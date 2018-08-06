@@ -15,6 +15,8 @@ Route::resources([
     'topics' => 'TopicsController'
 ]);
 
+Route::get('/topics/{topicSlug}/useCases/{useCaseSlug}', 'UseCasesController@show');
+
 Route::get('/', function() {
 	return view('index');
 });

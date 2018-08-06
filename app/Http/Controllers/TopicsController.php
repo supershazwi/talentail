@@ -31,7 +31,9 @@ class TopicsController extends Controller
     	return redirect('/');
     }
 
-    public function show() {
-        return view('topics.show');
+    public function show($slug) {
+        return view('topics.show', [
+            'topic' => Topic::where('slug', $slug)->first()
+        ]);
     }
 }

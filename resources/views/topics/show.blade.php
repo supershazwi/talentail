@@ -6,7 +6,7 @@
       <div class="card card-kanban">
         <div class="card-body">
           <div class="card-title">
-            <h4>Business Analyst</h4>
+            <h4>{{$topic->title}}</h4>
           </div>
           <div class="card-title">
             <span class="text-small">• Elicit requirements for software development using interviews</span>
@@ -50,6 +50,7 @@
                   <h4>Use Cases</h4>
               </div>
               <div class="card-list-body">
+                  @foreach($topic->useCases as $useCase)
                   <div class="card card-kanban">
                       <div class="card-body">
                           <div class="dropdown card-options">
@@ -63,43 +64,19 @@
                           </div>
                           <div class="card-title">
                               <a href="#" data-toggle="modal" data-target="#task-modal">
-                                  <h6><a href="#">Digital Transformation</a></h6>
+                                  <h6><a href="/topics/{{$topic->slug}}/useCases/{{$useCase->slug}}">{{$useCase->title}}</a></h6>
                               </a>
                           </div>
-                          <p class="text-small">Digital Transformation is not necessarily about digital technology, but about the fact that technology, which is digital, allows people to solve their traditional problems. And they prefer this digital solution to the old solution.</p>
-                          <div class="card-meta d-flex justify-content-between">
+                          <p class="text-small">{{$useCase->description}}</p>
+                          <!-- <div class="card-meta d-flex justify-content-between">
                               <div class="d-flex align-items-center">
                                   <span style="margin-right: 15px;"><a href="#">#DigitalTransformation</a></span>
                                   <span style="margin-right: 15px;"><a href="#">#EarlyChildhood</a></span>
                               </div>
-                          </div>
+                          </div> -->
                       </div>
                   </div>
-                  <div class="card card-kanban">
-                      <div class="card-body">
-                          <div class="dropdown card-options">
-                              <button class="btn-options" type="button" id="kanban-dropdown-button-13" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <i class="material-icons">more_vert</i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-right">
-                                  <a class="dropdown-item" href="#">Edit</a>
-                                  <a class="dropdown-item text-danger" href="#">Archive Card</a>
-                              </div>
-                          </div>
-                          <div class="card-title">
-                              <a href="#" data-toggle="modal" data-target="#task-modal">
-                                  <h6><a href="#">Data Migration</a></h6>
-                              </a>
-                          </div>
-                          <p class="text-small">Data migration is the process of transporting data between computers, storage devices or formats. It is a key consideration for any system implementation, upgrade or consolidation.</p>
-                          <div class="card-meta d-flex justify-content-between">
-                              <div class="d-flex align-items-center">
-                                  <span style="margin-right: 15px;"><a href="#">#DataMigration</a></span>
-                                  <span style="margin-right: 15px;"><a href="#">#Telecommunications</a></span>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+                  @endforeach
               </div>
           </div>
       </div>
