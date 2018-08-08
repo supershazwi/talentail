@@ -53,27 +53,19 @@
                   @foreach($topic->useCases as $useCase)
                   <div class="card card-kanban">
                       <div class="card-body">
-                          <div class="dropdown card-options">
-                              <button class="btn-options" type="button" id="kanban-dropdown-button-13" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <i class="material-icons">more_vert</i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-right">
-                                  <a class="dropdown-item" href="#">Edit</a>
-                                  <a class="dropdown-item text-danger" href="#">Archive Card</a>
-                              </div>
+                          <div class="row">
+                            <div class="col-lg-11">
+                            <div class="card-title">
+                                <a href="#" data-toggle="modal" data-target="#task-modal">
+                                    <h5><a href="/topics/{{$topic->slug}}/useCases/{{$useCase->slug}}">{{$useCase->title}}</a></h5>
+                                </a>
+                            </div>
+                            <p class="text-small">{{$useCase->description}}</p>
+                            </div>
+                            <div class="col-lg-1" style="text-align: center;">
+                              <h5 style="float: right; color: #16a085;">$35</h5>
+                            </div>
                           </div>
-                          <div class="card-title">
-                              <a href="#" data-toggle="modal" data-target="#task-modal">
-                                  <h6><a href="/topics/{{$topic->slug}}/useCases/{{$useCase->slug}}">{{$useCase->title}}</a></h6>
-                              </a>
-                          </div>
-                          <p class="text-small">{{$useCase->description}}</p>
-                          <!-- <div class="card-meta d-flex justify-content-between">
-                              <div class="d-flex align-items-center">
-                                  <span style="margin-right: 15px;"><a href="#">#DigitalTransformation</a></span>
-                                  <span style="margin-right: 15px;"><a href="#">#EarlyChildhood</a></span>
-                              </div>
-                          </div> -->
                       </div>
                   </div>
                   @endforeach

@@ -7,7 +7,31 @@
         <div class="card-body">
           <div class="card-title">
             <h4>{{$useCase->title}}</h4>
-            <p class="small-text">{{$useCase->description}}</p>
+            <p class="text-small">{{$useCase->description}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="card card-kanban">
+        <div class="card-body">
+          <div class="card-title">
+            <h4>{{$topic->title}}</h4>
+          </div>
+          <div class="card-title">
+            <span class="text-small">• Elicit requirements for software development using interviews</span>
+          </div>
+          <div class="card-title">
+            <span class="text-small">• Critically evaluate information gathered from multiple sources</span>
+          </div>
+          <div class="card-title">
+            <span class="text-small">• Translate technical information into business language to ensure understanding of the requirements</span>
+          </div>
+          <div class="card-title">
+            <span class="text-small">• Translate technical information into business language to ensure understanding of the requirements</span>
+          </div>
+          <div class="card-meta d-flex justify-content-between">
+              <div class="d-flex align-items-center">
+                  <span style="margin-right: 15px;"><a href="#">See 25 more competencies</a></span>
+              </div>
           </div>
         </div>
       </div>
@@ -87,7 +111,13 @@
               <div class="card-list-header">
                   <h4>Brief</h4>
               </div>
-              
+              <div class="card-list-body">
+                  <div class="card card-kanban">
+                      <div class="card-body">
+                          <p class="text-small">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                      </div>
+                  </div>
+              </div>
           </div>
       </div>
       <div class="kanban-col">
@@ -98,40 +128,41 @@
               <div class="accordion" id="accordionExample">
                 <div class="card">
                   <div class="card-header" id="headingOne">
-                    <p class="small-text" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="color: #007bff; cursor: pointer;">
+                    <p class="text-small" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="color: #007bff; cursor: pointer;">
                       1. Draw out the As-Is process map to detail the end-to-end process of variance analysis within the payroll run process.
                     </p>
                   </div>
 
                   <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                     <div class="card-body">
-                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                      <p class="text-small">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
+                      <form class="dropzone" action="..." style="margin-bottom: 0px;">
+                          <span class="dz-message" style="background-color: rgba(0, 0, 0, 0.03);">Drop files or click here to upload</span>
+                      </form>
                     </div>
                   </div>
                 </div>
                 <div class="card">
                   <div class="card-header" id="headingTwo">
-                    <p class="small-text" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="color: #007bff; cursor: pointer;">
+                    <p class="text-small" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="color: #007bff; cursor: pointer;">
                       2. Draw out the To-be process map to detail the end-to-end process of variance analysis within the payroll run process.
                     </p>
                   </div>
                   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                     <div class="card-body">
-                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                      <p class="text-small">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
                     </div>
                   </div>
                 </div>
                 <div class="card">
                   <div class="card-header" id="headingThree">
-                    <h5 class="mb-0">
-                      <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Collapsible Group Item #3
-                      </button>
-                    </h5>
+                    <p class="text-small" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="color: #007bff; cursor: pointer;">
+                      3. Derive the functional requirement specifications of the applications needed to support the To-be process map you have detailed in Step 2.
+                    </p>
                   </div>
                   <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                     <div class="card-body">
-                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                      <p class="text-small">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
                     </div>
                   </div>
                 </div>
