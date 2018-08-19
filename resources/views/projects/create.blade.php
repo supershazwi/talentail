@@ -9,7 +9,7 @@
             <h4>General Description</h4>
             <div class="form-group">
                 <label for="title"><strong>Title</strong></label>
-                <input type="text" name="title" class="form-control" id="title" placeholder="Enter title">
+                <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" autofocus>
             </div>
             <div class="form-group">
                 <label for="description"><strong>Description</strong></label>

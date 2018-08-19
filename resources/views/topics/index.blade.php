@@ -1,7 +1,12 @@
 @extends ('layouts.main')
 
 @section ('content')
-    <div class="row" style="margin-top: 25px;">
+    <div class="row" style="margin-top: 1.5rem;">
+        <div class="col-auto">
+            <h3>Skills</h3>
+        </div>
+    </div>
+    <div class="row">
         @foreach($topics as $topic)
           <div class="col-lg-4">
               <div class="card card-kanban">

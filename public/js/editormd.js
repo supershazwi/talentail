@@ -78,11 +78,11 @@
         delay                : 300,            // Delay parse markdown to html, Uint : ms
         autoLoadModules      : true,           // Automatic load dependent module files
         watch                : true,
-        placeholder          : "Enjoy Markdown! coding now...",
+        placeholder          : "Fill up brief...",
         gotoLine             : true,
         codeFold             : false,
         autoHeight           : false,
-		autoFocus            : true,
+		autoFocus            : false,
         autoCloseTags        : true,
         searchReplace        : true,
         syncScrolling        : true,           // true | false | "single", default true
@@ -667,7 +667,7 @@
                 theme                     : settings.editorTheme,
                 tabSize                   : settings.tabSize,
                 dragDrop                  : false,
-                autofocus                 : settings.autoFocus,
+                autofocus                 : false,
                 autoCloseTags             : settings.autoCloseTags,
                 readOnly                  : (settings.readOnly) ? "nocursor" : false,
                 indentUnit                : settings.indentUnit,
