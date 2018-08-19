@@ -12686,6 +12686,7 @@ html {
 .text-small {
   font-size: .875rem;
   line-height: 1.3125rem;
+  color: #333 !important;
 }
 
 p.lead {

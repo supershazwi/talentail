@@ -5,13 +5,15 @@
 <head>
 
 	<title>Compass</title>
+	<link rel="stylesheet" type="text/css" href="/css/custom.css">
 	<link rel="stylesheet" type="text/css" href="/css/theme.css">
+	<link rel="stylesheet" type="text/css" href="/css/editormd.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="A project management Bootstrap theme by Medium Rare">
 	<link href="assets/img/favicon.ico" rel="icon" type="image/x-icon">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
-
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 </head>
 
 <body>
@@ -30,8 +32,8 @@
 	                        <img alt="Image" src="/img/avatar-male-4.jpg" class="avatar" />
 	                    </a>
 	                    <div class="dropdown-menu dropdown-menu-right">
-	                        <a href="nav-side-user.html" class="dropdown-item">Profile</a>
-	                        <a href="utility-account-settings.html" class="dropdown-item">Account Settings</a>
+	                        <a href="/profile" class="dropdown-item">Profile</a>
+	                        <a href="/settings" class="dropdown-item">Account Settings</a>
 	                        <a href="#" class="dropdown-item">Log Out</a>
 	                    </div>
 	                </div>
@@ -39,20 +41,15 @@
 	        </div>
 	        <div class="collapse navbar-collapse justify-content-between" id="navbar-collapse">
 	            <ul class="navbar-nav">
-
 	                <li class="nav-item">
-
 	                    <a class="nav-link" href="/">Home</a>
-
 	                </li>
-
-	               
 	                <li class="nav-item">
-
 	                    <a class="nav-link" href="/topics">Explore</a>
-
 	                </li>
-
+	                <li class="nav-item">
+	                    <a class="nav-link" href="/messages">Messages</a>
+	                </li>
 	            </ul>
 	            <div class="d-lg-flex align-items-center">
 	                <form class="form-inline my-lg-0 my-2">
@@ -70,7 +67,8 @@
 	                        Create New
 	                    </button>
 	                    <div class="dropdown-menu" aria-labelledby="newContentButton">
-	                        <a class="dropdown-item" href="topics/create">Topic</a>
+	                        <a class="dropdown-item" href="/projects/create">Project</a>
+	                        <a class="dropdown-item" href="/topics/create">Topic</a>
 	                    </div>
 	                </div>
 	                <div class="d-none d-lg-block">
@@ -79,8 +77,8 @@
 	                            <img alt="Image" src="/img/avatar-male-4.jpg" class="avatar" />
 	                        </a>
 	                        <div class="dropdown-menu dropdown-menu-right">
-	                            <a href="nav-side-user.html" class="dropdown-item">Profile</a>
-	                            <a href="utility-account-settings.html" class="dropdown-item">Account Settings</a>
+	                            <a href="/profile" class="dropdown-item">Profile</a>
+	                            <a href="/settings" class="dropdown-item">Account Settings</a>
 	                            <a href="#" class="dropdown-item">Log Out</a>
 	                        </div>
 	                    </div>
