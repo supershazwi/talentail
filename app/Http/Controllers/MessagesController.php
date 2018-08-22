@@ -9,6 +9,11 @@ use App\Message;
 
 class MessagesController extends Controller
 {
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index() {
         $messages = Message::all();
 

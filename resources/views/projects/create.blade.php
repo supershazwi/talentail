@@ -24,7 +24,11 @@
             <h4>Skills</h4>
             <div class="form-group">
                 <label for="title"><strong>Title</strong></label>
-                <input type="text" name="title" class="form-control" id="title" placeholder="Enter title">
+                <select class="js-example-basic-single form-control" name="state" style="height: 100px !important; width: 100%;">
+                  <option value="Nil">Select Skill</option>
+                  <option value="AL">Alabama</option>
+                  <option value="WY">Wyoming</option>
+                </select>
             </div>
           </div>
         </div>

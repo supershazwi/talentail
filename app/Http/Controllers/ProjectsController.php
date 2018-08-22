@@ -7,21 +7,26 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 use App\Project;
-use App\Topic;
+use App\Skill;
 use App\User;
 
 class ProjectsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function show($slug) {
         $routeParameters = Route::getCurrentRoute()->parameters();
-        $topic = Topic::select('id', 'title')->where('slug', $routeParameters['topicSlug'])->get()[0];
+        $skill = Skill::select('id', 'title')->where('slug', $routeParameters['skillSlug'])->get()[0];
         
         return view('projects.show', [
             'project' => Project::where([
                 ['slug', '=', $routeParameters['projectSlug']],
-                ['topic_id', '=', $topic->id]
+                ['skill_id', '=', $skill->id]
             ])->get()[0],
-            'topic' => $topic
+            'skill' => $skill
         ]);
     }
 

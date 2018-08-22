@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="main-container fullscreen">
-        <div class="container">
+        <div class="container" style="margin-top: 1.5rem;">
             <div class="row justify-content-center">
                 <div class="col-xl-5 col-lg-6 col-md-7">
                     <div class="text-center">
@@ -94,7 +94,7 @@
                                                     <span class="text-small" style="color: #6c757d !important;">Post Opportunities</span>
                                                 </li>
                                                 <li style="color: transparent;">
-                                                    <span class="text-small" style="color: #6c757d !important;">Hello</span>
+                                                    <span class="text-small" style="color: #6c757d !important;">Recruit Applicants</span>
                                                 </li>
                                             </ul>
                                             <div class="custom-control custom-radio d-inline-block">

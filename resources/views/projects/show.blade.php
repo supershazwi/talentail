@@ -20,7 +20,7 @@
       <div class="card card-kanban">
         <div class="card-body">
           <div class="card-title">
-            <h4>{{$topic->title}}</h4>
+            <h4>{{$skill->title}}</h4>
           </div>
           <div class="card-title">
             <p class="text-small"><i class="fas fa-check"></i> Elicit requirements for software development using interviews</p>

@@ -10,6 +10,7 @@
 <script type="text/javascript" src="/js/theme.js"></script>
 <script type="text/javascript" src="/js/editormd.js"></script>
 <script type="text/javascript" src="/languages/en.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script type="text/javascript">
 var testEditor;
 
@@ -20,5 +21,9 @@ $(function() {
         syncScrolling : "single",
         path    : "../lib/"
     });
+});
+
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
 });
 </script>

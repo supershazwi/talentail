@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="main-container fullscreen">
-        <div class="container">
+        <div class="container" style="margin-top: 1.5rem;">
             <div class="row justify-content-center">
                 <div class="col-xl-5 col-lg-6 col-md-7">
                     <div class="text-center">

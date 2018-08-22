@@ -4,10 +4,10 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="page-header">
-              <h1>Create a topic</h1>
+              <h1>Create a skill</h1>
               <p class="lead">Help open the door for talents out there to discover their interests</p>
             </div>
-            <form method="POST" action="/topics">
+            <form method="POST" action="/skills">
               {{ csrf_field() }}
 
               <div class="form-group">
@@ -16,9 +16,9 @@
               </div>
               <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description" maxlength="255"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Create Topic</button>
+              <button type="submit" class="btn btn-primary">Create Skill</button>
             </form>
         </div>
     </div>

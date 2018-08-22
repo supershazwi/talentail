@@ -6,14 +6,14 @@
     <div class="col-lg-3" style="margin-bottom: 1.5rem;">
         <ul class="nav nav-tabs flex-lg-column">
             <li class="nav-item">
-                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Your Profile</a>
+                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">General</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="password-tab" data-toggle="tab" href="#password" role="tab" aria-controls="password" aria-selected="false">Password</a>
+                <a class="nav-link" id="password-tab" data-toggle="tab" href="#password" role="tab" aria-controls="password" aria-selected="false">Authentication</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="notifications-tab" data-toggle="tab" href="#notifications" role="tab" aria-controls="notifications" aria-selected="false">Email Notifications</a>
-            </li>
+            <!-- <li class="nav-item">
+                <a class="nav-link" id="notifications-tab" data-toggle="tab" href="#notifications" role="tab" aria-controls="notifications" aria-selected="false">Notifications</a>
+            </li> -->
         </ul>
     </div>
     <div class="col-lg-9">
@@ -36,28 +36,30 @@
                             </div>
                         </div>
                         <!--end of avatar-->
-                        <form>
+                        <form method="POST" action="/settings">
+                            @csrf
                             <div class="form-group row align-items-center">
                                 <label class="col-3">Name</label>
                                 <div class="col">
-                                    <input type="text" placeholder="Name" value="Shazwi Suwandi" name="name" class="form-control" required />
+                                    <input type="text" placeholder="Name" value="{{$user->name}}" id="name" name="name" class="form-control" required />
                                 </div>
                             </div>
                             <div class="form-group row align-items-center">
                                 <label class="col-3">Email</label>
                                 <div class="col">
-                                    <input type="email" placeholder="Enter your email address" value="supershazwi@gmail.com" name="profile-email" class="form-control" required />
+                                    <input type="email" placeholder="Enter your email address" value="{{$user->email}}" id="email" name="email" class="form-control" required />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-3">Bio</label>
+                                <label class="col-3">Description</label>
                                 <div class="col">
-                                    <textarea type="text" placeholder="Tell us a little about yourself" name="profile-bio" class="form-control" rows="4">A man who loves to dream and wants to get rid of bullshit jobs</textarea>
-                                    <small>This will be displayed on your public profile</small>
+                                    <textarea type="text" placeholder="Tell us a little about yourself" name="description" id="description" class="form-control" rows="4">{{$user->description}}</textarea>
                                 </div>
                             </div>
                             <div class="row justify-content-end">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary pull-right">Update Settings</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -83,7 +85,9 @@
                                 </div>
                             </div>
                             <div class="row justify-content-end">
-                                <button type="submit" class="btn btn-primary">Change Password</button>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary pull-right">Update Password</button>
+                                </div>
                             </div>
                         </form>
                     </div>
