@@ -2,436 +2,446 @@
 
 @section ('content')
 
-<div class="row justify-content-center">
-    <div class="col-lg-12">
-        <div class="page-header mb-4">
-            <div class="media">
-                <img alt="Image" src="/img/download.png" class="avatar avatar-lg mt-1" />
-                <div class="media-body ml-3">
-                    <h1 class="mb-0">Shazwi Suwandi</h1>
-                    <p class="lead">A man who loves to dream and wants to get rid of bullshit jobs</p>
-                </div>
-            </div>
-        </div>
-        <ul class="nav nav-tabs nav-fill">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#teams" role="tab" aria-controls="teams" aria-selected="true">Skills</a>
+<div class="breadcrumb-bar navbar bg-white sticky-top">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/profile">Profile</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#projects" role="tab" aria-controls="projects" aria-selected="false">Projects</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#opportunities" role="tab" aria-controls="opportunities" aria-selected="false">Opportunities</a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="teams" role="tabpanel" aria-labelledby="teams-tab" data-filter-list="content-list-body">
-                <div class="row content-list-head">
-                    <div class="col-auto">
-                        <h3>Skills</h3>
-                    </div>
-                    <form class="col-md-auto">
-                        <div class="input-group input-group-round">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="material-icons">filter_list</i>
-                                </span>
-                            </div>
-                            <input type="search" class="form-control filter-list-input" placeholder="Filter skills" aria-label="Filter skills" aria-describedby="filter-skills">
-                        </div>
-                    </form>
-                </div>
-                <!--end of content list head-->
-                <div class="content-list-body row">
-
-                    <div class="col-md-6">
-                        <div class="card card-team">
-                            <div class="card-body">
-                                <div class="card-title" style="text-align: center; max-width: 100%;">
-                                	<h5 data-filter-by="text">Business Analyst</h5>
-                                	<span class="fas fa-star star-rating" style="color: orange;"></span>
-                                	<span class="fas fa-star star-rating" style="color: orange;"></span>
-                                	<span class="fas fa-star star-rating" style="color: orange;"></span>
-                                	<span class="fas fa-star star-rating" style="color: orange;"></span>
-                                	<span class="fas fa-star-half-alt star-rating" style="color: orange;"></span>
-                                	<span>4.5</span>
-                                </div>
-                                <div style="margin-bottom: 10px;">
-	                                <span>Elicit requirements for software development using interviews</span>
-	                                <br/>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star-half-alt star-rating"></span>
-	                                <span>4.5</span>
-	                            </div>
-	                            <div style="margin-bottom: 10px;">
-	                                <span>Critically evaluate information gathered from multiple sources</span>
-	                                <br/>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star-half-alt star-rating"></span>
-	                                <span>4.5</span>
-	                            </div>
-	                            <div style="margin-bottom: 10px;">
-	                                <span>Translate technical information into business language to ensure understanding of the requirements</span>
-	                                <br/>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star-half-alt star-rating"></span>
-	                                <span>4.5</span>
-	                            </div>
-	                            <div style="text-align: center; margin-top: 1.5rem;">
-		                            <a href="#">See 20 more</a>
-		                        </div>
+        </ol>
+    </nav>
+</div>   
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-11 col-xl-10">
+                    <div class="page-header mb-4">
+                        <div class="media">
+                            <img alt="Image" src="/img/download.png" class="avatar avatar-lg mt-1" />
+                            <div class="media-body ml-3">
+                                <h1 class="mb-0">Shazwi Suwandi</h1>
+                                <p class="lead">A man who loves to dream and wants to get rid of bullshit jobs</p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-6">
-                        <div class="card card-team">
-                            <div class="card-body">
-                                <div class="card-title" style="text-align: center; max-width: 100%;">
-                                	<h5 data-filter-by="text">Enterprise Architect</h5>
-                                	<span class="fas fa-star star-rating" style="color: orange;"></span>
-                                	<span class="fas fa-star star-rating" style="color: orange;"></span>
-                                	<span class="fas fa-star star-rating" style="color: orange;"></span>
-                                	<span class="fas fa-star star-rating" style="color: orange;"></span>
-                                	<span class="fas fa-star-half-alt star-rating" style="color: orange;"></span>
-                                	<span>4.5</span>
-                                </div>
-                                <div style="margin-bottom: 10px;">
-	                                <span>Elicit requirements for software development using interviews</span>
-	                                <br/>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star-half-alt star-rating"></span>
-	                                <span>4.5</span>
-	                            </div>
-	                            <div style="margin-bottom: 10px;">
-	                                <span>Critically evaluate information gathered from multiple sources</span>
-	                                <br/>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star-half-alt star-rating"></span>
-	                                <span>4.5</span>
-	                            </div>
-	                            <div style="margin-bottom: 10px;">
-	                                <span>Translate technical information into business language to ensure understanding of the requirements</span>
-	                                <br/>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star star-rating"></span>
-	                                <span class="fas fa-star-half-alt star-rating"></span>
-	                                <span>4.5</span>
-	                            </div>
-	                            <div style="text-align: center; margin-top: 1.5rem;">
-		                            <a href="#">See 20 more</a>
-		                        </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--end of content-list-body-->
-            </div>
-            <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab" data-filter-list="content-list-body">
-                <div class="content-list">
-                    <div class="row content-list-head">
-                        <div class="col-auto">
-                            <h3>Projects</h3>
-                            <a href="/projects/create" class="btn btn-primary" style="margin-left: 1.5rem;">Create Project</a>
-                        </div>
-                        <form class="col-md-auto">
-                            <div class="input-group input-group-round">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="material-icons">filter_list</i>
-                                    </span>
-                                </div>
-                                <input type="search" class="form-control filter-list-input" placeholder="Filter projects" aria-label="Filter Projects" aria-describedby="filter-projects">
-                            </div>
-                        </form>
-                    </div>
-                    <!--end of content list head-->
-                    <div class="content-list-body row">
-                        <div class="col-lg-6">
-                            <div class="card card-project">
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <a href="#" data-toggle="modal" data-target="#task-modal">
-                                            <h5><a href="/topics/business-analyst/useCases/business-process-reengineering" data-filter-by="text">Business Process Re-engineering</a></h5>
-                                        </a>
-                                        <span class="badge badge-warning">In Progress</span>
-                                    </div>
-                                    <span>Business process re-engineering (BPR) is a business management strategy, originally pioneered in the early 1990s, focusing on the analysis and design of workflows and business processes within an organization.</span>
-                                    <br />
-                                    <br />
-                                    <a href="#" data-toggle="tooltip" data-placement="top" title="">
-                                        <img class="avatar" src="/img/avatar-male-4.jpg">
-                                    </a>
-                                    <a href="#">
-                                      <span style="font-size: .875rem; line-height: 1.3125rem;">Roger Ver</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end of content list body-->
-                </div>
-                <!--end of content list-->
-            </div>
-            <div class="tab-pane fade" id="opportunities" role="tabpanel" aria-labelledby="opportunities-tab" data-filter-list="content-list-body">
-                <div class="content-list">
-                    <div class="row content-list-head">
-                        <div class="col-auto">
-                            <h3>Opportunities</h3>
-                        </div>
-                        <form class="col-md-auto">
-                            <div class="input-group input-group-round">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="material-icons">filter_list</i>
-                                    </span>
-                                </div>
-                                <input type="search" class="form-control filter-list-input" placeholder="Filter opportunities" aria-label="Filter Opportunities" aria-describedby="filter-opportunities">
-                            </div>
-                        </form>
-                    </div>
-                    <!--end of content list head-->
-                    <div class="content-list-body row">
-                        <div class="col-lg-6">
-                            <div class="card card-project">
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <a href="#" data-toggle="modal" data-target="#task-modal">
-                                            <h5><a href="/topics/business-analyst/useCases/business-process-reengineering" data-filter-by="text">Business Analyst</a></h5>
-                                        </a>
-                                        <span class="badge badge-warning">In Progress</span>
-                                    </div>
-                                    <p class="text-small">Business process re-engineering (BPR) is a business management strategy, originally pioneered in the early 1990s, focusing on the analysis and design of workflows and business processes within an organization.</p>
-                                    <a href="#">
-                                      <span style="font-size: .875rem; line-height: 1.3125rem;">Accenture</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end of content list body-->
-                </div>
-                <!--end of content list-->
-            </div>
-            <!--end of tab-->
-        </div>
-        <form class="modal fade" id="team-add-modal" tabindex="-1" role="dialog" aria-labelledby="team-add-modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">New Team</h5>
-                        <button type="button" class="close btn btn-round" data-dismiss="modal" aria-label="Close">
-                            <i class="material-icons">close</i>
-                        </button>
-                    </div>
-                    <!--end of modal head-->
                     <ul class="nav nav-tabs nav-fill">
                         <li class="nav-item">
-                            <a class="nav-link active" id="team-add-details-tab" data-toggle="tab" href="#team-add-details" role="tab" aria-controls="team-add-details" aria-selected="true">Details</a>
+                            <a class="nav-link active" data-toggle="tab" href="#teams" role="tab" aria-controls="teams" aria-selected="true">Skills</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="team-add-members-tab" data-toggle="tab" href="#team-add-members" role="tab" aria-controls="team-add-members" aria-selected="false">Members</a>
+                            <a class="nav-link" data-toggle="tab" href="#projects" role="tab" aria-controls="projects" aria-selected="false">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#opportunities" role="tab" aria-controls="opportunities" aria-selected="false">Opportunities</a>
                         </li>
                     </ul>
-                    <div class="modal-body">
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="team-add-details" role="tabpanel" aria-labelledby="team-add-details-tab">
-                                <h6>Team Details</h6>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">Name</label>
-                                    <input class="form-control col" type="text" placeholder="Team name" name="team-name" />
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="teams" role="tabpanel" aria-labelledby="teams-tab" data-filter-list="content-list-body">
+                            <div class="row content-list-head">
+                                <div class="col-auto">
+                                    <h3>Skills</h3>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-3">Description</label>
-                                    <textarea class="form-control col" rows="3" placeholder="Team description" name="team-description"></textarea>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="team-add-members" role="tabpanel" aria-labelledby="team-add-members-tab">
-                                <div class="users-manage" data-filter-list="form-group-users">
-                                    <div class="mb-3">
-                                        <ul class="avatars text-center">
-
-                                            <li>
-                                                <img alt="Claire Connors" src="/img/avatar-female-1.jpg" class="avatar" data-toggle="tooltip" data-title="Claire Connors" />
-                                            </li>
-
-                                            <li>
-                                                <img alt="Marcus Simmons" src="/img/avatar-male-1.jpg" class="avatar" data-toggle="tooltip" data-title="Marcus Simmons" />
-                                            </li>
-
-                                            <li>
-                                                <img alt="Peggy Brown" src="/img/avatar-female-2.jpg" class="avatar" data-toggle="tooltip" data-title="Peggy Brown" />
-                                            </li>
-
-                                            <li>
-                                                <img alt="Harry Xai" src="/img/avatar-male-2.jpg" class="avatar" data-toggle="tooltip" data-title="Harry Xai" />
-                                            </li>
-
-                                        </ul>
-                                    </div>
+                                <form class="col-md-auto">
                                     <div class="input-group input-group-round">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
                                                 <i class="material-icons">filter_list</i>
                                             </span>
                                         </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter members" aria-label="Filter Members" aria-describedby="filter-members">
+                                        <input type="search" class="form-control filter-list-input" placeholder="Filter skills" aria-label="Filter skills" aria-describedby="filter-skills">
                                     </div>
-                                    <div class="form-group-users">
+                                </form>
+                            </div>
+                            <!--end of content list head-->
+                            <div class="content-list-body row">
 
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-1" checked>
-                                            <label class="custom-control-label" for="user-manage-1">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Claire Connors" src="/img/avatar-female-1.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Claire Connors</span>
-                                                </div>
-                                            </label>
+                                <div class="col-md-6">
+                                    <div class="card card-team">
+                                        <div class="card-body">
+                                            <div class="card-title" style="text-align: center; max-width: 100%;">
+                                                <h5 data-filter-by="text">Business Analyst</h5>
+                                                <span class="fas fa-star star-rating" style="color: orange;"></span>
+                                                <span class="fas fa-star star-rating" style="color: orange;"></span>
+                                                <span class="fas fa-star star-rating" style="color: orange;"></span>
+                                                <span class="fas fa-star star-rating" style="color: orange;"></span>
+                                                <span class="fas fa-star-half-alt star-rating" style="color: orange;"></span>
+                                                <span>4.5</span>
+                                            </div>
+                                            <div style="margin-bottom: 10px;">
+                                                <span>Elicit requirements for software development using interviews</span>
+                                                <br/>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star-half-alt star-rating"></span>
+                                                <span>4.5</span>
+                                            </div>
+                                            <div style="margin-bottom: 10px;">
+                                                <span>Critically evaluate information gathered from multiple sources</span>
+                                                <br/>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star-half-alt star-rating"></span>
+                                                <span>4.5</span>
+                                            </div>
+                                            <div style="margin-bottom: 10px;">
+                                                <span>Translate technical information into business language to ensure understanding of the requirements</span>
+                                                <br/>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star-half-alt star-rating"></span>
+                                                <span>4.5</span>
+                                            </div>
+                                            <div style="text-align: center; margin-top: 1.5rem;">
+                                                <a href="#">See 20 more</a>
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-2" checked>
-                                            <label class="custom-control-label" for="user-manage-2">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Marcus Simmons" src="/img/avatar-male-1.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Marcus Simmons</span>
-                                                </div>
-                                            </label>
+                                <div class="col-md-6">
+                                    <div class="card card-team">
+                                        <div class="card-body">
+                                            <div class="card-title" style="text-align: center; max-width: 100%;">
+                                                <h5 data-filter-by="text">Enterprise Architect</h5>
+                                                <span class="fas fa-star star-rating" style="color: orange;"></span>
+                                                <span class="fas fa-star star-rating" style="color: orange;"></span>
+                                                <span class="fas fa-star star-rating" style="color: orange;"></span>
+                                                <span class="fas fa-star star-rating" style="color: orange;"></span>
+                                                <span class="fas fa-star-half-alt star-rating" style="color: orange;"></span>
+                                                <span>4.5</span>
+                                            </div>
+                                            <div style="margin-bottom: 10px;">
+                                                <span>Elicit requirements for software development using interviews</span>
+                                                <br/>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star-half-alt star-rating"></span>
+                                                <span>4.5</span>
+                                            </div>
+                                            <div style="margin-bottom: 10px;">
+                                                <span>Critically evaluate information gathered from multiple sources</span>
+                                                <br/>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star-half-alt star-rating"></span>
+                                                <span>4.5</span>
+                                            </div>
+                                            <div style="margin-bottom: 10px;">
+                                                <span>Translate technical information into business language to ensure understanding of the requirements</span>
+                                                <br/>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star star-rating"></span>
+                                                <span class="fas fa-star-half-alt star-rating"></span>
+                                                <span>4.5</span>
+                                            </div>
+                                            <div style="text-align: center; margin-top: 1.5rem;">
+                                                <a href="#">See 20 more</a>
+                                            </div>
                                         </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-3" checked>
-                                            <label class="custom-control-label" for="user-manage-3">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Peggy Brown" src="/img/avatar-female-2.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Peggy Brown</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-4" checked>
-                                            <label class="custom-control-label" for="user-manage-4">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Harry Xai" src="/img/avatar-male-2.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Harry Xai</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-5">
-                                            <label class="custom-control-label" for="user-manage-5">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Sally Harper" src="/img/avatar-female-3.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Sally Harper</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-6">
-                                            <label class="custom-control-label" for="user-manage-6">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Ravi Singh" src="/img/avatar-male-3.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Ravi Singh</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-7">
-                                            <label class="custom-control-label" for="user-manage-7">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Kristina Van Der Stroem" src="/img/avatar-female-4.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Kristina Van Der Stroem</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-8">
-                                            <label class="custom-control-label" for="user-manage-8">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="David Whittaker" src="/img/avatar-male-4.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">David Whittaker</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-9">
-                                            <label class="custom-control-label" for="user-manage-9">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Kerri-Anne Banks" src="/img/avatar-female-5.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Kerri-Anne Banks</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-10">
-                                            <label class="custom-control-label" for="user-manage-10">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Masimba Sibanda" src="/img/avatar-male-5.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Masimba Sibanda</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-11">
-                                            <label class="custom-control-label" for="user-manage-11">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Krishna Bajaj" src="/img/avatar-female-6.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Krishna Bajaj</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="user-manage-12">
-                                            <label class="custom-control-label" for="user-manage-12">
-                                                <div class="d-flex align-items-center">
-                                                    <img alt="Kenny Tran" src="/img/avatar-male-6.jpg" class="avatar mr-2" />
-                                                    <span class="h6 mb-0" data-filter-by="text">Kenny Tran</span>
-                                                </div>
-                                            </label>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
+                            <!--end of content-list-body-->
                         </div>
+                        <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab" data-filter-list="content-list-body">
+                            <div class="content-list">
+                                <div class="row content-list-head">
+                                    <div class="col-auto">
+                                        <h3>Projects</h3>
+                                        <a href="/projects/create" class="btn btn-primary" style="margin-left: 1.5rem;">Create Project</a>
+                                    </div>
+                                    <form class="col-md-auto">
+                                        <div class="input-group input-group-round">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="material-icons">filter_list</i>
+                                                </span>
+                                            </div>
+                                            <input type="search" class="form-control filter-list-input" placeholder="Filter projects" aria-label="Filter Projects" aria-describedby="filter-projects">
+                                        </div>
+                                    </form>
+                                </div>
+                                <!--end of content list head-->
+                                <div class="content-list-body row">
+                                    <div class="col-lg-6">
+                                        <div class="card card-project">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                    <a href="#" data-toggle="modal" data-target="#task-modal">
+                                                        <h5><a href="/topics/business-analyst/useCases/business-process-reengineering" data-filter-by="text">Business Process Re-engineering</a></h5>
+                                                    </a>
+                                                    <span class="badge badge-warning">In Progress</span>
+                                                </div>
+                                                <span>Business process re-engineering (BPR) is a business management strategy, originally pioneered in the early 1990s, focusing on the analysis and design of workflows and business processes within an organization.</span>
+                                                <br />
+                                                <br />
+                                                <a href="#" data-toggle="tooltip" data-placement="top" title="">
+                                                    <img class="avatar" src="/img/avatar-male-4.jpg">
+                                                </a>
+                                                <a href="#">
+                                                  <span style="font-size: .875rem; line-height: 1.3125rem;">Roger Ver</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end of content list body-->
+                            </div>
+                            <!--end of content list-->
+                        </div>
+                        <div class="tab-pane fade" id="opportunities" role="tabpanel" aria-labelledby="opportunities-tab" data-filter-list="content-list-body">
+                            <div class="content-list">
+                                <div class="row content-list-head">
+                                    <div class="col-auto">
+                                        <h3>Opportunities</h3>
+                                    </div>
+                                    <form class="col-md-auto">
+                                        <div class="input-group input-group-round">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="material-icons">filter_list</i>
+                                                </span>
+                                            </div>
+                                            <input type="search" class="form-control filter-list-input" placeholder="Filter opportunities" aria-label="Filter Opportunities" aria-describedby="filter-opportunities">
+                                        </div>
+                                    </form>
+                                </div>
+                                <!--end of content list head-->
+                                <div class="content-list-body row">
+                                    <div class="col-lg-6">
+                                        <div class="card card-project">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                    <a href="#" data-toggle="modal" data-target="#task-modal">
+                                                        <h5><a href="/topics/business-analyst/useCases/business-process-reengineering" data-filter-by="text">Business Analyst</a></h5>
+                                                    </a>
+                                                    <span class="badge badge-warning">In Progress</span>
+                                                </div>
+                                                <p class="text-small">Business process re-engineering (BPR) is a business management strategy, originally pioneered in the early 1990s, focusing on the analysis and design of workflows and business processes within an organization.</p>
+                                                <a href="#">
+                                                  <span style="font-size: .875rem; line-height: 1.3125rem;">Accenture</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end of content list body-->
+                            </div>
+                            <!--end of content list-->
+                        </div>
+                        <!--end of tab-->
                     </div>
-                    <!--end of modal body-->
-                    <div class="modal-footer">
-                        <button role="button" class="btn btn-primary" type="submit">
-                            Done
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
+                    <form class="modal fade" id="team-add-modal" tabindex="-1" role="dialog" aria-labelledby="team-add-modal" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">New Team</h5>
+                                    <button type="button" class="close btn btn-round" data-dismiss="modal" aria-label="Close">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </div>
+                                <!--end of modal head-->
+                                <ul class="nav nav-tabs nav-fill">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="team-add-details-tab" data-toggle="tab" href="#team-add-details" role="tab" aria-controls="team-add-details" aria-selected="true">Details</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="team-add-members-tab" data-toggle="tab" href="#team-add-members" role="tab" aria-controls="team-add-members" aria-selected="false">Members</a>
+                                    </li>
+                                </ul>
+                                <div class="modal-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="team-add-details" role="tabpanel" aria-labelledby="team-add-details-tab">
+                                            <h6>Team Details</h6>
+                                            <div class="form-group row align-items-center">
+                                                <label class="col-3">Name</label>
+                                                <input class="form-control col" type="text" placeholder="Team name" name="team-name" />
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3">Description</label>
+                                                <textarea class="form-control col" rows="3" placeholder="Team description" name="team-description"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="team-add-members" role="tabpanel" aria-labelledby="team-add-members-tab">
+                                            <div class="users-manage" data-filter-list="form-group-users">
+                                                <div class="mb-3">
+                                                    <ul class="avatars text-center">
+
+                                                        <li>
+                                                            <img alt="Claire Connors" src="/img/avatar-female-1.jpg" class="avatar" data-toggle="tooltip" data-title="Claire Connors" />
+                                                        </li>
+
+                                                        <li>
+                                                            <img alt="Marcus Simmons" src="/img/avatar-male-1.jpg" class="avatar" data-toggle="tooltip" data-title="Marcus Simmons" />
+                                                        </li>
+
+                                                        <li>
+                                                            <img alt="Peggy Brown" src="/img/avatar-female-2.jpg" class="avatar" data-toggle="tooltip" data-title="Peggy Brown" />
+                                                        </li>
+
+                                                        <li>
+                                                            <img alt="Harry Xai" src="/img/avatar-male-2.jpg" class="avatar" data-toggle="tooltip" data-title="Harry Xai" />
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                                <div class="input-group input-group-round">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="material-icons">filter_list</i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="search" class="form-control filter-list-input" placeholder="Filter members" aria-label="Filter Members" aria-describedby="filter-members">
+                                                </div>
+                                                <div class="form-group-users">
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-1" checked>
+                                                        <label class="custom-control-label" for="user-manage-1">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Claire Connors" src="/img/avatar-female-1.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Claire Connors</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-2" checked>
+                                                        <label class="custom-control-label" for="user-manage-2">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Marcus Simmons" src="/img/avatar-male-1.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Marcus Simmons</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-3" checked>
+                                                        <label class="custom-control-label" for="user-manage-3">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Peggy Brown" src="/img/avatar-female-2.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Peggy Brown</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-4" checked>
+                                                        <label class="custom-control-label" for="user-manage-4">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Harry Xai" src="/img/avatar-male-2.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Harry Xai</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-5">
+                                                        <label class="custom-control-label" for="user-manage-5">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Sally Harper" src="/img/avatar-female-3.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Sally Harper</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-6">
+                                                        <label class="custom-control-label" for="user-manage-6">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Ravi Singh" src="/img/avatar-male-3.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Ravi Singh</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-7">
+                                                        <label class="custom-control-label" for="user-manage-7">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Kristina Van Der Stroem" src="/img/avatar-female-4.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Kristina Van Der Stroem</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-8">
+                                                        <label class="custom-control-label" for="user-manage-8">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="David Whittaker" src="/img/avatar-male-4.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">David Whittaker</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-9">
+                                                        <label class="custom-control-label" for="user-manage-9">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Kerri-Anne Banks" src="/img/avatar-female-5.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Kerri-Anne Banks</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-10">
+                                                        <label class="custom-control-label" for="user-manage-10">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Masimba Sibanda" src="/img/avatar-male-5.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Masimba Sibanda</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-11">
+                                                        <label class="custom-control-label" for="user-manage-11">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Krishna Bajaj" src="/img/avatar-female-6.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Krishna Bajaj</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="user-manage-12">
+                                                        <label class="custom-control-label" for="user-manage-12">
+                                                            <div class="d-flex align-items-center">
+                                                                <img alt="Kenny Tran" src="/img/avatar-male-6.jpg" class="avatar mr-2" />
+                                                                <span class="h6 mb-0" data-filter-by="text">Kenny Tran</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end of modal body-->
+                                <div class="modal-footer">
+                                    <button role="button" class="btn btn-primary" type="submit">
+                                        Done
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+        </div>
     </div>
-</div>	        
+</div>     
 
 @endsection
 

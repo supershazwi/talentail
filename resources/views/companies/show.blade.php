@@ -1,56 +1,46 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="row" style="margin-top: 1.5rem;">
-      <div class="col-auto">
-          <h3><a href="/companies">Companies</a> > {{$company->title}}</h3>
-      </div>
+  <div class="breadcrumb-bar navbar bg-white sticky-top">
+      <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/companies">Companies</a>&nbsp;> {{$company->title}}
+              </li>
+          </ol>
+      </nav>
   </div>
-  <div class="row">
-    <div class="col-lg-4">
-      <div class="card card-kanban">
-        <div class="card-body">
-          <div class="card-title">
-            <img src="{{$company->avatar}}" style="height: 48px; margin-bottom: 1rem;" />
-            <h4>{{$company->title}}</h4>
-          </div>
-          <p>{{$company->description}}</p>
+  <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+            <section class="py-4 py-lg-5">
+                <div class="mb-3 d-flex">
+                    <img alt="Pipeline" src="https://media.licdn.com/dms/image/C4E0BAQHGdEBFMKrWAw/company-logo_200_200/0?e=1542844800&v=beta&t=uIFmDYe1mWP8no811npLHCfB4-dYN1GNI4yUyE1F0po" class="avatar avatar-lg mr-1" />
+                </div>
+                <h1 class="display-4 mb-3">{{$company->title}} Opportunities</h1>
+                <p class="lead">{{$company->description}}</p>
+            </section>
+            <div class="row">
+              @foreach($company->opportunities as $opportunity)
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <div class="col-lg-9" style="float: left; padding: 0px;">
+                      <h5><a href="/opportunities/{{$opportunity->slug}}">{{$opportunity->title}}</a></h5>
+                      <p style="margin-top: 0.5rem;">{{$opportunity->description}}</p>
+                    </div>
+                    <div class="col-lg-2" style="float: right; padding: 0px;">
+                      <strong>Skill</strong>
+                      <p>{{$opportunity->skill->title}}</p>
+                      <strong>Competencies</strong>
+                      <p>15</p>
+                      <strong>Projects</strong>
+                      <p>2</p>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+            </div>
         </div>
       </div>
-    </div>
-    <div class="col-lg-8">
-      <div class="kanban-col">
-          <div class="card-list">
-              <div class="card-list-header">
-                  <h4>Opportunities</h4>
-              </div>
-              <div class="card-list-body">
-                  @foreach($company->opportunities as $opportunity)
-                  <div class="card card-kanban">
-                      <div class="card-body">
-                          <div class="row">
-                            <div class="col-lg-9">
-                              <div class="card-title">
-                                <h5><a href="/opportunities/{{$opportunity->slug}}">{{$opportunity->title}}</a></h5>
-                              </div>
-                              <p>{{$opportunity->description}}</p>
-                            </div>
-                            <div class="col-lg-3">
-                              <strong>Skill</strong>
-                              <p>{{$opportunity->skill->title}}</p>
-                              <strong>Competencies</strong>
-                              <p>15</p>
-                              <strong>Projects</strong>
-                              <p>2</p>
-                            </div>
-                          </div>
-                      </div>
-                  </div>
-                  @endforeach
-              </div>
-          </div>
-      </div>
-    </div>
   </div>
 @endsection
 

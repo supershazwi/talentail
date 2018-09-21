@@ -4,7 +4,7 @@
   <div class="breadcrumb-bar navbar bg-white sticky-top">
       <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/projects">Projects</a>&nbsp;> Create a Project
+              <li class="breadcrumb-item"><a href="/projects">Projects</a>&nbsp;> Edit Project
               </li>
           </ol>
       </nav>
@@ -16,7 +16,7 @@
                 <div class="mb-3 d-flex">
                     <img alt="Pipeline" src="/img/project.svg" class="avatar avatar-lg mr-1" />
                 </div>
-                <h1 class="display-4 mb-3">Create a Project</h1>
+                <h1 class="display-4 mb-3">Edit Project</h1>
                 <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             </section>
             <h3>Project Title</h3>

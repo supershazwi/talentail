@@ -19,13 +19,22 @@ class ProjectsController extends Controller
     
     public function show($slug) {
         $routeParameters = Route::getCurrentRoute()->parameters();
-        $skill = Skill::select('id', 'title')->where('slug', $routeParameters['skillSlug'])->get()[0];
+        $skill = Skill::select('id', 'title', 'slug')->where('slug', $routeParameters['skillSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['skill_id', '=', $skill->id]])->get()[0];
         
         return view('projects.show', [
-            'project' => Project::where([
-                ['slug', '=', $routeParameters['projectSlug']],
-                ['skill_id', '=', $skill->id]
-            ])->get()[0],
+            'project' => $project,
+            'skill' => $skill
+        ]);
+    }
+
+    public function edit($skillSlug, $projectSlug) {
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $skill = Skill::select('id', 'title', 'slug')->where('slug', $routeParameters['skillSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['skill_id', '=', $skill->id]])->get()[0];
+
+        return view('projects.edit', [
+            'project' => $project,
             'skill' => $skill
         ]);
     }

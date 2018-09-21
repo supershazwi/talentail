@@ -21,6 +21,10 @@ Route::get('/profile', function() {
 	return view('profile');
 })->middleware('auth');
 
+Route::get('/faq', function() {
+    return view('faq');
+});
+
 Route::post('/settings', function() {
     $user = Auth::user();
 
@@ -64,6 +68,7 @@ Route::resources([
     'projects' => 'ProjectsController'
 ]);
 
+Route::get('/skills/{skillSlug}/projects/{projectSlug}/edit', 'ProjectsController@edit')->middleware('auth');
 Route::get('/skills/{skillSlug}/projects/{projectSlug}', 'ProjectsController@show')->middleware('auth');
 
 Route::get('/', function() {
