@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "talentail-217309",
+  "private_key_id": "ac6e4e86e4f1d396485982539c38f27a6914c602",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDzMM74t41GPT38\nYsFNG5JEnN96w8sBuZQDXTz3hmSyaQkrW+3pnSZcDcu+6Fd/kuia7IDid5yoGvoa\nR3aqOCEWsKeWzJ8NKW31FrC5S7l+5+Ks5KR8/qDOfS8xVTs7UcdwifxR46KEq3in\nEEjp9ulcl1MetZZhKgf4bEvIqImmaoFn5yxEnUTmQnaJc8ksbiJIKFa7p0LH8ljO\ndKBFx3ltixzeRT+W4/gJ3wFBYutl2DWc7g58uKDSOLtGbI8L/8MFidD2skzEO9vn\nrAHGMrECBXvwbLbAVGVs2TX3yv7MXe7H3Z2r/T3U4Ff5ZDt+SgYTrtyVJDY7f8ia\nr0COf5dZAgMBAAECggEAAWCrJ3sItJdnuLyJekmX8kYOOQiPZ5bYyQ0X6ZIME3un\nVuTKK/rdKwPT/eScjEc1hJ0m3MGPNF+Uv53chPnU7Cc7h83ob79mlU8X2LDeX+Lp\n5I9WBDRADnNkl0uzjnI35kIN2RvoQYakJBQiSZsBtunPiXq/W5UMnwJkCoKz5uqs\nNb17Fior7hZWqsMuvLl9IEqF8WStAHCsDtp7zV3oHamqHuK6Xv3Hy/SQT3wFk1UF\nUhV+zLU+fSeWhGG7N36e3XBI9LU0yiLglDzqfychi/khJbvC7hS0XWmkYBrnyAH/\nbn8zsP+7IpEu+Fa1z2K66SRWxrAr/QW3BzvypmSMQQKBgQD845WAuF6tUkqPjfjW\nGgrbpbByfk62gh+eAl5wrBqd50lrdl5g+o+mfrjLSLL0g3C0IStKLBPL0LjmTV6L\nLywDzh86pJp00xVTglDJrClm/VNOnEvIFyBBiYJrIIdiraZUnS3o74lOot6XYvSG\nzY/yMx9Ud3TGoCePMQPyL2kE+QKBgQD2Lq6JJEmPTBGV458m2mCe4MVOUULmLkIY\nYz6XI0VvYz2IV6EL+HQvP2THF1DvkoVle+NBrNe5UiAJZoYadl3tuJsaCDK8/D2o\nNW9mQUDVaRQDA9uEv93PVflUlTee8CbV/W2M8qMTtX5dcqCP57EU083SOaYBULtQ\nYDRDnuidYQKBgHwAAAOw48Oq0SKY48Xf2Skgkmdhpaj6HxS0Zqhqy1ZX3XlS/i4h\nTiS+iFAtYopglPfON9LT0BUlUDSlBVHMHJH1FP0FTzMveYqMIJ7yyw5T8vBd1Q7U\nwB1Clu9+cMQjD6b3t1Y7diFX3Ttv6yTaUNXa2WbqeBkY2KzuxNeRBbbJAoGAPLjU\n+iTGNB86MzN63RV+QZIFeMTYcHg2e1d3Z8YeaVQcKFYc9hvpZIIJdIYOw5jraFW/\nf0KHz0Evf8IXD83kay9eqnQdN7or5yKPALTVrg4GDpxT+BFvP6XgIvnPR1fK7Htf\nGyX6DXF14szUR8qJRi7cFJ99j9N+8FtaaNd4XuECgYEAop3Limq08FMPxNuIyQdX\nbrkWKTARqQwmZPoZO5sCccIaOc9uD1/Axj5Vh4iUfNEQycTu4hcQM1X+7F7QhwPs\ncLXwNCM0nGEAPrZWJK0DKGrJkreA1TU0gVekqTsvHb/pCMMY9mRxoakUDgDj7OiG\nzf6DUNH7zI8hqUOozUWiWWU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "shazwi-2@talentail-217309.iam.gserviceaccount.com",
+  "client_id": "112409277788040755391",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/shazwi-2%40talentail-217309.iam.gserviceaccount.com"
+}

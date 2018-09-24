@@ -42,7 +42,7 @@
                     <div class="form-group">
                       <h3>Skill</h3>
                       <select class="js-example-basic-single form-control" name="skill_id" style="height: 100px !important; width: 100%;">
-                        <option value="Nil">Select Skill</option>
+                        <option value="Nil">Select skill</option>
                         @foreach($skills as $skill)
                         <option value="{{$skill->id}}">{{$skill->title}}</option>
                         @endforeach

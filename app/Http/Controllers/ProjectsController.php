@@ -10,6 +10,8 @@ use App\Project;
 use App\Skill;
 use App\User;
 
+use Illuminate\Support\Facades\Storage;
+
 class ProjectsController extends Controller
 {
     public function __construct()
@@ -44,10 +46,44 @@ class ProjectsController extends Controller
         $user = Auth::user();
 
         if($user->creator) {
-            return view('projects.create');
+            if(session('selectedSkill')) {
+                $selectedSkill = Skill::find(session('selectedSkill')); 
+            }
+
+            return view('projects.create', [
+                'selectedSkill' => $selectedSkill
+            ]);
         } else {
             return view('projects.apply');
         }
 
+    }
+
+    public function selectSkill() {
+        if(request('skill') != null) {
+            $skillId = request('skill');
+            session(['selectedSkill' => $skillId]);
+
+            return redirect()->action('ProjectsController@create');
+        }
+        $skills = Skill::select('id', 'title')->orderBy('title', 'asc')->get();
+
+        return view('projects.selectSkill', [
+            'skills' => $skills
+        ]);
+    }
+
+    public function store(Request $request) {
+
+        // dd(request());
+
+        // dd($request->file('file'));
+
+        $request->file('file')->store('/assets', 'gcs');
+
+        // $disk = Storage::disk('gcs');
+        // $disk->put('/assets/1', $fileContents);
+
+        // redirect('/file-upload');
     }
 }

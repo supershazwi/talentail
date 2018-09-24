@@ -178,7 +178,7 @@
                                             <div class="card-body">
                                                 <div class="card-title">
                                                     <a href="#" data-toggle="modal" data-target="#task-modal">
-                                                        <h5><a href="/topics/business-analyst/useCases/business-process-reengineering" data-filter-by="text">Business Process Re-engineering</a></h5>
+                                                        <h5><a href="/skills/business-analyst/projects/business-process-reengineering" data-filter-by="text">Business Process Re-engineering</a></h5>
                                                     </a>
                                                     <span class="badge badge-warning">In Progress</span>
                                                 </div>
@@ -223,7 +223,7 @@
                                             <div class="card-body">
                                                 <div class="card-title">
                                                     <a href="#" data-toggle="modal" data-target="#task-modal">
-                                                        <h5><a href="/topics/business-analyst/useCases/business-process-reengineering" data-filter-by="text">Business Analyst</a></h5>
+                                                        <h5><a href="/skills/business-analyst/projects/business-process-reengineering" data-filter-by="text">Business Analyst</a></h5>
                                                     </a>
                                                     <span class="badge badge-warning">In Progress</span>
                                                 </div>

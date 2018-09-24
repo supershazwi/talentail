@@ -9,6 +9,11 @@
           </ol>
       </nav>
   </div>
+  @if($selectedSkill != null)
+  <div class="alert alert-warning" style="border-radius: 0px;">
+    You are currently creating a project for <strong>{{$selectedSkill->title}}</strong>. <a href="/projects/selectSkill" style="float: right;">Select different skill</a>
+  </div>
+  @endif
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
@@ -16,10 +21,11 @@
                 <div class="mb-3 d-flex">
                     <img alt="Pipeline" src="/img/project.svg" class="avatar avatar-lg mr-1" />
                 </div>
-                <h1 class="display-4 mb-3">Create a Project</h1>
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <h1 class="display-4 mb-3">Create a {{$selectedSkill->title}} Project</h1>
+                <p class="lead">{{$selectedSkill->description}}</p>
             </section>
-            <h3>Project Title</h3>
+            
+            <h3 style="margin-top: 1.5rem;">Project Title</h3>
             <input type="text" name="title" class="form-control" id="title" placeholder="Enter title">
             <h3 style="margin-top: 1.5rem;">Project Description</h3>
             <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
@@ -49,7 +55,7 @@
                         <div class="card-body">
                           <div id="layout">
                               <div id="test-editormd" style="border-radius: 0.5rem;">
-                                  <textarea style="display:none;"></textarea>
+                                  <textarea style="display:none;" name="brief"></textarea>
                               </div>
                           </div>
                         </div>
@@ -61,13 +67,12 @@
                   <div class="row content-list-head">
                       <div class="col-auto">
                           <h3>Tasks</h3>
-                          <button class="btn btn-primary" style="margin-left: 1.5rem;" onclick="createTask()">Create Task</button>
+                          <button class="btn btn-primary" style="margin-left: 1.5rem;" onclick="addTask()">Add Task</button>
                       </div>
                   </div>
                   <!-- <span class="dz-message">No tasks added yet</span> -->
                   <div class="content-list-body">
-                    <div class="accordion" id="tasksList">
-                      
+                    <div class="accordion task-accordion" id="tasksList_1">
                     </div>
                   </div>
                   <!--end of content list-->
@@ -92,37 +97,17 @@
                                                       <i class="material-icons">attach_file</i>
                                                   </div>
                                               </li>
-                                              <li>
-                                                  <img alt="David Whittaker" src="/img/avatar-male-4.jpg" class="avatar" data-title="David Whittaker" data-toggle="tooltip" />
-                                              </li>
                                           </ul>
                                           <div class="media-body d-flex justify-content-between align-items-center">
                                               <div class="dz-file-details">
                                                   <a href="#" class="dz-filename">
-                                                      <span data-dz-name></span>
+                                                      <span data-dz-name class="filenames"></span>
                                                   </a>
                                                   <br>
                                                   <span class="text-small dz-size" data-dz-size></span>
                                               </div>
-                                              <img alt="Loader" src="/img/loader.svg" class="dz-loading" />
-                                              <div class="dropdown">
-                                                  <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                      <i class="material-icons">more_vert</i>
-                                                  </button>
-                                                  <div class="dropdown-menu dropdown-menu-right">
-                                                      <a class="dropdown-item" href="#">Download</a>
-                                                      <a class="dropdown-item" href="#">Share</a>
-                                                      <div class="dropdown-divider"></div>
-                                                      <a class="dropdown-item text-danger" href="#" data-dz-remove>Delete</a>
-                                                  </div>
-                                              </div>
-                                              <button class="btn btn-danger btn-sm dz-remove" data-dz-remove>
-                                                  Cancel
-                                              </button>
+                                              <i class="fas fa-times-circle remove-file" id="" onclick="removeFile(this)"></i>
                                           </div>
-                                      </div>
-                                      <div class="progress dz-progress">
-                                          <div class="progress-bar dz-upload" data-dz-uploadprogress></div>
                                       </div>
                                   </li>
                               </div>
@@ -147,41 +132,15 @@
                       <!--end of content list head-->
                       <div class="content-list-body">
                           <form class="checklist">
-                              <div class="row">
-                                  <div class="form-group col">
-                                      <input type="checkbox" name="" value="">
-                                      <p class="text-small" style="margin-left: 0.5rem;">Elicit requirements for software development using interviews</p>
-                                  </div>
-                                  <!--end of form group-->
-                              </div>
-                              <div class="row">
-                                  <div class="form-group col">
-                                      <input type="checkbox" name="" value="">
-                                      <p class="text-small" style="margin-left: 0.5rem;">Critically evaluate information gathered from multiple sources</p>
-                                  </div>
-                                  <!--end of form group-->
-                              </div>
-                              <div class="row">
-                                  <div class="form-group col">
-                                      <input type="checkbox" name="" value="">
-                                      <p class="text-small" style="margin-left: 0.5rem;">Translate technical information into business language to ensure understanding of the requirements</p>
-                                  </div>
-                                  <!--end of form group-->
-                              </div>
-                              <div class="row">
-                                  <div class="form-group col">
-                                      <input type="checkbox" name="" value="">
-                                      <p class="text-small" style="margin-left: 0.5rem;">Plans and designs complex business processes and system modifications</p>
-                                  </div>
-                                  <!--end of form group-->
-                              </div>
-                              <div class="row">
-                                  <div class="form-group col">
-                                      <input type="checkbox" name="" value="">
-                                      <p class="text-small" style="margin-left: 0.5rem;">Makes recommendations to improve and support business activities</p>
-                                  </div>
-                                  <!--end of form group-->
-                              </div>
+                              @foreach($selectedSkill->competencies as $competency)
+                                <div class="row">
+                                    <div class="form-group col">
+                                        <input type="checkbox" name="competency_{{$competency->id}}" value="{{$competency->id}}">
+                                        <p class="text-small" style="margin-left: 0.5rem;">{{$competency->title}}</p>
+                                    </div>
+                                    <!--end of form group-->
+                                </div>
+                              @endforeach
                           </form>
                       </div>
                   </div>
@@ -198,17 +157,71 @@
   </div>
 
   <script type="text/javascript">
-    function createTask() {
+    function addAnswer() {
+
+      // find out which add answer button was clicked
+      let taskIdString = event.target.id.split("_");
+      let taskId = taskIdString[1];
+      let answerId = document.querySelectorAll('.todo-answer-input_' + taskId).length + 1; 
+
+      document.getElementById("answersList_" + taskId + "_" + answerId).innerHTML += "<div class='input-group'><input type='text' name='answer_" + taskId + "_" + answerId + "' class='form-control todo-answer-input_" + taskId + "' id='todo-answer-input_" + taskId + "_" + answerId + "' placeholder='Enter answer " + answerId + "' style='margin-top: 1.5rem;'><div class='input-group-append' style='height: 40px; margin-top: 1.5rem;'><span class='input-group-text remove-answer' id='delete-answer_" + taskId + "_" + answerId + "' onclick='deleteAnswer()'><i class='fas fa-times-circle' id='span_" + taskId + "_" + answerId + "'></i></span></div></div>"
+
+      document.getElementById("answersList_" + taskId + "_" + answerId).insertAdjacentHTML('afterend', "<div class='accordion answer-accordion' id='answersList_" + taskId + "_" + (answerId+1) + "'></div>");
+    }
+
+    function deleteAnswer() {
+      let answerIdString = event.target.id.split("_");
+      let taskId = answerIdString[1];
+      let answerId = parseInt(answerIdString[2]);
+      let answersListId = "answersList_" + taskId + "_" + answerId;
+
+      // find total number of answers first
+      let answerCount = document.getElementsByClassName("todo-answer-input_" + taskId).length;
+
+      let elem = document.getElementById(answersListId);
+      elem.parentNode.removeChild(elem);
+
+      // need to recalculate all the ids
+      // start with answerslist
+      let x = document.getElementsByClassName("todo-answer-input_" + taskId);
+
+      for (i = answerId; i < answerCount; i++) {  
+          let x = document.getElementById("todo-answer-input_" + taskId + "_" + (parseInt(i) + 1));      
+          x.className = "form-control todo-answer-input_" + taskId;
+          x.name = "answer_" + taskId + "_" + i;
+          x.id = "todo-answer-input_" + taskId + "_" + i;
+          x.placeholder = "Enter answer " + i;
+
+          let y = document.getElementById("answersList_" + taskId + "_" + (i+1));
+          y.id = "answersList_" + taskId + "_" + i;
+
+          let u = document.getElementById("delete-answer_" + taskId + "_" + (i+1));
+          u.id = "delete-answer_" + taskId + "_" + i;
+
+          let v = document.getElementById("span_" + taskId + "_" + (i+1));
+          v.id = "span_" + taskId + "_" + i;
+      }
+
+      let z = document.getElementById("answersList_" + taskId + "_" + (answerCount+1));
+      z.id = "answersList_" + taskId + "_" + answerCount;
+    }
+
+    function addTask() {
       let cardCounter = document.querySelectorAll('.task-card').length + 1;
 
-      document.getElementById("tasksList").innerHTML += "<div class='card task-card' id='card_" + cardCounter + "' style='margin-bottom: 1.5rem;'><div class='card-header' id='heading_" + cardCounter + "'><h5 class='todo-title'>To-do #" + cardCounter + " Title</h5><input type='text' name='title' class='form-control todo-title-input' id='todo-title-input_" + cardCounter + "' placeholder='Enter title'></div><div id='collapse_" + cardCounter + "' class='collapse show collapse-heading' aria-labelledby='heading_" + cardCounter + "' data-parent='#tasksList'><div class='card-body'><h5 class='todo-description'>To-do #" + cardCounter + " Description</h5><input type='text' name='description' class='form-control todo-description-input' id='todo-description-input_" + cardCounter + "' placeholder='Enter description'><br /><input type='radio' name='mcq' value='mcq' class='radio-mcq' id='radio-mcq_" + cardCounter + "'> <span class='text-small'>Multiple Choice Question</span><br/><input type='radio' name='open-ended' value='open-ended' class='radio-open-ended' id='radio-open-ended_" + cardCounter + "'> <span class='text-small'>Open-ended</span><br/><input type='radio' name='na' value='na' class='radio-na' id='radio-na_" + cardCounter + "'> <span class='text-small'>N.A.</span><br/><hr /><input type='checkbox' name='file-upload' value='file-upload' class='checkbox-file-upload' id='checkbox-file-upload_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>File Upload</span><br /><button class='btn btn-danger delete-task' id='delete-task_" + cardCounter + "' onclick='deleteTask()' style='float: right; margin-bottom: 1.5rem;'>Delete</button></div></div></div>";
+      document.getElementById("tasksList_" + cardCounter).innerHTML += "<div class='card task-card' id='card_" + cardCounter + "' style='margin-bottom: 1.5rem;'><div class='card-header' id='heading_" + cardCounter + "'><h5 class='todo-title'>To-do #" + cardCounter + " Title</h5><input type='text' name='title' class='form-control todo-title-input' id='todo-title-input_" + cardCounter + "' placeholder='Enter title'></div><div id='collapse_" + cardCounter + "' class='collapse show collapse-heading' data-parent='#tasksList'><div class='card-body'><h5 class='todo-description'>To-do #" + cardCounter + " Description</h5><input type='text' name='description' class='form-control todo-description-input' id='todo-description-input_" + cardCounter + "' placeholder='Enter description'><div style='margin-top: 1.5rem;'><input type='radio' name='todo_" + cardCounter + "' value='mcq' class='radio-mcq' id='radio-mcq_" + cardCounter + "' onclick='launchMcq()'> <span class='text-small'>Multiple Choice Question</span> </div><div class='accordion answer-accordion' id='answersList_" + cardCounter + "_1'></div><div style='margin-top: 1.5rem; display: none;' id='mcq-buttons_" + cardCounter + "'><input type='checkbox' name='checkbox-multiple-select_" + cardCounter + "' value='file-upload' class='checkbox-multiple-select_" + cardCounter + "' id='checkbox-multiple-select_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>Enable Multiple Select</span><button class='btn btn-primary btn-sm add-task' style='float: right;' id='add-task_" + cardCounter + "' onclick='addAnswer()'>Add Answer</button><hr></div><div> <input type='radio' name='todo_" + cardCounter + "' value='open-ended' class='radio-open-ended' id='radio-open-ended_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>Open-ended</span></div><div><input type='radio' name='todo_" + cardCounter + "' value='na' class='radio-na' id='radio-na_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>N.A.</span></div><hr><input type='checkbox' name='checkbox-file-upload_" + cardCounter + "' value='file-upload' class='checkbox-file-upload_" + cardCounter + "' id='checkbox-file-upload_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>File Upload</span><br><button class='btn btn-danger delete-task btn-sm' id='delete-task_" + cardCounter + "' onclick='deleteTask()' style='float: right; margin-bottom: 1.5rem;'>Delete</button></div></div></div>";
+
+        document.getElementById("tasksList_" + cardCounter).insertAdjacentHTML('afterend', "<div class='accordion task-accordion' id='tasksList_" + (cardCounter+1) + "'></div>");
     }
 
     function deleteTask() {
       let taskIdString = event.target.id.split("_");
-      let cardId = "card_"+taskIdString[1];
+      let tasksListId = "tasksList_"+taskIdString[1];
 
-      let elem = document.getElementById(cardId);
+      // find total number of answers first
+      let taskCount = document.getElementsByClassName("task-card").length;
+
+      let elem = document.getElementById(tasksListId);
       elem.parentNode.removeChild(elem);
 
       // need to recalculate all the ids
@@ -257,25 +270,22 @@
       // radio-mcq
       x = document.getElementsByClassName("radio-mcq");
       for (i = 0; i < x.length; i++) {        
-          x[i].id = "radio-mcq_"+(i+1);
+          x[i].id = "radio-mcq_"+(i+1);   
+          x[i].name = "todo_"+(i+1);
       }
 
       // radio-open-ended
       x = document.getElementsByClassName("radio-open-ended");
       for (i = 0; i < x.length; i++) {        
-          x[i].id = "radio-open-ended_"+(i+1);
+          x[i].id = "radio-open-ended_"+(i+1);   
+          x[i].name = "todo_"+(i+1);
       }
 
       // radio-na
       x = document.getElementsByClassName("radio-na");
       for (i = 0; i < x.length; i++) {        
-          x[i].id = "radio-na_"+(i+1);
-      }
-
-      // checkbox-file-upload
-      x = document.getElementsByClassName("checkbox-file-upload");
-      for (i = 0; i < x.length; i++) {        
-          x[i].id = "checkbox-file-upload_"+(i+1);
+          x[i].id = "radio-na_"+(i+1);   
+          x[i].name = "todo_"+(i+1);
       }
 
       // delete-task
@@ -283,6 +293,91 @@
       for (i = 0; i < x.length; i++) {        
           x[i].id = "delete-task_"+(i+1);
       }
+
+      // task-accordion
+      x = document.getElementsByClassName("task-accordion");
+      for (i = 0; i < x.length; i++) {        
+          x[i].id = "tasksList_"+(i+1);
+      }
+
+      taskId = parseInt(taskIdString[1]);
+
+      // loop through tasks
+      for (i = taskId; i < taskCount; i++) {  
+          // loop through answersList
+          let counter = 1;
+          while(document.getElementById("answersList_" + (i + 1) + "_" + counter) != null) {
+            let a = document.getElementById("answersList_" + (i + 1) + "_" + counter);
+            if(a != null) {
+              a.id = "answersList_" + i + "_" + counter;
+            }
+
+            a = document.getElementById("todo-answer-input_" + (i + 1) + "_" + counter);
+            if(a != null) {
+              a.id = "todo-answer-input_" + i + "_" + counter;
+              a.name = "answer_" + i + "_" + counter;
+              a.className = "form-control todo-answer-input_" + i;
+            }
+
+            a = document.getElementById("delete-answer_" + (i+1) + "_" + counter);
+            if(a != null) {
+              a.id = "delete-answer_" + i + "_" + counter;
+            }
+
+            a = document.getElementById("span_" + (i+1) + "_" + counter);
+            if(a != null) {
+              a.id = "span_" + i + "_" + counter;
+            }
+
+            a = document.getElementById("mcq-buttons_" + (i+1));
+            if(a != null) {
+              a.id = "mcq-buttons_" + i;
+            }
+
+            a = document.getElementById("checkbox-file-upload_" + (i+1));
+            if(a != null) {
+              a.id = "checkbox-file-upload_" + i;
+              a.className = "checkbox-file-upload_" + i;
+              a.name = "checkbox-file-upload_" + i;
+            }
+
+            a = document.getElementById("checkbox-multiple-select_" + (i+1));
+            if(a != null) {
+              a.id = "checkbox-multiple-select_" + i;
+              a.className = "checkbox-multiple-select_" + i;
+              a.name = "checkbox-multiple-select_" + i;
+            }
+
+            a = document.getElementById("add-task_" + (i+1));
+            if(a != null) {
+              a.id = "add-task_" + i;
+            }
+
+            counter++;
+          }
+        let z = document.getElementById("answersList_" + (i+1) + "_" + counter);
+        if(z != null) {
+          z.id = "answersList_" + i + "_" + counter;
+        }
+      }
+    }
+
+    function launchMcq() {
+      let idString = event.target.id.split("_");
+      let mcqButtons = document.getElementById("mcq-buttons_" + idString[1]);
+      mcqButtons.style.display = "block";
+    }
+
+    function removeMcq() {
+      let idString = event.target.id.split("_");
+      let mcqButtons = document.getElementById("mcq-buttons_" + idString[1]);
+      mcqButtons.style.display = "none";
+    }
+
+    function removeFile(event) {
+      console.log(event.parentElement.parentElement.parentElement);
+      let a = event.parentElement.parentElement.parentElement;
+      a.parentNode.removeChild(a);
     }
   </script>
 @endsection

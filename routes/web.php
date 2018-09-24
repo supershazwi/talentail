@@ -25,6 +25,13 @@ Route::get('/faq', function() {
     return view('faq');
 });
 
+Route::get('/file-upload', function() {
+    return view('file-upload');
+});
+
+Route::get('/projects/selectSkill', 'ProjectsController@selectSkill');
+Route::post('/projects/selectSkill', 'ProjectsController@selectSkill');
+
 Route::post('/settings', function() {
     $user = Auth::user();
 
@@ -61,7 +68,7 @@ Route::get('/settings', function() {
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resources([
-    'companies' => 'CompaniesController',
+    // 'companies' => 'CompaniesController',
     'opportunities' => 'OpportunitiesController',
     'skills' => 'SkillsController',
     'messages' => 'MessagesController',

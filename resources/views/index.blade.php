@@ -20,7 +20,7 @@
                         <span class="badge badge-success">1.0</span>
                     </div>
                 </div>
-                <h1 class="display-4 mb-3">Pipeline Components</h1>
+                <h1 class="display-4 mb-3">Talentail</h1>
                 <p class="lead">In addition to the default <a href="components-bootstrap.html">Bootstrap Components</a>, Pipeline includes many custom components suited to project management and team-based aplications</p>
             </section>
             <div class="row">
