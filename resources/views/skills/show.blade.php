@@ -27,11 +27,11 @@
                       <div class="col-lg-10" style="float: left; padding: 0px;">
                         <h5><a href="/skills/{{$skill->slug}}/projects/{{$project->slug}}">{{$project->title}}</a></h5>
                         <p style="margin-top: 0.5rem;">{{$project->description}}</p>
-                        <a href="#" data-toggle="tooltip" data-placement="top" title="">
-                            <img class="avatar" src="/img/avatar-male-4.jpg">
+                        <a href="/profile/{{$project->user->id}}" data-toggle="tooltip" data-placement="top" title="">
+                            <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$project->user->avatar}}">
                         </a>
-                        <a href="#">
-                          <span style="font-size: .875rem; line-height: 1.3125rem;">Roger Ver</span>
+                        <a href="/profile/{{$project->user->id}}">
+                          <span style="font-size: .875rem; line-height: 1.3125rem;">{{$project->user->name}}</span>
                         </a>
                       </div>
                       <div class="col-lg-1" style="text-align: center; float: right; padding: 0px;">

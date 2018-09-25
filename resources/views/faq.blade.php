@@ -23,32 +23,20 @@
               <div class="col-lg-12">
                 <div class="card mb-3">
                   <div class="card-body">
-                      <h5>1. Why do applicants have to pay money to apply for a job?</h5>
-                      <p style="margin-top: 0.5rem;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                      <h5>1. What is the difference between Talentail and other sites such as Coursera, Udacity, etc.?</h5>
+                      <p style="margin-top: 0.5rem;">What better way to use the knowledge you've gained from these sites than to apply it onto real world use cases? There will be others who have taken the same course but what sets you apart is the work that you create.</p>
                   </div>
                 </div>
                 <div class="card mb-3">
                   <div class="card-body">
-                      <h5>1. Why do applicants have to pay money to apply for a job?</h5>
-                      <p style="margin-top: 0.5rem;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                      <h5>2. Why would companies trust the creators on this platform?</h5>
+                      <p style="margin-top: 0.5rem;">We have vetted each creator on the platform by looking at not only their experiences but also their tangible work to determine that they are fit to create projects and assess the competencies of each seeker.</p>
                   </div>
                 </div>
                 <div class="card mb-3">
                   <div class="card-body">
-                      <h5>1. Why do applicants have to pay money to apply for a job?</h5>
-                      <p style="margin-top: 0.5rem;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                  </div>
-                </div>
-                <div class="card mb-3">
-                  <div class="card-body">
-                      <h5>1. Why do applicants have to pay money to apply for a job?</h5>
-                      <p style="margin-top: 0.5rem;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                  </div>
-                </div>
-                <div class="card mb-3">
-                  <div class="card-body">
-                      <h5>1. Why do applicants have to pay money to apply for a job?</h5>
-                      <p style="margin-top: 0.5rem;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                      <h5>3. Why come up with this idea?</h5>
+                      <p style="margin-top: 0.5rem;">We have come a long way in using resumes to introduce ourselves and our capabilities. However, with the introduction of Applicant Tracking Systems & strict recruitment processes, it has led to practices such as "resume hacking". We serve to supercharge your resumes by making it easier for you to gather your "tangibles".</p>
                   </div>
                 </div>
               </div>

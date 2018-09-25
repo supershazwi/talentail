@@ -11,7 +11,12 @@
     </div>
     <div class="content-container">
         <div class="chat-module" data-filter-list="chat-module-body">
-            <div class="chat-module-top">
+            <div class="alert alert-light" role="alert" style="height: 100% !important; padding-top: 40% !important;
+text-align: center; text-align: center;">
+                <h1>👉</h1>
+                <h6>Jump into a conversation with other creators & seekers</h6>
+            </div>
+            <!-- <div class="chat-module-top">
                 <form>
                     <div class="input-group input-group-round">
                         <div class="input-group-prepend">
@@ -189,22 +194,13 @@
                         </div>
                     </div>
                 </form>
-            </div>
+            </div> -->
         </div>
         <div class="sidebar collapse" id="sidebar-collapse">
             <div class="sidebar-content">
                 <div class="chat-team-sidebar text-small">
                     <div class="chat-team-sidebar-top">
-                        <div class="media align-items-center">
-                            <a href="#" class="mr-2">
-                                <img alt="Team Avatar" src="/img/logo-team.jpg" class="avatar avatar-lg" />
-                            </a>
-                            <div class="media-body">
-                                <h5 class="mb-1">Pipeline Fans</h5>
-                                <p>A collective of Pipeline enthusiasts sharing the the love</p>
-                            </div>
-                        </div>
-                        <ul class="nav nav-tabs nav-justified" role="tablist">
+                        <ul class="nav nav-tabs nav-justified" role="tablist" style="margin-top: 0rem;">
                             <li class="nav-item">
                                 <a class="nav-link active" id="members-tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="true">Members</a>
                             </li>

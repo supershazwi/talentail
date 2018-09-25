@@ -31,16 +31,19 @@
             <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
             <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Brief</a>
+                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Step 1: Brief</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="false">Tasks</a>
+                    <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="false">Step 2: Tasks</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
+                    <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Step 3: Files</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#competencies" role="tab" aria-controls="competencies" aria-selected="false">Competencies</a>
+                    <a class="nav-link" data-toggle="tab" href="#competencies" role="tab" aria-controls="competencies" aria-selected="false">Step 4: Competencies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#miscellaneous" role="tab" aria-controls="miscellaneous" aria-selected="false">Step 5: Miscellaneous</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -135,13 +138,62 @@
                               @foreach($selectedSkill->competencies as $competency)
                                 <div class="row">
                                     <div class="form-group col">
-                                        <input type="checkbox" name="competency_{{$competency->id}}" value="{{$competency->id}}">
+                                        <input type="checkbox" name="competency[]" value="{{$competency->id}}">
                                         <p class="text-small" style="margin-left: 0.5rem;">{{$competency->title}}</p>
                                     </div>
                                     <!--end of form group-->
                                 </div>
                               @endforeach
                           </form>
+                      </div>
+                  </div>
+                  <!--end of content list-->
+              </div>
+              <div class="tab-pane fade" id="competencies" role="tabpanel" aria-labelledby="competencies-tab">
+                  <div class="content-list">
+                      <div class="row content-list-head">
+                          <div class="col-auto">
+                              <h3>Competencies</h3>
+                          </div>
+                      </div>
+                      <!--end of content list head-->
+                      <div class="content-list-body">
+                        @foreach($selectedSkill->competencies as $competency)
+                          <div class="row">
+                              <div class="form-group col">
+                                  <input type="checkbox" name="competency[]" value="{{$competency->id}}">
+                                  <p class="text-small" style="margin-left: 0.5rem;">{{$competency->title}}</p>
+                              </div>
+                              <!--end of form group-->
+                          </div>
+                        @endforeach
+                      </div>
+                  </div>
+                  <!--end of content list-->
+              </div>
+              <div class="tab-pane fade" id="miscellaneous" role="tabpanel" aria-labelledby="miscellaneous-tab">
+                  <div class="content-list">
+                      <div class="row content-list-head">
+                          <div class="col-auto">
+                              <h3>Miscellaneous</h3>
+                          </div>
+                      </div>
+                      <!--end of content list head-->
+                      <div class="content-list-body">
+                        <h3 style="margin-top: 1.5rem;">Project Price</h3>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">$</span>
+                          </div>
+                          <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1">
+                        </div>
+                        <h3 style="margin-top: 1.5rem;">Project Duration</h3>
+                        <div class="input-group mb-3">
+                          <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                          <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">hours</span>
+                          </div>
+                        </div>
                       </div>
                   </div>
                   <!--end of content list-->

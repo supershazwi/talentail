@@ -4,7 +4,7 @@
 
 <head>
 
-	<title>Talentail: The epicentre of real world projects</title>
+	<title>Talentail: Apply your knowledge onto real world projects</title>
 	<link rel="stylesheet" type="text/css" href="/css/custom.css">
 	<link rel="stylesheet" type="text/css" href="/css/theme.css">
 	<link rel="stylesheet" type="text/css" href="/css/editormd.css" />
@@ -48,9 +48,9 @@
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/skills">Skills</a>
 	                </li>
-	                <li class="nav-item">
+	                <!-- <li class="nav-item">
 	                    <a class="nav-link" href="/projects">Projects</a>
-	                </li>
+	                </li> -->
 	                <!-- <li class="nav-item">
 	                    <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#exploreDropdown" aria-controls="exploreDropdown">Explore</a>
 	                    <div id="exploreDropdown" class="collapse">
@@ -75,13 +75,13 @@
 	            <div class="d-none d-lg-block w-100">
 	                <ul class="nav nav-small flex-column">
 	                    <li class="nav-item">
-	                        <a href="nav-side-team.html" class="nav-link">About Us</a>
+	                        <a href="/about-us" class="nav-link">About Us</a>
 	                    </li>
 	                    <li class="nav-item">
-	                        <a href="nav-side-project.html" class="nav-link">Contact Us</a>
+	                        <a href="/contact-us" class="nav-link">Contact Us</a>
 	                    </li>
 	                    <li class="nav-item">
-	                        <a href="nav-side-task.html" class="nav-link">FAQ</a>
+	                        <a href="/faq" class="nav-link">FAQ</a>
 	                    </li>
 	                </ul>
 	                <hr>

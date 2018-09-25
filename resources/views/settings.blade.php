@@ -15,10 +15,7 @@
         <div class="col-lg-3 mb-3">
             <ul class="nav nav-tabs flex-lg-column">
                 <li class="nav-item">
-                    <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">General</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="password-tab" data-toggle="tab" href="#password" role="tab" aria-controls="password" aria-selected="false">Authentication</a>
+                    <a class="nav-link active" id="password-tab" data-toggle="tab" href="#password" role="tab" aria-controls="password" aria-selected="false">Authentication</a>
                 </li>
             </ul>
         </div>
@@ -26,50 +23,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane fade show active" role="tabpanel" id="profile" aria-labelledby="profile-tab">
-                            <div class="media mb-4">
-                                <img alt="Image" src="/img/download.png" class="avatar avatar-lg" />
-                                <div class="media-body ml-3">
-                                    <div class="custom-file custom-file-naked d-block mb-1">
-                                        <input type="file" class="custom-file-input d-none" id="avatar-file">
-                                        <label class="custom-file-label position-relative" for="avatar-file">
-                                            <span class="btn btn-primary">
-                                                Upload avatar
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <small>For best results, use an image at least 256px by 256px in either .jpg or .png format</small>
-                                </div>
-                            </div>
-                            <!--end of avatar-->
-                            <form method="POST" action="/settings">
-                                @csrf
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">Name</label>
-                                    <div class="col">
-                                        <input type="text" placeholder="Name" value="{{$user->name}}" id="name" name="name" class="form-control" required />
-                                    </div>
-                                </div>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">Email</label>
-                                    <div class="col">
-                                        <input type="email" placeholder="Enter your email address" value="{{$user->email}}" id="email" name="email" class="form-control" required />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-3">Description</label>
-                                    <div class="col">
-                                        <textarea type="text" placeholder="Tell us a little about yourself" name="description" id="description" class="form-control" rows="4">{{$user->description}}</textarea>
-                                    </div>
-                                </div>
-                                <div class="row justify-content-end">
-                                    <div class="col">
-                                        <button type="submit" class="btn btn-primary pull-right">Update Settings</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="tab-pane fade" role="tabpanel" id="password" aria-labelledby="password-tab">
+                        <div class="tab-pane fade show active" role="tabpanel" id="password" aria-labelledby="password-tab">
                             <form>
                                 <div class="form-group row align-items-center">
                                     <label class="col-3">Current Password</label>
