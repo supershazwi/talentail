@@ -14,4 +14,17 @@ class Project extends Model
     public function user() {
     	return $this->belongsTo(User::class);
     }
+
+    public function tasks() {
+    	return $this->hasMany(Task::class);
+    }
+
+    public function project_files() {
+        return $this->hasMany(ProjectFile::class);
+    }
+
+    public function competencies()
+    {
+        return $this->belongsToMany(Competency::class);
+    }
 }

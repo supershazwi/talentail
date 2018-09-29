@@ -18,7 +18,7 @@
                         <div class="media">
                             <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" />
                             <div class="media-body ml-3">
-                                <h1 class="mb-0">{{$user->name}} 
+                                <h1 class="mb-0" style="margin-top: 0;">{{$user->name}} 
                                     @if($user->creator)
                                     <span class="badge badge-warning" style="font-size: 0.8rem;">Creator</span>
                                     @endif

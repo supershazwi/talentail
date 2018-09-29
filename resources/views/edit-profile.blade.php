@@ -23,7 +23,7 @@
         <div class="content-list-body">
             <h5 style="margin-top: 1.5rem;">Profile Image</h5>
             <div class="media mb-4">
-                <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" />
+                <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" style="margin-top: 0px !important;"/>
                 <div class="media-body ml-3">
                     <div class="custom-file custom-file-naked d-block mb-1">
                         <input type="file" class="custom-file-input d-none" id="avatar-file" name="avatar-file">

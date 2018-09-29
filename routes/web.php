@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\App;
+
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
@@ -20,9 +22,31 @@ use Illuminate\Support\Facades\Auth;
 use App\Experience;
 use App\User;
 
+use Pusher\Laravel\Facades\Pusher;
+
+Route::get('/bridge', function() {
+    $pusher = App::make('pusher');
+
+    $pusher->trigger('my-channel', 'my-event', array('message' => 'hello world'));
+
+    return view('welcome');
+});
+
+Route::get('/bridge-2', function() {
+    return view('welcome-2');
+});
+
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Auth::routes();
+
+Route::get('/profile/edit', function() {
+    $user = Auth::user();
+
+    return view('edit-profile', [
+        'user' => $user
+    ]);
+})->middleware('auth');
 
 Route::get('/profile/{profileId}', function() {
     $user = User::find(Route::getCurrentRoute()->parameters()['profileId']);
@@ -42,13 +66,7 @@ Route::get('/profile/{profileId}', function() {
     ]);
 });
 
-Route::get('/profile/edit', function() {
-    $user = Auth::user();
 
-    return view('edit-profile', [
-        'user' => $user
-    ]);
-})->middleware('auth');
 
 Route::post('/profile/save', function(Request $request) {
     $user = Auth::user();
@@ -102,9 +120,9 @@ Route::get('/contact-us', function() {
     return view('contact-us');
 });
 
-Route::get('/notifications', function() {
-    return view('notifications');
-});
+// Route::get('/notifications', function() {
+//     return view('notifications');
+// });
 
 Route::get('/faq', function() {
     return view('faq');
@@ -114,8 +132,8 @@ Route::get('/file-upload', function() {
     return view('file-upload');
 });
 
-Route::get('/projects/selectSkill', 'ProjectsController@selectSkill');
-Route::post('/projects/selectSkill', 'ProjectsController@selectSkill');
+Route::get('/projects/select-skill', 'ProjectsController@selectSkill');
+Route::post('/projects/select-skill', 'ProjectsController@selectSkill');
 
 Route::post('/settings', function() {
     $user = Auth::user();
@@ -152,16 +170,35 @@ Route::get('/settings', function() {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('ajaxRequest', 'HomeController@ajaxRequest');
+
+Route::post('ajaxRequest', 'HomeController@ajaxRequestPost');
+
+Route::get('/messages/test', function() {
+    return view('messages.test');
+});
+
+Route::get('/messages/{userId}', 'MessagesController@showIndividualChannel');
+
+Route::post('/messages/send', 'MessagesController@sendMessage');
+
+
+
+Route::post('/messages/test', 'MessagesController@testMessage');
+
+Route::post('/skills/{skillSlug}/projects/{projectSlug}/save-project', 'ProjectsController@saveChanges');
+Route::get('/skills/{skillSlug}/projects/{projectSlug}/edit', 'ProjectsController@edit')->middleware('auth');
+Route::get('/skills/{skillSlug}/projects/{projectSlug}', 'ProjectsController@show')->middleware('auth');
+    
+Route::post('/notifications/notify', 'NotificationController@postNotify');
 Route::resources([
     // 'companies' => 'CompaniesController',
     'opportunities' => 'OpportunitiesController',
     'skills' => 'SkillsController',
     'messages' => 'MessagesController',
-    'projects' => 'ProjectsController'
+    'projects' => 'ProjectsController',
+    'notifications' => 'NotificationController',
 ]);
-
-Route::get('/skills/{skillSlug}/projects/{projectSlug}/edit', 'ProjectsController@edit')->middleware('auth');
-Route::get('/skills/{skillSlug}/projects/{projectSlug}', 'ProjectsController@show')->middleware('auth');
 
 Route::get('/', function() {
 	return view('index');

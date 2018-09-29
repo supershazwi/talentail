@@ -8,7 +8,9 @@
               </li>
           </ol>
       </nav>
-  </div>
+      <button class="btn btn-primary" onclick="submit()">Submit</button>
+  </div>  
+
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
@@ -19,7 +21,7 @@
                 <h1 class="display-4 mb-3">Create a Project</h1>
                 <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             </section>
-            <form method="POST" action="/projects/selectSkill">
+            <form method="POST" action="/projects/select-skill">
               {{ csrf_field() }}
               <div class="form-group">
                 <h3>Select Skill</h3>
@@ -31,12 +33,18 @@
                 </select>
               </div>
               <div style="margin-top: 1.5rem !important; text-align: right;">
-                <button class="btn btn-primary">Submit</button>
+                <button class="btn btn-primary" id="submit" style="display: none;">Submit</button>
               </div>
             </form>
           </div>
       </div>
   </div>
+
+  <script type="text/javascript">
+      function submit() {
+          document.getElementById("submit").click();
+      }
+  </script>
 @endsection
 
 @section ('footer')

@@ -1,17 +1,20 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="breadcrumb-bar navbar bg-white sticky-top">
+  <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box;">
       <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/projects">Projects</a>&nbsp;> Create a Project
               </li>
           </ol>
       </nav>
+      <button class="btn btn-default" onclick="cancel()">Cancel</button>
+      <button class="btn btn-default" onclick="saveProject()">Save Project</button>
+      <button class="btn btn-primary" onclick="createProject()">Create Project</button>
   </div>
   @if($selectedSkill != null)
-  <div class="alert alert-warning" style="border-radius: 0px;">
-    You are currently creating a project for <strong>{{$selectedSkill->title}}</strong>. <a href="/projects/selectSkill" style="float: right;">Select different skill</a>
+  <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+    You are currently creating a project for <strong>{{$selectedSkill->title}}</strong>. <a href="/projects/select-skill" style="float: right;">Select different skill</a>
   </div>
   @endif
   <div class="container">
@@ -24,193 +27,206 @@
                 <h1 class="display-4 mb-3">Create a {{$selectedSkill->title}} Project</h1>
                 <p class="lead">{{$selectedSkill->description}}</p>
             </section>
-            
-            <h3 style="margin-top: 1.5rem;">Project Title</h3>
-            <input type="text" name="title" class="form-control" id="title" placeholder="Enter title">
-            <h3 style="margin-top: 1.5rem;">Project Description</h3>
-            <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
-            <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
-                <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Step 1: Brief</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="false">Step 2: Tasks</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Step 3: Files</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#competencies" role="tab" aria-controls="competencies" aria-selected="false">Step 4: Competencies</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#miscellaneous" role="tab" aria-controls="miscellaneous" aria-selected="false">Step 5: Miscellaneous</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane fade show active" id="brief" role="tabpanel" aria-labelledby="brief-tab" data-filter-list="card-list-body">
-                  <div class="row content-list-head">
-                      <div class="col-auto">
-                          <h3>Brief</h3>
-                      </div>
-                  </div>
-                  <div class="content-list-body">
-                      <div class="card">
-                        <div class="card-body">
-                          <div id="layout">
-                              <div id="test-editormd" style="border-radius: 0.5rem;">
-                                  <textarea style="display:none;" name="brief"></textarea>
-                              </div>
-                          </div>
+            <form method="POST" action="/projects" enctype="multipart/form-data">
+            @csrf
+              <h3 style="margin-top: 1.5rem;">Project Title</h3>
+              <input type="text" name="title" class="form-control" id="title" placeholder="Enter title">
+              <h3 style="margin-top: 1.5rem;">Project Description</h3>
+              <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+              <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
+                  <li class="nav-item">
+                      <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Step 1: Brief</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="false">Step 2: Tasks</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Step 3: Files</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#competencies" role="tab" aria-controls="competencies" aria-selected="false">Step 4: Competencies</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#miscellaneous" role="tab" aria-controls="miscellaneous" aria-selected="false">Step 5: Miscellaneous</a>
+                  </li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane fade show active" id="brief" role="tabpanel" aria-labelledby="brief-tab" data-filter-list="card-list-body">
+                    <div class="row content-list-head">
+                        <div class="col-auto">
+                            <h3>Brief</h3>
                         </div>
-                      </div>
-                  </div>
-                  <!--end of content list-->
-              </div>
-              <div class="tab-pane fade" id="tasks" role="tabpanel" aria-labelledby="tasks-tab" data-filter-list="card-list-body">
-                  <div class="row content-list-head">
-                      <div class="col-auto">
-                          <h3>Tasks</h3>
-                          <button class="btn btn-primary" style="margin-left: 1.5rem;" onclick="addTask()">Add Task</button>
-                      </div>
-                  </div>
-                  <!-- <span class="dz-message">No tasks added yet</span> -->
-                  <div class="content-list-body">
-                    <div class="accordion task-accordion" id="tasksList_1">
                     </div>
-                  </div>
-                  <!--end of content list-->
-              </div>
-              <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab" data-filter-list="dropzone-previews">
-                  <div class="content-list">
-                      <div class="row content-list-head">
-                          <div class="col-auto">
-                              <h3>Files</h3>
-                          </div>
-                      </div>
-                      <!--end of content list head-->
-                      <div class="content-list-body row">
-                          <div class="col">
-                              <div class="d-none dz-template">
-                                  <li class="list-group-item dz-preview dz-file-preview">
-                                      <div class="media align-items-center dz-details">
-                                          <ul class="avatars">
-                                              <li>
-                                                  <div class="avatar bg-primary dz-file-representation">
-                                                      <img class="avatar" data-dz-thumbnail />
-                                                      <i class="material-icons">attach_file</i>
-                                                  </div>
-                                              </li>
-                                          </ul>
-                                          <div class="media-body d-flex justify-content-between align-items-center">
-                                              <div class="dz-file-details">
-                                                  <a href="#" class="dz-filename">
-                                                      <span data-dz-name class="filenames"></span>
-                                                  </a>
-                                                  <br>
-                                                  <span class="text-small dz-size" data-dz-size></span>
-                                              </div>
-                                              <i class="fas fa-times-circle remove-file" id="" onclick="removeFile(this)"></i>
-                                          </div>
-                                      </div>
-                                  </li>
-                              </div>
-                              <form class="dropzone" action="http://mediumra.re/dropzone/upload.php">
-                                  <span class="dz-message">Drop files here or click here to upload</span>
-                              </form>
-                              <ul class="list-group list-group-activity dropzone-previews flex-column-reverse">
-
-                              </ul>
-                          </div>
-                      </div>
-                  </div>
-                  <!--end of content list-->
-              </div>
-              <div class="tab-pane fade" id="competencies" role="tabpanel" aria-labelledby="competencies-tab">
-                  <div class="content-list">
-                      <div class="row content-list-head">
-                          <div class="col-auto">
-                              <h3>Competencies</h3>
-                          </div>
-                      </div>
-                      <!--end of content list head-->
-                      <div class="content-list-body">
-                          <form class="checklist">
-                              @foreach($selectedSkill->competencies as $competency)
-                                <div class="row">
-                                    <div class="form-group col">
-                                        <input type="checkbox" name="competency[]" value="{{$competency->id}}">
-                                        <p class="text-small" style="margin-left: 0.5rem;">{{$competency->title}}</p>
-                                    </div>
-                                    <!--end of form group-->
+                    <div class="content-list-body">
+                        <div class="card">
+                          <div class="card-body">
+                            <div id="layout">
+                                <div id="test-editormd" style="border-radius: 0.5rem;">
+                                    <textarea style="display:none;" name="brief"></textarea>
                                 </div>
-                              @endforeach
-                          </form>
-                      </div>
-                  </div>
-                  <!--end of content list-->
-              </div>
-              <div class="tab-pane fade" id="competencies" role="tabpanel" aria-labelledby="competencies-tab">
-                  <div class="content-list">
-                      <div class="row content-list-head">
-                          <div class="col-auto">
-                              <h3>Competencies</h3>
-                          </div>
-                      </div>
-                      <!--end of content list head-->
-                      <div class="content-list-body">
-                        @foreach($selectedSkill->competencies as $competency)
-                          <div class="row">
-                              <div class="form-group col">
-                                  <input type="checkbox" name="competency[]" value="{{$competency->id}}">
-                                  <p class="text-small" style="margin-left: 0.5rem;">{{$competency->title}}</p>
-                              </div>
-                              <!--end of form group-->
-                          </div>
-                        @endforeach
-                      </div>
-                  </div>
-                  <!--end of content list-->
-              </div>
-              <div class="tab-pane fade" id="miscellaneous" role="tabpanel" aria-labelledby="miscellaneous-tab">
-                  <div class="content-list">
-                      <div class="row content-list-head">
-                          <div class="col-auto">
-                              <h3>Miscellaneous</h3>
-                          </div>
-                      </div>
-                      <!--end of content list head-->
-                      <div class="content-list-body">
-                        <h3 style="margin-top: 1.5rem;">Project Price</h3>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">$</span>
-                          </div>
-                          <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1">
-                        </div>
-                        <h3 style="margin-top: 1.5rem;">Project Duration</h3>
-                        <div class="input-group mb-3">
-                          <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                          <div class="input-group-append">
-                            <span class="input-group-text" id="basic-addon2">hours</span>
+                            </div>
                           </div>
                         </div>
+                    </div>
+                    <!--end of content list-->
+                </div>
+                <div class="tab-pane fade" id="tasks" role="tabpanel" aria-labelledby="tasks-tab" data-filter-list="card-list-body">
+                    <div class="row content-list-head">
+                        <div class="col-auto">
+                            <h3>Tasks</h3>
+                            <button class="btn btn-primary" style="margin-left: 1.5rem;" onclick="addTask()">Add Task</button>
+                        </div>
+                    </div>
+                    <!-- <span class="dz-message">No tasks added yet</span> -->
+                    <div class="content-list-body">
+                      <div class="accordion task-accordion" id="tasksList_1">
                       </div>
-                  </div>
-                  <!--end of content list-->
+                    </div>
+                    <!--end of content list-->
+                </div>
+                <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab" data-filter-list="dropzone-previews">
+                    <div class="content-list">
+                        <div class="row content-list-head">
+                            <div class="col-auto">
+                                <h3>Files</h3>
+                            </div>
+                        </div>
+                        <!--end of content list head-->
+                        <div class="content-list-body row">
+                            <div class="col">
+                                <div class="box">
+                                  <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; margin-bottom: 1.5rem;"/>
+                                  <label for="file-1" style="position: absolute; left: 0; margin-left: 12px; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.2rem 1.25rem; height: 36px;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
+                                </div>
+                                <div id="selectedFiles"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end of content list-->
+                </div>
+                <div class="tab-pane fade" id="competencies" role="tabpanel" aria-labelledby="competencies-tab">
+                    <div class="content-list">
+                        <div class="row content-list-head">
+                            <div class="col-auto">
+                                <h3>Competencies</h3>
+                            </div>
+                        </div>
+                        <!--end of content list head-->
+                        <div class="content-list-body">
+                          @foreach($selectedSkill->competencies as $competency)
+                            <div class="row">
+                                <div class="form-group col">
+                                    <div class="form-check">
+                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}">
+                                      <p>
+                                        {{$competency->title}}
+                                      </p>
+                                    </div>
+                                </div>
+                                <!--end of form group-->
+                            </div>
+                          @endforeach
+                        </div>
+                    </div>
+                    <!--end of content list-->
+                </div>
+                <div class="tab-pane fade" id="competencies" role="tabpanel" aria-labelledby="competencies-tab">
+                    <div class="content-list">
+                        <div class="row content-list-head">
+                            <div class="col-auto">
+                                <h3>Competencies</h3>
+                            </div>
+                        </div>
+                        <!--end of content list head-->
+                        <div class="content-list-body">
+                          @foreach($selectedSkill->competencies as $competency)
+                            <div class="row">
+                                <div class="form-group col">
+                                    <input type="checkbox" name="competency[]" value="{{$competency->id}}">
+                                    <p class="text-small" style="margin-left: 0.5rem;">{{$competency->title}}</p>
+                                </div>
+                                <!--end of form group-->
+                            </div>
+                          @endforeach
+                        </div>
+                    </div>
+                    <!--end of content list-->
+                </div>
+                <div class="tab-pane fade" id="miscellaneous" role="tabpanel" aria-labelledby="miscellaneous-tab">
+                    <div class="content-list">
+                        <div class="row content-list-head">
+                            <div class="col-auto">
+                                <h3>Miscellaneous</h3>
+                            </div>
+                        </div>
+                        <!--end of content list head-->
+                        <div class="content-list-body">
+                          <h5 style="margin-top: 1.5rem;">Project Price</h5>
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="basic-addon1">$</span>
+                            </div>
+                            <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1" name="price">
+                          </div>
+                          <h5 style="margin-top: 1.5rem;">Project Duration</h5>
+                          <div class="input-group mb-3">
+                            <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Recipient's username" aria-describedby="basic-addon2" name="hours">
+                            <div class="input-group-append">
+                              <span class="input-group-text" id="basic-addon2">hours</span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <!--end of content list-->
+                </div>
               </div>
-            </div>
-            <div style="margin-top: 1.5rem !important;">
-              <button class="btn btn-primary" style="float: right;">Create Project</button>
-              <button class="btn btn-default" style="float: right; margin-right: 0.5rem;">Save</button>
-              <button class="btn btn-default" style="float: right; margin-right: 0.5rem;">Cancel</button>
-            </div>
+              <div style="margin-top: 1.5rem !important;">
+                <button class="btn btn-primary" id="createProject" type="submit" style="float: right; display: none;">Create Project</button>
+                <button class="btn btn-default" id="saveProject" type="submit" style="float: right; margin-right: 0.5rem; display: none;">Save</button>
+                <button class="btn btn-default" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
+              </div>
+            </form>
           </div>
       </div>
   </div>
 
   <script type="text/javascript">
-    function addAnswer() {
 
+    var selDiv = "";
+    
+    document.addEventListener("DOMContentLoaded", init, false);
+  
+    function init() {
+      document.querySelector('#file-1').addEventListener('change', handleFileSelect, false);
+      selDiv = document.querySelector("#selectedFiles");
+    }
+    
+    function handleFileSelect(e) {
+      if(!e.target.files) return;
+      selDiv.innerHTML = "";
+      
+      var files = e.target.files;
+      for(var i=0; i<files.length; i++) {
+        var f = files[i];
+        
+        selDiv.innerHTML += f.name + "<br/>";
+      }
+    }
+
+    function saveProject() {
+        document.getElementById("saveProject").click();
+    }
+
+    function createProject() {
+        document.getElementById("createProject").click();
+    }
+
+    function cancel() {
+        window.location.replace('/projects/select-skill');
+    }
+
+    function addAnswer() {
+      event.preventDefault();
       // find out which add answer button was clicked
       let taskIdString = event.target.id.split("_");
       let taskId = taskIdString[1];
@@ -259,9 +275,10 @@
     }
 
     function addTask() {
+      event.preventDefault();
       let cardCounter = document.querySelectorAll('.task-card').length + 1;
 
-      document.getElementById("tasksList_" + cardCounter).innerHTML += "<div class='card task-card' id='card_" + cardCounter + "' style='margin-bottom: 1.5rem;'><div class='card-header' id='heading_" + cardCounter + "'><h5 class='todo-title'>To-do #" + cardCounter + " Title</h5><input type='text' name='title' class='form-control todo-title-input' id='todo-title-input_" + cardCounter + "' placeholder='Enter title'></div><div id='collapse_" + cardCounter + "' class='collapse show collapse-heading' data-parent='#tasksList'><div class='card-body'><h5 class='todo-description'>To-do #" + cardCounter + " Description</h5><input type='text' name='description' class='form-control todo-description-input' id='todo-description-input_" + cardCounter + "' placeholder='Enter description'><div style='margin-top: 1.5rem;'><input type='radio' name='todo_" + cardCounter + "' value='mcq' class='radio-mcq' id='radio-mcq_" + cardCounter + "' onclick='launchMcq()'> <span class='text-small'>Multiple Choice Question</span> </div><div class='accordion answer-accordion' id='answersList_" + cardCounter + "_1'></div><div style='margin-top: 1.5rem; display: none;' id='mcq-buttons_" + cardCounter + "'><input type='checkbox' name='checkbox-multiple-select_" + cardCounter + "' value='file-upload' class='checkbox-multiple-select_" + cardCounter + "' id='checkbox-multiple-select_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>Enable Multiple Select</span><button class='btn btn-primary btn-sm add-task' style='float: right;' id='add-task_" + cardCounter + "' onclick='addAnswer()'>Add Answer</button><hr></div><div> <input type='radio' name='todo_" + cardCounter + "' value='open-ended' class='radio-open-ended' id='radio-open-ended_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>Open-ended</span></div><div><input type='radio' name='todo_" + cardCounter + "' value='na' class='radio-na' id='radio-na_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>N.A.</span></div><hr><input type='checkbox' name='checkbox-file-upload_" + cardCounter + "' value='file-upload' class='checkbox-file-upload_" + cardCounter + "' id='checkbox-file-upload_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>File Upload</span><br><button class='btn btn-danger delete-task btn-sm' id='delete-task_" + cardCounter + "' onclick='deleteTask()' style='float: right; margin-bottom: 1.5rem;'>Delete</button></div></div></div>";
+      document.getElementById("tasksList_" + cardCounter).innerHTML += "<div class='card task-card' id='card_" + cardCounter + "' style='margin-bottom: 1.5rem;'><div class='card-header' id='heading_" + cardCounter + "'><h5 class='todo-title'>To-do #" + cardCounter + " Title</h5><input type='text' name='todo-title_" + cardCounter + "' class='form-control todo-title-input' id='todo-title-input_" + cardCounter + "' placeholder='Enter title'></div><div id='collapse_" + cardCounter + "' class='collapse show collapse-heading' data-parent='#tasksList'><div class='card-body'><h5 class='todo-description'>To-do #" + cardCounter + " Description</h5><input type='text' name='todo-description_" + cardCounter + "' class='form-control todo-description-input' id='todo-description-input_" + cardCounter + "' placeholder='Enter description'><div style='margin-top: 1.5rem;'><input type='radio' name='todo_" + cardCounter + "' value='mcq' class='radio-mcq' id='radio-mcq_" + cardCounter + "' onclick='launchMcq()'> <span class='text-small'>Multiple Choice Question</span> </div><div class='accordion answer-accordion' id='answersList_" + cardCounter + "_1'></div><div style='margin-top: 1.5rem; display: none;' id='mcq-buttons_" + cardCounter + "'><input type='checkbox' name='checkbox-multiple-select_" + cardCounter + "' value='file-upload' class='checkbox-multiple-select_" + cardCounter + "' id='checkbox-multiple-select_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>Enable Multiple Select</span><button class='btn btn-primary btn-sm add-task' style='float: right;' id='add-task_" + cardCounter + "' onclick='addAnswer()'>Add Answer</button><hr></div><div> <input type='radio' name='todo_" + cardCounter + "' value='open-ended' class='radio-open-ended' id='radio-open-ended_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>Open-ended</span></div><div><input type='radio' name='todo_" + cardCounter + "' value='na' class='radio-na' id='radio-na_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>N.A.</span></div><hr><input type='checkbox' name='checkbox-file-upload_" + cardCounter + "' value='file-upload' class='checkbox-file-upload_" + cardCounter + "' id='checkbox-file-upload_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>File Upload</span><br><button class='btn btn-danger delete-task btn-sm' id='delete-task_" + cardCounter + "' onclick='deleteTask()' style='float: right; margin-bottom: 1.5rem;'>Delete</button></div></div></div>";
 
         document.getElementById("tasksList_" + cardCounter).insertAdjacentHTML('afterend', "<div class='accordion task-accordion' id='tasksList_" + (cardCounter+1) + "'></div>");
     }
@@ -298,7 +315,8 @@
       // todo-title-input
       x = document.getElementsByClassName("todo-title-input");
       for (i = 0; i < x.length; i++) {        
-          x[i].id = "todo-title-input_"+(i+1);
+          x[i].id = "todo-title-input_"+(i+1);     
+          x[i].name = "todo-title-input_"+(i+1);
       }
 
       // collapse-heading
@@ -316,7 +334,8 @@
       // todo-description-input
       x = document.getElementsByClassName("todo-description-input");
       for (i = 0; i < x.length; i++) {        
-          x[i].id = "todo-description-input_"+(i+1);
+          x[i].id = "todo-description-input_"+(i+1);  
+          x[i].name = "todo-description-input_"+(i+1);
       }
 
       // radio-mcq

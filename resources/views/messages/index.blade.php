@@ -11,205 +11,55 @@
     </div>
     <div class="content-container">
         <div class="chat-module" data-filter-list="chat-module-body">
+            @if($messages != null && request()->route()->parameters['userId'] != null)
+                <div class="chat-module-top">
+                    <form>
+                        <div class="input-group input-group-round">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="material-icons">search</i>
+                                </span>
+                            </div>
+                            <input type="search" class="form-control filter-list-input" placeholder="Search chat" aria-label="Search Chat" aria-describedby="search-chat">
+                        </div>
+                    </form>
+                    <div class="chat-module-body" id="newMessagesDiv">
+                        @foreach($messages as $message)
+                        <div class="media chat-item">
+                            <img alt="Claire" src="/img/avatar-female-1.jpg" class="avatar" />
+                            <div class="media-body">
+                                <div class="chat-item-title">
+                                    <span class="chat-item-author" data-filter-by="text">{{$message->user->name}}</span>
+                                    <span data-filter-by="text">4 days ago</span>
+                                </div>
+                                <div class="chat-item-body" data-filter-by="text">
+                                    <p>{{$message->message}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="chat-module-bottom">
+                    <form class="chat-form">
+                        <textarea id="chat-input" class="form-control" placeholder="Type message" rows="1" onkeypress="keyPress()"></textarea>
+                        <input id="userId" type="hidden" value="{{Auth::user()->id}}" />
+                        <input id="userName" type="hidden" value="{{Auth::user()->name}}" />
+                        <input id="userAvatar" type="hidden" value="{{Auth::user()->avatar}}" />
+                    </form>
+                </div>
+            @else
             <div class="alert alert-light" role="alert" style="height: 100% !important; padding-top: 40% !important;
 text-align: center; text-align: center;">
                 <h1>👉</h1>
                 <h6>Jump into a conversation with other creators & seekers</h6>
             </div>
-            <!-- <div class="chat-module-top">
-                <form>
-                    <div class="input-group input-group-round">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                <i class="material-icons">search</i>
-                            </span>
-                        </div>
-                        <input type="search" class="form-control filter-list-input" placeholder="Search chat" aria-label="Search Chat" aria-describedby="search-chat">
-                    </div>
-                </form>
-                <div class="chat-module-body">
-
-
-                    <div class="media chat-item">
-                        <img alt="Claire" src="/img/avatar-female-1.jpg" class="avatar" />
-                        <div class="media-body">
-                            <div class="chat-item-title">
-                                <span class="chat-item-author" data-filter-by="text">Claire</span>
-                                <span data-filter-by="text">4 days ago</span>
-                            </div>
-                            <div class="chat-item-body" data-filter-by="text">
-                                <p>Hey guys, just kicking things off here in the chat window. Hope you&#39;re all ready to tackle this great project. Let&#39;s smash some Brand Concept &amp; Design!</p>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="media chat-item">
-                        <img alt="Peggy" src="/img/avatar-female-2.jpg" class="avatar" />
-                        <div class="media-body">
-                            <div class="chat-item-title">
-                                <span class="chat-item-author" data-filter-by="text">Peggy</span>
-                                <span data-filter-by="text">4 days ago</span>
-                            </div>
-                            <div class="chat-item-body" data-filter-by="text">
-                                <p>Nice one <a href="#">@Claire</a>, we&#39;ve got some killer ideas kicking about already.
-                                    <img src="https://media.giphy.com/media/aTeHNLRLrwwwM/giphy.gif" alt="alt text" title="Thinking">
-                                </p>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="media chat-item">
-                        <img alt="Marcus" src="/img/avatar-male-1.jpg" class="avatar" />
-                        <div class="media-body">
-                            <div class="chat-item-title">
-                                <span class="chat-item-author" data-filter-by="text">Marcus</span>
-                                <span data-filter-by="text">3 days ago</span>
-                            </div>
-                            <div class="chat-item-body" data-filter-by="text">
-                                <p>Roger that boss! <a href="">@Ravi</a> and I have already started gathering some stuff for the mood boards, excited to start! &#x1f525;</p>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="media chat-item">
-                        <img alt="Ravi" src="/img/avatar-male-3.jpg" class="avatar" />
-                        <div class="media-body">
-                            <div class="chat-item-title">
-                                <span class="chat-item-author" data-filter-by="text">Ravi</span>
-                                <span data-filter-by="text">3 days ago</span>
-                            </div>
-                            <div class="chat-item-body" data-filter-by="text">
-                                <h1 id="-">&#x1f609;</h1>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="media chat-item">
-                        <img alt="Claire" src="/img/avatar-female-1.jpg" class="avatar" />
-                        <div class="media-body">
-                            <div class="chat-item-title">
-                                <span class="chat-item-author" data-filter-by="text">Claire</span>
-                                <span data-filter-by="text">2 days ago</span>
-                            </div>
-                            <div class="chat-item-body" data-filter-by="text">
-                                <p>Can&#39;t wait! <a href="#">@David</a> how are we coming along with the <a href="#">Client Objective Meeting</a>?</p>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="media chat-item">
-                        <img alt="David" src="/img/avatar-male-4.jpg" class="avatar" />
-                        <div class="media-body">
-                            <div class="chat-item-title">
-                                <span class="chat-item-author" data-filter-by="text">David</span>
-                                <span data-filter-by="text">Yesterday</span>
-                            </div>
-                            <div class="chat-item-body" data-filter-by="text">
-                                <p>Coming along nicely, we&#39;ve got a draft for the client questionnaire completed, take a look! &#x1f913;</p>
-
-                            </div>
-
-                            <div class="media media-attachment">
-                                <div class="avatar bg-primary">
-                                    <i class="material-icons">insert_drive_file</i>
-                                </div>
-                                <div class="media-body">
-                                    <a href="#" data-filter-by="text">questionnaire-draft.doc</a>
-                                    <span data-filter-by="text">24kb Document</span>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="media chat-item">
-                        <img alt="Sally" src="/img/avatar-female-3.jpg" class="avatar" />
-                        <div class="media-body">
-                            <div class="chat-item-title">
-                                <span class="chat-item-author" data-filter-by="text">Sally</span>
-                                <span data-filter-by="text">2 hours ago</span>
-                            </div>
-                            <div class="chat-item-body" data-filter-by="text">
-                                <p>Great start guys, I&#39;ve added some notes to the task. We may need to make some adjustments to the last couple of items - but no biggie!</p>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="media chat-item">
-                        <img alt="Peggy" src="/img/avatar-female-2.jpg" class="avatar" />
-                        <div class="media-body">
-                            <div class="chat-item-title">
-                                <span class="chat-item-author" data-filter-by="text">Peggy</span>
-                                <span data-filter-by="text">Just now</span>
-                            </div>
-                            <div class="chat-item-body" data-filter-by="text">
-                                <p>Well done <a href="#">@all</a>. See you all at 2 for the kick-off meeting. &#x1f91C;</p>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-            <div class="chat-module-bottom">
-                <form class="chat-form">
-                    <textarea class="form-control" placeholder="Type message" rows="1"></textarea>
-                    <div class="chat-form-buttons">
-                        <button type="button" class="btn btn-link">
-                            <i class="material-icons">tag_faces</i>
-                        </button>
-                        <div class="custom-file custom-file-naked">
-                            <input type="file" class="custom-file-input" id="customFile">
-                            <label class="custom-file-label" for="customFile">
-                                <i class="material-icons">attach_file</i>
-                            </label>
-                        </div>
-                    </div>
-                </form>
-            </div> -->
+            @endif
         </div>
         <div class="sidebar collapse" id="sidebar-collapse">
             <div class="sidebar-content">
                 <div class="chat-team-sidebar text-small">
-                    <div class="chat-team-sidebar-top">
-                        <ul class="nav nav-tabs nav-justified" role="tablist" style="margin-top: 0rem;">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="members-tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="true">Members</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="files-tab" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="chat-team-sidebar-bottom">
+                    <div class="chat-team-sidebar-bottom" style="margin-top: 1.5rem;">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="members" role="tabpanel" aria-labelledby="members-tab" data-filter-list="list-group">
                                 <form class="px-3 mb-3">
@@ -224,125 +74,17 @@ text-align: center; text-align: center;">
                                 </form>
                                 <div class="list-group list-group-flush">
 
-                                    <a class="list-group-item list-group-item-action" href="#">
+                                    @foreach($users as $user)
+                                    <a class="list-group-item list-group-item-action" href="/messages/{{$user->id}}">
                                         <div class="media media-member mb-0">
                                             <img alt="Claire Connors" src="/img/avatar-female-1.jpg" class="avatar" />
                                             <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Claire Connors</h6>
+                                                <h6 class="mb-0" data-filter-by="text">{{$user->name}}</h6>
                                                 <span data-filter-by="text">Administrator</span>
                                             </div>
                                         </div>
                                     </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Marcus Simmons" src="/img/avatar-male-1.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Marcus Simmons</h6>
-                                                <span data-filter-by="text">Administrator</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Peggy Brown" src="/img/avatar-female-2.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Peggy Brown</h6>
-                                                <span data-filter-by="text">Project Manager</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Harry Xai" src="/img/avatar-male-2.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Harry Xai</h6>
-                                                <span data-filter-by="text">Project Manager</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Sally Harper" src="/img/avatar-female-3.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Sally Harper</h6>
-                                                <span data-filter-by="text">Developer</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Ravi Singh" src="/img/avatar-male-3.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Ravi Singh</h6>
-                                                <span data-filter-by="text">Developer</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Kristina Van Der Stroem" src="/img/avatar-female-4.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Kristina Van Der Stroem</h6>
-                                                <span data-filter-by="text">Developer</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="David Whittaker" src="/img/avatar-male-4.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">David Whittaker</h6>
-                                                <span data-filter-by="text">Designer</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Kerri-Anne Banks" src="/img/avatar-female-5.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Kerri-Anne Banks</h6>
-                                                <span data-filter-by="text">Marketing</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Masimba Sibanda" src="/img/avatar-male-5.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Masimba Sibanda</h6>
-                                                <span data-filter-by="text">Designer</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Krishna Bajaj" src="/img/avatar-female-6.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Krishna Bajaj</h6>
-                                                <span data-filter-by="text">Marketing</span>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a class="list-group-item list-group-item-action" href="#">
-                                        <div class="media media-member mb-0">
-                                            <img alt="Kenny Tran" src="/img/avatar-male-6.jpg" class="avatar" />
-                                            <div class="media-body">
-                                                <h6 class="mb-0" data-filter-by="text">Kenny Tran</h6>
-                                                <span data-filter-by="text">Contributor</span>
-                                            </div>
-                                        </div>
-                                    </a>
+                                    @endforeach
 
                                 </div>
                             </div>
@@ -579,10 +321,58 @@ text-align: center; text-align: center;">
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        $.ajaxSetup({
+
+            headers: {
+
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+            }
+
+        });
+
+        function keyPress() {
+            var key = window.event.keyCode;
+
+            if (key === 13) {
+                var messageText = document.getElementById("chat-input").value;
+                var data = {message_text: messageText};
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+                console.log("inside enter call");
+                console.log(data);
+
+                $.ajax({
+                   type:'POST',
+                   url:'/messages/send',
+                   data: data,
+                   success:function(data){
+
+                   }
+                });
+            }
+        }
+
+        var pusher = new Pusher("5491665b0d0c9b23a516", {
+          cluster: 'ap1',
+          forceTLS: true,
+          auth: {
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              }
+        });
+
+        var channel = pusher.subscribe('{{$messageChannel}}');
+        channel.bind('new-message', function(data) {
+            console.log(data);
+            document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>4 days ago</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+        }); 
+    </script>
 @endsection
 
 @section ('footer')
-	
-	
-
+    
 @endsection

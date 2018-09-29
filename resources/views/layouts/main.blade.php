@@ -8,13 +8,23 @@
 	<link rel="stylesheet" type="text/css" href="/css/custom.css">
 	<link rel="stylesheet" type="text/css" href="/css/theme.css">
 	<link rel="stylesheet" type="text/css" href="/css/editormd.css" />
+	<link rel="stylesheet" type="text/css" href="/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="/css/component.css" />
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="At Talentail, you get to apply what you've learned onto real world projects and gain experience.">
 	<link href="/img/favicon.ico" rel="icon" type="image/x-icon">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta name="description" content="At Talentail, you get to apply what you've learned onto real world projects and gain experience.">
+
+	
+	<script src="https://js.pusher.com/4.3/pusher.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
 </head>
 
 <body>
@@ -92,7 +102,7 @@
 	                        Add New
 	                    </button>
 	                    <div class="dropdown-menu" aria-labelledby="newContentButton">
-	                        <a class="dropdown-item" href="/projects/selectSkill">Project</a>
+	                        <a class="dropdown-item" href="/projects/select-skill">Project</a>
 	                        @if(Auth::user() && Auth::user()->admin)
 	                        <!-- <a class="dropdown-item" href="/companies/create">Company</a> -->
 	                        <!-- <a class="dropdown-item" href="/projects/create">Competency</a> -->

@@ -1,4 +1,4 @@
-<script type="text/javascript" src="/js/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="/js/jquery.min.js"></script> -->
 <script type="text/javascript" src="/js/autosize.min.js"></script>
 <script type="text/javascript" src="/js/popper.min.js"></script>
 <script type="text/javascript" src="/js/prism.js"></script>
@@ -9,17 +9,16 @@
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/theme.js"></script>
 <script type="text/javascript" src="/js/editormd.js"></script>
-<script type="text/javascript" src="/languages/en.js"></script>
+<script type="text/javascript" src="/js/custom-file-input.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script type="text/javascript">
-var testEditor;
 
 $(function() {
-    testEditor = editormd("test-editormd", {
-        width   : "100%",
-        height  : 640,
-        syncScrolling : "single",
-        path    : "../lib/"
+    var editor = editormd({
+        id   : "test-editormd",
+        path : "/lib/",
+        height: 640
     });
 });
 

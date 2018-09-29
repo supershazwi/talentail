@@ -11,14 +11,14 @@
   </div>
   <div class="container">
       <div class="content-list">
-          <div class="row content-list-head" style="padding-top: 4.5rem !important;">
+          <div class="row content-list-head" style="padding-top: 1.5rem !important;">
               <div class="col-auto">
                   <h1>Notifications</h1>
               </div>
           </div>
           <!--end of content list head-->
           <div class="content-list-body">
-              <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 190px !important;
+              <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
   text-align: center; text-align: center;">
                   <h1>🤨</h1>
                   <h6>You have no notifications yet</h6>

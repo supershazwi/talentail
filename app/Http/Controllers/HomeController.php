@@ -5,24 +5,45 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
+
 {
+
     /**
+
      * Create a new controller instance.
+
      *
+
      * @return void
+
      */
-    public function __construct()
+
+    public function ajaxRequest()
+
     {
-        $this->middleware('auth');
+
+        return view('ajaxRequest');
+
     }
 
     /**
-     * Show the application dashboard.
+
+     * Create a new controller instance.
+
      *
-     * @return \Illuminate\Http\Response
+
+     * @return void
+
      */
-    public function index()
+
+    public function ajaxRequestPost()
+
     {
-        return view('home');
+
+        $input = request()->all();
+
+        return response()->json(['success'=>'Got Simple Ajax Request.']);
+
     }
+
 }
