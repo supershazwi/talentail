@@ -7,13 +7,25 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+
+use App\Notification;
 
 class NotificationController extends Controller
 {   
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     // to show a view that lets a user send a notification
     public function index()
     {
-        return view('notification');
+        $notifications = Notification::where('recipient_id', Auth::id())->get();
+        
+        return view('notifications', [
+            'notifications' => $notifications,
+        ]);
     }
 
     // to handle a notification request and trigger the notification event

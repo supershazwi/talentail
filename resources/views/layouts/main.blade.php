@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/editormd.css" />
 	<link rel="stylesheet" type="text/css" href="/css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="/css/component.css" />
+	<link rel="stylesheet" type="text/css" href="/css/toastr.css" />
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	<link href="/img/favicon.ico" rel="icon" type="image/x-icon">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -37,10 +38,11 @@
 	            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
 	                <span class="navbar-toggler-icon"></span>
 	            </button>
+	            @if(Auth::id())
 	            <div class="d-block d-lg-none ml-2">
 	                <div class="dropdown">
 	                    <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                        <img alt="Image" src="/img/avatar-male-4.jpg" class="avatar" />
+	                        <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
 	                    </a>
 	                    <div class="dropdown-menu dropdown-menu-right">
 	                        <a href="nav-side-user.html" class="dropdown-item">Profile</a>
@@ -49,6 +51,7 @@
 	                    </div>
 	                </div>
 	            </div>
+	            @endif
 	        </div>
 	        <div class="collapse navbar-collapse flex-column" id="navbar-collapse">
 	            <ul class="navbar-nav d-lg-block">
@@ -74,12 +77,14 @@
 	                        </ul>
 	                    </div>
 	                </li> -->
+	                @if(Auth::id())
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/messages">Messages</a>
 	                </li>
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/notifications">Notifications</a>
 	                </li>
+	                @endif
 	            </ul>
 	            <hr>
 	            <div class="d-none d-lg-block w-100">
@@ -93,9 +98,15 @@
 	                    <li class="nav-item">
 	                        <a href="/faq" class="nav-link">FAQ</a>
 	                    </li>
+	                    @if(!Auth::id())
+	                    <li class="nav-item">
+	                        <a href="/login" class="nav-link">Login</a>
+	                    </li>
+	                    @endif
 	                </ul>
 	                <hr>
 	            </div>
+	            @if(Auth::id())
 	            <div>
 	                <div class="dropdown mt-2">
 	                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="newContentButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -112,12 +123,15 @@
 	                    </div>
 	                </div>
 	            </div>
+	            @endif
 	        </div>
+            @if(Auth::id())
 	        <div class="d-none d-lg-block">
 	            <div class="dropup">
 	                <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                    <img alt="Image" src="/img/avatar-male-4.jpg" class="avatar" />
-	                </a>
+	                    <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
+
+	                </a><span style="color: rgba(255, 255, 255, 0.65); font-size: .875rem;">{{Auth::user()->name}}</span>
 	                <div class="dropdown-menu">
 	                    <a href="/profile" class="dropdown-item">Profile</a>
 	                    <a href="/settings" class="dropdown-item">Account Settings</a>
@@ -125,6 +139,7 @@
 	                </div>
 	            </div>
 	        </div>
+	        @endif
 	    </div>
 	    <div class="main-container">
 	        @yield('content')

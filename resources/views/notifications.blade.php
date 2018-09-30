@@ -9,189 +9,45 @@
           </ol>
       </nav>
   </div>
-  <div class="container">
+  <div class="container" style="padding: 1.5rem !important;">
       <div class="content-list">
-          <div class="row content-list-head" style="padding-top: 1.5rem !important;">
-              <div class="col-auto">
-                  <h1>Notifications</h1>
-              </div>
-          </div>
           <!--end of content list head-->
           <div class="content-list-body">
+              @if(empty($notifications))
               <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
   text-align: center; text-align: center;">
                   <h1>🤨</h1>
                   <h6>You have no notifications yet</h6>
               </div>
-              <!-- <ol class="list-group list-group-activity">
-
-
+              @elseif(count($notifications) == 0)
+              <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
+  text-align: center; text-align: center;">
+                  <h1>🤨</h1>
+                  <h6>You have no notifications yet</h6>
+              </div>
+              @else
+              <ol class="list-group list-group-activity">
+                  @foreach($notifications as $notification)
+                  <a href="{{$notification->url}}">
                   <li class="list-group-item">
                       <div class="media align-items-center">
                           <ul class="avatars">
                               <li>
-                                  <div class="avatar bg-primary">
-                                      <i class="material-icons">playlist_add_check</i>
-                                  </div>
-                              </li>
-                              <li>
-                                  <img alt="Claire" src="/img/avatar-female-1.jpg" class="avatar" data-filter-by="alt" />
+                                  <img alt="{{$notification->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$notification->user->avatar}}"" class="avatar" data-filter-by="alt" />
                               </li>
                           </ul>
                           <div class="media-body">
                               <div>
-                                  <span class="h6" data-filter-by="text">Claire</span>
-                                  <span data-filter-by="text">completed the task</span><a href="#" data-filter-by="text">Set up client chat channel</a>
+                                  <span class="h6" data-filter-by="text">{{$notification->user->name}}</span>
+                                  <span data-filter-by="text">{{$notification->message}}</span>
                               </div>
-                              <span class="text-small" data-filter-by="text">Just now</span>
+                              <span class="text-small" data-filter-by="text">{{$notification->created_at->diffForHumans()}}</span>
                           </div>
                       </div>
-                  </li>
-
-
-
-                  <li class="list-group-item">
-                      <div class="media align-items-center">
-                          <ul class="avatars">
-                              <li>
-                                  <div class="avatar bg-primary">
-                                      <i class="material-icons">person_add</i>
-                                  </div>
-                              </li>
-                              <li>
-                                  <img alt="Ravi" src="/img/avatar-male-3.jpg" class="avatar" data-filter-by="alt" />
-                              </li>
-                          </ul>
-                          <div class="media-body">
-                              <div>
-                                  <span class="h6" data-filter-by="text">Ravi</span>
-                                  <span data-filter-by="text">joined the project</span>
-                              </div>
-                              <span class="text-small" data-filter-by="text">5 hours ago</span>
-                          </div>
-                      </div>
-                  </li>
-
-
-
-                  <li class="list-group-item">
-                      <div class="media align-items-center">
-                          <ul class="avatars">
-                              <li>
-                                  <div class="avatar bg-primary">
-                                      <i class="material-icons">playlist_add</i>
-                                  </div>
-                              </li>
-                              <li>
-                                  <img alt="Kristina" src="/img/avatar-female-4.jpg" class="avatar" data-filter-by="alt" />
-                              </li>
-                          </ul>
-                          <div class="media-body">
-                              <div>
-                                  <span class="h6" data-filter-by="text">Kristina</span>
-                                  <span data-filter-by="text">added the task</span><a href="#" data-filter-by="text">Produce broad concept directions</a>
-                              </div>
-                              <span class="text-small" data-filter-by="text">Yesterday</span>
-                          </div>
-                      </div>
-                  </li>
-
-
-
-                  <li class="list-group-item">
-                      <div class="media align-items-center">
-                          <ul class="avatars">
-                              <li>
-                                  <div class="avatar bg-primary">
-                                      <i class="material-icons">playlist_add</i>
-                                  </div>
-                              </li>
-                              <li>
-                                  <img alt="Marcus" src="/img/avatar-male-1.jpg" class="avatar" data-filter-by="alt" />
-                              </li>
-                          </ul>
-                          <div class="media-body">
-                              <div>
-                                  <span class="h6" data-filter-by="text">Marcus</span>
-                                  <span data-filter-by="text">added the task</span><a href="#" data-filter-by="text">Present concepts and establish direction</a>
-                              </div>
-                              <span class="text-small" data-filter-by="text">Yesterday</span>
-                          </div>
-                      </div>
-                  </li>
-
-
-
-                  <li class="list-group-item">
-                      <div class="media align-items-center">
-                          <ul class="avatars">
-                              <li>
-                                  <div class="avatar bg-primary">
-                                      <i class="material-icons">person_add</i>
-                                  </div>
-                              </li>
-                              <li>
-                                  <img alt="Sally" src="/img/avatar-female-3.jpg" class="avatar" data-filter-by="alt" />
-                              </li>
-                          </ul>
-                          <div class="media-body">
-                              <div>
-                                  <span class="h6" data-filter-by="text">Sally</span>
-                                  <span data-filter-by="text">joined the project</span>
-                              </div>
-                              <span class="text-small" data-filter-by="text">2 days ago</span>
-                          </div>
-                      </div>
-                  </li>
-
-
-
-                  <li class="list-group-item">
-                      <div class="media align-items-center">
-                          <ul class="avatars">
-                              <li>
-                                  <div class="avatar bg-primary">
-                                      <i class="material-icons">date_range</i>
-                                  </div>
-                              </li>
-                              <li>
-                                  <img alt="Claire" src="/img/avatar-female-1.jpg" class="avatar" data-filter-by="alt" />
-                              </li>
-                          </ul>
-                          <div class="media-body">
-                              <div>
-                                  <span class="h6" data-filter-by="text">Claire</span>
-                                  <span data-filter-by="text">rescheduled the task</span><a href="#" data-filter-by="text">Target market trend analysis</a>
-                              </div>
-                              <span class="text-small" data-filter-by="text">2 days ago</span>
-                          </div>
-                      </div>
-                  </li>
-
-
-
-                  <li class="list-group-item">
-                      <div class="media align-items-center">
-                          <ul class="avatars">
-                              <li>
-                                  <div class="avatar bg-primary">
-                                      <i class="material-icons">add</i>
-                                  </div>
-                              </li>
-                              <li>
-                                  <img alt="David" src="/img/avatar-male-4.jpg" class="avatar" data-filter-by="alt" />
-                              </li>
-                          </ul>
-                          <div class="media-body">
-                              <div>
-                                  <span class="h6" data-filter-by="text">David</span>
-                                  <span data-filter-by="text">started the project</span>
-                              </div>
-                              <span class="text-small" data-filter-by="text">12 days ago</span>
-                          </div>
-                      </div>
-                  </li>
-              </ol> -->
+                  </li></a>
+                  @endforeach
+              </ol>
+              @endif
           </div>
       </div>
   </div>

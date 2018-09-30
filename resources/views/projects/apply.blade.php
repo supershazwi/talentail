@@ -28,10 +28,6 @@
                                   <label for="description"><h5>Description</h5></label>
                                   <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
                                 </div>
-                                <span>or</span>
-                                <button class="btn btn-primary" role="button" type="submit">
-                                    Retrieve information from LinkedIn
-                                </button>
                             </div>
                         </div>
                         <button class="btn btn-primary" role="button" type="submit" style="float: right;">

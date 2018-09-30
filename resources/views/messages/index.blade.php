@@ -12,6 +12,11 @@
     <div class="content-container">
         <div class="chat-module" data-filter-list="chat-module-body">
             @if($messages != null && request()->route()->parameters['userId'] != null)
+                @if(Request::route('projectId'))
+                    <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+                        {{$clickedProject->title}}
+                    </div>
+                @endif
                 <div class="chat-module-top">
                     <form>
                         <div class="input-group input-group-round">
@@ -26,11 +31,13 @@
                     <div class="chat-module-body" id="newMessagesDiv">
                         @foreach($messages as $message)
                         <div class="media chat-item">
-                            <img alt="Claire" src="/img/avatar-female-1.jpg" class="avatar" />
+                            <img alt="{{$message->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
                             <div class="media-body">
                                 <div class="chat-item-title">
-                                    <span class="chat-item-author" data-filter-by="text">{{$message->user->name}}</span>
-                                    <span data-filter-by="text">4 days ago</span>
+                                    <span class="chat-item-author" data-filter-by="text">
+                                        {{$message->user->name}}
+                                    </span>
+                                    <span data-filter-by="text">{{$message->created_at->diffForHumans()}}</span>
                                 </div>
                                 <div class="chat-item-body" data-filter-by="text">
                                     <p>{{$message->message}}</p>
@@ -42,10 +49,15 @@
                 </div>
                 <div class="chat-module-bottom">
                     <form class="chat-form">
-                        <textarea id="chat-input" class="form-control" placeholder="Type message" rows="1" onkeypress="keyPress()"></textarea>
+                        <textarea id="chat-input" class="form-control" placeholder="Type message" rows="2" onkeypress="keyPress()" style="resize: none;"></textarea>
                         <input id="userId" type="hidden" value="{{Auth::user()->id}}" />
                         <input id="userName" type="hidden" value="{{Auth::user()->name}}" />
                         <input id="userAvatar" type="hidden" value="{{Auth::user()->avatar}}" />
+                        <input id="clickedUserId" type="hidden" value="{{$clickedUserId}}" />
+                        <input id="messageChannel" type="hidden" value="{{$messageChannel}}" />
+                        @if(Request::route('projectId'))
+                            <input id="projectId" type="hidden" value="{{$clickedProject->id}}" />
+                        @endif
                     </form>
                 </div>
             @else
@@ -59,7 +71,17 @@ text-align: center; text-align: center;">
         <div class="sidebar collapse" id="sidebar-collapse">
             <div class="sidebar-content">
                 <div class="chat-team-sidebar text-small">
-                    <div class="chat-team-sidebar-bottom" style="margin-top: 1.5rem;">
+                    <div class="chat-team-sidebar-top">
+                        <ul class="nav nav-tabs nav-justified" role="tablist" style="margin-top: 0;">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="members-tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="true">By User</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="projects-tab" data-toggle="tab" href="#projects" role="tab" aria-controls="projects" aria-selected="false">By Project</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="chat-team-sidebar-bottom">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="members" role="tabpanel" aria-labelledby="members-tab" data-filter-list="list-group">
                                 <form class="px-3 mb-3">
@@ -69,7 +91,7 @@ text-align: center; text-align: center;">
                                                 <i class="material-icons">filter_list</i>
                                             </span>
                                         </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter members" aria-label="Filter Members" aria-describedby="filter-members">
+                                        <input type="search" class="form-control filter-list-input" placeholder="Filter users" aria-label="Filter Members" aria-describedby="filter-members">
                                     </div>
                                 </form>
                                 <div class="list-group list-group-flush">
@@ -77,10 +99,10 @@ text-align: center; text-align: center;">
                                     @foreach($users as $user)
                                     <a class="list-group-item list-group-item-action" href="/messages/{{$user->id}}">
                                         <div class="media media-member mb-0">
-                                            <img alt="Claire Connors" src="/img/avatar-female-1.jpg" class="avatar" />
+                                            <img alt="Claire Connors" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar" />
                                             <div class="media-body">
                                                 <h6 class="mb-0" data-filter-by="text">{{$user->name}}</h6>
-                                                <span data-filter-by="text">Administrator</span>
+                                                <!-- <span data-filter-by="text">Administrator</span> -->
                                             </div>
                                         </div>
                                     </a>
@@ -88,7 +110,7 @@ text-align: center; text-align: center;">
 
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab" data-filter-list="dropzone-previews">
+                            <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab" data-filter-list="dropzone-previews">
                                 <form class="px-3 mb-3">
                                     <div class="input-group input-group-round">
                                         <div class="input-group-prepend">
@@ -96,7 +118,7 @@ text-align: center; text-align: center;">
                                                 <i class="material-icons">filter_list</i>
                                             </span>
                                         </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter files" aria-label="Filter Files" aria-describedby="filter-files">
+                                        <input type="search" class="form-control filter-list-input" placeholder="Filter users" aria-label="Filter Files" aria-describedby="filter-projects">
                                     </div>
                                 </form>
                                 <div class="d-none dz-template">
@@ -143,176 +165,21 @@ text-align: center; text-align: center;">
                                         </div>
                                     </li>
                                 </div>
-                                <form class="dropzone" action="http://mediumra.re/dropzone/upload.php">
-                                    <span class="dz-message">Drop files here or click here to upload</span>
-                                </form>
-                                <ul class="list-group list-group-activity dropzone-previews flex-column-reverse list-group-flush">
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">insert_drive_file</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Peggy Brown" src="/img/avatar-female-2.jpg" class="avatar" data-title="Peggy Brown" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">client-questionnaire</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">48kb Text Doc</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>
+                                <ul class="list-group list-group-flush"> 
+                                    @if(! empty($userProjectObjectArray))
+                                    @foreach($userProjectObjectArray as $userProjectObject)
+                                    <a class="list-group-item list-group-item-action" href="/messages/{{$userProjectObject->user->id}}/projects/{{$userProjectObject->project->id}}">
+                                        <div class="media media-member mb-0">
+                                            <img alt="Claire Connors" src="https://storage.cloud.google.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar" />
+                                            <div class="media-body">
+                                                <h6 class="mb-0" data-filter-by="text">{{$userProjectObject->user->name}}</h6>
+                                                <span class="badge badge-warning" style="width: 170px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">{{$userProjectObject->project->title}}</span>
+                                                <!-- <span data-filter-by="text">Administrator</span> -->
                                             </div>
                                         </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">folder</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Harry Xai" src="/img/avatar-male-2.jpg" class="avatar" data-title="Harry Xai" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">moodboard_images</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">748kb ZIP</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">image</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Ravi Singh" src="/img/avatar-male-3.jpg" class="avatar" data-title="Ravi Singh" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">possible-hero-image</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">1.2mb JPEG image</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">insert_drive_file</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="Claire Connors" src="/img/avatar-female-1.jpg" class="avatar" data-title="Claire Connors" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">LandingPrototypes</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">415kb Sketch Doc</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="list-group-item">
-                                        <div class="media align-items-center">
-                                            <ul class="avatars">
-                                                <li>
-                                                    <div class="avatar bg-primary">
-                                                        <i class="material-icons">insert_drive_file</i>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <img alt="David Whittaker" src="/img/avatar-male-4.jpg" class="avatar" data-title="David Whittaker" data-toggle="tooltip" data-filter-by="data-title" />
-                                                </li>
-                                            </ul>
-                                            <div class="media-body d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#" data-filter-by="text">Branding-Proforma</a>
-                                                    <br>
-                                                    <span class="text-small" data-filter-by="text">15kb Text Document</span>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="material-icons">more_vert</i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Download</a>
-                                                        <a class="dropdown-item" href="#">Share</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
+                                    </a>
+                                    @endforeach
+                                    @endif
                                 </ul>
                             </div>
                         </div>
@@ -338,15 +205,16 @@ text-align: center; text-align: center;">
 
             if (key === 13) {
                 var messageText = document.getElementById("chat-input").value;
-                var data = {message_text: messageText};
+                var data = {message_text: messageText, clickedUserId: document.getElementById("clickedUserId").value, messageChannel: document.getElementById("messageChannel").value};
+                if(document.getElementById("projectId") != null) {
+                    data.projectId = document.getElementById("projectId").value;
+                }
+                
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-                console.log("inside enter call");
-                console.log(data);
 
                 $.ajax({
                    type:'POST',
-                   url:'/messages/send',
+                   url:'/messages/'+document.getElementById("clickedUserId").value,
                    data: data,
                    success:function(data){
 
@@ -355,21 +223,26 @@ text-align: center; text-align: center;">
             }
         }
 
-        var pusher = new Pusher("5491665b0d0c9b23a516", {
-          cluster: 'ap1',
-          forceTLS: true,
-          auth: {
-                  headers: {
-                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        if(document.getElementById("clickedUserId") != null) {
+            var pusher = new Pusher("5491665b0d0c9b23a516", {
+              cluster: 'ap1',
+              forceTLS: true,
+              auth: {
+                      headers: {
+                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                      }
                   }
-              }
-        });
+            });
 
-        var channel = pusher.subscribe('{{$messageChannel}}');
-        channel.bind('new-message', function(data) {
-            console.log(data);
-            document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>4 days ago</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
-        }); 
+            var channel = pusher.subscribe(document.getElementById("messageChannel").value);
+            channel.bind('new-message', function(data) {
+                document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+                
+                document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;
+                
+                document.getElementById("chat-input").value = "";
+            }); 
+        }
     </script>
 @endsection
 

@@ -24,6 +24,8 @@ use App\User;
 
 use Pusher\Laravel\Facades\Pusher;
 
+Route::post('/messages/{userId}', 'MessagesController@sendMessage');
+
 Route::get('/bridge', function() {
     $pusher = App::make('pusher');
 
@@ -75,7 +77,8 @@ Route::post('/profile/save', function(Request $request) {
     if (Input::has('email')) { $user->email = Input::get('email'); }
     if (Input::has('description')) { $user->description = Input::get('description'); }
     if (Input::has('avatar-file')) {
-        $user->avatar = $request->file('avatar-file')->store('/assets', 'gcs');
+        // $user->avatar = $request->file('avatar-file')->store('/assets', 'gcs');
+        $user->avatar = Storage::disk('gcs')->put('/avatars', $request->file('avatar-file'), 'public');
     }
 
     $counter = 1;
@@ -174,21 +177,27 @@ Route::get('ajaxRequest', 'HomeController@ajaxRequest');
 
 Route::post('ajaxRequest', 'HomeController@ajaxRequestPost');
 
-Route::get('/messages/test', function() {
-    return view('messages.test');
+Route::post('/messages/test', function(Request $request) {
+    $request->session()->flash('status', 'Task was successful!');
 });
 
-Route::get('/messages/{userId}', 'MessagesController@showIndividualChannel');
+Route::get('/ola', function() {
+    $pusher = App::make('pusher');
 
-Route::post('/messages/send', 'MessagesController@sendMessage');
+    $pusher->trigger('purchases_1', 'new-purchase', array('username' => 'Shazwi', 'message' => 'just purchased your project: blah blah'));
+});
+
+Route::get('/messages/{userId}/projects/{projectId}', 'MessagesController@showIndividualProjectChannel');
+
+Route::get('/messages/{userId}', 'MessagesController@showIndividualChannel');
 
 
 
 Route::post('/messages/test', 'MessagesController@testMessage');
+Route::get('/skills/{skillSlug}/projects/{projectSlug}', 'ProjectsController@show');
 
 Route::post('/skills/{skillSlug}/projects/{projectSlug}/save-project', 'ProjectsController@saveChanges');
 Route::get('/skills/{skillSlug}/projects/{projectSlug}/edit', 'ProjectsController@edit')->middleware('auth');
-Route::get('/skills/{skillSlug}/projects/{projectSlug}', 'ProjectsController@show')->middleware('auth');
     
 Route::post('/notifications/notify', 'NotificationController@postNotify');
 Route::resources([

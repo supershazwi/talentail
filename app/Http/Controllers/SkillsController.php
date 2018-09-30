@@ -9,11 +9,6 @@ use App\Competency;
 
 class SkillsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index() {
         $skills = Skill::all();
 

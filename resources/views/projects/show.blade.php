@@ -8,11 +8,13 @@
               </li>
           </ol>
       </nav>
-      @if($project->user_id == Auth::id())
-      <a href="/skills/{{$skill->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
-      @else
-      <button class="btn btn-link" style="color: #6c757d;"><strong>$139.00</strong></button>
-      <a href="/skills/{{$skill->slug}}/projects/{{$project->slug}}/edit" class="btn btn-success">Purchase</a>
+      @if(Auth::id())
+        @if($project->user_id == Auth::id())
+        <a href="/skills/{{$skill->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
+        @else
+        <button class="btn btn-link" style="color: #6c757d;"><strong>$139.00</strong></button>
+        <a href="/skills/{{$skill->slug}}/projects/{{$project->slug}}/edit" class="btn btn-success">Purchase</a>
+        @endif
       @endif
   </div>
   <div class="container">
@@ -176,6 +178,8 @@
                   <!--end of content list-->
               </div>
         </div>
+        @if(Auth::id())
+        @if(Auth::id() != $project->user_id)
         <button class="btn btn-primary btn-round btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat">
             <i class="material-icons">chat_bubble</i>
             <i class="material-icons">close</i>
@@ -194,181 +198,101 @@
                                 <input type="search" class="form-control filter-list-input" placeholder="Search chat" aria-label="Search Chat" aria-describedby="search-chat">
                             </div>
                         </form>
-                        <div class="chat-module-body">
-
-
+                        <div class="chat-module-body" id="newMessagesDiv">
+                            @foreach($messages as $message)
                             <div class="media chat-item">
-                                <img alt="Claire" src="/img/avatar-female-1.jpg" class="avatar" />
-                                <div class="media-body">
+                                <img alt="{{$message->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
+                                <div class="media-body" style="padding: 0.7rem 1rem;">
                                     <div class="chat-item-title">
-                                        <span class="chat-item-author" data-filter-by="text">Claire</span>
-                                        <span data-filter-by="text">4 days ago</span>
+                                        <span class="chat-item-author" data-filter-by="text">{{$message->user->name}}</span>
+                                        <span data-filter-by="text">{{$message->created_at->diffForHumans()}}</span>
                                     </div>
                                     <div class="chat-item-body" data-filter-by="text">
-                                        <p>Hey guys, just kicking things off here in the chat window. Hope you&#39;re all ready to tackle this great project. Let&#39;s smash some Brand Concept &amp; Design!</p>
-
+                                        <p>{{$message->message}}</p>
                                     </div>
-
                                 </div>
                             </div>
-
-
-
-                            <div class="media chat-item">
-                                <img alt="Peggy" src="/img/avatar-female-2.jpg" class="avatar" />
-                                <div class="media-body">
-                                    <div class="chat-item-title">
-                                        <span class="chat-item-author" data-filter-by="text">Peggy</span>
-                                        <span data-filter-by="text">4 days ago</span>
-                                    </div>
-                                    <div class="chat-item-body" data-filter-by="text">
-                                        <p>Nice one <a href="#">@Claire</a>, we&#39;ve got some killer ideas kicking about already.
-                                            <img src="https://media.giphy.com/media/aTeHNLRLrwwwM/giphy.gif" alt="alt text" title="Thinking">
-                                        </p>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="media chat-item">
-                                <img alt="Marcus" src="/img/avatar-male-1.jpg" class="avatar" />
-                                <div class="media-body">
-                                    <div class="chat-item-title">
-                                        <span class="chat-item-author" data-filter-by="text">Marcus</span>
-                                        <span data-filter-by="text">3 days ago</span>
-                                    </div>
-                                    <div class="chat-item-body" data-filter-by="text">
-                                        <p>Roger that boss! <a href="">@Ravi</a> and I have already started gathering some stuff for the mood boards, excited to start! &#x1f525;</p>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="media chat-item">
-                                <img alt="Ravi" src="/img/avatar-male-3.jpg" class="avatar" />
-                                <div class="media-body">
-                                    <div class="chat-item-title">
-                                        <span class="chat-item-author" data-filter-by="text">Ravi</span>
-                                        <span data-filter-by="text">3 days ago</span>
-                                    </div>
-                                    <div class="chat-item-body" data-filter-by="text">
-                                        <h1 id="-">&#x1f609;</h1>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="media chat-item">
-                                <img alt="Claire" src="/img/avatar-female-1.jpg" class="avatar" />
-                                <div class="media-body">
-                                    <div class="chat-item-title">
-                                        <span class="chat-item-author" data-filter-by="text">Claire</span>
-                                        <span data-filter-by="text">2 days ago</span>
-                                    </div>
-                                    <div class="chat-item-body" data-filter-by="text">
-                                        <p>Can&#39;t wait! <a href="#">@David</a> how are we coming along with the <a href="#">Client Objective Meeting</a>?</p>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="media chat-item">
-                                <img alt="David" src="/img/avatar-male-4.jpg" class="avatar" />
-                                <div class="media-body">
-                                    <div class="chat-item-title">
-                                        <span class="chat-item-author" data-filter-by="text">David</span>
-                                        <span data-filter-by="text">Yesterday</span>
-                                    </div>
-                                    <div class="chat-item-body" data-filter-by="text">
-                                        <p>Coming along nicely, we&#39;ve got a draft for the client questionnaire completed, take a look! &#x1f913;</p>
-
-                                    </div>
-
-                                    <div class="media media-attachment">
-                                        <div class="avatar bg-primary">
-                                            <i class="material-icons">insert_drive_file</i>
-                                        </div>
-                                        <div class="media-body">
-                                            <a href="#" data-filter-by="text">questionnaire-draft.doc</a>
-                                            <span data-filter-by="text">24kb Document</span>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="media chat-item">
-                                <img alt="Sally" src="/img/avatar-female-3.jpg" class="avatar" />
-                                <div class="media-body">
-                                    <div class="chat-item-title">
-                                        <span class="chat-item-author" data-filter-by="text">Sally</span>
-                                        <span data-filter-by="text">2 hours ago</span>
-                                    </div>
-                                    <div class="chat-item-body" data-filter-by="text">
-                                        <p>Great start guys, I&#39;ve added some notes to the task. We may need to make some adjustments to the last couple of items - but no biggie!</p>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="media chat-item">
-                                <img alt="Peggy" src="/img/avatar-female-2.jpg" class="avatar" />
-                                <div class="media-body">
-                                    <div class="chat-item-title">
-                                        <span class="chat-item-author" data-filter-by="text">Peggy</span>
-                                        <span data-filter-by="text">Just now</span>
-                                    </div>
-                                    <div class="chat-item-body" data-filter-by="text">
-                                        <p>Well done <a href="#">@all</a>. See you all at 2 for the kick-off meeting. &#x1f91C;</p>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
+                            @endforeach
                         </div>
                     </div>
                     <div class="chat-module-bottom">
                         <form class="chat-form">
-                            <textarea class="form-control" placeholder="Type message" rows="1"></textarea>
-                            <!-- <div class="chat-form-buttons">
-                                <button type="button" class="btn btn-link">
-                                    <i class="material-icons">tag_faces</i>
-                                </button>
-                                <div class="custom-file custom-file-naked">
-                                    <input type="file" class="custom-file-input" id="customFile">
-                                    <label class="custom-file-label" for="customFile">
-                                        <i class="material-icons">attach_file</i>
-                                    </label>
-                                </div>
-                            </div> -->
+                            <textarea class="form-control" placeholder="Type message" id="chat-input" rows="1" onkeypress="keyPress()"></textarea>
+                            @if(Auth::id())
+                            <input id="userId" type="hidden" value="{{Auth::user()->id}}" />
+                            <input id="userName" type="hidden" value="{{Auth::user()->name}}" />
+                            <input id="userAvatar" type="hidden" value="{{Auth::user()->avatar}}" />
+                            <input id="clickedUserId" type="hidden" value="{{$clickedUserId}}" />
+                            <input id="messageChannel" type="hidden" value="{{$messageChannel}}" />
+                            <input id="projectId" type="hidden" value="{{$project->id}}" />
+                            <input id="projectOwner" type="hidden" value="{{$project->user->id}}" />
+                            @endif
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+        @endif
+        @endif
       </div>
   </div>
 
+  <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
+
   <script type="text/javascript">
+    $.ajaxSetup({
+
+        headers: {
+
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+        }
+
+    });
+
+    function keyPress() {
+        var key = window.event.keyCode;
+
+        if (key === 13) {
+            var messageText = document.getElementById("chat-input").value;
+            var data = {message_text: messageText, clickedUserId: document.getElementById("clickedUserId").value, messageChannel: document.getElementById("messageChannel").value, projectId: document.getElementById("projectId").value};
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            console.log("inside enter call");
+            console.log(data);
+
+            $.ajax({
+               type:'POST',
+               url:'/messages/'+document.getElementById("clickedUserId").value,
+               data: data,
+               success:function(data){
+
+               }
+            });
+        }
+    }
+
+    if(document.getElementById("clickedUserId") != null) {
+        var pusher = new Pusher("5491665b0d0c9b23a516", {
+          cluster: 'ap1',
+          forceTLS: true,
+          auth: {
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              }
+        });
+
+        var channel = pusher.subscribe(document.getElementById("messageChannel").value);
+        channel.bind('new-message', function(data) {
+            console.log(data);
+            document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+            
+            document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;
+            
+            document.getElementById("chat-input").value = "";
+        }); 
+    }
 
     var selDiv = "";
     
@@ -392,9 +316,42 @@
         selDiv.innerHTML += f.name + "<br/>";
 
       }
-    
     }
 
+  </script>
+
+  <script type="text/javascript">
+      $(function () {
+          var pusher = new Pusher("5491665b0d0c9b23a516", {
+            cluster: 'ap1',
+            forceTLS: true,
+            auth: {
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                }
+          });
+
+          toastr.options = {
+              positionClass: 'toast-bottom-right'
+          };     
+
+          if(document.getElementById('loggedInUserId').value == document.getElementById('projectOwner').value) {
+            var messageChannel = pusher.subscribe('messages_' + document.getElementById('loggedInUserId').value);
+            messageChannel.bind('new-message', function(data) {
+                toastr.options.onclick = function () {
+                    window.location.replace(data.url);
+                };
+
+                toastr.info("<strong>" + data.username + "</strong><br />" + data.message); 
+            });
+          }
+
+          var purchaseChannel = pusher.subscribe('purchases_' + document.getElementById('loggedInUserId').value);
+          purchaseChannel.bind('new-purchase', function(data) {
+              toastr.success(data.username + ' ' + data.message); 
+          });
+      })
   </script>
 @endsection
 

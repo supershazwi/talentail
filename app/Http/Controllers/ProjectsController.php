@@ -12,26 +12,43 @@ use App\Answer;
 use App\ProjectFile;
 use App\Skill;
 use App\Competency;
+use App\Message;
 use App\User;
 
 use Illuminate\Support\Facades\Storage;
 
 class ProjectsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    
     public function show($slug) {
+
+        $loggedInUserId = Auth::id();
 
         $routeParameters = Route::getCurrentRoute()->parameters();
         $skill = Skill::select('id', 'title', 'slug')->where('slug', $routeParameters['skillSlug'])->get()[0];
         $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['skill_id', '=', $skill->id]])->get()[0];
 
+        $clickedUserId = $project->user_id;
+
+        $subscribeString;
+
+        if($loggedInUserId < $clickedUserId) {
+            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+        } else {
+            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        }
+
+        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+        $messages3 = $messages1->merge($messages2);
+
+        $messages3 = $messages3->sortBy('created_at');
+
         return view('projects.show', [
             'project' => $project,
-            'skill' => $skill
+            'skill' => $skill,
+            'messages' => $messages3,
+            'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+            'clickedUserId' => $clickedUserId
         ]);
     }
 

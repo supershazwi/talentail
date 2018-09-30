@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Message;
 use App\User;
+use App\Project;
+use App\Http\Controllers\stdClass;
+use DB;
 
 class MessagesController extends Controller
 {
@@ -53,6 +56,9 @@ class MessagesController extends Controller
         $loggedInUserId = Auth::id();
 
         $allUsersIdArray = array();
+        $allProjectsUsersIdArray = array();
+
+        $allProjectsIdArray = array();
 
         foreach($messages as $message) {
             if(!in_array($message->recipient_id, $allUsersIdArray) && $message->recipient_id != $loggedInUserId) {
@@ -61,13 +67,53 @@ class MessagesController extends Controller
             if(!in_array($message->sender_id, $allUsersIdArray) && $message->sender_id != $loggedInUserId) {
                 array_push($allUsersIdArray, $message->sender_id);
             } 
+            if($message->project_id && $message->recipient_id != $loggedInUserId) {
+                if(!in_array($message->project_id, $allProjectsIdArray) && !in_array($message->recipient_id, $allProjectsUsersIdArray)) {
+                    array_push($allProjectsUsersIdArray, $message->recipient_id);
+                    array_push($allProjectsIdArray, $message->project_id);
+                }
+            } 
+            if($message->project_id && $message->sender_id != $loggedInUserId) {
+                if(!in_array($message->project_id, $allProjectsIdArray) && !in_array($message->sender_id, $allProjectsUsersIdArray)) {
+                    array_push($allProjectsUsersIdArray, $message->sender_id);
+                    array_push($allProjectsIdArray, $message->project_id);
+                }
+            } 
+        }
+
+        $allNewArray = array();
+
+        foreach($allProjectsUsersIdArray as $key=>$projectUserId) {
+            $app = app();
+            $obj = $app->make('stdClass');
+            $obj->user = User::find($projectUserId);
+            $obj->project = Project::find($allProjectsIdArray[$key]);
+            array_push($allNewArray, $obj);
+        }
+
+        foreach($messages as $message) {
+            if(!in_array($message->recipient_id, $allUsersIdArray) && $message->recipient_id != $loggedInUserId) {
+                array_push($allUsersIdArray, $message->recipient_id);
+            } 
+            if(!in_array($message->sender_id, $allUsersIdArray) && $message->sender_id != $loggedInUserId) {
+                array_push($allUsersIdArray, $message->sender_id);
+            } 
+            if($message->project_id && $message->recipient_id != $loggedInUserId) {
+                array_push($allProjectsUsersIdArray, $message->recipient_id);
+            } 
+            if($message->project_id && $message->sender_id != $loggedInUserId) {
+                array_push($allProjectsUsersIdArray, $message->sender_id);
+            } 
         }
 
         $users = User::find($allUsersIdArray);
+        $projectUsers = User::find($allProjectsUsersIdArray);
 
         return view('messages.index', [
             'users' => $users,
-            'messages' => null
+            'projectUsers' => $projectUsers,
+            'messages' => null,
+            'userProjectObjectArray' => $allNewArray
         ]);
     }
 
@@ -81,6 +127,12 @@ class MessagesController extends Controller
         $loggedInUserId = Auth::id();
 
         $allUsersIdArray = array();
+        $allProjectsUsersIdArray = array();
+
+        // $app = app();
+        // $projectUsersObject = $app->make('stdClass');
+
+        $allProjectsIdArray = array();
 
         foreach($messages as $message) {
             if(!in_array($message->recipient_id, $allUsersIdArray) && $message->recipient_id != $loggedInUserId) {
@@ -89,37 +141,182 @@ class MessagesController extends Controller
             if(!in_array($message->sender_id, $allUsersIdArray) && $message->sender_id != $loggedInUserId) {
                 array_push($allUsersIdArray, $message->sender_id);
             } 
+            if($message->project_id && $message->recipient_id != $loggedInUserId) {
+                if(!in_array($message->project_id, $allProjectsIdArray) && !in_array($message->recipient_id, $allProjectsUsersIdArray)) {
+                    array_push($allProjectsUsersIdArray, $message->recipient_id);
+                    array_push($allProjectsIdArray, $message->project_id);
+                }
+            } 
+            if($message->project_id && $message->sender_id != $loggedInUserId) {
+                if(!in_array($message->project_id, $allProjectsIdArray) && !in_array($message->sender_id, $allProjectsUsersIdArray)) {
+                    array_push($allProjectsUsersIdArray, $message->sender_id);
+                    array_push($allProjectsIdArray, $message->project_id);
+                }
+            } 
+        }
+
+        $allNewArray = array();
+
+        foreach($allProjectsUsersIdArray as $key=>$projectUserId) {
+            $app = app();
+            $obj = $app->make('stdClass');
+            $obj->user = User::find($projectUserId);
+            $obj->project = Project::find($allProjectsIdArray[$key]);
+            array_push($allNewArray, $obj);
         }
 
         $users = User::find($allUsersIdArray);
+        $projectUsers = User::find($allProjectsUsersIdArray);
 
         $clickedUserId = $routeParameters['userId'];
 
-        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->get();
-        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->get();
-        $messages3 = $messages1->merge($messages2);
+        $messages = Message::where('project_id', '=', 0)
+                ->where(function ($query) {
+                    $query->where('recipient_id', '=', Route::getCurrentRoute()->parameters()['userId'])
+                          ->where('sender_id', '=', Auth::id())
+                          ->where('project_id', '=', 0);
+                })
+                ->orWhere(function ($query) {
+                    $query->where('recipient_id', '=', Auth::id())
+                          ->where('sender_id', '=', Route::getCurrentRoute()->parameters()['userId'])
+                          ->where('project_id', '=', 0);
+                })
+                ->get();
 
-        $messages3 = $messages3->sortByDesc('created_at');
+        $messages = $messages->sortBy('created_at');
+
+        $subscribeString;
+
+        if($loggedInUserId < $clickedUserId) {
+            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+        } else {
+            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        }
+
 
         return view('messages.index', [
             'users' => $users,
-            'messages' => $messages3,
-            'messageChannel' => self::DEFAULT_message_CHANNEL
+            'userProjectObjectArray' => $allNewArray,
+            'messages' => $messages,
+            'messageChannel' => 'messages_'.$subscribeString,
+            'clickedUserId' => $clickedUserId
         ]);
     }
 
-    public function sendMessage(Request $request)
-    {
+    public function showIndividualProjectChannel() {
+        $routeParameters = Route::getCurrentRoute()->parameters();
+
+        $messages = Message::where('recipient_id', Auth::id())->orWhere('sender_id', Auth::id())->get();
+
+        // i need to loop through the messages to sift out users that i need to display at the right hand side
+
+        $loggedInUserId = Auth::id();
+
+        $allUsersIdArray = array();
+        $allProjectsUsersIdArray = array();
+
+        // $app = app();
+        // $projectUsersObject = $app->make('stdClass');
+
+        $allProjectsIdArray = array();
+
+        foreach($messages as $message) {
+            if(!in_array($message->recipient_id, $allUsersIdArray) && $message->recipient_id != $loggedInUserId) {
+                array_push($allUsersIdArray, $message->recipient_id);
+            } 
+            if(!in_array($message->sender_id, $allUsersIdArray) && $message->sender_id != $loggedInUserId) {
+                array_push($allUsersIdArray, $message->sender_id);
+            } 
+            if($message->project_id && $message->recipient_id != $loggedInUserId) {
+                if(!in_array($message->project_id, $allProjectsIdArray) && !in_array($message->recipient_id, $allProjectsUsersIdArray)) {
+                    array_push($allProjectsUsersIdArray, $message->recipient_id);
+                    array_push($allProjectsIdArray, $message->project_id);
+                }
+            } 
+            if($message->project_id && $message->sender_id != $loggedInUserId) {
+                if(!in_array($message->project_id, $allProjectsIdArray) && !in_array($message->sender_id, $allProjectsUsersIdArray)) {
+                    array_push($allProjectsUsersIdArray, $message->sender_id);
+                    array_push($allProjectsIdArray, $message->project_id);
+                }
+            } 
+        }
+
+        $allNewArray = array();
+
+        foreach($allProjectsUsersIdArray as $key=>$projectUserId) {
+            $app = app();
+            $obj = $app->make('stdClass');
+            $obj->user = User::find($projectUserId);
+            $obj->project = Project::find($allProjectsIdArray[$key]);
+            array_push($allNewArray, $obj);
+        }
+
+        $users = User::find($allUsersIdArray);
+        $projectUsers = User::find($allProjectsUsersIdArray);
+
+        $clickedUserId = $routeParameters['userId'];
+        $clickedProjectId = $routeParameters['projectId'];
+
+        $messages = Message::where('project_id', '=', $clickedProjectId)
+                ->where(function ($query) {
+                    $query->where('recipient_id', '=', Route::getCurrentRoute()->parameters()['userId'])
+                          ->where('sender_id', '=', Auth::id())
+                          ->where('project_id', '=', Route::getCurrentRoute()->parameters()['projectId']);
+                })
+                ->orWhere(function ($query) {
+                    $query->where('recipient_id', '=', Auth::id())
+                          ->where('sender_id', '=', Route::getCurrentRoute()->parameters()['userId'])
+                          ->where('project_id', '=', Route::getCurrentRoute()->parameters()['projectId']);
+                })
+                ->get();
+
+        $messages = $messages->sortBy('created_at');
+
+        $subscribeString;
+
+        if($loggedInUserId < $clickedUserId) {
+            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+        } else {
+            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        }
+
+        return view('messages.index', [
+            'users' => $users,
+            'userProjectObjectArray' => $allNewArray,
+            'messages' => $messages,
+            'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$clickedProjectId,
+            'clickedUserId' => $clickedUserId,
+            'clickedProject' => Project::find($clickedProjectId)
+        ]);
+    }
+
+    public function sendMessage(Request $request) {
+        $messageToSave = new Message;
+        $messageToSave->message = $request->input('message_text');
+        $messageToSave->sender_id = Auth::id();
+        $messageToSave->recipient_id = $request->input('clickedUserId');
+        $messageToSave->user_id = Auth::id();
+
+        $messageToSave->project_id = 0;
+
+        if($request->input('projectId')) {
+            $messageToSave->project_id = $request->input('projectId');
+        }
+
+        $messageToSave->save();
+
         $message = [
             'text' => e($request->input('message_text')),
             'username' => Auth::user()->name,
             'avatar' => Auth::user()->avatar,
-            'timestamp' => (time()*1000)
+            'timestamp' => (time()*1000),
+            'projectId' => $messageToSave->projectId
         ];
-        $this->pusher->trigger($this->messageChannel, 'new-message', $message);
+
+        $this->pusher->trigger($request->input('messageChannel'), 'new-message', $message);
     }
 
     public function testMessage(Request $request) {
-        $this->pusher->trigger($this->messageChannel, 'new-message', 'hello');
+        App::make('pusher')->trigger('channel', 'new-message', 'test');
     }
 }

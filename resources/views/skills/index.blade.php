@@ -1,6 +1,7 @@
 @extends ('layouts.main')
 
 @section ('content')
+    @include('toast::messages')
     <div class="breadcrumb-bar navbar bg-white sticky-top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -52,10 +53,43 @@
             </div>
         </div>
     </div>
+
+    <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
+
+    <script type="text/javascript">
+        $(function () {
+            var pusher = new Pusher("5491665b0d0c9b23a516", {
+              cluster: 'ap1',
+              forceTLS: true,
+              auth: {
+                      headers: {
+                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                      }
+                  }
+            });
+
+            toastr.options = {
+                positionClass: 'toast-bottom-right'
+            };     
+
+            var messageChannel = pusher.subscribe('messages_' + document.getElementById('loggedInUserId').value);
+            messageChannel.bind('new-message', function(data) {
+                toastr.options.onclick = function () {
+                    window.location.replace(data.url);
+                };
+
+                toastr.info("<strong>" + data.username + "</strong><br />" + data.message); 
+            });
+
+            var purchaseChannel = pusher.subscribe('purchases_' + document.getElementById('loggedInUserId').value);
+            purchaseChannel.bind('new-purchase', function(data) {
+                toastr.success(data.username + ' ' + data.message); 
+            });
+        })
+    </script>
+
 @endsection
 
 @section ('footer')
-	
-	
 
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class HomeController extends Controller
 
@@ -40,9 +41,7 @@ class HomeController extends Controller
 
     {
 
-        $input = request()->all();
-
-        return response()->json(['success'=>'Got Simple Ajax Request.']);
+        App::make('pusher')->trigger('channel', 'new-message', 'test');
 
     }
 

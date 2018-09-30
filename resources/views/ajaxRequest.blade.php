@@ -28,8 +28,8 @@
 
         
 
-        <form >
-
+        <form>
+            @csrf
             <div class="form-group">
 
                 <label>Name:</label>
@@ -116,7 +116,7 @@
 
         $.ajax({
            type:'POST',
-           url:'/messages/test',
+           url:'/ajaxRequest',
            data: "hello",
            success:function(data){
 
