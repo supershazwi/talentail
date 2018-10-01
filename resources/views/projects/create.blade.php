@@ -21,9 +21,6 @@
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
-                <div class="mb-3 d-flex">
-                    <img alt="Pipeline" src="/img/project.svg" class="avatar avatar-lg mr-1" />
-                </div>
                 <h1 class="display-4 mb-3">Create a {{$selectedSkill->title}} Project</h1>
                 <p class="lead">{{$selectedSkill->description}}</p>
             </section>

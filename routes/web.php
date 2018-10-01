@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Experience;
 use App\User;
+use App\SkillGained;
+use App\AttemptedProject;
 
 use Pusher\Laravel\Facades\Pusher;
 
@@ -40,7 +42,7 @@ Route::get('/bridge-2', function() {
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/profile/edit', function() {
     $user = Auth::user();
@@ -110,8 +112,14 @@ Route::post('/profile/save', function(Request $request) {
 Route::get('/profile', function() {
     $user = Auth::user();
 
+    // find out skills gained
+    $skillsGained = SkillGained::where('user_id', Auth::id())->get();
+    $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
+
 	return view('profile', [
-        'user' => $user
+        'user' => $user,
+        'skillsGained' => $skillsGained,
+        'attemptedProjects' => $attemptedProjects
     ]);
 })->middleware('auth');
 

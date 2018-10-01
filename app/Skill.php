@@ -18,4 +18,8 @@ class Skill extends Model
     public function competencies() {
     	return $this->hasMany(Competency::class);
     }
+
+    public function skills_gained() {
+        return $this->hasMany(SkillGained::class);
+    }
 }

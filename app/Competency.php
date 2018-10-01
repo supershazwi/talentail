@@ -15,4 +15,9 @@ class Competency extends Model
     {
         return $this->belongsToMany(Project::class);
     }
+
+    public function competency_scores()
+    {
+        return $this->hasMany(CompetencyScore::class);
+    }
 }

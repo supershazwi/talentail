@@ -22,7 +22,7 @@
                 <div class="col-xl-5 col-lg-6 col-md-7">
                     <div class="text-center">
                         <h1 class="h2">Welcome Back &#x1f44b;</h1>
-                        <p class="lead">Log in to your account to continue</p>
+                        <p class="lead">Attempt real world projects to gain real world experience.</p>
                         <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                             @csrf
                             <div class="form-group">

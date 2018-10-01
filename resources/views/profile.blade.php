@@ -28,23 +28,34 @@
                         </div>
                     </div>
                     <ul class="nav nav-tabs nav-fill">
+                        @if(Auth::user()->creator)
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#creatorInformation" role="tab" aria-controls="creatorInformation" aria-selected="true">Creator-only Information</a>
                         </li>
+                        @endif
+                        @if(Auth::user()->creator)
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#gatheredSkills" role="tab" aria-controls="gatheredSkills" aria-selected="true">Gathered Skills</a>
                         </li>
+                        @else
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#gatheredSkills" role="tab" aria-controls="gatheredSkills" aria-selected="true">Gathered Skills</a>
+                        </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#attemptedProjects" role="tab" aria-controls="attemptedProjects" aria-selected="false">Attempted Projects</a>
                         </li>
+                        @if(Auth::user()->creator)
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#createdProjects" role="tab" aria-controls="createdProjects" aria-selected="false">Created Projects</a>
                         </li>
+                        @endif
                         <!-- <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#opportunities" role="tab" aria-controls="opportunities" aria-selected="false">Opportunities</a>
                         </li> -->
                     </ul>
                     <div class="tab-content">
+                        @if(Auth::user()->creator)
                         <div class="tab-pane fade show active" id="creatorInformation" role="tabpanel" aria-labelledby="creatorInformation-tab" data-filter-list="content-list-body">
                             <div class="row content-list-head">
                                 <div class="col-auto">
@@ -77,10 +88,12 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
+                        @if(Auth::user()->creator)
                         <div class="tab-pane fade" id="gatheredSkills" role="tabpanel" aria-labelledby="gatheredSkills-tab" data-filter-list="content-list-body">
                             <div class="row content-list-head">
                                 <div class="col-auto">
-                                    <h3>Skills</h3>
+                                    <h3>Gathered Skills</h3>
                                 </div>
                                 <form class="col-md-auto">
                                     <div class="input-group input-group-round">
@@ -184,6 +197,65 @@
                             </div>
                             <!--end of content-list-body-->
                         </div>
+                        @else
+                        <div class="tab-pane fade show active" id="gatheredSkills" role="tabpanel" aria-labelledby="gatheredSkills-tab" data-filter-list="content-list-body">
+                            <div class="row content-list-head">
+                                <div class="col-auto">
+                                    <h3>Gathered Skills</h3>
+                                </div>
+                                <form class="col-md-auto">
+                                    <div class="input-group input-group-round">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="material-icons">filter_list</i>
+                                            </span>
+                                        </div>
+                                        <input type="search" class="form-control filter-list-input" placeholder="Filter skills" aria-label="Filter skills" aria-describedby="filter-skills">
+                                    </div>
+                                </form>
+                            </div>
+                            @if(count($skillsGained) > 0)   
+                            <div class="content-list-body row">
+                                @foreach($skillsGained as $skillGained)
+                                <div class="col-md-6">
+                                    <div class="card card-team">
+                                        <div class="card-body">
+                                            <div class="card-title" style="text-align: center; max-width: 100%;">
+                                                <h5 data-filter-by="text"><a href="/skills/{{$skillGained->skill->slug}}">{{$skillGained->skill->title}}</a></h5>
+                                            </div>
+                                            @foreach($skillGained->competency_scores as $competencyScore)
+                                            <div class="row">
+                                                <div class="col-lg-9">
+                                                    <p>{{$competencyScore->competency->title}}</p>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="fas fa-star star-rating" style="color: #6c757d !important;"></span>
+                                                    <span>{{$competencyScore->score}}</span>
+                                                </div>
+                                            </div>
+                                            @if(!$loop->last)
+                                                <hr/>
+                                            @endif
+                                            @endforeach
+                                            @if(count($skillGained->competency_scores) > 3)
+                                            <div style="text-align: center; margin-top: 1.5rem;">
+                                                <a href="#">See {{count($skillGained->competency_scores)-3}} more</a>
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                            @else 
+                            <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
+                text-align: center; text-align: center;">
+                                <h1>🤨</h1>
+                                <h6>You have not gathered skills yet because you <br />have not attempted and completed any project yet</h6>
+                            </div>
+                            @endif
+                        </div>
+                        @endif
                         <div class="tab-pane fade" id="attemptedProjects" role="tabpanel" aria-labelledby="attemptedProjects-tab" data-filter-list="content-list-body">
                             <div class="content-list">
                                 <div class="row content-list-head">
@@ -202,33 +274,42 @@
                                     </form>
                                 </div>
                                 <!--end of content list head-->
+                                @if(count($attemptedProjects) > 0) 
                                 <div class="content-list-body row">
+                                    @foreach($attemptedProjects as $attemptedProject)
                                     <div class="col-lg-6">
                                         <div class="card card-project">
                                             <div class="card-body">
                                                 <div class="card-title">
-                                                    <a href="#" data-toggle="modal" data-target="#task-modal">
-                                                        <h5><a href="/skills/business-analyst/projects/business-process-reengineering" data-filter-by="text">Business Process Re-engineering</a></h5>
-                                                    </a>
-                                                    <span class="badge badge-warning">In Progress</span>
+                                                    <h5 data-filter-by="text"><a href="/skills/{{$attemptedProject->project->skill->slug}}/projects/{{$attemptedProject->project->slug}}">{{$attemptedProject->project->title}}</a></h5>
+                                                    <span class="badge badge-warning">{{$attemptedProject->status}}</span>
                                                 </div>
-                                                <span>Business process re-engineering (BPR) is a business management strategy, originally pioneered in the early 1990s, focusing on the analysis and design of workflows and business processes within an organization.</span>
+                                                <span>{{$attemptedProject->project->description}}</span>
                                                 <br />
                                                 <br />
-                                                <a href="#" data-toggle="tooltip" data-placement="top" title="">
-                                                    <img class="avatar" src="/img/avatar-male-4.jpg">
+                                                <a href="/profile/{{$attemptedProject->user_id}}" data-toggle="tooltip" data-placement="top" title="">
+                                                    <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$attemptedProject->user->avatar}}">
                                                 </a>
                                                 <a href="#">
-                                                  <span style="font-size: .875rem; line-height: 1.3125rem;">Roger Ver</span>
+                                                  <span style="font-size: .875rem; line-height: 1.3125rem;">{{$attemptedProject->user->name}}</span>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
+                                @else 
+                                <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
+                    text-align: center; text-align: center;">
+                                    <h1>🤨</h1>
+                                    <h6>You have not attempted any project yet</h6>
+                                </div>
+                                @endif
                                 <!--end of content list body-->
                             </div>
                             <!--end of content list-->
                         </div>
+                        @if(Auth::user()->creator)
                         <div class="tab-pane fade" id="createdProjects" role="tabpanel" aria-labelledby="createdProjects-tab" data-filter-list="content-list-body">
                             <div class="content-list">
                                 <div class="row content-list-head">
@@ -275,6 +356,7 @@
                             </div>
                             <!--end of content list-->
                         </div>
+                        @endif
                         <!--end of tab-->
                     </div>
                     <form class="modal fade" id="team-add-modal" tabindex="-1" role="dialog" aria-labelledby="team-add-modal" aria-hidden="true">

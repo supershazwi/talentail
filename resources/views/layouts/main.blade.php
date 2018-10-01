@@ -31,8 +31,8 @@
 <body>
 	<div class="layout layout-nav-side">
 	    <div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
-	        <a class="navbar-brand" href="index.html">
-	            <img alt="Pipeline" src="/img/logo.svg" />
+	        <a class="navbar-brand" href="/">
+	            <img alt="Pipeline" src="/img/logo4.png" style="width: 100%;"/>
 	        </a>
 	        <div class="d-flex align-items-center">
 	            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">

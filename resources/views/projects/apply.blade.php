@@ -13,9 +13,6 @@
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-11">
                 <section class="py-4 py-lg-5">
-                    <div class="mb-3 d-flex">
-                        <img alt="Pipeline" src="/img/creator.svg" class="avatar avatar-lg mr-1" />
-                    </div>
                     <h1 class="display-4 mb-3">Apply to be a Creator</h1>
                     <p class="lead">Creators are given the responsibility of creating gateways for applicants to their dream careers. Creators are encouraged to model projects based upon their real world experiences without compromising confidential information.</p>
                     <p class="lead">We place high importance on the quality of projects that are available on the platform. This ensures that applicants get the value from the dollars and cents that they part with and that companies can rely on the projects as a pre-filtering mechanism of applicants without losing quality.</p>

@@ -258,9 +258,6 @@
             var data = {message_text: messageText, clickedUserId: document.getElementById("clickedUserId").value, messageChannel: document.getElementById("messageChannel").value, projectId: document.getElementById("projectId").value};
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-            console.log("inside enter call");
-            console.log(data);
-
             $.ajax({
                type:'POST',
                url:'/messages/'+document.getElementById("clickedUserId").value,
@@ -286,7 +283,7 @@
         var channel = pusher.subscribe(document.getElementById("messageChannel").value);
         channel.bind('new-message', function(data) {
             console.log(data);
-            document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+            document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
             
             document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;
             
@@ -299,8 +296,10 @@
     document.addEventListener("DOMContentLoaded", init, false);
   
     function init() {
-      document.querySelector('#file-1').addEventListener('change', handleFileSelect, false);
-      selDiv = document.querySelector("#selectedFiles");
+      if(document.querySelector('#file-1')) {
+        document.querySelector('#file-1').addEventListener('change', handleFileSelect, false);
+        selDiv = document.querySelector("#selectedFiles");
+      } 
     }
     
     function handleFileSelect(e) {

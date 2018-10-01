@@ -22,7 +22,7 @@
                 <div class="col-xl-5 col-lg-6 col-md-7">
                     <div class="text-center">
                         <h1 class="h2">Create account</h1>
-                        <p class="lead">Start doing things for free, in an instant</p>
+                        <p class="lead">Attempt real world projects to gain real world experience.</p>
                         <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
                             @csrf
                             <div class="form-group">
@@ -57,52 +57,6 @@
 
                                 <div class="text-left">
                                     <small>Your password should be at least 8 characters</small>
-                                </div>
-                            </div>
-                            <div class="card text-center">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col" style="border-right: 0.1px solid #E9EEF2 !important;">
-                                            <div class="mb-4">
-                                                <h6 style="text-align: center; height: 38px;">Applicants and/or Creators</h6>
-                                            </div>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <span class="text-small" style="color: #6c757d !important;">Attempt Projects</span>
-                                                </li>
-                                                <li>
-                                                    <span class="text-small" style="color: #6c757d !important;">Create Projects</span>
-                                                </li>
-                                                <li>
-                                                    <span class="text-small" style="color: #6c757d !important;">Apply for Opportunities</span>
-                                                </li>
-                                            </ul>
-                                            <div class="custom-control custom-radio d-inline-block">
-                                                <input type="radio" id="plan-radio-1" name="customRadio" class="custom-control-input" checked>
-                                                <label class="custom-control-label" for="plan-radio-1"></label>
-                                            </div>
-                                        </div>
-                                        <div class="col" style="border-left: 0.1px solid #E9EEF2 !important;">
-                                            <div class="mb-4">
-                                                <h6 style="text-align: center; height: 38px;">Companies</h6>
-                                            </div>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <span class="text-small" style="color: #6c757d !important;">Create Projects</span>
-                                                </li>
-                                                <li>
-                                                    <span class="text-small" style="color: #6c757d !important;">Post Opportunities</span>
-                                                </li>
-                                                <li style="color: transparent;">
-                                                    <span class="text-small" style="color: #6c757d !important;">Recruit Applicants</span>
-                                                </li>
-                                            </ul>
-                                            <div class="custom-control custom-radio d-inline-block">
-                                                <input type="radio" id="plan-radio-2" name="customRadio" class="custom-control-input">
-                                                <label class="custom-control-label" for="plan-radio-2"></label>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <button class="btn btn-lg btn-block btn-primary" role="button" type="submit">

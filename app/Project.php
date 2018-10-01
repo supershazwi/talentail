@@ -31,4 +31,8 @@ class Project extends Model
     {
         return $this->belongsToMany(Competency::class);
     }
+
+    public function attempted_projects() {
+        return $this->hasMany(AttemptedProject::class);
+    }
 }
