@@ -9,7 +9,9 @@
             </li>
         </ol>
     </nav>
+    @if(Auth::id() == $user->id)
     <a href="/profile/edit" class="btn btn-primary">Edit Profile</a>
+    @endif
 </div>   
 <div class="container">
     <div class="row justify-content-center">
@@ -28,12 +30,12 @@
                         </div>
                     </div>
                     <ul class="nav nav-tabs nav-fill">
-                        @if(Auth::user()->creator)
+                        @if($user->creator)
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#creatorInformation" role="tab" aria-controls="creatorInformation" aria-selected="true">Creator-only Information</a>
+                            <a class="nav-link active" data-toggle="tab" href="#workExperience" role="tab" aria-controls="workExperience" aria-selected="true">Work Experience</a>
                         </li>
                         @endif
-                        @if(Auth::user()->creator)
+                        @if($user->creator)
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#gatheredSkills" role="tab" aria-controls="gatheredSkills" aria-selected="true">Gathered Skills</a>
                         </li>
@@ -45,7 +47,7 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#attemptedProjects" role="tab" aria-controls="attemptedProjects" aria-selected="false">Attempted Projects</a>
                         </li>
-                        @if(Auth::user()->creator)
+                        @if($user->creator)
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#createdProjects" role="tab" aria-controls="createdProjects" aria-selected="false">Created Projects</a>
                         </li>
@@ -55,8 +57,8 @@
                         </li> -->
                     </ul>
                     <div class="tab-content">
-                        @if(Auth::user()->creator)
-                        <div class="tab-pane fade show active" id="creatorInformation" role="tabpanel" aria-labelledby="creatorInformation-tab" data-filter-list="content-list-body">
+                        @if($user->creator)
+                        <div class="tab-pane fade show active" id="workExperience" role="tabpanel" aria-labelledby="workExperience-tab" data-filter-list="content-list-body">
                             <div class="row content-list-head">
                                 <div class="col-auto">
                                     <h3>Work Experience</h3>
@@ -89,7 +91,7 @@
                             </div>
                         </div>
                         @endif
-                        @if(Auth::user()->creator)
+                        @if($user->creator)
                         <div class="tab-pane fade" id="gatheredSkills" role="tabpanel" aria-labelledby="gatheredSkills-tab" data-filter-list="content-list-body">
                             <div class="row content-list-head">
                                 <div class="col-auto">
@@ -309,13 +311,15 @@
                             </div>
                             <!--end of content list-->
                         </div>
-                        @if(Auth::user()->creator)
+                        @if($user->creator)
                         <div class="tab-pane fade" id="createdProjects" role="tabpanel" aria-labelledby="createdProjects-tab" data-filter-list="content-list-body">
                             <div class="content-list">
                                 <div class="row content-list-head">
                                     <div class="col-auto">
                                         <h3>Created Projects</h3>
+                                        @if(Auth::id() == $user->id)
                                         <a href="/projects/selectSkill" class="btn btn-primary" style="margin-left: 1.5rem;">Create Project</a>
+                                        @endif
                                     </div>
                                     <form class="col-md-auto">
                                         <div class="input-group input-group-round">

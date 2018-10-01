@@ -59,14 +59,13 @@ Route::get('/profile/{profileId}', function() {
         return view('error');
     }
 
-    if(Auth::id() != $user->id) {
-        return view('profile-others', [
-            'user' => $user,
-        ]);
-    }
+    $skillsGained = SkillGained::where('user_id', Auth::id())->get();
+    $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
 
     return view('profile', [
         'user' => $user,
+        'skillsGained' => $skillsGained,
+        'attemptedProjects' => $attemptedProjects
     ]);
 });
 
@@ -121,7 +120,7 @@ Route::get('/profile', function() {
         'skillsGained' => $skillsGained,
         'attemptedProjects' => $attemptedProjects
     ]);
-})->middleware('auth');
+});
 
 Route::get('/about-us', function() {
     return view('about-us');

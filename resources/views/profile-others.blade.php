@@ -9,6 +9,9 @@
             </li>
         </ol>
     </nav>
+    @if(Auth::id() == $user->id)
+    <a href="/profile/edit" class="btn btn-primary">Edit Profile</a>
+    @endif
 </div>   
 <div class="container">
     <div class="row justify-content-center">
