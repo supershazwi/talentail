@@ -44,11 +44,23 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
-    public function skills_gained() {
-        return $this->hasMany(SkillGained::class);
+    public function roles_gained() {
+        return $this->hasMany(RoleGained::class);
     }
 
     public function attempted_projects() {
         return $this->hasMany(AttemptedProject::class);
+    }
+
+    public function answered_tasks() {
+        return $this->hasMany(AnsweredTask::class);
+    }
+
+    public function answered_task_files() {
+        return $this->hasMany(AnsweredTaskFile::class);
+    }
+
+    public function reviewed_answered_task_files() {
+        return $this->hasMany(ReviewedAnsweredTaskFile::class);
     }
 }

@@ -29,10 +29,10 @@
 </head>
 
 <body>
-	<div class="layout layout-nav-side">
+	<div class="layout layout-nav-top">
 	    <div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
 	        <a class="navbar-brand" href="/">
-	            <img alt="Pipeline" src="/img/logo4.png" style="width: 100%;"/>
+	            <img alt="Pipeline" src="/img/logo.svg" />
 	        </a>
 	        <div class="d-flex align-items-center">
 	            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,11 @@
 	            <div class="d-block d-lg-none ml-2">
 	                <div class="dropdown">
 	                    <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                    	@if(Auth::user()->avatar)
 	                        <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
+	                        @else
+	                        <img alt="Image" src="/img/avatar.png" class="avatar" />
+	                        @endif
 	                    </a>
 	                    <div class="dropdown-menu dropdown-menu-right">
 	                        <a href="nav-side-user.html" class="dropdown-item">Profile</a>
@@ -53,30 +57,17 @@
 	            </div>
 	            @endif
 	        </div>
-	        <div class="collapse navbar-collapse flex-column" id="navbar-collapse">
-	            <ul class="navbar-nav d-lg-block">
+	        <div class="collapse navbar-collapse justify-content-between" id="navbar-collapse">
+	            <ul class="navbar-nav">
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/">Home</a>
 	                </li>
 	                <li class="nav-item">
-	                    <a class="nav-link" href="/skills">Skills</a>
+	                    <a class="nav-link" href="/roles">Roles</a>
 	                </li>
-	                <!-- <li class="nav-item">
-	                    <a class="nav-link" href="/projects">Projects</a>
-	                </li> -->
-	                <!-- <li class="nav-item">
-	                    <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#exploreDropdown" aria-controls="exploreDropdown">Explore</a>
-	                    <div id="exploreDropdown" class="collapse">
-	                        <ul class="nav nav-small flex-column">
-	                            <li class="nav-item">
-	                                <a class="nav-link" href="/skills">Skills</a>
-	                            </li>
-	                            <li class="nav-item">
-	                                <a class="nav-link" href="/companies">Companies</a>
-	                            </li>
-	                        </ul>
-	                    </div>
-	                </li> -->
+	                <li class="nav-item">
+	                    <a class="nav-link" href="/creators">Creators</a>
+	                </li>
 	                @if(Auth::id())
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/messages">Messages</a>
@@ -86,66 +77,106 @@
 	                </li>
 	                @endif
 	            </ul>
-	            <hr>
-	            <div class="d-none d-lg-block w-100">
-	                <ul class="nav nav-small flex-column">
-	                    <li class="nav-item">
-	                        <a href="/about-us" class="nav-link">About Us</a>
-	                    </li>
-	                    <li class="nav-item">
-	                        <a href="/contact-us" class="nav-link">Contact Us</a>
-	                    </li>
-	                    <li class="nav-item">
-	                        <a href="/faq" class="nav-link">FAQ</a>
-	                    </li>
-	                    @if(!Auth::id())
-	                    <li class="nav-item">
-	                        <a href="/login" class="nav-link">Login</a>
-	                    </li>
-	                    @endif
-	                </ul>
-	                <hr>
-	            </div>
-	            @if(Auth::id())
-	            <div>
-	                <div class="dropdown mt-2">
+	            <div class="d-lg-flex align-items-center">
+	            	@if(Auth::id())
+	                <div class="dropdown mx-lg-2">
 	                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="newContentButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	                        Add New
 	                    </button>
 	                    <div class="dropdown-menu" aria-labelledby="newContentButton">
-	                        <a class="dropdown-item" href="/projects/select-skill">Project</a>
+	                        <a class="dropdown-item" href="/projects/select-role">Project</a>
 	                        @if(Auth::user() && Auth::user()->admin)
 	                        <!-- <a class="dropdown-item" href="/companies/create">Company</a> -->
 	                        <!-- <a class="dropdown-item" href="/projects/create">Competency</a> -->
-	                        <!-- <a class="dropdown-item" href="/opportunities/create">Opportunity</a> -->
-	                        <a class="dropdown-item" href="/skills/create">Skill</a>
+	                        <a class="dropdown-item" href="/opportunities/create">Opportunity</a>
+	                        <a class="dropdown-item" href="/roles/create">Role</a>
 	                    	@endif
 	                    </div>
 	                </div>
-	            </div>
-	            @endif
-	        </div>
-            @if(Auth::id())
-	        <div class="d-none d-lg-block">
-	            <div class="dropup">
-	                <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                    <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
-
-	                </a><span style="color: rgba(255, 255, 255, 0.65); font-size: .875rem;">{{Auth::user()->name}}</span>
-	                <div class="dropdown-menu">
-	                    <a href="/profile" class="dropdown-item">Profile</a>
-	                    <a href="/settings" class="dropdown-item">Account Settings</a>
-	                    <a href="/logout" class="dropdown-item">Log Out</a>
+	                <div class="d-none d-lg-block">
+	                    <div class="dropdown">
+	                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        	                    @if(Auth::user()->avatar)
+                                <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
+                                @else
+                                <img alt="Image" src="/img/avatar.png" class="avatar" />
+                                @endif
+        	                </a>
+	                        <div class="dropdown-menu dropdown-menu-right">
+	                            <a href="/profile" class="dropdown-item">Profile</a>
+        	                    <a href="/settings" class="dropdown-item">Account Settings</a>
+        	                    <a href="/logout" class="dropdown-item">Log Out</a>
+	                        </div>
+	                    </div>
 	                </div>
+	                @else
+	                <a href="/login" class="btn btn-primary btn-block">
+	                    Login
+	                </a>
+	                @endif
 	            </div>
 	        </div>
-	        @endif
 	    </div>
 	    <div class="main-container">
+	    	@include('toast::messages')
 	        @yield('content')
+	        <div style="width: 100%; background-color: white; border-top: 1px solid #E5E5E5;">
+		        <div class="container" style="padding-left: 4.5rem; padding-right: 4.5rem; padding-top: 1.5rem; padding-bottom: 1.5rem;">
+				    <div class="row">
+				        <div class="col-lg-5">
+		                	<h5>Talentail</h5>
+		                	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		                </div>
+				        <div class="col-lg-3">
+							<a href="/about-us" class="text-small">About Us</a><br />
+							<a href="/contact-us" class="text-small">Contact Us</a><br />
+							<a href="/faq" class="text-small">Frequently Asked Questions</a>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
 	    </div>
 	</div>
+
+	<input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
+
 	@include('scripts.javascript')
+
+	<script type="text/javascript">
+	    $(function () {
+	        toastr.options = {
+	            positionClass: 'toast-bottom-right'
+	        }; 
+
+	        var pusher = new Pusher("5491665b0d0c9b23a516", {
+	          cluster: 'ap1',
+	          forceTLS: true,
+	          auth: {
+	                  headers: {
+	                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	                  }
+	              }
+	        });
+
+	        var messageChannel = pusher.subscribe('messages_' + document.getElementById('loggedInUserId').value);
+	        messageChannel.bind('new-message', function(data) {
+	            toastr.options.onclick = function () {
+	                window.location.replace(data.url);
+	            };
+
+	            toastr.info("<strong>" + data.username + "</strong><br />" + data.text); 
+	        });
+
+	        var notificationChannel = pusher.subscribe('notifications_' + document.getElementById('loggedInUserId').value);
+	        notificationChannel.bind('new-notification', function(data) {
+	            toastr.options.onclick = function () {
+	                window.location.replace(data.url);
+	            };
+
+	            toastr.success("<strong>" + data.username + "</strong><br />" + data.text); 
+	        });
+	    })
+	</script> 
 </body>
 
 </html>

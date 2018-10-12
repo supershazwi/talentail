@@ -21,7 +21,7 @@ class NotificationController extends Controller
     // to show a view that lets a user send a notification
     public function index()
     {
-        $notifications = Notification::where('recipient_id', Auth::id())->get();
+        $notifications = Notification::where('recipient_id', Auth::id())->orderBy('created_at', 'desc')->get();
         
         return view('notifications', [
             'notifications' => $notifications,

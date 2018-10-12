@@ -1,20 +1,12 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="breadcrumb-bar navbar bg-white sticky-top">
-      <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/about-us">About Us</a>
-              </li>
-          </ol>
-      </nav>
-  </div>
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
-                <h1 class="display-4 mb-3">Meet the team behind Talentail</h1>
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <h1 class="display-4 mb-3">The platform to achieve greater control over one's career</h1>
+                <p class="lead">At Talentail, we believe that everyone should be given an equal opportunity to control their career paths and ultimately their happiness. Therefore, over 100 creators have come together to design projects and provide you with real world experience that you never got the chance to accumulate.</p>
             </section>
             <div class="tab-pane fade show active" id="team" role="tabpanel" aria-labelledby="teams-tab" data-filter-list="content-list-body">
                 <!--end of content list head-->
@@ -22,10 +14,16 @@
                     <div class="col-xl-6">
                         <div class="card mb-3">
                             <div class="card-body">
-                                <img src="/img/shaz.jpg" style="width: 50%; border-radius: 0.5rem;"/>
-                                <h5 data-filter-by="text" style="margin-top: 1rem;">Shazwi Suwandi</h5>
-                                <p style="margin-top: 0.5rem;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                <a href="https://www.linkedin.com/in/shazwi/"><i class="fab fa-linkedin"></i></a>
+                                <div class="row">
+                                  <div class="col-lg-4">
+                                    <img src="/img/1235519_10151680956467939_1487085179_n.jpg" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
+                                  </div>
+                                  <div class="col-lg-8">
+                                    <h5 data-filter-by="text">Shazwi Suwandi</h5>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                    <a href="https://www.linkedin.com/in/shazwi/"><i class="fab fa-linkedin"></i></a>
+                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>

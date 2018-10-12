@@ -33,6 +33,7 @@ class MessagesController extends Controller
         $this->pusher = App::make('pusher');
         $this->user = Auth::user();
         $this->messageChannel = self::DEFAULT_message_CHANNEL;
+        $this->middleware('auth');
     }
 
     /**
@@ -305,15 +306,36 @@ class MessagesController extends Controller
 
         $messageToSave->save();
 
+        $url;
+
+        if($messageToSave->project_id == 0) {
+            $url = '/messages/' . Auth::id();
+        } else {
+            $url = '/messages/' . Auth::id() . '/projects/' . $messageToSave->project_id;
+        }
+
         $message = [
             'text' => e($request->input('message_text')),
             'username' => Auth::user()->name,
             'avatar' => Auth::user()->avatar,
             'timestamp' => (time()*1000),
-            'projectId' => $messageToSave->projectId
+            'projectId' => $messageToSave->projectId,
+            'url' => $url
         ];
 
         $this->pusher->trigger($request->input('messageChannel'), 'new-message', $message);
+
+        $otherChannel;
+
+        $channelString = explode("_", $request->input('messageChannel'));
+
+        if(Auth::id() == $channelString[1]) {
+            $otherChannel = 'messages_' . $channelString[2];
+        } else {
+            $otherChannel = 'messages_' . $channelString[1];
+        }
+
+        $this->pusher->trigger($otherChannel, 'new-message', $message);
     }
 
     public function testMessage(Request $request) {

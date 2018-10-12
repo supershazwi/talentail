@@ -8,7 +8,7 @@
 <script type="text/javascript" src="/js/list.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript" src="/js/theme.js"></script>
-<script type="text/javascript" src="/js/editormd.js"></script>
+<!-- <script type="text/javascript" src="/js/editormd.js"></script> -->
 <script type="text/javascript" src="/js/custom-file-input.js"></script>
 <script type="text/javascript" src="/js/toastr.js"></script>
 

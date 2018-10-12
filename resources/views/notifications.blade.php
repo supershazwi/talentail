@@ -1,14 +1,6 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="breadcrumb-bar navbar bg-white sticky-top">
-      <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/notifications">Notifications</a>
-              </li>
-          </ol>
-      </nav>
-  </div>
   <div class="container" style="padding: 1.5rem !important;">
       <div class="content-list">
           <!--end of content list head-->
@@ -29,11 +21,15 @@
               <ol class="list-group list-group-activity">
                   @foreach($notifications as $notification)
                   <a href="{{$notification->url}}">
-                  <li class="list-group-item">
+                  <li class="list-group-item" style="margin-bottom: 0.5rem;">
                       <div class="media align-items-center">
                           <ul class="avatars">
                               <li>
+                                @if($notification->user->avatar)
                                   <img alt="{{$notification->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$notification->user->avatar}}"" class="avatar" data-filter-by="alt" />
+                                @else
+                                  <img alt="{{$notification->user->name}}" src="/img/avatar.png"" class="avatar" data-filter-by="alt" />
+                                @endif
                               </li>
                           </ul>
                           <div class="media-body">

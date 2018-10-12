@@ -6,7 +6,7 @@
   <div class="breadcrumb-bar navbar bg-white sticky-top">
       <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/skills">Skills</a>&nbsp;> {{$skill->title}}
+              <li class="breadcrumb-item"><a href="/roles">Roles</a>&nbsp;> {{$role->title}}
               </li>
           </ol>
       </nav>
@@ -16,7 +16,7 @@
       <div class="card card-kanban">
         <div class="card-body">
           <div class="card-title">
-            <h4>{{$skill->title}}</h4>
+            <h4>{{$role->title}}</h4>
           </div>
           <div class="card-title">
             <p class="text-small"><i class="fas fa-angle-right"></i> Elicit requirements for software development using interviews</p>
@@ -64,13 +64,13 @@
                   <h4>Projects</h4>
               </div>
               <div class="card-list-body">
-                  @foreach($skill->projects as $project)
+                  @foreach($role->projects as $project)
                   <div class="card card-kanban">
                       <div class="card-body">
                           <div class="row">
                             <div class="col-lg-11">
                               <div class="card-title">
-                                      <h5><a href="/skills/{{$skill->slug}}/projects/{{$project->slug}}">{{$project->title}}</a></h5>
+                                      <h5><a href="/roles/{{$role->slug}}/projects/{{$project->slug}}">{{$project->title}}</a></h5>
                               </div>
                               <p class="text-small">{{$project->description}}</p>
                               <a href="#" data-toggle="tooltip" data-placement="top" title="">

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Skill extends Model
+class Role extends Model
 {
     //
     public function projects() {
@@ -19,7 +19,7 @@ class Skill extends Model
     	return $this->hasMany(Competency::class);
     }
 
-    public function skills_gained() {
-        return $this->hasMany(SkillGained::class);
+    public function roles_gained() {
+        return $this->hasMany(RoleGained::class);
     }
 }

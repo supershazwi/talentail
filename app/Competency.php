@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Competency extends Model
 {
     //
-    public function skill() {
-    	return $this->belongsTo(Skill::class);
+    public function role() {
+    	return $this->belongsTo(Role::class);
     }
 
     public function projects()

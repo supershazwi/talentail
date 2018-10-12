@@ -18,4 +18,8 @@ class Task extends Model
     public function user_answers() {
         return $this->hasMany(UserAnswer::class);
     }
+
+    public function answered_tasks() {
+        return $this->hasMany(AnsweredTask::class);
+    }
 }

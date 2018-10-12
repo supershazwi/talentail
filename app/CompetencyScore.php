@@ -8,8 +8,8 @@ class CompetencyScore extends Model
 {
 	protected $table = 'competency_scores';
 
-    public function skill_gained() {
-    	return $this->belongsTo(SkillGained::class);
+    public function role_gained() {
+    	return $this->belongsTo(RoleGained::class);
     }
 
     public function competency() {

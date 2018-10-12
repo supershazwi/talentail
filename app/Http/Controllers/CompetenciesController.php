@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Competency;
-use App\Skill;
+use App\Role;
 
 class CompetenciesController extends Controller
 {
@@ -15,10 +15,10 @@ class CompetenciesController extends Controller
     }
 
     public function index() {
-        $skills = Skill::all();
+        $roles = Role::all();
 
         return view('competencies.index', [
-            'skills' => $skills
+            'roles' => $roles
         ]);
     }
 

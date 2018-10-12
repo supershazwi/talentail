@@ -21,10 +21,18 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Experience;
 use App\User;
-use App\SkillGained;
+use App\RoleGained;
 use App\AttemptedProject;
 
 use Pusher\Laravel\Facades\Pusher;
+
+use App\Mail\UserRegistered;
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/send-message', function() {
+    Mail::to('supershazwi@gmail.com')->send(new UserRegistered());
+});
+
 
 Route::post('/messages/{userId}', 'MessagesController@sendMessage');
 
@@ -34,6 +42,14 @@ Route::get('/bridge', function() {
     $pusher->trigger('my-channel', 'my-event', array('message' => 'hello world'));
 
     return view('welcome');
+});
+
+Route::get('/creators', function() {
+    $creators = User::where('creator', 1)->get();
+
+    return view('creators.index', [
+        'creators' => $creators
+    ]);
 });
 
 Route::get('/bridge-2', function() {
@@ -59,12 +75,12 @@ Route::get('/profile/{profileId}', function() {
         return view('error');
     }
 
-    $skillsGained = SkillGained::where('user_id', Auth::id())->get();
+    $rolesGained = RoleGained::where('user_id', Auth::id())->get();
     $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
 
     return view('profile', [
         'user' => $user,
-        'skillsGained' => $skillsGained,
+        'rolesGained' => $rolesGained,
         'attemptedProjects' => $attemptedProjects
     ]);
 });
@@ -112,15 +128,15 @@ Route::get('/profile', function() {
     $user = Auth::user();
 
     // find out skills gained
-    $skillsGained = SkillGained::where('user_id', Auth::id())->get();
+    $rolesGained = RoleGained::where('user_id', Auth::id())->get();
     $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
 
 	return view('profile', [
         'user' => $user,
-        'skillsGained' => $skillsGained,
+        'rolesGained' => $rolesGained,
         'attemptedProjects' => $attemptedProjects
     ]);
-});
+})->middleware('auth');
 
 Route::get('/about-us', function() {
     return view('about-us');
@@ -142,8 +158,8 @@ Route::get('/file-upload', function() {
     return view('file-upload');
 });
 
-Route::get('/projects/select-skill', 'ProjectsController@selectSkill');
-Route::post('/projects/select-skill', 'ProjectsController@selectSkill');
+Route::get('/projects/select-role', 'ProjectsController@selectRole');
+Route::post('/projects/select-role', 'ProjectsController@selectRole');
 
 Route::post('/settings', function() {
     $user = Auth::user();
@@ -178,15 +194,16 @@ Route::get('/settings', function() {
 	]);
 })->middleware('auth');
 
+Route::get('/messages/testtesttest', function() {
+    return view('messages.test', [
+    ]);
+})->middleware('auth');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('ajaxRequest', 'HomeController@ajaxRequest');
 
 Route::post('ajaxRequest', 'HomeController@ajaxRequestPost');
-
-Route::post('/messages/test', function(Request $request) {
-    $request->session()->flash('status', 'Task was successful!');
-});
 
 Route::get('/ola', function() {
     $pusher = App::make('pusher');
@@ -198,19 +215,26 @@ Route::get('/messages/{userId}/projects/{projectId}', 'MessagesController@showIn
 
 Route::get('/messages/{userId}', 'MessagesController@showIndividualChannel');
 
+Route::post('/projects/publish-project', 'ProjectsController@publishProject');
+Route::post('/projects/save-project', 'ProjectsController@saveProject');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/toggle-visibility-project', 'ProjectsController@toggleVisibilityProject');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/submit-project-attempt', 'ProjectsController@submitProjectAttempt');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/purchase-project', 'ProjectsController@purchaseProject');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/save-project', 'ProjectsController@saveChanges');
+Route::get('/roles/{roleSlug}/projects/{projectSlug}/edit', 'ProjectsController@edit')->middleware('auth');
+Route::get('/roles/{roleSlug}/projects/{projectSlug}/attempt', 'ProjectsController@attempt')->middleware('auth');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/{userId}', 'ProjectsController@submitReview')->middleware('auth');
+Route::get('/roles/{roleSlug}/projects/{projectSlug}/{userId}', 'ProjectsController@review')->middleware('auth');
 
 
-Route::post('/messages/test', 'MessagesController@testMessage');
-Route::get('/skills/{skillSlug}/projects/{projectSlug}', 'ProjectsController@show');
+Route::get('/roles/{roleSlug}/projects/{projectSlug}', 'ProjectsController@show');
 
-Route::post('/skills/{skillSlug}/projects/{projectSlug}/save-project', 'ProjectsController@saveChanges');
-Route::get('/skills/{skillSlug}/projects/{projectSlug}/edit', 'ProjectsController@edit')->middleware('auth');
     
 Route::post('/notifications/notify', 'NotificationController@postNotify');
 Route::resources([
     // 'companies' => 'CompaniesController',
     'opportunities' => 'OpportunitiesController',
-    'skills' => 'SkillsController',
+    'roles' => 'RolesController',
     'messages' => 'MessagesController',
     'projects' => 'ProjectsController',
     'notifications' => 'NotificationController',

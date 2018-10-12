@@ -4,17 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SkillGained extends Model
+class RoleGained extends Model
 {
-	protected $table = 'skills_gained';
+	protected $table = 'roles_gained';
 
     //
     public function competencies() {
     	return $this->hasMany(Competency::class);
     }
 
-    public function skill() {
-    	return $this->belongsTo(Skill::class);
+    public function role() {
+    	return $this->belongsTo(Role::class);
     }
 
     public function user() {

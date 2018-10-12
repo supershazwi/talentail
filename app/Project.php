@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     //
-    public function skill() {
-    	return $this->belongsTo(Skill::class);
+    public function role() {
+    	return $this->belongsTo(Role::class);
     }
 
     public function user() {
@@ -34,5 +34,17 @@ class Project extends Model
 
     public function attempted_projects() {
         return $this->hasMany(AttemptedProject::class);
+    }
+
+    public function reviewed_answered_task_files() {
+        return $this->hasMany(ReviewedAnsweredTaskFile::class);
+    }
+
+    public function answered_task_files() {
+        return $this->hasMany(AnsweredTaskFile::class);
+    }
+
+    public function answered_tasks() {
+        return $this->hasMany(AnsweredTask::class);
     }
 }

@@ -3,10 +3,6 @@
 @section ('content')
     <div class="breadcrumb-bar navbar bg-white sticky-top">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/projects">Projects</a>&nbsp;> Apply to be a Creator
-                </li>
-            </ol>
         </nav>
     </div>
     <div class="container">

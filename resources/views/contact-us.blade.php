@@ -1,14 +1,6 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="breadcrumb-bar navbar bg-white sticky-top">
-      <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/contact-us">Contact Us</a>
-              </li>
-          </ol>
-      </nav>
-  </div>
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">

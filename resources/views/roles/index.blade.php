@@ -1,21 +1,12 @@
 @extends ('layouts.main')
 
 @section ('content')
-    @include('toast::messages')
-    <div class="breadcrumb-bar navbar bg-white sticky-top">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/skills">Skills</a>
-                </li>
-            </ol>
-        </nav>
-    </div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-11">
                 <section class="py-4 py-lg-5">
-                    <h1 class="display-4 mb-3">Skills</h1>
-                    <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <h1 class="display-4 mb-3">Roles</h1>
+                    <p class="lead">Individuals come together to ensure that a company operates like a well-oiled machine. Each one of them plays an important role in fulfilling the company's mission. Be the best in the role that you're in so that you can make the greatest impact at work.</p>
                 </section>
                 <div class="tab-pane fade show active" id="teams" role="tabpanel" aria-labelledby="teams-tab" data-filter-list="content-list-body">
                     <div class="row content-list-head">
@@ -28,18 +19,18 @@
                                         <i class="material-icons">filter_list</i>
                                     </span>
                                 </div>
-                                <input type="search" class="form-control filter-list-input" placeholder="Filter skills" aria-label="Filter skills" aria-describedby="filter-skills">
+                                <input type="search" class="form-control filter-list-input" placeholder="Filter roles" aria-label="Filter roles" aria-describedby="filter-roles">
                             </div>
                         </form>
                     </div>
                     <!--end of content list head-->
                     <div class="content-list-body row">
-                        @foreach($skills as $skill)
+                        @foreach($roles as $role)
                         <div class="col-xl-4 col-6">
                             <div class="card mb-3">
                                 <div class="card-body">
-                                    <h5 data-filter-by="text"><a href="/skills/{{$skill->slug}}">{{$skill->title}}</a></h5>
-                                    <p style="margin-top: 0.5rem;">{{$skill->description}}</p>
+                                    <h5 data-filter-by="text"><a href="/roles/{{$role->slug}}">{{$role->title}}</a></h5>
+                                    <p style="margin-top: 0.5rem;">{{$role->description}}</p>
                                 </div>
                             </div>
                         </div>
@@ -63,19 +54,6 @@
                           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                       }
                   }
-            });
-
-            toastr.options = {
-                positionClass: 'toast-bottom-right'
-            };     
-
-            var messageChannel = pusher.subscribe('messages_' + document.getElementById('loggedInUserId').value);
-            messageChannel.bind('new-message', function(data) {
-                toastr.options.onclick = function () {
-                    window.location.replace(data.url);
-                };
-
-                toastr.info("<strong>" + data.username + "</strong><br />" + data.message); 
             });
 
             var purchaseChannel = pusher.subscribe('purchases_' + document.getElementById('loggedInUserId').value);

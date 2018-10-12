@@ -3,30 +3,56 @@
 @section ('content')
   <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box;">
       <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/skills">Skills</a>&nbsp;>&nbsp;<a href="/skills/{{$skill->slug}}">{{$skill->title}}</a>&nbsp;> {{$project->title}}
-              </li>
-          </ol>
       </nav>
       @if(Auth::id())
         @if($project->user_id == Auth::id())
-        <a href="/skills/{{$skill->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
+          @if($project->published)
+            <button onclick="toggleVisibilityProject()" class="btn btn-primary">Make Private</button>
+          @else
+            <button onclick="toggleVisibilityProject()" class="btn btn-primary">Publish Project</button>
+          @endif
+          <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
         @else
-        <button class="btn btn-link" style="color: #6c757d;"><strong>$139.00</strong></button>
-        <a href="/skills/{{$skill->slug}}/projects/{{$project->slug}}/edit" class="btn btn-success">Purchase</a>
+            <button class="btn btn-link" style="color: #6c757d;"><strong>${{$project->amount}}</strong></button>
+            <button onclick="purchaseProject()" class="btn btn-success">Purchase</button>
         @endif
       @endif
   </div>
+  @if(!$project->published)
+  <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+    This project is <strong>private</strong>.
+  </div>
+  @endif
+  <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/toggle-visibility-project" id="toggleVisibilityProject">
+    @csrf
+    <input type="hidden" name="project_id" value="{{$project->id}}" />
+    <input type="hidden" name="role_slug" value="{{$project->role->slug}}" />
+    <input type="hidden" name="project_slug" value="{{$project->slug}}" />
+    <button type="submit" style="display: none;" id="toggleVisibilityProjectButton">Submit</button>
+  </form>
+  <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/purchase-project" id="purchaseProject">
+    @csrf
+    <input type="hidden" name="project_id" value="{{$project->id}}" />
+    <input type="hidden" name="role_slug" value="{{$project->role->slug}}" />
+    <input type="hidden" name="project_slug" value="{{$project->slug}}" />
+    <button type="submit" style="display: none;" id="purchaseProjectButton">Submit</button>
+  </form>
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
-                <h1 class="display-4 mb-3">{{$project->title}}</h1>
+                <a href="/profile/{{$project->user_id}}" data-toggle="tooltip" data-placement="top" title="">
+                    <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$project->user->avatar}}">
+                </a>
+                <a href="/profile/{{$project->user_id}}">
+                  <span style="font-size: .875rem; line-height: 1.3125rem;">{{$project->user->name}}</span>
+                </a>
+                <h1 class="display-4 mb-3" style="margin-top: 1.5rem;">{{$project->title}}</h1>
                 <p class="lead">{{$project->description}}</p>
             </section>
             <ul class="nav nav-tabs nav-fill">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Brief</a>
+                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Role Brief</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="false">Tasks</a>
@@ -37,17 +63,22 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#competencies" role="tab" aria-controls="competencies" aria-selected="false">Competencies</a>
                 </li>
+                @if($project->user->id == Auth::id()) 
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#miscellaneous" role="tab" aria-controls="miscellaneous" aria-selected="false">Miscellaneous</a>
+                </li>
+                @endif
             </ul>
             <div class="tab-content">
               <div class="tab-pane fade show active" id="brief" role="tabpanel" aria-labelledby="brief-tab" data-filter-list="card-list-body">
                   <div class="row content-list-head">
                       <div class="col-auto">
-                          <h3>Brief</h3>
+                          <h3>Role Brief</h3>
                       </div>
                   </div>
                   <div class="content-list-body">
                       <div class="card mb-3">
-                        <div class="card-body">
+                        <div class="card-body role-brief">
                           @parsedown($project->brief)
                         </div>
                       </div>
@@ -73,40 +104,6 @@
                         <div id="collapse{{$key+1}}" class="collapse show" aria-labelledby="heading{{$key+1}}" data-parent="#accordionExample">
                           <div class="card-body">
                             <p>{{$task->description}}</p>
-                            @if($task->mcq) 
-                              @if($task->multiple_select)
-                                @foreach($task->answers as $answer) 
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="answer_{{$task->id}}_{{$answer->id}}">
-                                    <label class="form-check-label" for="defaultCheck1">
-                                      <p>{{$answer->title}}</p>
-                                    </label>
-                                  </div>
-                                @endforeach
-                              @else
-                                @foreach($task->answers as $answer) 
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="answer_{{$task->id}}" id="answer_{{$task->id}}_{{$answer->id}}" value="{{$answer->title}}">
-                                    <label class="form-check-label" for="exampleRadios1">
-                                      <p>{{$answer->title}}</p>
-                                    </label>
-                                  </div>
-                                @endforeach
-                              @endif
-                            @elseif($task->open_ended)
-                              <textarea class="form-control" name="answer_{{$task->id}}" id="answer_{{$task->id}}" rows="5" placeholder="Enter your answer here"></textarea>
-                            @endif
-
-                            @if($task->file_upload) 
-                              <div class="box">
-                                <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden;"/>
-                                <label for="file-1" style="position: absolute; left: 0; margin-left: 1.5rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.2rem 1.25rem; height: 36px;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
-                              </div>
-                              <div id="selectedFiles" style="margin-top: 1.5rem;"></div>
-                            @endif
-                            <!-- <form class="dropzone" action="..." style="margin-bottom: 0px;">
-                                <span class="dz-message" style="background-color: rgba(0, 0, 0, 0.03);">Drop files or click here to upload</span>
-                            </form> -->
                           </div>
                         </div>
                       </div>
@@ -138,9 +135,9 @@
                                         </ul>
                                         <div class="media-body d-flex justify-content-between align-items-center">
                                             <div>
-                                                <a href="https://storage.cloud.google.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" data-filter-by="text">{{$projectFile->title}}</a>
+                                                <span>{{$projectFile->title}}</span>
                                                 <br>
-                                                <span class="text-small" data-filter-by="text">{{number_format($projectFile->size/1024,2)}} MB, {{$projectFile->mime_type}}</span>
+                                                <span class="text-small" data-filter-by="text">{{round($projectFile->size/1048576, 2)}} MB, {{$projectFile->mime_type}}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -177,6 +174,26 @@
                   </div>
                   <!--end of content list-->
               </div>
+              @if($project->user_id == Auth::id())
+                <div class="tab-pane fade" id="miscellaneous" role="tabpanel" aria-labelledby="miscellaneous-tab">
+                    <div class="content-list">
+                        <div class="row content-list-head">
+                            <div class="col-auto">
+                                <h3>Miscellaneous</h3>
+                            </div>
+                        </div>
+                        <!--end of content list head-->
+                        <div class="content-list-body">
+                          <h5 style="margin-top: 1.5rem;">Project Price</h5>
+                          <p>$ {{$project->amount}}</p>
+                          <h5 style="margin-top: 1.5rem;">Project Duration</h5>
+                          <p>{{$project->hours}} hours</p>
+                        </div>
+                    </div>
+                    <!--end of content list-->
+                </div>
+              @endif
+            </div>
         </div>
         @if(Auth::id())
         @if(Auth::id() != $project->user_id)
@@ -201,7 +218,11 @@
                         <div class="chat-module-body" id="newMessagesDiv">
                             @foreach($messages as $message)
                             <div class="media chat-item">
+                                @if($message->user->avatar)
                                 <img alt="{{$message->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
+                                @else
+                                <img alt="{{$message->user->name}}" src="/img/avatar.png" class="avatar" />
+                                @endif
                                 <div class="media-body" style="padding: 0.7rem 1rem;">
                                     <div class="chat-item-title">
                                         <span class="chat-item-author" data-filter-by="text">{{$message->user->name}}</span>
@@ -315,6 +336,14 @@
         selDiv.innerHTML += f.name + "<br/>";
 
       }
+    }
+
+    function toggleVisibilityProject() {
+      document.getElementById("toggleVisibilityProjectButton").click();
+    }
+
+    function purchaseProject() {
+      document.getElementById("purchaseProjectButton").click();
     }
 
   </script>

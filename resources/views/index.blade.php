@@ -1,23 +1,33 @@
 @extends ('layouts.main')
 
 @section ('content')
-<div class="breadcrumb-bar navbar bg-white sticky-top">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Overview</a>
-            </li>
-        </ol>
-    </nav>
-
-</div>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-xl-10 col-lg-11">
-            <section class="py-4 py-lg-5">
-                <div class="mb-3 d-flex">
-                    <img alt="Pipeline" src="/img/wallpaper-home5.png" style="width: 100%; border-radius: 0.5rem;"/>
-                </div>
-            </section>
+<img alt="Home" src="/img/wallpaper4.png" style="width: 100%; height: auto;"/>
+<div class="container" style="padding-left: 4.5rem; padding-right: 4.5rem;">
+    <div class="row" style="margin-top: 4.5rem;">
+        <div class="col-lg-7">
+            <h3>Build your very own portfolio through applied knowledge</h3>
+            <p>There are countless other portfolio websites like Dribbble, Behance and Carbonmade that allow creative professionals to maintain their own portfolios. On Talentail, you build your own portfolio by attempting projects designed by our creators and getting assessed by them.</p>
+        </div>
+        <div class="col-lg-5">
+            <img alt="Wallpaper" src="/img/wallpaper1.png" style="width: 100%; height: auto;"/>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 4.5rem;">
+        <div class="col-lg-5">
+            <img alt="Wallpaper" src="/img/wallpaper2.png" style="width: 100%; height: auto;"/>
+        </div>
+        <div class="col-lg-7">
+            <h3>High quality creators carefully selected from top firms</h3>
+            <p>The brightest diamonds are crafted by master gemcutters. To equip you with the right skill sets to excel at their work, we have meticulously sourced and assessed our creators from reputable companies.</p>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 4.5rem;">
+        <div class="col-lg-7">
+            <h3>Projects based on real world experience</h3>
+            <p>Our creators' reputation lie in the quality of their projects and the feedback they provide you. We go the extra length to make sure that our creators design projects that reflect their past experience as much as possible. This way, you are assured relevance and also usefulness.</p>
+        </div>
+        <div class="col-lg-5">
+            <img alt="Wallpaper" src="/img/wallpaper3.png" style="width: 100%; height: auto;"/>
         </div>
     </div>
 </div>

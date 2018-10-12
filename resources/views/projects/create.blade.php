@@ -1,34 +1,23 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box;">
-      <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/projects">Projects</a>&nbsp;> Create a Project
-              </li>
-          </ol>
-      </nav>
-      <button class="btn btn-default" onclick="cancel()">Cancel</button>
-      <button class="btn btn-default" onclick="saveProject()">Save Project</button>
-      <button class="btn btn-primary" onclick="createProject()">Create Project</button>
-  </div>
-  @if($selectedSkill != null)
+  @if($selectedRole != null)
   <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
-    You are currently creating a project for <strong>{{$selectedSkill->title}}</strong>. <a href="/projects/select-skill" style="float: right;">Select different skill</a>
+    You are currently creating a project for <strong>{{$selectedRole->title}}</strong>. <a href="/projects/select-role" style="float: right;">Select different role</a>
   </div>
   @endif
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
-                <h1 class="display-4 mb-3">Create a {{$selectedSkill->title}} Project</h1>
-                <p class="lead">{{$selectedSkill->description}}</p>
+                <h1 class="display-4 mb-3">Create a {{$selectedRole->title}} Project</h1>
+                <p class="lead">{{$selectedRole->description}}</p>
             </section>
-            <form method="POST" action="/projects" enctype="multipart/form-data">
+            <form id="projectForm" method="POST" action="/projects" enctype="multipart/form-data">
             @csrf
               <h3 style="margin-top: 1.5rem;">Project Title</h3>
               <input type="text" name="title" class="form-control" id="title" placeholder="Enter title">
-              <h3 style="margin-top: 1.5rem;">Project Description</h3>
+              <h3 style="margin-top: 1.5rem;">Project Summary</h3>
               <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
               <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
                   <li class="nav-item">
@@ -51,7 +40,7 @@
                 <div class="tab-pane fade show active" id="brief" role="tabpanel" aria-labelledby="brief-tab" data-filter-list="card-list-body">
                     <div class="row content-list-head">
                         <div class="col-auto">
-                            <h3>Brief</h3>
+                            <h3>Role Brief</h3>
                         </div>
                     </div>
                     <div class="content-list-body">
@@ -110,7 +99,7 @@
                         </div>
                         <!--end of content list head-->
                         <div class="content-list-body">
-                          @foreach($selectedSkill->competencies as $competency)
+                          @foreach($selectedRole->competencies as $competency)
                             <div class="row">
                                 <div class="form-group col">
                                     <div class="form-check">
@@ -136,7 +125,7 @@
                         </div>
                         <!--end of content list head-->
                         <div class="content-list-body">
-                          @foreach($selectedSkill->competencies as $competency)
+                          @foreach($selectedRole->competencies as $competency)
                             <div class="row">
                                 <div class="form-group col">
                                     <input type="checkbox" name="competency[]" value="{{$competency->id}}">
@@ -182,11 +171,28 @@
                 <button class="btn btn-default" id="saveProject" type="submit" style="float: right; margin-right: 0.5rem; display: none;">Save</button>
                 <button class="btn btn-default" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
               </div>
+              <button class="btn btn-primary pull-right" onclick="createProject()">Publish Project</button>
+              <button class="btn btn-default pull-right" onclick="saveProject()" style="margin-right: 0.5rem;">Save Project</button>
+              <button class="btn btn-default pull-right" onclick="cancel()" style="margin-right: 0.5rem;">Cancel</button>
             </form>
           </div>
       </div>
   </div>
 
+  <script type="text/javascript" src="/js/editormd.js"></script>
+  <script type="text/javascript">
+    var editor2 = editormd({
+        id   : "test-editormd",
+        path : "/lib/",
+        height: 640,
+        onload : function() {
+            //this.watch();
+            //this.setMarkdown("###test onloaded");
+            //testEditor.setMarkdown("###Test onloaded");
+            // editor2.insertValue(document.getElementById("brief-info").innerHTML);
+        }
+    });
+  </script>
   <script type="text/javascript">
 
     var selDiv = "";
@@ -211,15 +217,17 @@
     }
 
     function saveProject() {
-        document.getElementById("saveProject").click();
+      document.getElementById("projectForm").action = "/projects/save-project";
+      document.getElementById("saveProject").click();
     }
 
     function createProject() {
-        document.getElementById("createProject").click();
+      document.getElementById("projectForm").action = "/projects/publish-project";
+      document.getElementById("createProject").click();
     }
 
     function cancel() {
-        window.location.replace('/projects/select-skill');
+        window.location.replace('/projects/select-role');
     }
 
     function addAnswer() {

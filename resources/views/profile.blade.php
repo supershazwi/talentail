@@ -4,10 +4,6 @@
 
 <div class="breadcrumb-bar navbar bg-white sticky-top">
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/profile">Profile</a>
-            </li>
-        </ol>
     </nav>
     @if(Auth::id() == $user->id)
     <a href="/profile/edit" class="btn btn-primary">Edit Profile</a>
@@ -18,7 +14,11 @@
         <div class="col-lg-11 col-xl-10">
                     <div class="page-header mb-4">
                         <div class="media">
+                            @if($user->avatar)
                             <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" />
+                            @else
+                            <img alt="Image" src="/img/avatar.png" class="avatar avatar-lg mt-1" />
+                            @endif
                             <div class="media-body ml-3">
                                 <h1 class="mb-0" style="margin-top: 0;">{{$user->name}} 
                                     @if($user->creator)
@@ -35,18 +35,22 @@
                             <a class="nav-link active" data-toggle="tab" href="#workExperience" role="tab" aria-controls="workExperience" aria-selected="true">Work Experience</a>
                         </li>
                         @endif
-                        @if($user->creator)
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#gatheredSkills" role="tab" aria-controls="gatheredSkills" aria-selected="true">Gathered Skills</a>
-                        </li>
-                        @else
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#gatheredSkills" role="tab" aria-controls="gatheredSkills" aria-selected="true">Gathered Skills</a>
-                        </li>
+                        @if($user->id == Auth::id())
+                            @if($user->creator)
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#gatheredRoles" role="tab" aria-controls="gatheredRoles" aria-selected="true">Gathered Roles</a>
+                            </li>   
+                            @else
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#gatheredRoles" role="tab" aria-controls="gatheredRoles" aria-selected="true">Gathered Roles</a>
+                            </li>
+                            @endif
                         @endif
+                        @if($user->id == Auth::id())
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#attemptedProjects" role="tab" aria-controls="attemptedProjects" aria-selected="false">Attempted Projects</a>
                         </li>
+                        @endif
                         @if($user->creator)
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#createdProjects" role="tab" aria-controls="createdProjects" aria-selected="false">Created Projects</a>
@@ -64,6 +68,7 @@
                                     <h3>Work Experience</h3>
                                 </div>
                             </div>
+                            @if(count($user->experiences) > 0)
                             <div class="content-list-body row">
                                 <div class="col-md-12">
                                     <div class="card card-team">
@@ -89,13 +94,20 @@
                                     </div>
                                 </div>
                             </div>
+                            @else 
+                            <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
+                text-align: center; text-align: center;">
+                                <h1>🤨</h1>
+                                <h6>You have not added any work experience yet</h6>
+                            </div>
+                            @endif
                         </div>
                         @endif
                         @if($user->creator)
-                        <div class="tab-pane fade" id="gatheredSkills" role="tabpanel" aria-labelledby="gatheredSkills-tab" data-filter-list="content-list-body">
+                        <div class="tab-pane fade" id="gatheredRoles" role="tabpanel" aria-labelledby="gatheredRoles-tab" data-filter-list="content-list-body">
                             <div class="row content-list-head">
                                 <div class="col-auto">
-                                    <h3>Gathered Skills</h3>
+                                    <h3>Gathered Roles</h3>
                                 </div>
                                 <form class="col-md-auto">
                                     <div class="input-group input-group-round">
@@ -104,128 +116,20 @@
                                                 <i class="material-icons">filter_list</i>
                                             </span>
                                         </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter skills" aria-label="Filter skills" aria-describedby="filter-skills">
+                                        <input type="search" class="form-control filter-list-input" placeholder="Filter roles" aria-label="Filter roles" aria-describedby="filter-roles">
                                     </div>
                                 </form>
                             </div>
-                            <!--end of content list head-->
+                            @if(count($rolesGained) > 0)   
                             <div class="content-list-body row">
-
+                                @foreach($rolesGained as $roleGained)
                                 <div class="col-md-6">
                                     <div class="card card-team">
                                         <div class="card-body">
                                             <div class="card-title" style="text-align: center; max-width: 100%;">
-                                                <h4 data-filter-by="text"><a href="#">Business Analyst</a></h4>
+                                                <h5 data-filter-by="text"><a href="/roles/{{$roleGained->role->slug}}">{{$roleGained->role->title}}</a></h5>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-lg-9">
-                                                    <p>Elicit requirements for software development using interviews</p>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <span class="fas fa-star star-rating" style="color: #6c757d !important;"></span>
-                                                    <span>4.5</span>
-                                                </div>
-                                            </div>
-                                            <hr/>
-                                            <div class="row">
-                                                <div class="col-lg-9">
-                                                    <p> Critically evaluate information gathered from multiple sources</p>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <span class="fas fa-star star-rating" style="color: #6c757d !important;"></span>
-                                                    <span>4.5</span>
-                                                </div>
-                                            </div>
-                                            <hr/>
-                                            <div class="row">
-                                                <div class="col-lg-9">
-                                                    <p>Translate technical information into business language to ensure understanding of the requirements</p>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <span class="fas fa-star star-rating" style="color: #6c757d !important;"></span>
-                                                    <span>4.5</span>
-                                                </div>
-                                            </div>
-                                            <hr />
-                                            <div style="text-align: center; margin-top: 1.5rem;">
-                                                <a href="#">See 20 more</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="card card-team">
-                                        <div class="card-body">
-                                            <div class="card-title" style="text-align: center; max-width: 100%;">
-                                                <h4 data-filter-by="text"><a href="#">Enterprise Architect</a></h4>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-9">
-                                                    <p>Elicit requirements for software development using interviews</p>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <span class="fas fa-star star-rating" style="color: #6c757d !important;"></span>
-                                                    <span>4</span>
-                                                </div>
-                                            </div>
-                                            <hr/>
-                                            <div class="row">
-                                                <div class="col-lg-9">
-                                                    <p> Critically evaluate information gathered from multiple sources</p>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <span class="fas fa-star star-rating" style="color: #6c757d !important;"></span>
-                                                    <span>3.5</span>
-                                                </div>
-                                            </div>
-                                            <hr/>
-                                            <div class="row">
-                                                <div class="col-lg-9">
-                                                    <p>Translate technical information into business language to ensure understanding of the requirements</p>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <span class="fas fa-star star-rating" style="color: #6c757d !important;"></span>
-                                                    <span>3.2</span>
-                                                </div>
-                                            </div>
-                                            <hr />
-                                            <div style="text-align: center; margin-top: 1.5rem;">
-                                                <a href="#">See 20 more</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end of content-list-body-->
-                        </div>
-                        @else
-                        <div class="tab-pane fade show active" id="gatheredSkills" role="tabpanel" aria-labelledby="gatheredSkills-tab" data-filter-list="content-list-body">
-                            <div class="row content-list-head">
-                                <div class="col-auto">
-                                    <h3>Gathered Skills</h3>
-                                </div>
-                                <form class="col-md-auto">
-                                    <div class="input-group input-group-round">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="material-icons">filter_list</i>
-                                            </span>
-                                        </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter skills" aria-label="Filter skills" aria-describedby="filter-skills">
-                                    </div>
-                                </form>
-                            </div>
-                            @if(count($skillsGained) > 0)   
-                            <div class="content-list-body row">
-                                @foreach($skillsGained as $skillGained)
-                                <div class="col-md-6">
-                                    <div class="card card-team">
-                                        <div class="card-body">
-                                            <div class="card-title" style="text-align: center; max-width: 100%;">
-                                                <h5 data-filter-by="text"><a href="/skills/{{$skillGained->skill->slug}}">{{$skillGained->skill->title}}</a></h5>
-                                            </div>
-                                            @foreach($skillGained->competency_scores as $competencyScore)
+                                            @foreach($roleGained->competency_scores as $competencyScore)
                                             <div class="row">
                                                 <div class="col-lg-9">
                                                     <p>{{$competencyScore->competency->title}}</p>
@@ -239,9 +143,9 @@
                                                 <hr/>
                                             @endif
                                             @endforeach
-                                            @if(count($skillGained->competency_scores) > 3)
+                                            @if(count($roleGained->competency_scores) > 3)
                                             <div style="text-align: center; margin-top: 1.5rem;">
-                                                <a href="#">See {{count($skillGained->competency_scores)-3}} more</a>
+                                                <a href="#">See {{count($roleGained->competency_scores)-3}} more</a>
                                             </div>
                                             @endif
                                         </div>
@@ -253,7 +157,65 @@
                             <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
                 text-align: center; text-align: center;">
                                 <h1>🤨</h1>
-                                <h6>You have not gathered skills yet because you <br />have not attempted and completed any project yet</h6>
+                                <h6>You have not gathered roles yet because you <br />have not attempted and completed any project yet</h6>
+                            </div>
+                            @endif
+                        </div>
+                        @else
+                        <div class="tab-pane fade show active" id="gatheredRoles" role="tabpanel" aria-labelledby="gatheredRoles-tab" data-filter-list="content-list-body">
+                            <div class="row content-list-head">
+                                <div class="col-auto">
+                                    <h3>Gathered Roles</h3>
+                                </div>
+                                <form class="col-md-auto">
+                                    <div class="input-group input-group-round">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="material-icons">filter_list</i>
+                                            </span>
+                                        </div>
+                                        <input type="search" class="form-control filter-list-input" placeholder="Filter roles" aria-label="Filter roles" aria-describedby="filter-roles">
+                                    </div>
+                                </form>
+                            </div>
+                            @if(count($rolesGained) > 0)   
+                            <div class="content-list-body row">
+                                @foreach($rolesGained as $roleGained)
+                                <div class="col-md-6">
+                                    <div class="card card-team">
+                                        <div class="card-body">
+                                            <div class="card-title" style="text-align: center; max-width: 100%;">
+                                                <h5 data-filter-by="text"><a href="/roles/{{$roleGained->role->slug}}">{{$roleGained->role->title}}</a></h5>
+                                            </div>
+                                            @foreach($roleGained->competency_scores as $competencyScore)
+                                            <div class="row">
+                                                <div class="col-lg-9">
+                                                    <p>{{$competencyScore->competency->title}}</p>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="fas fa-star star-rating" style="color: #6c757d !important;"></span>
+                                                    <span>{{$competencyScore->score}}</span>
+                                                </div>
+                                            </div>
+                                            @if(!$loop->last)
+                                                <hr/>
+                                            @endif
+                                            @endforeach
+                                            @if(count($roleGained->competency_scores) > 3)
+                                            <div style="text-align: center; margin-top: 1.5rem;">
+                                                <a href="#">See {{count($roleGained->competency_scores)-3}} more</a>
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                            @else 
+                            <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
+                text-align: center; text-align: center;">
+                                <h1>🤨</h1>
+                                <h6>You have not gathered roles yet because you <br />have not attempted and completed any project yet</h6>
                             </div>
                             @endif
                         </div>
@@ -283,17 +245,21 @@
                                         <div class="card card-project">
                                             <div class="card-body">
                                                 <div class="card-title">
-                                                    <h5 data-filter-by="text"><a href="/skills/{{$attemptedProject->project->skill->slug}}/projects/{{$attemptedProject->project->slug}}">{{$attemptedProject->project->title}}</a></h5>
+                                                    <h5 data-filter-by="text"><a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}">{{$attemptedProject->project->title}}</a></h5>
+                                                    @if($attemptedProject->status == "Completed")
                                                     <span class="badge badge-warning">{{$attemptedProject->status}}</span>
+                                                    @else
+                                                    <span class="badge badge-success">{{$attemptedProject->status}}</span>
+                                                    @endif
                                                 </div>
                                                 <span>{{$attemptedProject->project->description}}</span>
                                                 <br />
                                                 <br />
-                                                <a href="/profile/{{$attemptedProject->user_id}}" data-toggle="tooltip" data-placement="top" title="">
-                                                    <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$attemptedProject->user->avatar}}">
+                                                <a href="/profile/{{$attemptedProject->project->user_id}}" data-toggle="tooltip" data-placement="top" title="">
+                                                    <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}">
                                                 </a>
-                                                <a href="#">
-                                                  <span style="font-size: .875rem; line-height: 1.3125rem;">{{$attemptedProject->user->name}}</span>
+                                                <a href="/profile/{{$attemptedProject->project->user_id}}">
+                                                  <span style="font-size: .875rem; line-height: 1.3125rem;">{{$attemptedProject->project->user->name}}</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -318,7 +284,7 @@
                                     <div class="col-auto">
                                         <h3>Created Projects</h3>
                                         @if(Auth::id() == $user->id)
-                                        <a href="/projects/selectSkill" class="btn btn-primary" style="margin-left: 1.5rem;">Create Project</a>
+                                        <a href="/projects/select-role" class="btn btn-primary" style="margin-left: 1.5rem;">Create Project</a>
                                         @endif
                                     </div>
                                     <form class="col-md-auto">
@@ -333,29 +299,35 @@
                                     </form>
                                 </div>
                                 <!--end of content list head-->
+                                @if(count($user->projects) > 0)
                                 <div class="content-list-body row">
+                                    @foreach($user->projects as $project)
                                     <div class="col-lg-6">
                                         <div class="card card-project">
                                             <div class="card-body">
                                                 <div class="card-title">
                                                     <a href="#" data-toggle="modal" data-target="#task-modal">
-                                                        <h5><a href="/skills/business-analyst/projects/business-process-reengineering" data-filter-by="text">Business Process Re-engineering</a></h5>
+                                                        <h5><a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}" data-filter-by="text">{{$project->title}}</a></h5>
+                                                        @if($project->published)
+                                                        <span class="badge badge-success">Published</span>
+                                                        @else
+                                                        <span class="badge badge-warning">Private</span>
+                                                        @endif
                                                     </a>
-                                                    <span class="badge badge-warning">In Progress</span>
                                                 </div>
-                                                <span>Business process re-engineering (BPR) is a business management strategy, originally pioneered in the early 1990s, focusing on the analysis and design of workflows and business processes within an organization.</span>
-                                                <br />
-                                                <br />
-                                                <a href="#" data-toggle="tooltip" data-placement="top" title="">
-                                                    <img class="avatar" src="/img/avatar-male-4.jpg">
-                                                </a>
-                                                <a href="#">
-                                                  <span style="font-size: .875rem; line-height: 1.3125rem;">Roger Ver</span>
-                                                </a>
+                                                <span>{{$project->description}}</span>
                                             </div>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
+                                @else
+                                <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
+                    text-align: center; text-align: center;">
+                                    <h1>🤨</h1>
+                                    <h6>You have not created any project yet</h6>
+                                </div>
+                                @endif
                                 <!--end of content list body-->
                             </div>
                             <!--end of content list-->

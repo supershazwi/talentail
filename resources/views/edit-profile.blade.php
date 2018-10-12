@@ -1,15 +1,6 @@
 @extends ('layouts.main')
 
 @section ('content')
-<div class="breadcrumb-bar navbar bg-white sticky-top">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/profile">Profile</a>
-            </li>
-        </ol>
-    </nav>
-    <button class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
-</div>   
 <div class="container">
     <div class="content-list">
         <div class="row content-list-head" style="padding-top: 4.5rem !important;">
@@ -41,7 +32,8 @@
             <h5 style="margin-top: 1.5rem;">Email</h5>
             <input type="text" name="email" class="form-control" id="email" placeholder="Enter your email (e.g. j.orange@gmail.com)" value="{{$user->email}}">
             <h5 style="margin-top: 1.5rem;">Description</h5>
-            <textarea type="text" placeholder="Tell us a little about yourself" name="description" id="description" class="form-control" rows="4">{{$user->description}}</textarea>
+            <textarea type="text" placeholder="Tell us a little about yourself" name="description" id="description" class="form-control" rows="4" style="margin-bottom: 1.5rem;">{{$user->description}}</textarea>
+            @if(Auth::user()->creator)
             <div style="display: block; margin-top: 1.5rem;">
                 <h5 style="float: left; margin-right: 1.5rem; margin-top: 6px;">Work Experience</h5>
                 <button class="btn btn-primary" onclick="addWork()">Add Work</button>
@@ -76,8 +68,9 @@
             @endforeach
             <div class="accordion" id="workList_{{count($user->experiences)+1}}" style="margin-top: 1.5rem;">
             </div>
+            @endif
         </div>
-        <button class="btn btn-primary" type="submit" id="saveChanges" style="display: none;">Save Changes</button>
+        <button class="btn btn-primary pull-right" type="submit" id="saveChanges">Save Changes</button>
         </form>
     </div>
 </div>

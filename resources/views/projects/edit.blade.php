@@ -3,35 +3,26 @@
 @section ('content')
   <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box;">
       <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/projects">Projects</a>&nbsp;> Edit Project
-              </li>
-          </ol>
       </nav>
-      <button class="btn btn-default" onclick="cancel()">Cancel</button>
       <div id="cancel-url" style="display: none;">{{Request::url()}}</div>
-      <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
   </div>
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
-                <div class="mb-3 d-flex">
-                    <img alt="Pipeline" src="/img/project.svg" class="avatar avatar-lg mr-1" />
-                </div>
-                <h1 class="display-4 mb-3">Edit a {{$skill->title}} Project</h1>
-                <p class="lead">{{$skill->description}}</p>
+                <h1 class="display-4 mb-3">Edit a {{$role->title}} Project</h1>
+                <p class="lead">{{$role->description}}</p>
             </section>
-            <form method="POST" action="/skills/{{$skill->slug}}/projects/{{$project->slug}}/save-project" enctype="multipart/form-data">
+            <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/save-project" enctype="multipart/form-data">
             @csrf
             <input name="id" class="form-control" id="id" type="hidden" value="{{$project->id}}">
             <h3>Project Title</h3>
             <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" value="{{$project->title}}">
-            <h3 style="margin-top: 1.5rem;">Project Description</h3>
-            <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description">{{$project->description}}</textarea>
+            <h3 style="margin-top: 1.5rem;">Project Summary</h3>
+            <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter summary">{{$project->description}}</textarea>
             <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Brief</a>
+                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Detailed Role Brief</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="false">Tasks</a>
@@ -50,7 +41,7 @@
               <div class="tab-pane fade show active" id="brief" role="tabpanel" aria-labelledby="brief-tab" data-filter-list="card-list-body">
                   <div class="row content-list-head">
                       <div class="col-auto">
-                          <h3>Brief</h3>
+                          <h3>Detailed Role Brief</h3>
                       </div>
                   </div>
                     <div class="content-list-body">
@@ -141,7 +132,11 @@
                               <span class="text-small">N.A.</span>
                             </div>
                             <hr>
+                            @if($task->file_upload)
+                            <input type="checkbox" name="checkbox-file-upload_{{$key+1}}" value="file-upload" class="checkbox-file-upload_{{$key+1}}" id="checkbox-file-upload_1" checked>
+                            @else
                             <input type="checkbox" name="checkbox-file-upload_{{$key+1}}" value="file-upload" class="checkbox-file-upload_{{$key+1}}" id="checkbox-file-upload_1">
+                            @endif
                             <span class="text-small" style="margin-left: 0.5rem;">File Upload</span>
                             <br>
                             <button class="btn btn-danger delete-task btn-sm" id="delete-task_{{$key+1}}" onclick="deleteTask()" style="float: right; margin-bottom: 1.5rem;">Delete</button>
@@ -187,7 +182,7 @@
                                               <div>
                                                   <a href="https://storage.cloud.google.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" data-filter-by="text">{{$projectFile->title}}</a>
                                                   <br>
-                                                  <span class="text-small" data-filter-by="text">{{number_format($projectFile->size/1024,2)}} MB, {{$projectFile->mime_type}}</span>
+                                                  <span class="text-small" data-filter-by="text">{{round($projectFile->size/1048576, 2)}} MB, {{$projectFile->mime_type}}</span>
                                               </div>
                                           </div>
                                           <span class="input-group-text remove-file" id="delete-file_{{$projectFile->id}}" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;">
@@ -212,7 +207,7 @@
                       </div>
                       <!--end of content list head-->
                       <div class="content-list-body">
-                          @foreach($skill->competencies as $competency)
+                          @foreach($role->competencies as $competency)
                             <div class="row">
                                 <div class="form-group col">
                                     <div class="form-check">
@@ -262,8 +257,8 @@
               </div>
             </div>
             <div style="margin-top: 1.5rem !important;">
-              <button class="btn btn-default" style="float: right; margin-right: 0.5rem; display: none;" type="submit" id="saveProject">Save</button>
-              <button class="btn btn-default" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
+              <button class="btn btn-primary" style="float: right; margin-right: 0.5rem;" type="submit" id="saveProject">Save Project</button>
+              <button class="btn btn-default" style="float: right; margin-right: 0.5rem;" onclick="cancel()">Cancel</button>
             </div>
           </form>
         </div>
@@ -404,10 +399,14 @@
       let taskIdString = event.target.id.split("_");
       let tasksListId = "tasksList_"+taskIdString[1];
 
-      if(document.getElementById("tasks-deleted").value == "") {
-        document.getElementById("tasks-deleted").value += document.getElementById("deleted-task-id_"+taskIdString[1]).value;
-      } else {
-        document.getElementById("tasks-deleted").value += ", " + document.getElementById("deleted-task-id_"+taskIdString[1]).value;
+      console.log(taskIdString[1]);
+
+      if(document.getElementById("deleted-task-id_"+taskIdString[1]) != null) {
+        if(document.getElementById("tasks-deleted").value == "") {
+          document.getElementById("tasks-deleted").value += document.getElementById("deleted-task-id_"+taskIdString[1]).value;
+        } else {
+          document.getElementById("tasks-deleted").value += ", " + document.getElementById("deleted-task-id_"+taskIdString[1]).value;
+        }
       }
 
       // find total number of answers first
@@ -584,10 +583,6 @@
       console.log(event.parentElement.parentElement.parentElement);
       let a = event.parentElement.parentElement.parentElement;
       a.parentNode.removeChild(a);
-    }
-
-    function saveProject() {
-      document.getElementById("saveProject").click();
     }
 
     function cancel() {

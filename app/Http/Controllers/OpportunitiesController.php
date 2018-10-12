@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Opportunity;
-use App\Skill;
+use App\Role;
 use App\Company;
 
 class OpportunitiesController extends Controller
@@ -16,11 +16,11 @@ class OpportunitiesController extends Controller
     }
 
     public function create() {
-        $skills = Skill::select('id', 'title')->orderBy('title', 'asc')->get();
+        $roles = Role::select('id', 'title')->orderBy('title', 'asc')->get();
         $companies = Company::select('id', 'title')->orderBy('title', 'asc')->get();
 
         return view('opportunities.create', [
-            'skills' => $skills,
+            'roles' => $roles,
             'companies' => $companies
         ]);
     }
@@ -30,7 +30,7 @@ class OpportunitiesController extends Controller
 
     	$opportunity->title = request('title');
     	$opportunity->description = request('description');
-        $opportunity->skill_id = request('skill_id');
+        $opportunity->role_id = request('role_id');
         $opportunity->company_id = request('company_id');
 
         $company = Company::select('title')->where('id', request('company_id'))->first();

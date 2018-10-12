@@ -3,46 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 
 class HomeController extends Controller
-
 {
-
     /**
-
      * Create a new controller instance.
-
      *
-
      * @return void
-
      */
-
-    public function ajaxRequest()
-
+    public function __construct()
     {
-
-        return view('ajaxRequest');
-
+        $this->middleware('auth');
     }
 
     /**
-
-     * Create a new controller instance.
-
+     * Show the application dashboard.
      *
-
-     * @return void
-
+     * @return \Illuminate\Http\Response
      */
-
-    public function ajaxRequestPost()
-
+    public function index()
     {
-
-        App::make('pusher')->trigger('channel', 'new-message', 'test');
-
+        return view('home');
     }
-
 }

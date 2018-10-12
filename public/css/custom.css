@@ -1,3 +1,16 @@
+.navbar.bg-white {
+  border-bottom: 1px solid #F7F9FA !important;
+  background-color: #F7F9FA !important;
+}
+
+.role-brief img {
+  width: 100% !important;
+}
+
+p, li, ul, ol {
+  color: #292e32 !important;
+}
+
 .star-rating {
 	color: orange !important;
 }
