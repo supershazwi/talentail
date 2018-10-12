@@ -171,10 +171,11 @@
                 <button class="btn btn-default" id="saveProject" type="submit" style="float: right; margin-right: 0.5rem; display: none;">Save</button>
                 <button class="btn btn-default" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
               </div>
-              <button class="btn btn-primary pull-right" onclick="createProject()">Publish Project</button>
+              
+            </form>
+            <button class="btn btn-primary pull-right" onclick="createProject()">Publish Project</button>
               <button class="btn btn-default pull-right" onclick="saveProject()" style="margin-right: 0.5rem;">Save Project</button>
               <button class="btn btn-default pull-right" onclick="cancel()" style="margin-right: 0.5rem;">Cancel</button>
-            </form>
           </div>
       </div>
   </div>
@@ -217,11 +218,13 @@
     }
 
     function saveProject() {
+      event.preventDefault();
       document.getElementById("projectForm").action = "/projects/save-project";
       document.getElementById("saveProject").click();
     }
 
     function createProject() {
+      event.preventDefault();
       document.getElementById("projectForm").action = "/projects/publish-project";
       document.getElementById("createProject").click();
     }
