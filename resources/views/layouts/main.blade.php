@@ -30,7 +30,11 @@
 
 <body>
 	<div class="layout layout-nav-top">
+		@if(Request::path() == "/")
+	    <div class="navbar navbar-expand-lg" style=" background: #3a7bd5; background: -webkit-linear-gradient(to right, #3a7bd5, #3a6073); background: linear-gradient(to right, #3a7bd5, #3a6073);">
+	    @else
 	    <div class="navbar navbar-expand-lg sticky-top" style="background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;">
+	    @endif
 	        <a class="navbar-brand" href="/">
 	            <img alt="Pipeline" src="/img/logo.svg" />
 	        </a>
@@ -58,6 +62,27 @@
 	            @endif
 	        </div>
 	        <div class="collapse navbar-collapse justify-content-between" id="navbar-collapse">
+	        	@if(Request::path() == "/")
+	            <ul class="navbar-nav">
+	                <li class="nav-item">
+	                    <a class="nav-link" href="/" style="color: white;">Home</a>
+	                </li>
+	                <li class="nav-item">
+	                    <a class="nav-link" href="/roles" style="color: white;">Roles</a>
+	                </li>
+	                <li class="nav-item">
+	                    <a class="nav-link" href="/creators" style="color: white;">Creators</a>
+	                </li>
+	                @if(Auth::id())
+	                <li class="nav-item">
+	                    <a class="nav-link" href="/messages" style="color: white;">Messages</a>
+	                </li>
+	                <li class="nav-item">
+	                    <a class="nav-link" href="/notifications" style="color: white;">Notifications</a>
+	                </li>
+	                @endif
+	            </ul>
+	            @else
 	            <ul class="navbar-nav">
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/">Home</a>
@@ -77,6 +102,7 @@
 	                </li>
 	                @endif
 	            </ul>
+	            @endif
 	            <div class="d-lg-flex align-items-center">
 	            	@if(Auth::id())
 	                <div class="dropdown mx-lg-2">
@@ -110,9 +136,15 @@
 	                    </div>
 	                </div>
 	                @else
-	                <a href="/login" class="btn btn-primary btn-block">
-	                    Login
-	                </a>
+		                @if(Request::path() == "/")
+			                <a href="/login" class="btn btn-outline-light btn-block">
+			                    Login
+			                </a>
+		                @else 
+		                	<a href="/login" class="btn btn-primary btn-block">
+			                    Login
+			                </a>
+		                @endif
 	                @endif
 	            </div>
 	        </div>
