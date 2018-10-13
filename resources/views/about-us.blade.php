@@ -20,7 +20,7 @@
                                   </div>
                                   <div class="col-lg-8">
                                     <h5 data-filter-by="text">Shazwi Suwandi</h5>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                    <p>You can call me Shaz. What keeps my mind ticking is the limitless amount of technology that exists around us and that we've yet to reach the ceiling. My spare time is used to learn programming languages/frameworks which allows me to develop the countless ideas I have in my head. I enjoy reading Hacker News, following Startup Grind and Product Hunt on Medium. Always on the look out for great books to build a mini-library in my room and be my own librarian. Total membership count: 1.</p>
                                     <a href="https://www.linkedin.com/in/shazwi/"><i class="fab fa-linkedin"></i></a>
                                   </div>
                                 </div>
