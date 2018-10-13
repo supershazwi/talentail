@@ -23,9 +23,15 @@
         <div class="row justify-content-center">
           <div class="col-xl-10 col-lg-11">
               <section class="py-4 py-lg-5">
+                  @if($project->user->avatar)
                   <a href="/profile/{{$project->user_id}}" data-toggle="tooltip" data-placement="top" title="">
                       <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$project->user->avatar}}">
                   </a>
+                  @else
+                  <a href="/profile/{{$project->user_id}}" data-toggle="tooltip" data-placement="top" title="">
+                      <img class="avatar" src="/img/avatar.png">
+                  </a>
+                  @endif
                   <a href="/profile/{{$project->user_id}}">
                     <span style="font-size: .875rem; line-height: 1.3125rem;">{{$project->user->name}}</span>
                   </a>
