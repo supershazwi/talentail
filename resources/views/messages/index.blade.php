@@ -29,7 +29,7 @@
     <body>
 
         <div class="layout layout-nav-top layout-sidebar">
-            <div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
+            <div class="navbar navbar-expand-lg sticky-top" style="background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;">
                 <a class="navbar-brand" href="/">
                     <img alt="Pipeline" src="/img/logo.svg" />
                 </a>

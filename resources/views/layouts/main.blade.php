@@ -30,7 +30,7 @@
 
 <body>
 	<div class="layout layout-nav-top">
-	    <div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
+	    <div class="navbar navbar-expand-lg sticky-top" style="background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;">
 	        <a class="navbar-brand" href="/">
 	            <img alt="Pipeline" src="/img/logo.svg" />
 	        </a>
@@ -121,16 +121,16 @@
 	    	@include('toast::messages')
 	        @yield('content')
 	        <div style="width: 100%; background-color: white; border-top: 1px solid #E5E5E5;">
-		        <div class="container" style="padding-left: 4.5rem; padding-right: 4.5rem; padding-top: 1.5rem; padding-bottom: 1.5rem;">
+		        <div style="padding: 1.5rem 1.5rem;">
 				    <div class="row">
-				        <div class="col-lg-5">
+				        <div class="col-lg-4">
 		                	<h5>Talentail</h5>
-		                	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		                	<p class="text-small">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 		                </div>
 				        <div class="col-lg-3">
-							<a href="/about-us" class="text-small">About Us</a><br />
-							<a href="/contact-us" class="text-small">Contact Us</a><br />
-							<a href="/faq" class="text-small">Frequently Asked Questions</a>
+							<a href="/about-us" style="font-size: .875rem;">About Us</a><br />
+							<a href="/contact-us" style="font-size: .875rem;">Contact Us</a><br />
+							<a href="/faq" style="font-size: .875rem;">Frequently Asked Questions</a>
 		                </div>
 		            </div>
 		        </div>

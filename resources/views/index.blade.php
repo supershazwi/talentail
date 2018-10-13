@@ -1,7 +1,7 @@
 @extends ('layouts.main')
 
 @section ('content')
-<img alt="Home" src="/img/wallpaper4.png" style="width: 100%; height: auto;"/>
+<!-- <img alt="Home" src="/img/wallpaper4.png" style="width: 100%; height: auto;"/> -->
 <div class="container" style="padding-left: 4.5rem; padding-right: 4.5rem;">
     <div class="row" style="margin-top: 4.5rem;">
         <div class="col-lg-7">
