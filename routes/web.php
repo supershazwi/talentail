@@ -100,7 +100,9 @@ Route::post('/profile/save', function(Request $request) {
 
     $counter = 1;
 
-    Experience::where('user_id', $user->id)->delete();
+    if(Experience::where('user_id', $user->id)) {
+        Experience::where('user_id', $user->id)->delete();
+    }
 
     while (Input::has('company_'.$counter) || Input::has('role_'.$counter) || Input::has('work-description_'.$counter) || Input::has('start-date_'.$counter) || Input::has('end-date_'.$counter)) {
 
@@ -117,7 +119,6 @@ Route::post('/profile/save', function(Request $request) {
 
         $counter++;
     }
-
 
     $user->save();
 
