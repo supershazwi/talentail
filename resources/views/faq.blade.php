@@ -6,7 +6,6 @@
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
                 <h1 class="display-4 mb-3">Frequently Asked Questions</h1>
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             </section>
             <div class="row">
               <div class="col-lg-12">

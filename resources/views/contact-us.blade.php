@@ -5,8 +5,8 @@
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
-                <h1 class="display-4 mb-3">Have questions? We will help you answer them.</h1>
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <h1 class="display-4 mb-3">Have questions?</h1>
+                <p class="lead">Contact us. We'd love to hear from you and answer them.</p>
             </section>
         </div>
         <div class="col-xl-10 col-lg-11">
