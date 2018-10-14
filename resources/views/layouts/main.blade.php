@@ -40,7 +40,7 @@
 	        </a>
 	        <div class="d-flex align-items-center">
 	            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-	                <span class="navbar-toggler-icon"></span>
+	                <span class="navbar-toggler-icon" style="color: white;"></span>
 	            </button>
 	            @if(Auth::id())
 	            <div class="d-block d-lg-none ml-2">
@@ -157,7 +157,8 @@
 				    <div class="row">
 				        <div class="col-lg-4">
 		                	<h5>Talentail</h5>
-		                	<p class="text-small">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		                	<p class="text-small" style="font-weight: bold;">The platform to achieve greater control over one's career</p>
+		                	<p class="text-small">At Talentail, we believe that everyone should be given an equal opportunity to control their career paths and ultimately their happiness. Therefore, over 100 creators have come together to design projects and provide you with real world experience that you never got the chance to accumulate.</p>
 		                </div>
 				        <div class="col-lg-3">
 							<a href="/about-us" style="font-size: .875rem;">About Us</a><br />
