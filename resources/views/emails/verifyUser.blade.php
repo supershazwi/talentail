@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Welcome Email</title>
+    <title>Confirm your email address!</title>
 </head>
 
 <body>
-<h2>Welcome to the site {{$user['name']}}</h2>
+<p>Hi {{$user['name']}},</p>
+<p>Thank you for visiting Talentail. You are one click away from verifying your account and unlocking the features on the platform.</p>
 <br/>
-Your registered email-id is {{$user['email']}} , Please click on the below link to verify your email account
+<a href="#">Verify Email</a>
 <br/>
-<a href="{{url('user/verify', $user->verifyUser->token)}}">Verify Email</a>
+<br/>
+<p>Regards,</p>
+<p>Team Talentail.</p>
 </body>
 
 </html>

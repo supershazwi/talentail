@@ -29,6 +29,11 @@ use Pusher\Laravel\Facades\Pusher;
 use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 
+Route::get('/verifyuser', function() {
+    return view('emails.verifyUser');
+});
+
+
 Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
 Route::get('/send-message', function() {
