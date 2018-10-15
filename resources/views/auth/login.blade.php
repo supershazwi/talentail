@@ -23,6 +23,16 @@
                     <div class="text-center">
                         <h1 class="h2">Welcome Back &#x1f44b;</h1>
                         <p class="lead">Attempt real world projects to gain real world experience.</p>
+                        @if (session('status'))
+                            <div class="alert alert-success">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                        @if (session('warning'))
+                            <div class="alert alert-warning">
+                                {{ session('warning') }}
+                            </div>
+                        @endif
                         <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                             @csrf
                             <div class="form-group">
