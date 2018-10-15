@@ -8,7 +8,7 @@
 <p>Hi {{$user['name']}},</p>
 <p>Thank you for visiting Talentail. You are one click away from verifying your account and unlocking the features on the platform.</p>
 <br/>
-<a href="#">Verify Email</a>
+<a href="{{url('user/verify', $user->verifyUser->token)}}">Verify Email</a>
 <br/>
 <br/>
 <p>Regards,</p>
