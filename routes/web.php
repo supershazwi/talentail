@@ -54,7 +54,7 @@ Route::get('/creators', function() {
 
 Route::get('/bridge-2', function() {
     return view('welcome-2');
-});
+})->middleware('verified');
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
@@ -244,3 +244,7 @@ Route::resources([
 Route::get('/', function() {
 	return view('index');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
