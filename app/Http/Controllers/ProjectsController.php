@@ -43,7 +43,6 @@ class ProjectsController extends Controller
         $this->pusher = App::make('pusher');
         $this->user = Auth::user();
         $this->messageChannel = self::DEFAULT_message_CHANNEL;
-        $this->middleware('auth');
     }
 
     public function submitReview(Request $request) {
