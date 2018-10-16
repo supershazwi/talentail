@@ -59,6 +59,7 @@
                                     <small>Your password should be at least 8 characters</small>
                                 </div>
                             </div>
+                            <input id="url" type="hidden" name="url" value="/register">
                             <button class="btn btn-lg btn-block btn-primary" role="button" type="submit">
                                 Create account
                             </button>

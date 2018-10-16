@@ -52,6 +52,9 @@
                             <div class="form-group">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password" required>
                             </div>
+
+                            <input id="url" type="hidden" name="url" value="/">
+
                             <button class="btn btn-block btn-primary" role="button" type="submit">
                                 Create account
                             </button>
