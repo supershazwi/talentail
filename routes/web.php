@@ -23,6 +23,7 @@ use App\Mail\SendContactMail;
 use App\Experience;
 use App\User;
 use App\RoleGained;
+use App\ContactMessage;
 use App\AttemptedProject;
 
 use Pusher\Laravel\Facades\Pusher;
@@ -170,13 +171,15 @@ Route::get('/about-us', function() {
 });
 
 Route::post('contact-us', function(Request $request) {
-    $message = new stdClass();
+    $contactMessage = new ContactMessage;
 
-    $message->name = $request->input('name');
-    $message->email = $request->input('email');
-    $message->description = $request->input('description');
+    $contactMessage->name = $request->input('name');
+    $contactMessage->description = $request->input('description');
+    $contactMessage->email = $request->input('email');
 
-    Mail::to('thetalentail@gmail.com')->send(new SendContactMail($message));
+    $contactMessage->save();
+
+    Mail::to('thetalentail@gmail.com')->send(new SendContactMail($contactMessage));
 
     return redirect('/contact-us')->with('contactStatus', 'Thank you for your enquiry. We will reply you at the provided email the soonest.');
 });

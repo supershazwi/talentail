@@ -25,19 +25,19 @@
                               <div class="form-group row align-items-center">
                                   <label class="col-3">Name</label>
                                   <div class="col">
-                                      <input type="text" placeholder="Name" value="" id="name" name="name" class="form-control" required />
+                                      <input type="text" placeholder="Johnny Dutch" value="" id="name" name="name" class="form-control" required />
                                   </div>
                               </div>
                               <div class="form-group row align-items-center">
                                   <label class="col-3">Email</label>
                                   <div class="col">
-                                      <input type="email" placeholder="Enter your email address" value="" id="email" name="email" class="form-control" required />
+                                      <input type="email" placeholder="johnnydutch@mi10.com" value="" id="email" name="email" class="form-control" required />
                                   </div>
                               </div>
                               <div class="form-group row">
                                   <label class="col-3">Description</label>
                                   <div class="col">
-                                      <textarea type="text" placeholder="Tell us a little about yourself" name="description" id="description" class="form-control" rows="4"></textarea>
+                                      <textarea type="text" placeholder="Is this the platform to gain spy experience?" name="description" id="description" class="form-control" rows="4"></textarea>
                                   </div>
                               </div>
                               <div class="row justify-content-end">

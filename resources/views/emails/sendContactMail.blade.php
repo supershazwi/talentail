@@ -5,9 +5,9 @@
 </head>
 
 <body>
-<p>Name: {{$message->name}}</p>
-<p>Email: {{$message->email}}</p>
-<p>Description: {{$message->description}}</p>
+<p>Name: {{$contactMessage->name}}</p>
+<p>Email: {{$contactMessage->email}}</p>
+<p>Description: {{$contactMessage->description}}</p>
 </body>
 
 </html>
