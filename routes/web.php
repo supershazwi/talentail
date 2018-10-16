@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\SendContactMail;
 
 use App\Experience;
 use App\User;
@@ -28,9 +29,27 @@ use Pusher\Laravel\Facades\Pusher;
 
 use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Mailable;
 
 Route::get('/verifyuser', function() {
     return view('emails.verifyUser');
+});
+
+Route::get('/sendemail', function() {
+    Mail::send('thetalentail@gmail.com', ['title' => 'You have been contacted', 'content' => 'Hi'], function ($message) use ($attach)
+    {
+
+        $message->from('yolomolotolo@gmail.com', 'Christian Nwamba');
+
+        $message->to('chrisn@scotch.io');
+
+        //Attach file
+        $message->attach($attach);
+
+        //Add a subject
+        $message->subject("Hello from Scotch");
+
+    });
 });
 
 
@@ -148,6 +167,18 @@ Route::get('/profile', function() {
 
 Route::get('/about-us', function() {
     return view('about-us');
+});
+
+Route::post('contact-us', function(Request $request) {
+    $message = new stdClass();
+
+    $message->name = $request->input('name');
+    $message->email = $request->input('email');
+    $message->description = $request->input('description');
+
+    Mail::to('thetalentail@gmail.com')->send(new SendContactMail($message));
+
+    return redirect('/contact-us')->with('contactStatus', 'Thank you for your enquiry. We will reply you at the provided email the soonest.');
 });
 
 Route::get('/contact-us', function() {

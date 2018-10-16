@@ -15,7 +15,12 @@
                   <div class="tab-content">
                       <div class="tab-pane fade show active" role="tabpanel" id="profile" aria-labelledby="profile-tab">
                           <!--end of avatar-->
-                          <form method="POST" action="/settings">
+                          @if (session('contactStatus'))
+                              <div class="alert alert-success">
+                                  {{ session('contactStatus') }}
+                              </div>
+                          @endif
+                          <form method="POST" action="/contact-us">
                               @csrf
                               <div class="form-group row align-items-center">
                                   <label class="col-3">Name</label>
