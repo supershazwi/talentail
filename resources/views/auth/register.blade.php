@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="/css/custom.css">
     <link rel="stylesheet" type="text/css" href="/css/theme.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A project management Bootstrap theme by Medium Rare">
+    <meta name="description" content="At Talentail, you get to apply what you've learned onto real world projects and gain experience.">
     <link href="assets/img/favicon.ico" rel="icon" type="image/x-icon">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
