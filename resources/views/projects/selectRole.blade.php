@@ -11,7 +11,7 @@
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
                 <h1 class="display-4 mb-3">Create a Project</h1>
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p class="lead">Select the role that you are creating this project for.</p>
             </section>
             <form method="POST" action="/projects/select-role">
               {{ csrf_field() }}

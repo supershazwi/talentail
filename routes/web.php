@@ -33,6 +33,14 @@ use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
+Route::get('privacy-policy', function() {
+    return view('privacy');
+});
+
+Route::get('terms-and-conditions', function() {
+    return view('terms');
+});
+
 Route::get('/verifyuser', function() {
     return view('emails.verifyUser');
 });

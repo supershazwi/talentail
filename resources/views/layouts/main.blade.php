@@ -160,11 +160,16 @@
 		                	<p class="text-small" style="font-weight: bold;">The platform to achieve greater control over one's career</p>
 		                	<p class="text-small">At Talentail, we believe that everyone should be given an equal opportunity to control their career paths and ultimately their happiness. Therefore, over 100 creators have come together to design projects and provide you with real world experience that you never got the chance to accumulate.</p>
 		                </div>
-				        <div class="col-lg-3">
+				        <div class="col-lg-2">
 							<a href="/about-us" style="font-size: .875rem;">About Us</a><br />
 							<a href="/contact-us" style="font-size: .875rem;">Contact Us</a><br />
 							<a href="/faq" style="font-size: .875rem;">Frequently Asked Questions</a>
 		                </div>
+				        <div class="col-lg-3">
+							<a href="/terms-and-conditions" style="font-size: .875rem;">Terms & Conditions</a><br />
+							<a href="/privacy-policy" style="font-size: .875rem;">Privacy Policy</a><br />
+		                </div>
+		            </div>
 		            </div>
 		        </div>
 		    </div>
