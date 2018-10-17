@@ -68,4 +68,8 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\VerifyUser');
     }
+
+    public function creator_applications() {
+        return $this->hasMany(CreatorApplication::class);
+    }
 }

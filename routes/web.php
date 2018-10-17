@@ -24,6 +24,7 @@ use App\Experience;
 use App\User;
 use App\RoleGained;
 use App\ContactMessage;
+use App\CreatorApplication;
 use App\AttemptedProject;
 
 use Pusher\Laravel\Facades\Pusher;
@@ -112,7 +113,16 @@ Route::get('/profile/{profileId}', function() {
     ]);
 });
 
+Route::post('/projects/apply', function(Request $request) {
+    $creatorApplication = new CreatorApplication;
 
+    $creatorApplication->description = $request->input('description');
+    $creatorApplication->user_id = Auth::id();
+
+    $creatorApplication->save();
+
+    return redirect('projects/create')->with('status', 'Your application has been submitted. We will get back to you shortly.');
+});
 
 Route::post('/profile/save', function(Request $request) {
     $user = Auth::user();
