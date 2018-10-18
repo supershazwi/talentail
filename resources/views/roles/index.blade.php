@@ -8,7 +8,7 @@
                     <h1 class="display-4 mb-3">Roles</h1>
                     <p class="lead">Individuals come together to ensure that a company operates like a well-oiled machine. Each one of them plays an important role in fulfilling the company's mission. Be the best in the role that you're in so that you can make the greatest impact at work.</p>
                 </section>
-                <div class="tab-pane fade show active" id="teams" role="tabpanel" aria-labelledby="teams-tab" data-filter-list="content-list-body">
+                <div class="tab-pane fade show active" id="roles" role="tabpanel" aria-labelledby="teams-tab" data-filter-list="content-list-body">
                     <div class="row content-list-head">
                         <div class="col-auto">
                         </div>
