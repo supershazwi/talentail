@@ -374,10 +374,10 @@
                                         <div class="card card-project">
                                             <div class="card-body">
                                                 <div class="card-title">
-                                                    <h5><a href="/roles/{{$received_review->project->role->slug}}/projects/{{$received_review->project->slug}}" data-filter-by="text">{{$project->title}}</a></h5>
+                                                    <h5><a href="/roles/{{$received_review->project->role->slug}}/projects/{{$received_review->project->slug}}" data-filter-by="text">{{$received_review->project->title}}</a></h5>
                                                     @if($received_review->rating == "Positive")
                                                     <span class="badge badge-success">Positive</span>
-                                                    @elseif($received_review->rating == "Positive")
+                                                    @elseif($received_review->rating == "Neutral")
                                                     <span class="badge badge-warning">Neutral</span>
                                                     @else
                                                     <span class="badge badge-danger">Negative</span>

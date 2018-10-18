@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
 
 use App\Project;
+use App\Review;
 use App\AttemptedProject;
 use App\AnsweredTask;
 use App\AnsweredTaskFile;
@@ -334,19 +335,71 @@ class ProjectsController extends Controller
 
                 $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
 
+                if(Auth::id() != $project->user_id) {
+                    $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
 
-                return view('projects.review', [
-                    'project' => $project,
-                    'role' => $role,
-                    'messages' => $messages3,
-                    'attemptedProject' => $attemptedProject,
-                    'answeredTasksArray' => $answeredTasksArray,
-                    'answeredTasks' => $answeredTasks,
-                    'competencyScores' => $competencyScores,
-                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
-                    'clickedUserId' => $clickedUserId,
-                    'reviewedUserId' => 0
-                ]);
+                    return view('projects.review', [
+                        'project' => $project,
+                        'role' => $role,
+                        'reviewLeftByApplicant' => $reviewLeftByApplicant,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0
+                    ]);
+                } else {
+                    return view('projects.review', [
+                        'project' => $project,
+                        'role' => $role,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0
+                    ]);
+                }
+            } elseif($attemptedProject->status == "Reviewed") {
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
+
+                if(Auth::id() != $project->user_id) {
+                    $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
+
+                    return view('projects.review', [
+                        'project' => $project,
+                        'role' => $role,
+                        'reviewLeftByApplicant' => $reviewLeftByApplicant,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0
+                    ]);
+                } else {
+                    return view('projects.review', [
+                        'project' => $project,
+                        'role' => $role,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0
+                    ]);
+                }
             } else {
                 return view('projects.attempt', [
                     'project' => $project,

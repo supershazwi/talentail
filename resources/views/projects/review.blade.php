@@ -7,13 +7,33 @@
   </div>
   @else
     @if($attemptedProject->user_id != Auth::id())
+      @if($attemptedProject->status == "Assessed")
       <div class="alert alert-success" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
-        <button class="btn btn-link" disabled style="color: #155724; padding-left: 0; opacity: 1;">This project has been <strong>assessed</strong>. {{$attemptedProject->user->name}} has been notified.</button> <a href="#" class="btn btn-primary pull-right">Leave a review</a>
+        <button class="btn btn-link" disabled style="color: #155724; padding-left: 0; opacity: 1;">This project has been <strong>assessed</strong>. {{$attemptedProject->user->name}} has been notified.</button> <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/{{$reviewedUserId}}/review" class="btn btn-primary pull-right">Leave a review</a>
       </div>
+      @else
+      <div class="alert alert-success" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+        <button class="btn btn-link" disabled style="color: #155724; padding-left: 0; opacity: 1;">This project has been <strong>reviewed</strong>. {{$attemptedProject->user->name}} has been notified.</button>
+      </div>
+      @endif
     @else
+      @if($attemptedProject->status == "Assessed")
       <div class="alert alert-success" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
-        <button class="btn btn-link" disabled style="color: #155724; padding-left: 0; opacity: 1;">This project has been <strong>assessed</strong> by {{$project->user->name}}.</button> <a href="#" class="btn btn-primary pull-right">Leave a review</a>
+        <button class="btn btn-link" disabled style="color: #155724; padding-left: 0; opacity: 1;">This project has been <strong>assessed</strong> by {{$project->user->name}}.</button> 
+
+        @if(!$reviewLeftByApplicant)
+          <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/review" class="btn btn-primary pull-right">Leave a review</a>
+        @endif
       </div>
+      @else
+      <div class="alert alert-success" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+        <button class="btn btn-link" disabled style="color: #155724; padding-left: 0; opacity: 1;">This project has been <strong>reviewed</strong> by {{$project->user->name}}.</button> 
+
+        @if(!$reviewLeftByApplicant)
+          <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/review" class="btn btn-primary pull-right">Leave a review</a>
+        @endif
+      </div>
+      @endif
     @endif
   @endif
   <input type="hidden" id="answeredTasksArray" value="{{implode(',', $answeredTasksArray)}}" />

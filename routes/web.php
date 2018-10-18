@@ -289,6 +289,13 @@ Route::get('/messages/{userId}/projects/{projectId}', 'MessagesController@showIn
 
 Route::get('/messages/{userId}', 'MessagesController@showIndividualChannel');
 
+Route::get('/roles/{roleSlug}/projects/{projectSlug}/{userId}/review', 'ReviewsController@leaveReview');
+Route::get('/roles/{roleSlug}/projects/{projectSlug}/review', 'ReviewsController@leaveReview');
+
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/{userId}/review', 'ReviewsController@submitReview');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/review', 'ReviewsController@submitReview');
+
+
 Route::post('/projects/publish-project', 'ProjectsController@publishProject');
 Route::post('/projects/save-project', 'ProjectsController@saveProject');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/toggle-visibility-project', 'ProjectsController@toggleVisibilityProject');
