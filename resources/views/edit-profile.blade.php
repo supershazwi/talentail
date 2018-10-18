@@ -14,7 +14,11 @@
         <div class="content-list-body">
             <h5 style="margin-top: 1.5rem;">Profile Image</h5>
             <div class="media mb-4">
+                @if($user->avatar)
                 <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" style="margin-top: 0px !important;"/>
+                @else
+                <img alt="Image" src="/img/avatar.png" class="avatar avatar-lg mt-1" style="margin-top: 0px !important;"/>
+                @endif
                 <div class="media-body ml-3">
                     <div class="custom-file custom-file-naked d-block mb-1">
                         <input type="file" class="custom-file-input d-none" id="avatar-file" name="avatar-file">
@@ -24,7 +28,7 @@
                             </span>
                         </label>
                     </div>
-                    <small>For best results, use an image at least 256px by 256px in either .jpg or .png format</small>
+                    <small>Smile for the camera!</small>
                 </div>
             </div>
             <h5 style="margin-top: 1.5rem;">Full Name</h5>

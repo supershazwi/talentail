@@ -23,9 +23,36 @@
     This project is <strong>private</strong>.
   </div>
   @endif
+  @if (($errors->has('title') && strlen($errors->first('title')) > 0) || $errors->has('description') && strlen($errors->first('description')) > 0 || $errors->has('brief') && strlen($errors->first('brief')) > 0 || $errors->has('hours') && strlen($errors->first('hours')) > 0 || $errors->has('price') && strlen($errors->first('price')) > 0 || $errors->has('competency') && strlen($errors->first('competency')) > 0)
+  <div class="alert alert-danger">
+    @if ($errors->has('title') && strlen($errors->first('title')) > 0)
+      <p style="color: #721c24 !important;">{{ $errors->first('title') }}</p>
+    @endif
+    @if ($errors->has('description') && strlen($errors->first('description')) > 0)
+      <p style="color: #721c24 !important;">{{ $errors->first('description') }}</p>
+    @endif
+    @if ($errors->has('brief') && strlen($errors->first('brief')) > 0)
+      <p style="color: #721c24 !important;">{{ $errors->first('brief') }}</p>
+    @endif
+    @if ($errors->has('hours') && strlen($errors->first('hours')) > 0)
+      <p style="color: #721c24 !important;">{{ $errors->first('hours') }}</p>
+    @endif
+    @if ($errors->has('price') && strlen($errors->first('price')) > 0)
+      <p style="color: #721c24 !important;">{{ $errors->first('price') }}</p>
+    @endif
+    @if ($errors->has('competency') && strlen($errors->first('competency')) > 0)
+      <p style="color: #721c24 !important;">{{ $errors->first('competency') }}</p>
+    @endif
+  </div>
+  @endif
   <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/toggle-visibility-project" id="toggleVisibilityProject">
     @csrf
     <input type="hidden" name="project_id" value="{{$project->id}}" />
+    <input type="hidden" name="title" value="{{$project->title}}" />
+    <input type="hidden" name="description" value="{{$project->description}}" />
+    <input type="hidden" name="brief" value="{{$project->brief}}" />
+    <input type="hidden" name="price" value="{{$project->amount}}" />
+    <input type="hidden" name="hours" value="{{$project->hours}}" />
     <input type="hidden" name="role_slug" value="{{$project->role->slug}}" />
     <input type="hidden" name="project_slug" value="{{$project->slug}}" />
     <button type="submit" style="display: none;" id="toggleVisibilityProjectButton">Submit</button>
@@ -84,11 +111,15 @@
                       </div>
                   </div>
                   <div class="content-list-body">
+                      @if($project->brief)
                       <div class="card mb-3">
                         <div class="card-body role-brief">
                           @parsedown($project->brief)
                         </div>
                       </div>
+                      @else
+                      <p>No role brief added to this project yet.</p>
+                      @endif
                   </div>
                   <!--end of content list-->
               </div>
@@ -100,6 +131,7 @@
                   </div>
                   <div class="content-list-body">
                     <div class="accordion" id="accordionExample">
+                      @if(count($project->tasks))
                       @foreach($project->tasks as $key=>$task)
                       <div class="card">
                         <div class="card-header" id="headingOne">
@@ -115,6 +147,9 @@
                         </div>
                       </div>
                       @endforeach
+                      @else
+                        <p>No tasks tagged to this project yet.</p>
+                      @endif
                     </div>
                   </div>
                   <!--end of content list-->
@@ -130,6 +165,7 @@
                     <div class="content-list-body row">
                         <div class="col">
                             <ul class="list-group list-group-activity dropzone-previews flex-column-reverse">
+                              @if(count($project->project_files))
                               @foreach($project->project_files as $projectFile) 
                                 <li class="list-group-item">
                                     <div class="media align-items-center">
@@ -150,6 +186,9 @@
                                     </div>
                                 </li>
                               @endforeach 
+                              @else
+                                <p>No files attached to this project yet.</p>
+                              @endif
                             </ul>
                         </div>
                     </div>
@@ -163,6 +202,7 @@
                               <h3>Competencies</h3>
                           </div>
                       </div>
+                      @if(count($project->competencies))
                       @foreach($project->competencies as $competency)
                       <div class="content-list-body">
                           <div class="row">
@@ -178,6 +218,9 @@
                           </div>
                       </div>
                       @endforeach
+                      @else
+                        <p>No competencies tagged to this project yet.</p>
+                      @endif
                   </div>
                   <!--end of content list-->
               </div>
@@ -192,9 +235,17 @@
                         <!--end of content list head-->
                         <div class="content-list-body">
                           <h5 style="margin-top: 1.5rem;">Project Price</h5>
-                          <p>$ {{$project->amount}}</p>
+                          @if($project->amount)
+                            <p>$ {{$project->amount}}</p>
+                          @else 
+                            <p>No project price added yet.</p>
+                          @endif
                           <h5 style="margin-top: 1.5rem;">Project Duration</h5>
-                          <p>{{$project->hours}} hours</p>
+                          @if($project->hours)
+                            <p>{{$project->hours}} hours</p>
+                          @else
+                            <p>No project hours added yet.</p>
+                          @endif
                         </div>
                     </div>
                     <!--end of content list-->

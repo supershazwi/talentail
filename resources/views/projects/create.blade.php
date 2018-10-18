@@ -3,7 +3,7 @@
 @section ('content')
   @if($selectedRole != null)
   <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
-    You are currently creating a project for <strong>{{$selectedRole->title}}</strong>. <a href="/projects/select-role" style="float: right;">Select different role</a>
+    You are currently creating a project for <strong>{{$selectedRole->title}}</strong>.<a href="/projects/select-role" style="float: right;">Select different role</a>
   </div>
   @endif
   <div class="container">
@@ -13,12 +13,34 @@
                 <h1 class="display-4 mb-3">Create a {{$selectedRole->title}} Project</h1>
                 <p class="lead">{{$selectedRole->description}}</p>
             </section>
+            @if (($errors->has('title') && strlen($errors->first('title')) > 0) || $errors->has('description') && strlen($errors->first('description')) > 0 || $errors->has('brief') && strlen($errors->first('brief')) > 0 || $errors->has('hours') && strlen($errors->first('hours')) > 0 || $errors->has('price') && strlen($errors->first('price')) > 0 || $errors->has('competency') && strlen($errors->first('competency')) > 0)
+            <div class="alert alert-danger">
+              @if ($errors->has('title') && strlen($errors->first('title')) > 0)
+                <p style="color: #721c24 !important;">The title field is required to determine the custom url of the project.</p>
+              @endif
+              @if ($errors->has('description') && strlen($errors->first('description')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('description') }}</p>
+              @endif
+              @if ($errors->has('brief') && strlen($errors->first('brief')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('brief') }}</p>
+              @endif
+              @if ($errors->has('hours') && strlen($errors->first('hours')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('hours') }}</p>
+              @endif
+              @if ($errors->has('price') && strlen($errors->first('price')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('price') }}</p>
+              @endif
+              @if ($errors->has('competency') && strlen($errors->first('competency')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('competency') }}</p>
+              @endif
+            </div>
+            @endif
             <form id="projectForm" method="POST" action="/projects" enctype="multipart/form-data">
             @csrf
               <h3 style="margin-top: 1.5rem;">Project Title</h3>
-              <input type="text" name="title" class="form-control" id="title" placeholder="Enter title">
-              <h3 style="margin-top: 1.5rem;">Project Summary</h3>
-              <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+              <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" value="{{ old('title') }}" autofocus>
+              <h3 style="margin-top: 1.5rem;">Project Description</h3>
+              <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description">{{ old('description') }}</textarea>
               <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
                   <li class="nav-item">
                       <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Step 1: Brief</a>
@@ -47,9 +69,10 @@
                         <div class="card">
                           <div class="card-body">
                             <div id="layout">
-                                <div id="test-editormd" style="border-radius: 0.5rem;">
+                                <div id="test-editormd3" style="border-radius: 0.5rem;">
                                     <textarea style="display:none;" name="brief"></textarea>
                                 </div>
+                                <div id="old-brief" style="display: none;">{{ old('brief') }}</div>
                             </div>
                           </div>
                         </div>
@@ -152,11 +175,11 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="basic-addon1">$</span>
                             </div>
-                            <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1" name="price">
+                            <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1" name="price" value="{{ old('price') }}">
                           </div>
                           <h5 style="margin-top: 1.5rem;">Project Duration</h5>
                           <div class="input-group mb-3">
-                            <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Recipient's username" aria-describedby="basic-addon2" name="hours">
+                            <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Recipient's username" aria-describedby="basic-addon2" name="hours" value="{{ old('hours') }}">
                             <div class="input-group-append">
                               <span class="input-group-text" id="basic-addon2">hours</span>
                             </div>
@@ -173,8 +196,8 @@
               </div>
               
             </form>
-            <button class="btn btn-primary pull-right" onclick="createProject()">Publish Project</button>
-              <button class="btn btn-default pull-right" onclick="saveProject()" style="margin-right: 0.5rem;">Save Project</button>
+            <!-- <button class="btn btn-primary pull-right" onclick="createProject()">Publish Project</button> -->
+              <button class="btn btn-primary pull-right" onclick="saveProject()" style="margin-right: 0.5rem;">Save Project</button>
               <button class="btn btn-default pull-right" onclick="cancel()" style="margin-right: 0.5rem;">Cancel</button>
           </div>
       </div>
@@ -183,7 +206,7 @@
   <script type="text/javascript" src="/js/editormd.js"></script>
   <script type="text/javascript">
     var editor2 = editormd({
-        id   : "test-editormd",
+        id   : "test-editormd3",
         path : "/lib/",
         height: 640,
         onload : function() {
@@ -191,8 +214,10 @@
             //this.setMarkdown("###test onloaded");
             //testEditor.setMarkdown("###Test onloaded");
             // editor2.insertValue(document.getElementById("brief-info").innerHTML);
+            editor2.insertValue(document.getElementById("old-brief").innerHTML);
         }
     });
+
   </script>
   <script type="text/javascript">
 

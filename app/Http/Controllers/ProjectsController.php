@@ -23,6 +23,8 @@ use App\User;
 use App\Notification;
 use App\ReviewedAnsweredTaskFile;
 
+use Validator;
+
 use Illuminate\Support\Facades\Storage;
 
 class ProjectsController extends Controller
@@ -243,11 +245,40 @@ class ProjectsController extends Controller
     public function toggleVisibilityProject(Request $request) {
         $project = Project::find($request->input('project_id'));
 
-        $project->published = !($project->published);
+        // if it is not published and i want to publish it, i need to
+        // check that all fields are in
 
-        $project->save();
+        if(!$project->published) {
+            // i need to validate all fields are in
 
-        return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug'));
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'description' => 'required',
+                'brief' => 'required',
+                'hours' => 'required',
+                'price' => 'required',
+                'competency' => 'required',
+            ]);
+
+
+            if($validator->fails()) {
+                return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug'))
+                            ->withErrors($validator)
+                            ->withInput();
+            } else {
+                $project->published = !($project->published);
+                $project->save();
+
+                return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug'));
+            }
+        } else {
+            // i just need to make it private, that's all
+
+            $project->published = !($project->published);
+            $project->save();
+
+            return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug'));
+        }
     }
 
     public function show($slug) {
@@ -326,13 +357,17 @@ class ProjectsController extends Controller
                 ]);
             }
         } else {
-            return view('projects.show', [
-                'project' => $project,
-                'role' => $role,
-                'messages' => $messages3,
-                'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
-                'clickedUserId' => $clickedUserId
-            ]);
+            if($project->published == 0 && $project->user_id != Auth::id()) {
+                return redirect('/roles/' . $routeParameters['roleSlug']);
+            } else {
+                return view('projects.show', [
+                    'project' => $project,
+                    'role' => $role,
+                    'messages' => $messages3,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId
+                ]); 
+            }
         }
     }
 
@@ -463,6 +498,22 @@ class ProjectsController extends Controller
 
     public function publishProject(Request $request) {
 
+        // need to validate inputs first before trying to store to database
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'description' => 'required',
+            'brief' => 'required',
+            'hours' => 'required',
+            'price' => 'required',
+            'competency' => 'required'
+        ]);
+
+        if($validator->fails()) {
+            return redirect('projects/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
         $project = new Project;
 
         $project->title = $request->input('title');
@@ -548,6 +599,17 @@ class ProjectsController extends Controller
 
     public function saveProject(Request $request) {
 
+        // need to validate inputs first before trying to store to database
+        $validator = Validator::make($request->all(), [
+            'title' => 'required'
+        ]);
+
+        if($validator->fails()) {
+            return redirect('projects/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        
         $project = new Project;
 
         $project->title = $request->input('title');

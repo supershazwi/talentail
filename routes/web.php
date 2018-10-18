@@ -99,6 +99,16 @@ Auth::routes(['verify' => true]);
 Route::get('/profile/edit', function() {
     $user = Auth::user();
 
+    foreach($user->experiences as $experience) {
+        $experience->description = preg_replace("/\r\n\r\n/","\r\n",$experience->description);
+
+        // dd($experience->description);
+
+        $experience->save();
+
+        // dd(preg_replace("/\r\n\r\n/","\r\n",$experience->description));
+    }
+
     return view('edit-profile', [
         'user' => $user
     ]);
@@ -155,7 +165,7 @@ Route::post('/profile/save', function(Request $request) {
 
         $experience->company = Input::get('company_'.$counter);
         $experience->role = Input::get('role_'.$counter);
-        $experience->description = Input::get('work-description_'.$counter);
+        $experience->description = preg_replace("/[\r\n]/","\r\n",Input::get('work-description_'.$counter));
         $experience->user_id = $user->id;
         $experience->start_date = Input::get('start-date_'.$counter);
         $experience->end_date = Input::get('end-date_'.$counter);

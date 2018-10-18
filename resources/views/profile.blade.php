@@ -80,7 +80,7 @@
                                             <div class="row">
                                                 <div class="col-lg-9">
                                                     <strong>{{$experience->role}}</strong>
-                                                    <p>{{$experience->description}}</p>
+                                                    <p>@parsedown($experience->description)</p>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <p>{{date("M Y", strtotime($experience->start_date))}} - {{date("M Y", strtotime($experience->end_date))}}</p>

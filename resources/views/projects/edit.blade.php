@@ -13,6 +13,27 @@
                 <h1 class="display-4 mb-3">Edit a {{$role->title}} Project</h1>
                 <p class="lead">{{$role->description}}</p>
             </section>
+            @if (($errors->has('title') && strlen($errors->first('title')) > 0) || $errors->has('description') && strlen($errors->first('description')) > 0 || $errors->has('brief') && strlen($errors->first('brief')) > 0 || $errors->has('hours') && strlen($errors->first('hours')) > 0 || $errors->has('price') && strlen($errors->first('price')) > 0 || $errors->has('competency') && strlen($errors->first('competency')) > 0)
+            <div class="alert alert-danger">
+              @if ($errors->has('title') && strlen($errors->first('title')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('title') }}</p>
+              @endif
+              @if ($errors->has('description') && strlen($errors->first('description')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('description') }}</p>
+              @endif
+              @if ($errors->has('brief') && strlen($errors->first('brief')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('brief') }}</p>
+              @endif
+              @if ($errors->has('hours') && strlen($errors->first('hours')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('hours') }}</p>
+              @endif
+              @if ($errors->has('price') && strlen($errors->first('price')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('price') }}</p>
+              @endif
+              @if ($errors->has('competency') && strlen($errors->first('competency')) > 0)
+                <p style="color: #721c24 !important;">{{ $errors->first('competency') }}</p>
+              @endif
+            @endif
             <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/save-project" enctype="multipart/form-data">
             @csrf
             <input name="id" class="form-control" id="id" type="hidden" value="{{$project->id}}">
@@ -289,6 +310,7 @@
             //this.setMarkdown("###test onloaded");
             //testEditor.setMarkdown("###Test onloaded");
             editor2.insertValue(document.getElementById("brief-info").innerHTML);
+            console.log("fire");
         }
     });
 
