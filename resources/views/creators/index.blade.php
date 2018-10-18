@@ -32,7 +32,11 @@
                                 <div class="card-body">
                                     <div class="row">
                                       <div class="col-lg-4">
+                                        @if($creator->avatar)
                                         <img src="https://storage.cloud.google.com/talentail-123456789/{{$creator->avatar}}" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
+                                        @else
+                                        <img src="/img/avatar.png" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
+                                        @endif
                                       </div>
                                       <div class="col-lg-8">
                                         <h5 data-filter-by="text"><a href="/profile/{{$creator->id}}">{{$creator->name}}</a></h5>
