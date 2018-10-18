@@ -62,7 +62,7 @@
                             <div style="width: 100%; text-align: center;">
                         </div>
                         <div style="width: 100%; text-align: center;">
-                            <small>By clicking 'Create Account' you agree to our <a href="/terms-and-conditions">Terms of Service</a>
+                            <small>By clicking 'Create account' you agree to our <a href="/terms-and-conditions">Terms of Service</a>
                             </small>
                         </div>
                         </form>
