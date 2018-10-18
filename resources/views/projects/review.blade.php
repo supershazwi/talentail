@@ -8,11 +8,11 @@
   @else
     @if($attemptedProject->user_id != Auth::id())
       <div class="alert alert-success" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
-        This project has been <strong>reviewed</strong>. {{$attemptedProject->user->name}} has been notified.
+        <button class="btn btn-link" disabled style="color: #155724; padding-left: 0; opacity: 1;">This project has been <strong>assessed</strong>. {{$attemptedProject->user->name}} has been notified.</button> <a href="#" class="btn btn-primary pull-right">Leave a review</a>
       </div>
     @else
       <div class="alert alert-success" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
-        This project has been <strong>reviewed</strong> by <a href="/profile/{{$project->user->id}}">{{$project->user->name}}</a>.
+        <button class="btn btn-link" disabled style="color: #155724; padding-left: 0; opacity: 1;">This project has been <strong>assessed</strong> by {{$project->user->name}}.</button> <a href="#" class="btn btn-primary pull-right">Leave a review</a>
       </div>
     @endif
   @endif
@@ -215,7 +215,7 @@
                         </div>
                         <table class="table table-borderless" style="margin-left: 10px;">
                           <tbody>
-                            @if($attemptedProject->status != "Reviewed")
+                            @if($attemptedProject->status != "Assessed")
                               @foreach($project->competencies as $competency)
                               <tr>
                                 <td style="width: 80%;"><p><i class="fas fa-check form-check-input"></i> {{$competency->title}}</p></td>

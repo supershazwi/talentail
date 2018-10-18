@@ -149,7 +149,7 @@
                       </div>
                   </div>
                   <!--end of content list head-->
-                  <div class="content-list-body row">
+                  <div class="content-list-body row" style="margin-bottom: 1.5rem;">
                       <div class="col">
                           <ul class="list-group list-group-activity dropzone-previews flex-column-reverse">
                             @foreach($project->project_files as $projectFile) 

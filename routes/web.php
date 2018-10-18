@@ -147,6 +147,10 @@ Route::post('/profile/save', function(Request $request) {
 
     if (Input::has('name')) { $user->name = Input::get('name'); }
     if (Input::has('email')) { $user->email = Input::get('email'); }
+    if (Input::has('website')) { $user->website = Input::get('website'); }
+    if (Input::has('facebook')) { $user->facebook = Input::get('facebook'); }
+    if (Input::has('linkedin')) { $user->linkedin = Input::get('linkedin'); }
+    if (Input::has('twitter')) { $user->twitter = Input::get('twitter'); }
     if (Input::has('description')) { $user->description = Input::get('description'); }
     if (Input::has('avatar-file')) {
         // $user->avatar = $request->file('avatar-file')->store('/assets', 'gcs');

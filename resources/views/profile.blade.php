@@ -26,6 +26,18 @@
                                     @endif
                                 </h1>
                                 <p class="lead">{{$user->description}}</p>
+                                @if($user->website)
+                                <a href="{{$user->website}}" style="margin-right: 0.5rem;"><i class="fas fa-link"></i></a>
+                                @endif
+                                @if($user->linkedin)
+                                <a href="{{$user->linkedin}}" style="margin-right: 0.5rem;"><i class="fab fa-linkedin-in"></i></a>
+                                @endif
+                                @if($user->facebook)
+                                <a href="{{$user->facebook}}" style="margin-right: 0.5rem;"><i class="fab fa-facebook-f"></i></a>
+                                @endif
+                                @if($user->twitter)
+                                <a href="{{$user->twitter}}"><i class="fab fa-twitter"></i></a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -59,6 +71,9 @@
                         <!-- <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#opportunities" role="tab" aria-controls="opportunities" aria-selected="false">Opportunities</a>
                         </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         @if($user->creator)
@@ -334,6 +349,67 @@
                         </div>
                         @endif
                         <!--end of tab-->
+                        <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab" data-filter-list="content-list-body">
+                            <div class="content-list">
+                                <div class="row content-list-head">
+                                    <div class="col-auto">
+                                        <h3>Reviews</h3>
+                                    </div>
+                                    <form class="col-md-auto">
+                                        <div class="input-group input-group-round">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="material-icons">filter_list</i>
+                                                </span>
+                                            </div>
+                                            <input type="search" class="form-control filter-list-input" placeholder="Filter projects" aria-label="Filter Projects" aria-describedby="filter-projects">
+                                        </div>
+                                    </form>
+                                </div>
+                                <!--end of content list head-->
+                                @if(count($user->received_reviews) > 0)
+                                <div class="content-list-body row">
+                                    @foreach($user->received_reviews as $received_review)
+                                    <div class="col-lg-12">
+                                        <div class="card card-project">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                    <h5><a href="/roles/{{$received_review->project->role->slug}}/projects/{{$received_review->project->slug}}" data-filter-by="text">{{$project->title}}</a></h5>
+                                                    @if($received_review->rating == "Positive")
+                                                    <span class="badge badge-success">Positive</span>
+                                                    @elseif($received_review->rating == "Positive")
+                                                    <span class="badge badge-warning">Neutral</span>
+                                                    @else
+                                                    <span class="badge badge-danger">Negative</span>
+                                                    @endif
+                                                </div>
+                                                <p>{{$received_review->description}}</p>
+                                                <a href="/profile/{{$received_review->project->user->id}}" data-toggle="tooltip" data-placement="top" title="">
+                                                    @if($user->avatar)
+                                                    <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$received_review->project->user->avatar}}">
+                                                    @else
+                                                    <img alt="Image" src="/img/avatar.png" class="avatar" />
+                                                    @endif
+                                                </a>
+                                                <a href="/profile/{{$received_review->project->user->id}}">
+                                                  <span style="font-size: .875rem; line-height: 1.3125rem;">{{$received_review->project->user->name}}</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                @else
+                                <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
+                    text-align: center; text-align: center;">
+                                    <h1>🤨</h1>
+                                    <h6>You have no reviews given to you by other users yet</h6>
+                                </div>
+                                @endif
+                                <!--end of content list body-->
+                            </div>
+                            <!--end of content list-->
+                        </div>
                     </div>
                     <form class="modal fade" id="team-add-modal" tabindex="-1" role="dialog" aria-labelledby="team-add-modal" aria-hidden="true">
                         <div class="modal-dialog" role="document">

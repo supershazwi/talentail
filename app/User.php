@@ -72,4 +72,12 @@ class User extends Authenticatable
     public function creator_applications() {
         return $this->hasMany(CreatorApplication::class);
     }
+
+    public function received_reviews() {
+        return $this->hasMany(Review::class, 'receiver_id');
+    }
+
+    public function sent_reviews() {
+        return $this->hasMany(Review::class, 'sender_id');
+    }
 }

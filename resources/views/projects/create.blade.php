@@ -209,6 +209,7 @@
         id   : "test-editormd3",
         path : "/lib/",
         height: 640,
+        placeholder: "Start creating your role brief...",
         onload : function() {
             //this.watch();
             //this.setMarkdown("###test onloaded");

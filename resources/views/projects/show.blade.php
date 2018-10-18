@@ -49,6 +49,7 @@
     @csrf
     <input type="hidden" name="project_id" value="{{$project->id}}" />
     <input type="hidden" name="title" value="{{$project->title}}" />
+    <input type="hidden" name="competency" value="{{$project->competencies}}" />
     <input type="hidden" name="description" value="{{$project->description}}" />
     <input type="hidden" name="brief" value="{{$project->brief}}" />
     <input type="hidden" name="price" value="{{$project->amount}}" />

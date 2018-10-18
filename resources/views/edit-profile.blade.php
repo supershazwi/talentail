@@ -35,6 +35,14 @@
             <input type="text" name="name" class="form-control" id="name" placeholder="Enter your full name (e.g. Johnie Orange)" value="{{$user->name}}">
             <h5 style="margin-top: 1.5rem;">Email</h5>
             <input type="text" name="email" class="form-control" id="email" placeholder="Enter your email (e.g. j.orange@gmail.com)" value="{{$user->email}}">
+            <h5 style="margin-top: 1.5rem;">Website</h5>
+            <input type="text" name="website" class="form-control" id="website" placeholder="Enter your website link (e.g. johnieorange.com)" value="{{$user->website}}">
+            <h5 style="margin-top: 1.5rem;">LinkedIn</h5>
+            <input type="text" name="linkedin" class="form-control" id="linkedin" placeholder="Enter your LinkedIn profile link (e.g. https://www.linkedin.com/in/jorange.007)" value="{{$user->linkedin}}">
+            <h5 style="margin-top: 1.5rem;">Facebook</h5>
+            <input type="text" name="facebook" class="form-control" id="facebook" placeholder="Enter your Facebook profile link (e.g. https://www.facebook.com/jorange.007)" value="{{$user->facebook}}">
+            <h5 style="margin-top: 1.5rem;">Twitter</h5>
+            <input type="text" name="twitter" class="form-control" id="twitter" placeholder="Enter your Twitter profile link (e.g. https://www.twitter.com/jorange.007)" value="{{$user->twitter}}">
             <h5 style="margin-top: 1.5rem;">Description</h5>
             <textarea type="text" placeholder="Tell us a little about yourself" name="description" id="description" class="form-control" rows="4" style="margin-bottom: 1.5rem;">{{$user->description}}</textarea>
             @if(Auth::user()->creator)

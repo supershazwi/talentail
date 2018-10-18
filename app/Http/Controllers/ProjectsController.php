@@ -101,7 +101,7 @@ class ProjectsController extends Controller
         // update attempted project
         $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
 
-        $attemptedProject->status = "Reviewed";
+        $attemptedProject->status = "Assessed";
 
         $attemptedProject->save();
 
@@ -329,7 +329,7 @@ class ProjectsController extends Controller
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                     'clickedUserId' => $clickedUserId
                 ]);
-            } elseif($attemptedProject->status == "Reviewed") {
+            } elseif($attemptedProject->status == "Assessed") {
                 $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
 
                 $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
