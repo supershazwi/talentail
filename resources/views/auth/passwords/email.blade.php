@@ -31,7 +31,7 @@
                         <form method="POST" action="{{ route('password.email') }}" aria-label="{{ __('Reset Password') }}">
                             @csrf
                             <div class="form-group">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Emaill Address" required autofocus>
+                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Emaill address" required autofocus>
 
                                 @if ($errors->has('email'))
                                     <span class="invalid-feedback" role="alert">
@@ -40,7 +40,7 @@
                                 @endif
                             </div>
                             <button class="btn btn-lg btn-block btn-primary" role="button" type="submit">
-                                Send Password Reset Link
+                                Send password reset link
                             </button>
                         </form>
                     </div>

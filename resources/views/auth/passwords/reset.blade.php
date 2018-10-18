@@ -58,7 +58,7 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Re-enter New Password" required>
                             </div>
                             <button class="btn btn-lg btn-block btn-primary" role="button" type="submit">
-                                Reset Password
+                                Reset password
                             </button>
                         </form>
                     </div>
