@@ -18,6 +18,7 @@
       @endif
     @else
       @if($attemptedProject->status == "Assessed")
+      {{$reviewLeftByApplicant}}
       <div class="alert alert-success" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
         <button class="btn btn-link" disabled style="color: #155724; padding-left: 0; opacity: 1;">This project has been <strong>assessed</strong> by {{$project->user->name}}.</button> 
 

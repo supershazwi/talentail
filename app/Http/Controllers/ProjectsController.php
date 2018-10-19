@@ -132,6 +132,26 @@ class ProjectsController extends Controller
             }
         }
 
+        $notification = new Notification;
+
+        $notification->message = "submitted reviews to your answers for project: " . $attemptedProject->project->title;
+        $notification->recipient_id = $attemptedProject->user_id;
+        $notification->user_id = Auth::id();
+        $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug;
+
+        $notification->save();
+
+        $message = [
+            'text' => e("submitted reviews to your answers for project: " . $attemptedProject->project->title),
+            'username' => Auth::user()->name,
+            'avatar' => Auth::user()->avatar,
+            'timestamp' => (time()*1000),
+            'projectId' => $attemptedProject->project->id,
+            'url' => '/notifications'
+        ];
+
+        $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
+
         return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
     }
 
@@ -239,6 +259,26 @@ class ProjectsController extends Controller
         $attemptedProject->status = "Completed";
 
         $attemptedProject->save();
+
+        $notification = new Notification;
+
+        $notification->message = "submitted answers for project: " . $attemptedProject->project->title;
+        $notification->recipient_id = $attemptedProject->project->user_id;
+        $notification->user_id = Auth::id();
+        $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . Auth::id();
+
+        $notification->save();
+
+        $message = [
+            'text' => e("submitted answers for project: " . $attemptedProject->project->title),
+            'username' => Auth::user()->name,
+            'avatar' => Auth::user()->avatar,
+            'timestamp' => (time()*1000),
+            'projectId' => $attemptedProject->project->id,
+            'url' => '/notifications'
+        ];
+
+        $this->pusher->trigger('notifications_' . $attemptedProject->project->user_id, 'new-notification', $message);
 
         return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug'));
     }
@@ -517,7 +557,7 @@ class ProjectsController extends Controller
         $notification->message = "purchased project: " . $project->title;
         $notification->recipient_id = $project->user_id;
         $notification->user_id = Auth::id();
-        $notification->url = "/skills/" . $project->role->slug . "/projects/" . $project->slug;
+        $notification->url = "/roles/" . $project->role->slug . "/projects/" . $project->slug;
 
         $notification->save();
 
