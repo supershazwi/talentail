@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <title>Compass</title>
+    <title>Talentail: Apply your knowledge onto real world projects</title>
     <link rel="stylesheet" type="text/css" href="/css/custom.css">
     <link rel="stylesheet" type="text/css" href="/css/theme.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
