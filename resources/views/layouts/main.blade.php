@@ -50,29 +50,17 @@
 	}
 	#header {
 		background:#ff0;
-		padding:10px;
 	}
 	#body {
-		padding:10px;
-		padding-bottom:230px;	/* Height of the footer */
+		padding-bottom: 205px;	/* Height of the footer */
 	}
 	#footer {
 		position:absolute;
 		bottom:0;
 		width:100%;
-		height:230px;			/* Height of the footer */
+		height: 205px;			/* Height of the footer */
 		background-color: white; 
 		border-top: 1px solid #E5E5E5;
-	}
-	/* other non-essential CSS */
-	#header p,
-	#header h1 {
-		margin:0;
-		padding:10px 0 0 10px;
-	}
-	#footer p {
-		margin:0;
-		padding:10px;
 	}
 	</style>
 </head>
@@ -211,7 +199,7 @@
 	        @yield('content')
 	    </div>
         <div id="footer">
-	        <div style="padding: 1.5rem 1.5rem;">
+	        <div style="padding: 1.5rem 1.5rem 1.5rem 1.5rem;">
 			    <div class="row">
 			        <div class="col-lg-4">
 	                	<h5>Talentail</h5>
