@@ -203,7 +203,8 @@ class ProjectsController extends Controller
                 'competencyScores' => $competencyScores,
                 'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                 'clickedUserId' => $clickedUserId,
-                'reviewedUserId' => $routeParameters['userId']
+                'reviewedUserId' => $routeParameters['userId'],
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             ]);
         }
     }
@@ -368,7 +369,8 @@ class ProjectsController extends Controller
                     'messages' => $messages3,
                     'answeredTasks' => $answeredTasks,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
-                    'clickedUserId' => $clickedUserId
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
                 ]);
             } elseif($attemptedProject->status == "Assessed") {
                 $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
@@ -389,7 +391,8 @@ class ProjectsController extends Controller
                         'competencyScores' => $competencyScores,
                         'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                         'clickedUserId' => $clickedUserId,
-                        'reviewedUserId' => 0
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
                     ]);
                 } else {
                     return view('projects.review', [
@@ -402,7 +405,8 @@ class ProjectsController extends Controller
                         'competencyScores' => $competencyScores,
                         'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                         'clickedUserId' => $clickedUserId,
-                        'reviewedUserId' => 0
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
                     ]);
                 }
             } elseif($attemptedProject->status == "Reviewed") {
@@ -424,7 +428,8 @@ class ProjectsController extends Controller
                         'competencyScores' => $competencyScores,
                         'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                         'clickedUserId' => $clickedUserId,
-                        'reviewedUserId' => 0
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
                     ]);
                 } else {
                     return view('projects.review', [
@@ -437,7 +442,8 @@ class ProjectsController extends Controller
                         'competencyScores' => $competencyScores,
                         'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                         'clickedUserId' => $clickedUserId,
-                        'reviewedUserId' => 0
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
                     ]);
                 }
             } else {
@@ -446,7 +452,8 @@ class ProjectsController extends Controller
                     'role' => $role,
                     'messages' => $messages3,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
-                    'clickedUserId' => $clickedUserId
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
                 ]);
             }
         } else {
@@ -457,7 +464,8 @@ class ProjectsController extends Controller
                         'role' => $role,
                         'messages' => $messages3,
                         'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
-                        'clickedUserId' => $clickedUserId
+                        'clickedUserId' => $clickedUserId,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
                     ]); 
                 } else {
                     return redirect('/roles/' . $routeParameters['roleSlug']);
@@ -468,7 +476,8 @@ class ProjectsController extends Controller
                     'role' => $role,
                     'messages' => $messages3,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
-                    'clickedUserId' => $clickedUserId
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
                 ]); 
             }
         }
@@ -487,7 +496,8 @@ class ProjectsController extends Controller
         return view('projects.edit', [
             'project' => $project,
             'role' => $role,
-            'competencyIdArray' => $competencyIdArray
+            'competencyIdArray' => $competencyIdArray,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 
@@ -501,10 +511,13 @@ class ProjectsController extends Controller
             }
 
             return view('projects.create', [
-                'selectedRole' => $selectedRole
+                'selectedRole' => $selectedRole,
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             ]);
         } else {
-            return view('projects.apply');
+            return view('projects.apply', [
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            ]);
         }
     }
 
@@ -537,7 +550,8 @@ class ProjectsController extends Controller
                 'role' => $role,
                 'messages' => $messages3,
                 'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
-                'clickedUserId' => $clickedUserId
+                'clickedUserId' => $clickedUserId,
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             ]);
         } else {
             return view('projects.show', [
@@ -545,7 +559,8 @@ class ProjectsController extends Controller
                 'role' => $role,
                 'messages' => $messages3,
                 'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
-                'clickedUserId' => $clickedUserId
+                'clickedUserId' => $clickedUserId,
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             ]);
         }
     }
@@ -595,7 +610,8 @@ class ProjectsController extends Controller
         $roles = Role::select('id', 'title')->orderBy('title', 'asc')->get();
 
         return view('projects.selectRole', [
-            'roles' => $roles
+            'roles' => $roles,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 

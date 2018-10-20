@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Experience;
 use App\User;
+use App\Message;
+
 
 use Illuminate\Support\Facades\Storage;
 

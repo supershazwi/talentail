@@ -114,7 +114,8 @@ class MessagesController extends Controller
             'users' => $users,
             'projectUsers' => $projectUsers,
             'messages' => null,
-            'userProjectObjectArray' => $allNewArray
+            'userProjectObjectArray' => $allNewArray,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 
@@ -194,13 +195,20 @@ class MessagesController extends Controller
             $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
         }
 
+        foreach($messages as $message) {
+            $message->read = true;
+
+            $message->save();
+        }
+
 
         return view('messages.index', [
             'users' => $users,
             'userProjectObjectArray' => $allNewArray,
             'messages' => $messages,
             'messageChannel' => 'messages_'.$subscribeString,
-            'clickedUserId' => $clickedUserId
+            'clickedUserId' => $clickedUserId,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 
@@ -281,13 +289,20 @@ class MessagesController extends Controller
             $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
         }
 
+        foreach($messages as $message) {
+            $message->read = true;
+
+            $message->save();
+        }
+
         return view('messages.index', [
             'users' => $users,
             'userProjectObjectArray' => $allNewArray,
             'messages' => $messages,
             'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$clickedProjectId,
             'clickedUserId' => $clickedUserId,
-            'clickedProject' => Project::find($clickedProjectId)
+            'clickedProject' => Project::find($clickedProjectId),
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 

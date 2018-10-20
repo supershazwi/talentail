@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Company;
+use App\Message;
 
 class CompaniesController extends Controller
 {
@@ -17,12 +19,15 @@ class CompaniesController extends Controller
         $companies = Company::all();
 
     	return view('companies.index', [
-            'companies' => $companies
+            'companies' => $companies,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 
     public function create() {
-    	return view('companies.create');
+    	return view('companies.create', [
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        ]);
     }
 
     public function store() {
@@ -47,7 +52,8 @@ class CompaniesController extends Controller
         $company = Company::where('slug', $slug)->first();
 
         return view('companies.show', [
-            'company' => $company
+            'company' => $company,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 }

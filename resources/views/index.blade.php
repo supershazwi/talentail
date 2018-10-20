@@ -7,6 +7,7 @@
   background: linear-gradient(to right, #3a7bd5, #3a6073); border-radius: 0px;">
     <div>
         <div class="row">
+            @if(Auth::id() == null)
             <div class="col-lg-1" style="margin-bottom: 1.5rem;">
 
             </div>
@@ -17,6 +18,7 @@
             <div class="col-lg-1" style="margin-bottom: 1.5rem;">
 
             </div>
+            
             <div class="col-lg-4" style="margin-bottom: 1.5rem;">
                 <div class="card mb-3">
                     <div class="card-body">
@@ -69,9 +71,20 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col-lg-1" style="margin-bottom: 1.5rem;">
 
             </div>
+
+            @else
+                <div class="col-lg-3" style="margin-bottom: 1.5rem;">
+
+                </div>
+                <div class="col-lg-6" style="margin-bottom: 1.5rem; text-align: center;">
+                    <h1 style="font-size: 58px; color: white; font-weight: bold;">Discover real world projects & build a portfolio</h1>
+                    <p style="color: white !important;">Talentail is the platform for you to not just say what you can do but show what you can do. Portfolios are not meant for just creative professionals.</p>
+                </div>
+            @endif
         </div>
     </div>
 </div>    

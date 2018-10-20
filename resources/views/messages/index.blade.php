@@ -69,7 +69,11 @@
                         </li>
                         @if(Auth::id())
                         <li class="nav-item">
-                            <a class="nav-link" href="/messages">Messages</a>
+                            <a class="nav-link" href="/messages">Messages
+                                @if($messageCount > 0)
+                                    <span class="badge badge-primary" style="margin-left: 0.5rem;">{{$messageCount}}</span>
+                                @endif
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/notifications">Notifications</a>
@@ -247,7 +251,7 @@
                         @if($messages != null && request()->route()->parameters['userId'] != null)
                             @if(Request::route('projectId'))
                                 <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
-                                    {{$clickedProject->title}}
+                                    <strong>Project: </strong>{{$clickedProject->title}}
                                 </div>
                             @endif
                             <div class="chat-module-top">

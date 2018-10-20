@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Competency;
 use App\Role;
+use App\Message;
+
 
 class CompetenciesController extends Controller
 {
@@ -18,12 +21,15 @@ class CompetenciesController extends Controller
         $roles = Role::all();
 
         return view('competencies.index', [
-            'roles' => $roles
+            'roles' => $roles,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 
     public function create() {
-    	return view('competencies.create');
+    	return view('competencies.create', [
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        ]);
     }
 
     public function store() {

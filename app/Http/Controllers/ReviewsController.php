@@ -59,11 +59,13 @@ class ReviewsController extends Controller
                 'project' => $project,
                 'role' => $role,
                 'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get()[0],
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             ]);
         } else {
             return view('reviews.create', [
                 'project' => $project,
                 'role' => $role,
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             ]);
         }
     }

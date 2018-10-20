@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Opportunity;
 use App\Role;
 use App\Company;
+use App\Message;
+
 
 class OpportunitiesController extends Controller
 {
@@ -21,7 +24,8 @@ class OpportunitiesController extends Controller
 
         return view('opportunities.create', [
             'roles' => $roles,
-            'companies' => $companies
+            'companies' => $companies,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 
@@ -46,7 +50,8 @@ class OpportunitiesController extends Controller
         $opportunity = Opportunity::where('slug', $slug)->first();
 
         return view('opportunities.show', [
-            'opportunity' => $opportunity
+            'opportunity' => $opportunity,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 }

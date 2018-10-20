@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 use App\Notification;
+use App\Message;
+
 
 class NotificationController extends Controller
 {   
@@ -25,6 +27,7 @@ class NotificationController extends Controller
         
         return view('notifications', [
             'notifications' => $notifications,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
 

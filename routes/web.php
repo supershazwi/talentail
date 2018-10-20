@@ -23,6 +23,7 @@ use App\Mail\SendContactMail;
 use App\Experience;
 use App\User;
 use App\RoleGained;
+use App\Message;
 use App\ContactMessage;
 use App\CreatorApplication;
 use App\AttemptedProject;
@@ -34,11 +35,15 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
 Route::get('privacy-policy', function() {
-    return view('privacy');
+    return view('privacy',[
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
 });
 
 Route::get('terms-and-conditions', function() {
-    return view('terms');
+    return view('terms', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
 });
 
 Route::get('/verifyuser', function() {
@@ -77,14 +82,17 @@ Route::get('/bridge', function() {
 
     $pusher->trigger('my-channel', 'my-event', array('message' => 'hello world'));
 
-    return view('welcome');
+    return view('welcome', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
 });
 
 Route::get('/creators', function() {
     $creators = User::where('creator', 1)->get();
 
     return view('creators.index', [
-        'creators' => $creators
+        'creators' => $creators,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
     ]);
 });
 
@@ -110,7 +118,8 @@ Route::get('/profile/edit', function() {
     }
 
     return view('edit-profile', [
-        'user' => $user
+        'user' => $user,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
     ]);
 })->middleware('auth');
 
@@ -127,7 +136,8 @@ Route::get('/profile/{profileId}', function() {
     return view('profile', [
         'user' => $user,
         'rolesGained' => $rolesGained,
-        'attemptedProjects' => $attemptedProjects
+        'attemptedProjects' => $attemptedProjects,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
     ]);
 });
 
@@ -194,12 +204,15 @@ Route::get('/profile', function() {
 	return view('profile', [
         'user' => $user,
         'rolesGained' => $rolesGained,
-        'attemptedProjects' => $attemptedProjects
+        'attemptedProjects' => $attemptedProjects,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
     ]);
 })->middleware('auth');
 
 Route::get('/about-us', function() {
-    return view('about-us');
+    return view('about-us', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
 });
 
 Route::post('contact-us', function(Request $request) {
@@ -217,7 +230,9 @@ Route::post('contact-us', function(Request $request) {
 });
 
 Route::get('/contact-us', function() {
-    return view('contact-us');
+    return view('contact-us', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
 });
 
 // Route::get('/notifications', function() {
@@ -225,7 +240,9 @@ Route::get('/contact-us', function() {
 // });
 
 Route::get('/faq', function() {
-    return view('faq');
+    return view('faq', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
 });
 
 Route::get('/file-upload', function() {
@@ -256,7 +273,8 @@ Route::post('/settings', function() {
     $user->save();
 
 	return view('settings', [
-		'user' => $user
+		'user' => $user,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
 	]);
 })->middleware('auth');
 
@@ -264,13 +282,9 @@ Route::get('/settings', function() {
     $user = Auth::user();
 
 	return view('settings', [
-		'user' => $user
+		'user' => $user,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
 	]);
-})->middleware('auth');
-
-Route::get('/messages/testtesttest', function() {
-    return view('messages.test', [
-    ]);
 })->middleware('auth');
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -322,7 +336,9 @@ Route::resources([
 ]);
 
 Route::get('/', function() {
-	return view('index');
+	return view('index', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
 });
 
 Auth::routes();
