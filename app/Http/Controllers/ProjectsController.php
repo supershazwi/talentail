@@ -451,7 +451,17 @@ class ProjectsController extends Controller
             }
         } else {
             if($project->published == 0 && $project->user_id != Auth::id()) {
-                return redirect('/roles/' . $routeParameters['roleSlug']);
+                if(Auth::user()->admin) {
+                    return view('projects.show', [
+                        'project' => $project,
+                        'role' => $role,
+                        'messages' => $messages3,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId
+                    ]); 
+                } else {
+                    return redirect('/roles/' . $routeParameters['roleSlug']);
+                }
             } else {
                 return view('projects.show', [
                     'project' => $project,
