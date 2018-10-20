@@ -601,6 +601,7 @@ class ProjectsController extends Controller
     }
 
     public function selectRole() {
+        // dd()
         if(request('role') != null) {
             $roleId = request('role');
             session(['selectedRole' => $roleId]);
