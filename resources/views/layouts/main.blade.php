@@ -36,41 +36,14 @@
 
 	  gtag('config', 'UA-122657233-1');
 	</script>
-
-	<style media="screen" type="text/css">
-	html,
-	body {
-		margin:0;
-		padding:0;
-		height:100%;
-	}
-	#container {
-		min-height:100%;
-		position:relative;
-	}
-	#header {
-		background:#ff0;
-	}
-	#body {
-		padding-bottom: 205px;	/* Height of the footer */
-	}
-	#footer {
-		position:absolute;
-		bottom:0;
-		width:100%;
-		height: 205px;			/* Height of the footer */
-		background-color: white; 
-		border-top: 1px solid #E5E5E5;
-	}
-	</style>
 </head>
 
 <body>
-	<div class="layout layout-nav-top" id="container">
+	<div class="layout layout-nav-top">
 		@if(Request::path() == "/")
-	    <div class="navbar navbar-expand-lg" style="background: #3a7bd5; background: -webkit-linear-gradient(to right, #3a7bd5, #3a6073); background: linear-gradient(to right, #3a7bd5, #3a6073);" id="header">
+	    <div class="navbar navbar-expand-lg" style=" background: #3a7bd5; background: -webkit-linear-gradient(to right, #3a7bd5, #3a6073); background: linear-gradient(to right, #3a7bd5, #3a6073);">
 	    @else
-	    <div class="navbar navbar-expand-lg sticky-top" style="background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;" id="header">
+	    <div class="navbar navbar-expand-lg sticky-top" style="background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;">
 	    @endif
 	        <a class="navbar-brand" href="/">
 	            <img alt="Pipeline" src="/img/logo.svg" />
@@ -194,29 +167,30 @@
 	            </div>
 	        </div>
 	    </div>
-	    <div class="main-container" id="body">
+	    <div class="main-container">
 	    	@include('toast::messages')
 	        @yield('content')
-	    </div>
-        <div id="footer">
-	        <div style="padding: 1.5rem 1.5rem 1.5rem 1.5rem;">
-			    <div class="row">
-			        <div class="col-lg-4">
-	                	<h5>Talentail</h5>
-	                	<p class="text-small" style="font-weight: bold;">The platform to achieve greater control over one's career</p>
-	                	<p class="text-small">At Talentail, we believe that everyone should be given an equal opportunity to control their career paths and ultimately their happiness. Therefore, creators have come together to design projects and provide you with real world experience.</p>
-	                </div>
-			        <div class="col-lg-2">
-						<a href="/about-us" style="font-size: .875rem;">About Us</a><br />
-						<a href="/contact-us" style="font-size: .875rem;">Contact Us</a><br />
-						<a href="/faq" style="font-size: .875rem;">Frequently Asked Questions</a>
-	                </div>
-			        <div class="col-lg-3">
-						<a href="/terms-and-conditions" style="font-size: .875rem;">Terms & Conditions</a><br />
-						<a href="/privacy-policy" style="font-size: .875rem;">Privacy Policy</a><br />
-	                </div>
-	            </div>
-	        </div>
+	        <div style="width: 100%; background-color: white; border-top: 1px solid #E5E5E5;">
+		        <div style="padding: 1.5rem 1.5rem;">
+				    <div class="row">
+				        <div class="col-lg-4">
+		                	<h5>Talentail</h5>
+		                	<p class="text-small" style="font-weight: bold;">The platform to achieve greater control over one's career</p>
+		                	<p class="text-small">At Talentail, we believe that everyone should be given an equal opportunity to control their career paths and ultimately their happiness. Therefore, creators have come together to design projects and provide you with real world experience.</p>
+		                </div>
+				        <div class="col-lg-2">
+							<a href="/about-us" style="font-size: .875rem;">About Us</a><br />
+							<a href="/contact-us" style="font-size: .875rem;">Contact Us</a><br />
+							<a href="/faq" style="font-size: .875rem;">Frequently Asked Questions</a>
+		                </div>
+				        <div class="col-lg-3">
+							<a href="/terms-and-conditions" style="font-size: .875rem;">Terms & Conditions</a><br />
+							<a href="/privacy-policy" style="font-size: .875rem;">Privacy Policy</a><br />
+		                </div>
+		            </div>
+		            </div>
+		        </div>
+		    </div>
 	    </div>
 	</div>
 
