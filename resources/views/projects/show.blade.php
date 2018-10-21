@@ -12,6 +12,8 @@
             <button onclick="toggleVisibilityProject()" class="btn btn-primary">Publish Project</button>
           @endif
           <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
+        @elseif(Auth::user()->admin)
+          <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
         @else
             <button class="btn btn-link" style="color: #6c757d;"><strong>${{$project->amount}}</strong></button>
             <button onclick="purchaseProject()" class="btn btn-success">Purchase</button>

@@ -820,7 +820,9 @@ class ProjectsController extends Controller
         $project->description = $request->input('description');
         $project->brief = $request->input('brief');
         $project->slug = str_slug($request->input('title'), '-');
-        $project->user_id = Auth::id();
+        if(!Auth::user()->admin) {
+            $project->user_id = Auth::id();
+        }
         $project->hours = $request->input('hours');
         $project->amount = $request->input('price');
 
