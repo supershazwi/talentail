@@ -63,9 +63,9 @@
 	                        @endif
 	                    </a>
 	                    <div class="dropdown-menu dropdown-menu-right">
-	                        <a href="nav-side-user.html" class="dropdown-item">Profile</a>
-	                        <a href="utility-account-settings.html" class="dropdown-item">Account Settings</a>
-	                        <a href="#" class="dropdown-item">Log Out</a>
+	                        <a href="/profile" class="dropdown-item">Profile</a>
+	                        <a href="/settings" class="dropdown-item">Account Settings</a>
+	                        <a href="/logout" class="dropdown-item">Log Out</a>
 	                    </div>
 	                </div>
 	            </div>
