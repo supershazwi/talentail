@@ -158,7 +158,11 @@
                                                 @foreach($users as $user)
                                                 <a class="list-group-item list-group-item-action" href="/messages/{{$user->id}}">
                                                     <div class="media media-member mb-0">
-                                                        <img alt="Claire Connors" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar" />
+                                                        @if($user->avatar)
+                                                        <img alt="{{$user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar" />
+                                                        @else
+                                                        <img alt="Image" src="/img/avatar.png" class="avatar" />
+                                                        @endif
                                                         <div class="media-body">
                                                             <h6 class="mb-0" data-filter-by="text">{{$user->name}}</h6>
                                                         </div>
@@ -228,7 +232,11 @@
                                                 @foreach($userProjectObjectArray as $userProjectObject)
                                                 <a class="list-group-item list-group-item-action" href="/messages/{{$userProjectObject->user->id}}/projects/{{$userProjectObject->project->id}}">
                                                     <div class="media media-member mb-0">
-                                                        <img alt="Claire Connors" src="https://storage.cloud.google.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar" />
+                                                        @if($user->avatar)
+                                                        <img alt="{{$userProjectObject->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar" />
+                                                        @else
+                                                        <img alt="Image" src="/img/avatar.png" class="avatar" />
+                                                        @endif
                                                         <div class="media-body">
                                                             <h6 class="mb-0" data-filter-by="text">{{$userProjectObject->user->name}}</h6>
                                                             <span class="badge badge-warning" style="width: 170px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">{{$userProjectObject->project->title}}</span>
@@ -268,7 +276,11 @@
                                 <div class="chat-module-body" id="newMessagesDiv">
                                     @foreach($messages as $message)
                                     <div class="media chat-item">
+                                        @if($user->avatar)
                                         <img alt="{{$message->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
+                                        @else
+                                        <img alt="Image" src="/img/avatar.png" class="avatar" />
+                                        @endif
                                         <div class="media-body">
                                             <div class="chat-item-title">
                                                 <span class="chat-item-author" data-filter-by="text">
@@ -357,7 +369,11 @@
 
                 var channel = pusher.subscribe(document.getElementById("messageChannel").value);
                 channel.bind('new-message', function(data) {
-                    document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+                    if(data.avatar == "") {
+                     document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='/img/avatar.png' class='avatar'><div class='media-body'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+                    } else {
+                      document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+                    }
                     
                     document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;
                     
