@@ -124,7 +124,7 @@
                                 <div class="col-auto">
                                     <h3>Gathered Roles</h3>
                                 </div>
-                                <form class="col-md-auto">
+                                <!-- <form class="col-md-auto">
                                     <div class="input-group input-group-round">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
@@ -133,7 +133,7 @@
                                         </div>
                                         <input type="search" class="form-control filter-list-input" placeholder="Filter roles" aria-label="Filter roles" aria-describedby="filter-roles">
                                     </div>
-                                </form>
+                                </form> -->
                             </div>
                             @if(count($rolesGained) > 0)   
                             <div class="content-list-body row">
@@ -182,7 +182,7 @@
                                 <div class="col-auto">
                                     <h3>Gathered Roles</h3>
                                 </div>
-                                <form class="col-md-auto">
+                                <!-- <form class="col-md-auto">
                                     <div class="input-group input-group-round">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
@@ -191,7 +191,7 @@
                                         </div>
                                         <input type="search" class="form-control filter-list-input" placeholder="Filter roles" aria-label="Filter roles" aria-describedby="filter-roles">
                                     </div>
-                                </form>
+                                </form> -->
                             </div>
                             @if(count($rolesGained) > 0)   
                             <div class="content-list-body row">
@@ -241,7 +241,7 @@
                                     <div class="col-auto">
                                         <h3>Attempted Projects</h3>
                                     </div>
-                                    <form class="col-md-auto">
+                                    <!-- <form class="col-md-auto">
                                         <div class="input-group input-group-round">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
@@ -250,7 +250,7 @@
                                             </div>
                                             <input type="search" class="form-control filter-list-input" placeholder="Filter projects" aria-label="Filter Projects" aria-describedby="filter-projects">
                                         </div>
-                                    </form>
+                                    </form> -->
                                 </div>
                                 <!--end of content list head-->
                                 @if(count($attemptedProjects) > 0) 
@@ -302,7 +302,7 @@
                                         <a href="/projects/select-role" class="btn btn-primary" style="margin-left: 1.5rem;">Create Project</a>
                                         @endif
                                     </div>
-                                    <form class="col-md-auto">
+                                    <!-- <form class="col-md-auto">
                                         <div class="input-group input-group-round">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
@@ -311,7 +311,7 @@
                                             </div>
                                             <input type="search" class="form-control filter-list-input" placeholder="Filter projects" aria-label="Filter Projects" aria-describedby="filter-projects">
                                         </div>
-                                    </form>
+                                    </form> -->
                                 </div>
                                 <!--end of content list head-->
                                 @if(count($user->projects) > 0)
@@ -355,7 +355,7 @@
                                     <div class="col-auto">
                                         <h3>Reviews</h3>
                                     </div>
-                                    <form class="col-md-auto">
+                                   <!--  <form class="col-md-auto">
                                         <div class="input-group input-group-round">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
@@ -364,7 +364,7 @@
                                             </div>
                                             <input type="search" class="form-control filter-list-input" placeholder="Filter projects" aria-label="Filter Projects" aria-describedby="filter-projects">
                                         </div>
-                                    </form>
+                                    </form> -->
                                 </div>
                                 <!--end of content list head-->
                                 @if(count($user->received_reviews) > 0)

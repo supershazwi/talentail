@@ -319,7 +319,8 @@ var mrFilterList = function ($) {
       var filterInput = this.element.querySelector("." + Selector.FILTER_INPUT); // Store reference to data-filter-list element on the input itself
 
       $(filterInput).data(DATA_KEY, this);
-      // filterInput.addEventListener('paste', this.searchLists, false); // Handle submit to disable page reload
+      filterInput.addEventListener('keyup', this.searchLists, false);
+      filterInput.addEventListener('paste', this.searchLists, false); // Handle submit to disable page reload
 
       filterInput.closest('form').addEventListener('submit', function (evt) {
         if (evt.preventDefault) {// evt.preventDefault();
