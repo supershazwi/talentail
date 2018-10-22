@@ -50,7 +50,11 @@
                               
                               <p style="margin-top: 0.5rem;">{{$project->description}}</p>
                               <a href="/profile/{{$project->user->id}}" data-toggle="tooltip" data-placement="top" title="">
+                                  @if($project->user->avatar)
                                   <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$project->user->avatar}}">
+                                  @else
+                                  <img class="avatar" src="/img/avatar.png">
+                                  @endif
                               </a>
                               <a href="/profile/{{$project->user->id}}">
                                 <span style="font-size: .875rem; line-height: 1.3125rem;">{{$project->user->name}}</span>
