@@ -5,201 +5,37 @@
   <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
     You are currently creating a project for <strong>{{$selectedRole->title}}</strong>.<a href="/projects/select-role" style="float: right;">Select different role</a>
   </div>
-  <a href="/projects/clone" class="btn btn-primary pull-right" style="margin-right: 1.5rem;">Check Sample Projects</a>
   @endif
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
-                <h1 class="display-4 mb-3">Create a {{$selectedRole->title}} Project</h1>
-                <p class="lead">{{$selectedRole->description}}</p>
+                <h1 class="display-4 mb-3">Clone a Sample Project</h1>
+                <p class="lead">We have populated several sample projects to make it easier for you to create your own project. Dive into the details of the project to check whether it is similar to the project you would like to create.</p>
             </section>
-            @if (($errors->has('title') && strlen($errors->first('title')) > 0) || $errors->has('description') && strlen($errors->first('description')) > 0 || $errors->has('brief') && strlen($errors->first('brief')) > 0 || $errors->has('hours') && strlen($errors->first('hours')) > 0 || $errors->has('price') && strlen($errors->first('price')) > 0 || $errors->has('competency') && strlen($errors->first('competency')) > 0)
-            <div class="alert alert-danger">
-              @if ($errors->has('title') && strlen($errors->first('title')) > 0)
-                <p style="color: #721c24 !important;">The title field is required to determine the custom url of the project.</p>
-              @endif
-              @if ($errors->has('description') && strlen($errors->first('description')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('description') }}</p>
-              @endif
-              @if ($errors->has('brief') && strlen($errors->first('brief')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('brief') }}</p>
-              @endif
-              @if ($errors->has('hours') && strlen($errors->first('hours')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('hours') }}</p>
-              @endif
-              @if ($errors->has('price') && strlen($errors->first('price')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('price') }}</p>
-              @endif
-              @if ($errors->has('competency') && strlen($errors->first('competency')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('competency') }}</p>
-              @endif
-            </div>
-            @endif
-            <form id="projectForm" method="POST" action="/projects" enctype="multipart/form-data">
-            @csrf
-              <h3 style="margin-top: 1.5rem;">Project Title</h3>
-              <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" value="{{ old('title') }}" autofocus>
-              <h3 style="margin-top: 1.5rem;">Project Description</h3>
-              <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description">{{ old('description') }}</textarea>
-              <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
-                  <li class="nav-item">
-                      <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Step 1: Brief</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="false">Step 2: Tasks</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Step 3: Files</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#competencies" role="tab" aria-controls="competencies" aria-selected="false">Step 4: Competencies</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#miscellaneous" role="tab" aria-controls="miscellaneous" aria-selected="false">Step 5: Miscellaneous</a>
-                  </li>
-              </ul>
-              <div class="tab-content">
-                <div class="tab-pane fade show active" id="brief" role="tabpanel" aria-labelledby="brief-tab" data-filter-list="card-list-body">
-                    <div class="row content-list-head">
-                        <div class="col-auto">
-                            <h3>Role Brief</h3>
-                        </div>
-                    </div>
-                    <div class="content-list-body">
-                        <div class="card">
-                          <div class="card-body">
-                            <div id="layout">
-                                <div id="test-editormd3" style="border-radius: 0.5rem;">
-                                    <textarea style="display:none;" name="brief"></textarea>
-                                </div>
-                                <div id="old-brief" style="display: none;">{{ old('brief') }}</div>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                    <!--end of content list-->
-                </div>
-                <div class="tab-pane fade" id="tasks" role="tabpanel" aria-labelledby="tasks-tab" data-filter-list="card-list-body">
-                    <div class="row content-list-head">
-                        <div class="col-auto">
-                            <h3>Tasks</h3>
-                            <button class="btn btn-primary" style="margin-left: 1.5rem;" onclick="addTask()">Add Task</button>
-                        </div>
-                    </div>
-                    <!-- <span class="dz-message">No tasks added yet</span> -->
-                    <div class="content-list-body">
-                      <div class="accordion task-accordion" id="tasksList_1">
+            <div class="content-list-body row">
+                @foreach($projects as $project)
+                <div class="col-lg-12">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="col-lg-10" style="float: left; padding: 0px;">
+                        <h5><a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}">{{$project->title}}</a></h5>
+                        <p style="margin-top: 0.5rem;">{{$project->description}}</p>
+                        <a href="#" data-toggle="tooltip" data-placement="top" title="">
+                          <img class="avatar" src="/img/avatar.png">
+                        </a>
+                        <a href="#">
+                          <span style="font-size: .875rem; line-height: 1.3125rem;">Team Talentail</span>
+                        </a>
+                      </div>
+                      <div class="col-lg-1" style="text-align: center; float: right; padding: 0px;">
+                        <h5 style="float: right; color: #16a085;">${{$project->amount}}</h5>
                       </div>
                     </div>
-                    <!--end of content list-->
+                  </div>
                 </div>
-                <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab" data-filter-list="dropzone-previews">
-                    <div class="content-list">
-                        <div class="row content-list-head">
-                            <div class="col-auto">
-                                <h3>Files</h3>
-                            </div>
-                        </div>
-                        <!--end of content list head-->
-                        <div class="content-list-body row">
-                            <div class="col">
-                                <div class="box">
-                                  <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; margin-bottom: 1.5rem;"/>
-                                  <label for="file-1" style="position: absolute; left: 0; margin-left: 12px; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.2rem 1.25rem; height: 36px;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
-                                </div>
-                                <div id="selectedFiles"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end of content list-->
-                </div>
-                <div class="tab-pane fade" id="competencies" role="tabpanel" aria-labelledby="competencies-tab">
-                    <div class="content-list">
-                        <div class="row content-list-head">
-                            <div class="col-auto">
-                                <h3>Competencies</h3>
-                            </div>
-                        </div>
-                        <!--end of content list head-->
-                        <div class="content-list-body">
-                          @foreach($selectedRole->competencies as $competency)
-                            <div class="row">
-                                <div class="form-group col">
-                                    <div class="form-check">
-                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}">
-                                      <p>
-                                        {{$competency->title}}
-                                      </p>
-                                    </div>
-                                </div>
-                                <!--end of form group-->
-                            </div>
-                          @endforeach
-                        </div>
-                    </div>
-                    <!--end of content list-->
-                </div>
-                <div class="tab-pane fade" id="competencies" role="tabpanel" aria-labelledby="competencies-tab">
-                    <div class="content-list">
-                        <div class="row content-list-head">
-                            <div class="col-auto">
-                                <h3>Competencies</h3>
-                            </div>
-                        </div>
-                        <!--end of content list head-->
-                        <div class="content-list-body">
-                          @foreach($selectedRole->competencies as $competency)
-                            <div class="row">
-                                <div class="form-group col">
-                                    <input type="checkbox" name="competency[]" value="{{$competency->id}}">
-                                    <p class="text-small" style="margin-left: 0.5rem;">{{$competency->title}}</p>
-                                </div>
-                                <!--end of form group-->
-                            </div>
-                          @endforeach
-                        </div>
-                    </div>
-                    <!--end of content list-->
-                </div>
-                <div class="tab-pane fade" id="miscellaneous" role="tabpanel" aria-labelledby="miscellaneous-tab">
-                    <div class="content-list">
-                        <div class="row content-list-head">
-                            <div class="col-auto">
-                                <h3>Miscellaneous</h3>
-                            </div>
-                        </div>
-                        <!--end of content list head-->
-                        <div class="content-list-body">
-                          <h5 style="margin-top: 1.5rem;">Project Price</h5>
-                          <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text" id="basic-addon1">$</span>
-                            </div>
-                            <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1" name="price" value="{{ old('price') }}">
-                          </div>
-                          <h5 style="margin-top: 1.5rem;">Project Duration</h5>
-                          <div class="input-group mb-3">
-                            <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Recipient's username" aria-describedby="basic-addon2" name="hours" value="{{ old('hours') }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text" id="basic-addon2">hours</span>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                    <!--end of content list-->
-                </div>
-              </div>
-              <div style="margin-top: 1.5rem !important;">
-                <button class="btn btn-primary" id="createProject" type="submit" style="float: right; display: none;">Create Project</button>
-                <button class="btn btn-default" id="saveProject" type="submit" style="float: right; margin-right: 0.5rem; display: none;">Save</button>
-                <button class="btn btn-default" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
-              </div>
-              
-            </form>
-            <!-- <button class="btn btn-primary pull-right" onclick="createProject()">Publish Project</button> -->
-              <button class="btn btn-primary pull-right" onclick="saveProject()" style="margin-right: 0.5rem;">Save Project</button>
-              <button class="btn btn-default pull-right" onclick="cancel()" style="margin-right: 0.5rem;">Cancel</button>
+                @endforeach
+            </div>
           </div>
       </div>
   </div>

@@ -5,22 +5,26 @@
       <nav aria-label="breadcrumb">
       </nav>
       @if(Auth::id())
-        @if($project->user_id == Auth::id())
-          @if($project->published)
-            <button onclick="toggleVisibilityProject()" class="btn btn-primary">Make Private</button>
-          @else
-            <button onclick="toggleVisibilityProject()" class="btn btn-primary">Publish Project</button>
-          @endif
-          <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
-        @elseif(Auth::user()->admin)
-          <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
+        @if($project->sample)
+          <button onclick="cloneProject()" class="btn btn-primary">Clone Project</button>
         @else
-            <button class="btn btn-link" style="color: #6c757d;"><strong>${{$project->amount}}</strong></button>
-            <button onclick="purchaseProject()" class="btn btn-success">Purchase</button>
+          @if($project->user_id == Auth::id())
+            @if($project->published)
+              <button onclick="toggleVisibilityProject()" class="btn btn-primary">Make Private</button>
+            @else
+              <button onclick="toggleVisibilityProject()" class="btn btn-primary">Publish Project</button>
+            @endif
+            <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
+          @elseif(Auth::user()->admin)
+            <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
+          @else
+              <button class="btn btn-link" style="color: #6c757d;"><strong>${{$project->amount}}</strong></button>
+              <button onclick="purchaseProject()" class="btn btn-success">Purchase</button>
+          @endif
         @endif
       @endif
   </div>
-  @if(!$project->published)
+  @if(!$project->published && !$project->sample)
   <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
     This project is <strong>private</strong>.
   </div>
@@ -47,6 +51,19 @@
     @endif
   </div>
   @endif
+  <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/clone" id="cloneProject">
+    @csrf
+    <input type="hidden" name="project_id" value="{{$project->id}}" />
+    <input type="hidden" name="title" value="{{$project->title}}" />
+    <input type="hidden" name="competency" value="{{$project->competencies}}" />
+    <input type="hidden" name="description" value="{{$project->description}}" />
+    <input type="hidden" name="brief" value="{{$project->brief}}" />
+    <input type="hidden" name="price" value="{{$project->amount}}" />
+    <input type="hidden" name="hours" value="{{$project->hours}}" />
+    <input type="hidden" name="role_slug" value="{{$project->role->slug}}" />
+    <input type="hidden" name="project_slug" value="{{$project->slug}}" />
+    <button type="submit" style="display: none;" id="cloneProjectButton">Submit</button>
+  </form>
   <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/toggle-visibility-project" id="toggleVisibilityProject">
     @csrf
     <input type="hidden" name="project_id" value="{{$project->id}}" />
@@ -401,6 +418,10 @@
 
     function toggleVisibilityProject() {
       document.getElementById("toggleVisibilityProjectButton").click();
+    }
+
+    function cloneProject() {
+      document.getElementById("cloneProjectButton").click();
     }
 
     function purchaseProject() {

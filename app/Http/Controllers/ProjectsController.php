@@ -323,6 +323,19 @@ class ProjectsController extends Controller
         }
     }
 
+    public function cloneProject(Request $request) {
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug', 'description')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $competencyIdArray = $project->competencies->toArray();
+        foreach($competencyIdArray as $key=>$competencyArray) {
+            $competencyIdArray[$key] = $competencyArray['id'];
+        }
+
+        return redirect('/roles/' . $role->slug . '/projects/' . $project->slug . '/edit');
+    }
+
     public function show($slug) {
         $loggedInUserId = Auth::id();
 
@@ -620,7 +633,7 @@ class ProjectsController extends Controller
 
         // need to validate inputs first before trying to store to database
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:projects, title',
             'description' => 'required',
             'brief' => 'required',
             'hours' => 'required',
@@ -721,7 +734,7 @@ class ProjectsController extends Controller
 
         // need to validate inputs first before trying to store to database
         $validator = Validator::make($request->all(), [
-            'title' => 'required'
+            'title' => 'required|unique:projects, title'
         ]);
 
         if($validator->fails()) {
@@ -815,152 +828,248 @@ class ProjectsController extends Controller
 
     public function saveChanges(Request $request) {
         $project = Project::find($request->input('id'));
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
         
-        $project->title = $request->input('title');
-        $project->description = $request->input('description');
-        $project->brief = $request->input('brief');
-        $project->slug = str_slug($request->input('title'), '-');
-        if(!Auth::user()->admin) {
-            $project->user_id = Auth::id();
-        }
-        $project->hours = $request->input('hours');
-        $project->amount = $request->input('price');
+        if($project->sample) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:projects'
+            ]);
 
-        // detach all competencies so that i can reattach the new ones
-        $project->competencies()->detach();
-        $competencies = Competency::find($request->input('competency'));
-        $project->competencies()->attach($competencies);
-
-        $project->save();
-
-        // remove tasks if any
-        $removedTasksIdArray = $request->input('tasks-deleted');
-
-        if($removedTasksIdArray != null) {
-            $removedTasksIdArray = explode(",",$removedTasksIdArray);
-            foreach($removedTasksIdArray as $removedTaskId) {
-                Task::destroy($removedTaskId);
-                Answer::where('task_id', $removedTaskId)->delete();
+            if($validator->fails()) {
+                return redirect('/roles/' . $routeParameters['roleSlug'] . '/projects/' . $routeParameters['projectSlug'] . '/edit')
+                            ->withErrors($validator)
+                            ->withInput();
             }
-        }
+            
+            $newProject = new Project;
 
-        // go through each task so that the updated ones are in
-        $taskCounter = 1;
-        while($request->input('todo-title_'.$taskCounter) != null || $request->input('todo-description_'.$taskCounter) != null || $request->input('todo_'.$taskCounter) != null) {
+            $newProject->title = $request->input('title');
+            $newProject->description = $request->input('description');
+            $newProject->brief = $request->input('brief');
+            $newProject->slug = str_slug($request->input('title'), '-');
+            $newProject->role_id = session('selectedRole');
+            $newProject->user_id = Auth::id();
+            $newProject->hours = $request->input('hours');
+            $newProject->amount = $request->input('price');
+            $newProject->published = false;
 
-            // need to check the remaining tasks
-            // some are existing tasks that we do not want to change its id
-            // some are new tasks that need to be saved
+            $newProject->save();
 
-            // this is to check whether or not there is an existing id
-            if($request->input('task-id_'.$taskCounter)) {
-                // this means that this task exists
-                // need to update
-                $task = Task::find($request->input('task-id_'.$taskCounter));
-            } else {
+            $competencies = Competency::find($request->input('competency'));
+            $newProject->competencies()->attach($competencies);
+
+            $taskCounter = 1;
+            while($request->input('todo-title_'.$taskCounter) != null || $request->input('todo-description_'.$taskCounter) != null || $request->input('todo_'.$taskCounter) != null) {
+
                 $task = new Task;
-            }
 
-            $task->title = $request->input('todo-title_'.$taskCounter);
-            $task->description = $request->input('todo-description_'.$taskCounter);
+                $task->title = $request->input('todo-title_'.$taskCounter);
+                $task->description = $request->input('todo-description_'.$taskCounter);
 
-            if($request->input('todo_'.$taskCounter) == "mcq") {
-                $task->mcq = true;
-                $task->open_ended = false;
-                $task->na = false;
-            } else if($request->input('todo_'.$taskCounter) == "open-ended") {
-                $task->open_ended = true;
-                $task->mcq = false;
-                $task->na = false;
-            } else if($request->input('todo_'.$taskCounter) == "na") {
-                $task->na = true;
-                $task->mcq = false;
-                $task->open_ended = false;
-            }
-
-            if($request->input('checkbox-file-upload_'.$taskCounter) != null) {
-                $task->file_upload = true;
-            } else {
-                $task->file_upload = false;
-            }
-
-            if($request->input('checkbox-multiple-select_'.$taskCounter) != null) {
-                $task->multiple_select = true;
-            } else {
-                $task->multiple_select = false;
-            }
-
-            $task->project_id = $project->id;
-
-            $task->save();
-
-            // remove answers if any
-            $removedAnswersIdArray = $request->input('answers-deleted');
-
-            if($removedAnswersIdArray != null) {
-                $removedAnswersIdArray = explode(",",$removedAnswersIdArray);
-                foreach($removedAnswersIdArray as $removedAnswerId) {
-                    Answer::destroy($removedAnswerId);
+                if($request->input('todo_'.$taskCounter) == "mcq") {
+                    $task->mcq = true;
+                } else if($request->input('todo_'.$taskCounter) == "open-ended") {
+                    $task->open_ended = true;
+                } else if($request->input('todo_'.$taskCounter) == "na") {
+                    $task->na = true;
                 }
-            }
 
-            // add answers if any
-            if($request->input('todo_'.$taskCounter) == 'mcq') {
-                // need to check whether the answer we are looping already exist
-                // get the id, if there is, that means answer exist, so just update
-                // if no id, create new answer
+                if($request->input('checkbox-file-upload_'.$taskCounter) != null) {
+                    $task->file_upload = true;
+                }
 
-                $answerCounter = 1;
-                
-                while($request->input('answer_'.$taskCounter.'_'.$answerCounter) != null) {
+                if($request->input('checkbox-multiple-select_'.$taskCounter) != null) {
+                    $task->multiple_select = true;
+                }
 
-                    if($request->input('deleted-answer-id_'.$taskCounter.'_'.$answerCounter) != null) {
-                        $answer = Answer::find($request->input('deleted-answer-id_'.$taskCounter.'_'.$answerCounter));
-                    } else {
+                $task->project_id = $project->id;
+
+                $task->save();
+
+                if($request->input('todo_'.$taskCounter) == 'mcq') {
+                    $answerCounter = 1;
+
+                    while($request->input('answer_'.$taskCounter.'_'.$answerCounter) != null) {
                         $answer = new Answer;
+
+                        $answer->title = $request->input('answer_'.$taskCounter.'_'.$answerCounter);
+                        $answer->task_id = $task->id;
+
+                        $answer->save();
+
+                        $answerCounter++;
                     }
+                }
 
-                    $answer->title = $request->input('answer_'.$taskCounter.'_'.$answerCounter);
-                    $answer->task_id = $task->id;
+                $taskCounter++;
+            }
 
-                    $answer->save();
+            if($request->file('file-1')) {
+                for($fileCounter = 0; $fileCounter < count($request->file('file-1')); $fileCounter++) {
 
-                    $answerCounter++;
+                    $projectFile = new ProjectFile;
+
+                    $projectFile->title = $request->file('file-1')[$fileCounter]->getClientOriginalName();
+                    $projectFile->size = $request->file('file-1')[$fileCounter]->getSize();
+                    $projectFile->url = $request->file('file-1')[$fileCounter]->store('/assets', 'gcs');
+                    $projectFile->mime_type = $request->file('file-1')[$fileCounter]->getMimeType();
+                    $projectFile->project_id = $project->id;
+
+                    $projectFile->save();
                 }
             }
 
-            $taskCounter++;
-        }
+            $roleSlug = Role::find(session('selectedRole'))->slug;
 
-        // dissociate all removed files
-        $removedFilesIdArray = $request->input('files-deleted');
-
-        if($removedFilesIdArray != null) {
-            $removedFilesIdArray = explode(",",$removedFilesIdArray);
-            foreach($removedFilesIdArray as $removedFileId) {
-                ProjectFile::destroy($removedFileId);
+            return redirect('/roles/'.$roleSlug.'/projects/'.$project->slug);
+        } else {
+            $project->title = $request->input('title');
+            $project->description = $request->input('description');
+            $project->brief = $request->input('brief');
+            $project->slug = str_slug($request->input('title'), '-');
+            if(!Auth::user()->admin) {
+                $project->user_id = Auth::id();
             }
-        }
+            $project->hours = $request->input('hours');
+            $project->amount = $request->input('price');
 
-        // dd($request->file('file-1'));
+            // detach all competencies so that i can reattach the new ones
+            $project->competencies()->detach();
+            $competencies = Competency::find($request->input('competency'));
+            $project->competencies()->attach($competencies);
 
-        if($request->file('file-1')) {
-            for($fileCounter = 0; $fileCounter < count($request->file('file-1')); $fileCounter++) {
+            $project->save();
 
-                $projectFile = new ProjectFile;
+            // remove tasks if any
+            $removedTasksIdArray = $request->input('tasks-deleted');
 
-                $projectFile->title = $request->file('file-1')[$fileCounter]->getClientOriginalName();
-                $projectFile->size = $request->file('file-1')[$fileCounter]->getSize();
-                $projectFile->url = $request->file('file-1')[$fileCounter]->store('/assets', 'gcs');
-                $projectFile->mime_type = $request->file('file-1')[$fileCounter]->getMimeType();
-                $projectFile->project_id = $project->id;
-
-                $projectFile->save();
+            if($removedTasksIdArray != null) {
+                $removedTasksIdArray = explode(",",$removedTasksIdArray);
+                foreach($removedTasksIdArray as $removedTaskId) {
+                    Task::destroy($removedTaskId);
+                    Answer::where('task_id', $removedTaskId)->delete();
+                }
             }
+
+            // go through each task so that the updated ones are in
+            $taskCounter = 1;
+            while($request->input('todo-title_'.$taskCounter) != null || $request->input('todo-description_'.$taskCounter) != null || $request->input('todo_'.$taskCounter) != null) {
+
+                // need to check the remaining tasks
+                // some are existing tasks that we do not want to change its id
+                // some are new tasks that need to be saved
+
+                // this is to check whether or not there is an existing id
+                if($request->input('task-id_'.$taskCounter)) {
+                    // this means that this task exists
+                    // need to update
+                    $task = Task::find($request->input('task-id_'.$taskCounter));
+                } else {
+                    $task = new Task;
+                }
+
+                $task->title = $request->input('todo-title_'.$taskCounter);
+                $task->description = $request->input('todo-description_'.$taskCounter);
+
+                if($request->input('todo_'.$taskCounter) == "mcq") {
+                    $task->mcq = true;
+                    $task->open_ended = false;
+                    $task->na = false;
+                } else if($request->input('todo_'.$taskCounter) == "open-ended") {
+                    $task->open_ended = true;
+                    $task->mcq = false;
+                    $task->na = false;
+                } else if($request->input('todo_'.$taskCounter) == "na") {
+                    $task->na = true;
+                    $task->mcq = false;
+                    $task->open_ended = false;
+                }
+
+                if($request->input('checkbox-file-upload_'.$taskCounter) != null) {
+                    $task->file_upload = true;
+                } else {
+                    $task->file_upload = false;
+                }
+
+                if($request->input('checkbox-multiple-select_'.$taskCounter) != null) {
+                    $task->multiple_select = true;
+                } else {
+                    $task->multiple_select = false;
+                }
+
+                $task->project_id = $project->id;
+
+                $task->save();
+
+                // remove answers if any
+                $removedAnswersIdArray = $request->input('answers-deleted');
+
+                if($removedAnswersIdArray != null) {
+                    $removedAnswersIdArray = explode(",",$removedAnswersIdArray);
+                    foreach($removedAnswersIdArray as $removedAnswerId) {
+                        Answer::destroy($removedAnswerId);
+                    }
+                }
+
+                // add answers if any
+                if($request->input('todo_'.$taskCounter) == 'mcq') {
+                    // need to check whether the answer we are looping already exist
+                    // get the id, if there is, that means answer exist, so just update
+                    // if no id, create new answer
+
+                    $answerCounter = 1;
+                    
+                    while($request->input('answer_'.$taskCounter.'_'.$answerCounter) != null) {
+
+                        if($request->input('deleted-answer-id_'.$taskCounter.'_'.$answerCounter) != null) {
+                            $answer = Answer::find($request->input('deleted-answer-id_'.$taskCounter.'_'.$answerCounter));
+                        } else {
+                            $answer = new Answer;
+                        }
+
+                        $answer->title = $request->input('answer_'.$taskCounter.'_'.$answerCounter);
+                        $answer->task_id = $task->id;
+
+                        $answer->save();
+
+                        $answerCounter++;
+                    }
+                }
+
+                $taskCounter++;
+            }
+
+            // dissociate all removed files
+            $removedFilesIdArray = $request->input('files-deleted');
+
+            if($removedFilesIdArray != null) {
+                $removedFilesIdArray = explode(",",$removedFilesIdArray);
+                foreach($removedFilesIdArray as $removedFileId) {
+                    ProjectFile::destroy($removedFileId);
+                }
+            }
+
+            // dd($request->file('file-1'));
+
+            if($request->file('file-1')) {
+                for($fileCounter = 0; $fileCounter < count($request->file('file-1')); $fileCounter++) {
+
+                    $projectFile = new ProjectFile;
+
+                    $projectFile->title = $request->file('file-1')[$fileCounter]->getClientOriginalName();
+                    $projectFile->size = $request->file('file-1')[$fileCounter]->getSize();
+                    $projectFile->url = $request->file('file-1')[$fileCounter]->store('/assets', 'gcs');
+                    $projectFile->mime_type = $request->file('file-1')[$fileCounter]->getMimeType();
+                    $projectFile->project_id = $project->id;
+
+                    $projectFile->save();
+                }
+            }
+
+            $roleSlug = Role::find($project->role_id)->slug;
+
+            return redirect('/roles/'.$roleSlug.'/projects/'.$project->slug);
         }
-
-        $roleSlug = Role::find($project->role_id)->slug;
-
-        return redirect('/roles/'.$roleSlug.'/projects/'.$project->slug);
     }
 }

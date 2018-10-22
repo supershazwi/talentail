@@ -33,6 +33,7 @@
               @if ($errors->has('competency') && strlen($errors->first('competency')) > 0)
                 <p style="color: #721c24 !important;">{{ $errors->first('competency') }}</p>
               @endif
+            </div>
             @endif
             <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/save-project" enctype="multipart/form-data">
             @csrf

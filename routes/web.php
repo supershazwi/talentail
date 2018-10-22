@@ -22,6 +22,8 @@ use App\Mail\SendContactMail;
 
 use App\Experience;
 use App\User;
+use App\Role;
+use App\Project;
 use App\RoleGained;
 use App\Message;
 use App\ContactMessage;
@@ -137,6 +139,18 @@ Route::get('/profile/{profileId}', function() {
         'user' => $user,
         'rolesGained' => $rolesGained,
         'attemptedProjects' => $attemptedProjects,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
+});
+
+Route::get('projects/clone', function() {
+    if(session('selectedRole')) {
+        $selectedRole = Role::find(session('selectedRole')); 
+    }
+
+    return view('projects.clone', [
+        'projects' => Project::where('sample', 1)->get(),
+        'selectedRole' => $selectedRole,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
     ]);
 });
@@ -312,6 +326,7 @@ Route::post('/roles/{roleSlug}/projects/{projectSlug}/review', 'ReviewsControlle
 
 Route::post('/projects/publish-project', 'ProjectsController@publishProject');
 Route::post('/projects/save-project', 'ProjectsController@saveProject');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/clone', 'ProjectsController@cloneProject');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/toggle-visibility-project', 'ProjectsController@toggleVisibilityProject');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/submit-project-attempt', 'ProjectsController@submitProjectAttempt');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/purchase-project', 'ProjectsController@purchaseProject');
