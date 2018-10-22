@@ -88,7 +88,7 @@
         </div>
     </div>
 </div>    
-<div class="container" style="padding-left: 4.5rem; padding-right: 4.5rem; padding-bottom: 2.5rem;">
+<div class="container" style="padding-left: 1rem; padding-right: 1rem; padding-bottom: 2.5rem;">
     <div class="row" style="margin-top: 4.5rem;">
         <div class="col-lg-4" style="margin-bottom: 1.5rem;">
             <div class="card mb-3">
