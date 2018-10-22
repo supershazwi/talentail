@@ -461,6 +461,7 @@ class ProjectsController extends Controller
                 }
             } else {
                 return view('projects.attempt', [
+                    'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first(),
                     'project' => $project,
                     'role' => $role,
                     'messages' => $messages3,
@@ -579,15 +580,18 @@ class ProjectsController extends Controller
     }
 
     public function purchaseProject(Request $request) {
+        $project = Project::find($request->input('project_id'));
+
         $attemptedProject = new AttemptedProject;
 
         $attemptedProject->project_id = $request->input('project_id');
         $attemptedProject->user_id = Auth::id();
         $attemptedProject->status = "Attempting";
 
-        $attemptedProject->save();
+        // calculate the deadline of the project by adding project hours to current date
+        $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
 
-        $project = Project::find($request->input('project_id'));
+        $attemptedProject->save();
 
         // notify creator
         $notification = new Notification;

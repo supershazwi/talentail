@@ -1,9 +1,8 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box;">
-      <nav aria-label="breadcrumb">
-      </nav>
+  <div class="alert alert-info" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+    <strong>Project Deadline: </strong> {{date('d M Y, h:i a', strtotime($attemptedProject->deadline))}}.
   </div>
   <div class="container">
       <div class="row justify-content-center">
