@@ -73,7 +73,7 @@
                             <button class="btn btn-lg btn-block btn-primary" role="button" type="submit">
                                 Create account
                             </button>
-                            <small>By clicking 'Create Account' you agree to our <a href="#">Terms of Use</a>
+                            <small>By clicking 'Create Account' you agree to our <a href="/terms-and-conditions">Terms of Service</a>
                             </small>
                             <br />
                             <small>Already have an account yet? <a href="/login">Login</a>
