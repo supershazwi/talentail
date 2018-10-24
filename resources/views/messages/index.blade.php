@@ -373,7 +373,7 @@
                     </div>
                 </div>
                 <div class="content-container">
-                    <div class="chat-module" data-filter-list="chat-module-body">
+                    <div class="chat-module" data-filter-list="chat-module-body" style="height: 100% !important;">
                         @if($messages != null && request()->route()->parameters['userId'] != null)
                             @if(Request::route('projectId'))
                                 <div class="alert alert-info" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
