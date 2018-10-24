@@ -311,10 +311,11 @@
                             </div>
                             @else
                             <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
-                                When users visit your project page, they have a chat button at the bottom to contact you. If the user has purchased the project, all chats can be found under "By Project". This page will be populated once users contact you via the chat function.
+                                <strong>By user</strong> chat messages are received when users chat with you via your <strong>profile page</strong>.
 
                                 <br/><br />
-                                Click a user from the sidebar 👉
+
+                                <strong>By project</strong> chat messages are received when users chat with you via your <strong>project page</strong>.
                             </div>
                         @endif
                     </div>
@@ -440,6 +441,11 @@
                     if('/' + document.getElementById('currentUrl').value != data.url) {
                         toastr.info("<strong>" + data.username + "</strong><br />" + data.text); 
                     }
+                });
+
+                var purchaseChannel = pusher.subscribe('purchases_' + document.getElementById('loggedInUserId').value);
+                purchaseChannel.bind('new-purchase', function(data) {
+                    toastr.success(data.username + ' ' + data.message); 
                 });
             })
         </script> 

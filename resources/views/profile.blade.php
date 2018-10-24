@@ -27,16 +27,16 @@
                                 </h1>
                                 <p class="lead">{{$user->description}}</p>
                                 @if($user->website)
-                                <a href="{{$user->website}}" style="margin-right: 0.5rem;"><i class="fas fa-link"></i></a>
+                                <a target="_blank" href="{{$user->website}}" style="margin-right: 0.5rem;"><i class="fas fa-link"></i></a>
                                 @endif
                                 @if($user->linkedin)
-                                <a href="{{$user->linkedin}}" style="margin-right: 0.5rem;"><i class="fab fa-linkedin-in"></i></a>
+                                <a target="_blank" href="{{$user->linkedin}}" style="margin-right: 0.5rem;"><i class="fab fa-linkedin"></i></a>
                                 @endif
                                 @if($user->facebook)
-                                <a href="{{$user->facebook}}" style="margin-right: 0.5rem;"><i class="fab fa-facebook-f"></i></a>
+                                <a target="_blank" href="{{$user->facebook}}" style="margin-right: 0.5rem;"><i class="fab fa-facebook-square"></i></a>
                                 @endif
                                 @if($user->twitter)
-                                <a href="{{$user->twitter}}"><i class="fab fa-twitter"></i></a>
+                                <a target="_blank" href="{{$user->twitter}}"><i class="fab fa-twitter-square"></i></a>
                                 @endif
                             </div>
                         </div>
@@ -614,8 +614,143 @@
                         </div>
                     </form>
         </div>
+        @if(Auth::id() && !empty($clickedUserId) && $clickedUserId != null)
+        <button class="btn btn-primary btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" style="margin-right: 1.5rem; height: 48px;" id="rectangleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
+            Ask me anything!
+        </button>
+        <button class="btn btn-primary btn-round btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" id="circleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
+            <i class="material-icons">chat_bubble</i>
+            <i class="material-icons">close</i>
+        </button>
+        <div class="collapse sidebar-floating" id="floating-chat">
+            <div class="sidebar-content">
+                <div class="chat-module" data-filter-list="chat-module-body">
+                    <div class="chat-module-top">
+                        <form>
+                            <div class="input-group input-group-round">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="material-icons">search</i>
+                                    </span>
+                                </div>
+                                <input type="search" class="form-control filter-list-input" placeholder="Search chat" aria-label="Search Chat" aria-describedby="search-chat">
+                            </div>
+                        </form>
+                        <div class="chat-module-body" id="newMessagesDiv">
+                            @foreach($messages as $message)
+                            <div class="media chat-item">
+                                @if($message->user->avatar)
+                                <img alt="{{$message->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
+                                @else
+                                <img alt="{{$message->user->name}}" src="/img/avatar.png" class="avatar" />
+                                @endif
+                                <div class="media-body" style="padding: 0.7rem 1rem;">
+                                    <div class="chat-item-title">
+                                        <span class="chat-item-author" data-filter-by="text">{{$message->user->name}}</span>
+                                        <span data-filter-by="text">{{$message->created_at->diffForHumans()}}</span>
+                                    </div>
+                                    <div class="chat-item-body" data-filter-by="text">
+                                        <p>{{$message->message}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="chat-module-bottom">
+                        <form class="chat-form">
+                            <textarea class="form-control" placeholder="Type message" id="chat-input" rows="1" onkeypress="keyPress()"></textarea>
+                            @if(Auth::id())
+                            <input id="userId" type="hidden" value="{{Auth::user()->id}}" />
+                            <input id="userName" type="hidden" value="{{Auth::user()->name}}" />
+                            <input id="userAvatar" type="hidden" value="{{Auth::user()->avatar}}" />
+                            <input id="clickedUserId" type="hidden" value="{{$clickedUserId}}" />
+                            <input id="messageChannel" type="hidden" value="{{$messageChannel}}" />
+                            <input id="projectId" type="hidden" value="0" />
+                            <input id="projectOwner" type="hidden" value="{{$clickedUserId}}" />
+                            @endif
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </div>     
+
+<script type="text/javascript">
+    $.ajaxSetup({
+
+        headers: {
+
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+        }
+
+    });
+
+    function keyPress() {
+        var key = window.event.keyCode;
+
+        if (key === 13) {
+            var messageText = document.getElementById("chat-input").value;
+            var data = {message_text: messageText, clickedUserId: document.getElementById("clickedUserId").value, messageChannel: document.getElementById("messageChannel").value, projectId: document.getElementById("projectId").value};
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+               type:'POST',
+               url:'/messages/'+document.getElementById("clickedUserId").value,
+               data: data,
+               success:function(data){
+
+               }
+            });
+        }
+    }
+
+    if(document.getElementById("clickedUserId") != null) {
+        var pusher = new Pusher("5491665b0d0c9b23a516", {
+          cluster: 'ap1',
+          forceTLS: true,
+          auth: {
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              }
+        });
+
+        console.log("SUBSCRIBE TO: " + document.getElementById("messageChannel").value);
+
+        var channel = pusher.subscribe(document.getElementById("messageChannel").value);
+        channel.bind('new-message', function(data) {
+            console.log(data);
+            if(data.avatar == "") {
+              document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='/img/avatar.png' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+            } else {
+              document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+            }
+            
+            document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;
+            
+            document.getElementById("chat-input").value = "";
+        }); 
+    }
+
+    function highlightButtons() {
+        document.getElementById("circleChat").style.background = "#0156cf";
+        document.getElementById("circleChat").style.borderColor = "#0156cf";
+        document.getElementById("rectangleChat").style.background = "#0156cf";
+        document.getElementById("rectangleChat").style.borderColor = "#0156cf";
+    }
+
+    function unhighlightButtons() {
+        document.getElementById("circleChat").style.background = "#076bff";
+        document.getElementById("circleChat").style.borderColor = "#076bff";
+        document.getElementById("rectangleChat").style.background = "#076bff";
+        document.getElementById("rectangleChat").style.borderColor = "#076bff";
+    }
+
+</script>
 
 @endsection
 

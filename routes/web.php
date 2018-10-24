@@ -126,6 +126,20 @@ Route::get('/profile/edit', function() {
 })->middleware('auth');
 
 Route::get('/profile/{profileId}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $loggedInUserId = Auth::id();
+
+    $clickedUserId = $routeParameters['profileId'];
+
+    $subscribeString;
+
+    if($loggedInUserId < $clickedUserId) {
+        $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+    } else {
+        $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+    }
+
     $user = User::find(Route::getCurrentRoute()->parameters()['profileId']);
 
     if($user == null || $user->creator == 0) {
@@ -135,11 +149,20 @@ Route::get('/profile/{profileId}', function() {
     $rolesGained = RoleGained::where('user_id', Auth::id())->get();
     $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
 
+    $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', 0)->get();
+    $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', 0)->get();
+    $messages3 = $messages1->merge($messages2);
+
+    $messages3 = $messages3->sortBy('created_at');
+
     return view('profile', [
         'user' => $user,
         'rolesGained' => $rolesGained,
+        'messages' => $messages3,
+        'clickedUserId' => $clickedUserId,
         'attemptedProjects' => $attemptedProjects,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'messageChannel' => 'messages_'.$subscribeString,
     ]);
 });
 
