@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
+use Illuminate\Validation\Rule;
 
 use App\Project;
 use App\Review;
@@ -928,6 +929,20 @@ class ProjectsController extends Controller
 
             return redirect('/roles/'.$roleSlug.'/projects/'.$project->slug);
         } else {
+
+            $validator = Validator::make($request->all(), [
+                'title' => [
+                    'required',
+                    Rule::unique('projects')->ignore($project->id),
+                ],
+            ]);
+
+            if($validator->fails()) {
+                return redirect('/roles/' . $routeParameters['roleSlug'] . '/projects/' . $routeParameters['projectSlug'] . '/edit')
+                            ->withErrors($validator)
+                            ->withInput();
+            }
+
             $project->title = $request->input('title');
             $project->description = $request->input('description');
             $project->brief = $request->input('brief');
