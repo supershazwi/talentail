@@ -271,7 +271,11 @@
                                                 <br />
                                                 <br />
                                                 <a href="/profile/{{$attemptedProject->project->user_id}}" data-toggle="tooltip" data-placement="top" title="">
+                                                    @if($user->avatar)
                                                     <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}">
+                                                    @else
+                                                    <img alt="Image" class="avatar" src="/img/avatar.png"/>
+                                                    @endif
                                                 </a>
                                                 <a href="/profile/{{$attemptedProject->project->user_id}}">
                                                   <span style="font-size: .875rem; line-height: 1.3125rem;">{{$attemptedProject->project->user->name}}</span>

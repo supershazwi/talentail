@@ -6,22 +6,25 @@
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
                 <h1 class="display-4 mb-3">The platform to achieve greater control over one's career</h1>
-                <p class="lead">At Talentail, we believe that everyone should be given an equal opportunity to control their career paths and ultimately their happiness. Therefore, over 100 creators have come together to design projects and provide you with real world experience that you never got the chance to accumulate.</p>
+                <p class="lead">At Talentail, we believe that everyone should be given an equal opportunity to control their career paths and ultimately their happiness. Therefore, creators have come together to design projects and provide you with real world experience.</p>
             </section>
             <div class="tab-pane fade show active" id="team" role="tabpanel" aria-labelledby="teams-tab" data-filter-list="content-list-body">
                 <!--end of content list head-->
                 <div class="content-list-body row">
-                    <div class="col-xl-6">
+                    <div class="col-xl-12">
                         <div class="card mb-3">
                             <div class="card-body">
                                 <div class="row">
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-2">
                                     <img src="/img/1235519_10151680956467939_1487085179_n.jpg" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
                                   </div>
-                                  <div class="col-lg-8">
+                                  <div class="col-lg-10">
                                     <h5 data-filter-by="text">Shazwi Suwandi</h5>
-                                    <p>You can call me Shaz. What keeps my mind ticking is the limitless amount of technology that exists around us and that we've yet to reach the ceiling. My spare time is used to learn programming languages/frameworks which allows me to develop the countless ideas I have in my head. I enjoy reading Hacker News, following Startup Grind and Product Hunt on Medium. Always on the look out for great books to build a mini-library in my room and be my own librarian. Total membership count: 1.</p>
-                                    <a href="https://www.linkedin.com/in/shazwi/"><i class="fab fa-linkedin"></i></a>
+                                    <p>Shazwi has been working as a tech consultant since graduation and has gained significant experience in digital transformation projects. He likes to overthink in his everyday life and sometimes land himself onto problems that he wants to solve. When push comes to shove, he will roll up his sleeves, his pants, tie up his hair and sit tight till a solution is found. He still can't afford his own bat signal yet, so he can only be contactable on the other channels below.</p>
+                                    <a target="_blank" href="https://www.linkedin.com/in/shazwi/"><i class="fab fa-linkedin"></i></a>
+                                    <a target="_blank" href="https://t.me/supershazwi" style="margin-left: 0.5rem;"><i class="fab fa-telegram"></i></a>
+                                    <a target="_blank" href="https://wa.me/6593839053" style="margin-left: 0.5rem;"><i class="fab fa-whatsapp-square"></i></a>
+                                    <a href="mailto:supershazwi@gmail.com?Subject=Hello%20Shazwi" target="_top" style="margin-left: 0.5rem;"><i class="fas fa-envelope-square"></i></a>
                                   </div>
                                 </div>
                             </div>
