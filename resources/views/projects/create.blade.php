@@ -17,7 +17,7 @@
             @if (($errors->has('title') && strlen($errors->first('title')) > 0) || $errors->has('description') && strlen($errors->first('description')) > 0 || $errors->has('brief') && strlen($errors->first('brief')) > 0 || $errors->has('hours') && strlen($errors->first('hours')) > 0 || $errors->has('price') && strlen($errors->first('price')) > 0 || $errors->has('competency') && strlen($errors->first('competency')) > 0)
             <div class="alert alert-danger">
               @if ($errors->has('title') && strlen($errors->first('title')) > 0)
-                <p style="color: #721c24 !important;">The title field is required to determine the custom url of the project.</p>
+                <p style="color: #721c24 !important;">{{ $errors->first('title') }}</p>
               @endif
               @if ($errors->has('description') && strlen($errors->first('description')) > 0)
                 <p style="color: #721c24 !important;">{{ $errors->first('description') }}</p>
