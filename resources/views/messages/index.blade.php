@@ -143,7 +143,7 @@
                                 <div class="chat-team-sidebar-bottom">
                                     <div class="tab-content">
                                         <div class="tab-pane fade show active" id="members" role="tabpanel" aria-labelledby="members-tab" data-filter-list="list-group">
-                                            <form class="px-3 mb-3">
+                                            <!-- <form class="px-3 mb-3">
                                                 <div class="input-group input-group-round">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">
@@ -152,7 +152,7 @@
                                                     </div>
                                                     <input type="search" class="form-control filter-list-input" placeholder="Filter users" aria-label="Filter Members" aria-describedby="filter-members">
                                                 </div>
-                                            </form>
+                                            </form> -->
                                             <div class="list-group list-group-flush">
 
                                                 @foreach($users as $user)
@@ -173,7 +173,7 @@
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab" data-filter-list="list-project">
-                                            <form class="px-3 mb-3">
+                                            <!-- <form class="px-3 mb-3">
                                                 <div class="input-group input-group-round">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">
@@ -182,7 +182,7 @@
                                                     </div>
                                                     <input type="search" class="form-control filter-list-input" placeholder="Filter users" aria-label="Filter Files" aria-describedby="filter-projects">
                                                 </div>
-                                            </form>
+                                            </form> -->
                                             <div class="d-none dz-template">
                                                 <li class="list-group-item dz-preview dz-file-preview">
                                                     <div class="media align-items-center dz-details">
@@ -311,6 +311,9 @@
                             </div>
                             @else
                             <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+                                When users visit your project page, they have a chat button at the bottom to contact you. If the user has purchased the project, all chats can be found under "By Project". This page will be populated once users contact you via the chat function.
+
+                                <br/><br />
                                 Click a user from the sidebar 👉
                             </div>
                         @endif
