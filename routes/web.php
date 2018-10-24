@@ -142,7 +142,7 @@ Route::get('/profile/{profileId}', function() {
 
     $user = User::find(Route::getCurrentRoute()->parameters()['profileId']);
 
-    if($user == null || $user->creator == 0) {
+    if($user == null) {
         return view('error');
     }
 

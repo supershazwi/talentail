@@ -132,16 +132,133 @@
                             <div class="chat-team-sidebar text-small">
                                 <div class="chat-team-sidebar-top">
                                     <ul class="nav nav-tabs nav-justified" role="tablist" style="margin-top: 0;">
+                                        @if(Request::route('projectId'))
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="members-tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="true">By User</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="projects-tab" data-toggle="tab" href="#projects" role="tab" aria-controls="projects" aria-selected="false">By Project</a>
+                                        </li>
+                                        @else
                                         <li class="nav-item">
                                             <a class="nav-link active" id="members-tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="true">By User</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" id="projects-tab" data-toggle="tab" href="#projects" role="tab" aria-controls="projects" aria-selected="false">By Project</a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </div>
                                 <div class="chat-team-sidebar-bottom">
                                     <div class="tab-content">
+                                        @if(Request::route('projectId'))
+                                        <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab" data-filter-list="list-group">
+                                            <!-- <form class="px-3 mb-3">
+                                                <div class="input-group input-group-round">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="material-icons">filter_list</i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="search" class="form-control filter-list-input" placeholder="Filter users" aria-label="Filter Members" aria-describedby="filter-members">
+                                                </div>
+                                            </form> -->
+                                            <div class="list-group list-group-flush">
+
+                                                @foreach($users as $user)
+                                                <a class="list-group-item list-group-item-action" href="/messages/{{$user->id}}">
+                                                    <div class="media media-member mb-0">
+                                                        @if($user->avatar)
+                                                        <img alt="{{$user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar" />
+                                                        @else
+                                                        <img alt="Image" src="/img/avatar.png" class="avatar" />
+                                                        @endif
+                                                        <div class="media-body">
+                                                            <h6 class="mb-0" data-filter-by="text">{{$user->name}}</h6>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                @endforeach
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade show active" id="projects" role="tabpanel" aria-labelledby="projects-tab" data-filter-list="list-project">
+                                            <!-- <form class="px-3 mb-3">
+                                                <div class="input-group input-group-round">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="material-icons">filter_list</i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="search" class="form-control filter-list-input" placeholder="Filter users" aria-label="Filter Files" aria-describedby="filter-projects">
+                                                </div>
+                                            </form> -->
+                                            <div class="d-none dz-template">
+                                                <li class="list-group-item dz-preview dz-file-preview">
+                                                    <div class="media align-items-center dz-details">
+                                                        <ul class="avatars">
+                                                            <li>
+                                                                <div class="avatar bg-primary dz-file-representation">
+                                                                    <img class="avatar" data-dz-thumbnail />
+                                                                    <i class="material-icons">attach_file</i>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <img alt="David Whittaker" src="/img/avatar-male-4.jpg" class="avatar" data-title="David Whittaker" data-toggle="tooltip" />
+                                                            </li>
+                                                        </ul>
+                                                        <div class="media-body d-flex justify-content-between align-items-center">
+                                                            <div class="dz-file-details">
+                                                                <a href="#" class="dz-filename">
+                                                                    <span data-dz-name></span>
+                                                                </a>
+                                                                <br>
+                                                                <span class="text-small dz-size" data-dz-size></span>
+                                                            </div>
+                                                            <img alt="Loader" src="/img/loader.svg" class="dz-loading" />
+                                                            <div class="dropdown">
+                                                                <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <i class="material-icons">more_vert</i>
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <a class="dropdown-item" href="#">Download</a>
+                                                                    <a class="dropdown-item" href="#">Share</a>
+                                                                    <div class="dropdown-divider"></div>
+                                                                    <a class="dropdown-item text-danger" href="#" data-dz-remove>Delete</a>
+                                                                </div>
+                                                            </div>
+                                                            <button class="btn btn-danger btn-sm dz-remove" data-dz-remove>
+                                                                Cancel
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="progress dz-progress">
+                                                        <div class="progress-bar dz-upload" data-dz-uploadprogress></div>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                            <ul class="list-group list-group-flush list-project"> 
+                                                @if(! empty($userProjectObjectArray))
+                                                @foreach($userProjectObjectArray as $userProjectObject)
+                                                <a class="list-group-item list-group-item-action" href="/messages/{{$userProjectObject->user->id}}/projects/{{$userProjectObject->project->id}}">
+                                                    <div class="media media-member mb-0">
+                                                        @if($user->avatar)
+                                                        <img alt="{{$userProjectObject->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar" />
+                                                        @else
+                                                        <img alt="Image" src="/img/avatar.png" class="avatar" />
+                                                        @endif
+                                                        <div class="media-body">
+                                                            <h6 class="mb-0" data-filter-by="text">{{$userProjectObject->user->name}}</h6>
+                                                            <span class="badge badge-warning" style="width: 170px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">{{$userProjectObject->project->title}}</span>
+                                                            <!-- <span data-filter-by="text">Administrator</span> -->
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                @endforeach
+                                                @endif
+                                            </ul>
+                                        </div>
+                                        @else
                                         <div class="tab-pane fade show active" id="members" role="tabpanel" aria-labelledby="members-tab" data-filter-list="list-group">
                                             <!-- <form class="px-3 mb-3">
                                                 <div class="input-group input-group-round">
@@ -248,6 +365,7 @@
                                                 @endif
                                             </ul>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -258,8 +376,14 @@
                     <div class="chat-module" data-filter-list="chat-module-body">
                         @if($messages != null && request()->route()->parameters['userId'] != null)
                             @if(Request::route('projectId'))
-                                <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
-                                    <strong>Project: </strong>{{$clickedProject->title}}
+                                <div class="alert alert-info" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+                                    <strong>Project: </strong><a href="/roles/{{$clickedProject->role->slug}}/projects/{{$clickedProject->slug}}">{{$clickedProject->title}}</a>
+                                    <br/>
+                                    <strong>User: </strong><a href="/profile/{{$clickedProject->user_id}}">{{$clickedProject->user->name}}</a>
+                                </div>
+                            @else
+                                <div class="alert alert-info" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+                                    <strong>User: </strong><a href="/profile/{{$clickedUserId}}">{{$clickedUser->name}}</a>
                                 </div>
                             @endif
                             <div class="chat-module-top">

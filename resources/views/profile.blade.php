@@ -42,27 +42,15 @@
                         </div>
                     </div>
                     <ul class="nav nav-tabs nav-fill">
-                        @if($user->creator)
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#workExperience" role="tab" aria-controls="workExperience" aria-selected="true">Work Experience</a>
                         </li>
-                        @endif
-                        @if($user->id == Auth::id())
-                            @if($user->creator)
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#gatheredRoles" role="tab" aria-controls="gatheredRoles" aria-selected="true">Gathered Roles</a>
-                            </li>   
-                            @else
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#gatheredRoles" role="tab" aria-controls="gatheredRoles" aria-selected="true">Gathered Roles</a>
-                            </li>
-                            @endif
-                        @endif
-                        @if($user->id == Auth::id())
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#gatheredRoles" role="tab" aria-controls="gatheredRoles" aria-selected="true">Gathered Roles</a>
+                        </li>   
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#attemptedProjects" role="tab" aria-controls="attemptedProjects" aria-selected="false">Attempted Projects</a>
                         </li>
-                        @endif
                         @if($user->creator)
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#createdProjects" role="tab" aria-controls="createdProjects" aria-selected="false">Created Projects</a>
@@ -76,7 +64,6 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                        @if($user->creator)
                         <div class="tab-pane fade show active" id="workExperience" role="tabpanel" aria-labelledby="workExperience-tab" data-filter-list="content-list-body">
                             <div class="row content-list-head">
                                 <div class="col-auto">
@@ -113,12 +100,14 @@
                             <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
                 text-align: center; text-align: center;">
                                 <h1>🤨</h1>
+                                @if(Auth::id() == $user->id)
                                 <h6>You have not added any work experience yet</h6>
+                                @else
+                                <h6>{{$user->name}} has not added any work experience yet</h6>
+                                @endif
                             </div>
                             @endif
                         </div>
-                        @endif
-                        @if($user->creator)
                         <div class="tab-pane fade" id="gatheredRoles" role="tabpanel" aria-labelledby="gatheredRoles-tab" data-filter-list="content-list-body">
                             <div class="row content-list-head">
                                 <div class="col-auto">
@@ -172,69 +161,14 @@
                             <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
                 text-align: center; text-align: center;">
                                 <h1>🤨</h1>
+                                @if(Auth::id() == $user->id)
                                 <h6>You have not gathered roles yet because you <br />have not attempted and completed any project yet</h6>
+                                @else
+                                <h6>{{$user->name}} has not gathered roles yet because {{$user->name}} <br />has not attempted and completed any project yet</h6>
+                                @endif
                             </div>
                             @endif
                         </div>
-                        @else
-                        <div class="tab-pane fade show active" id="gatheredRoles" role="tabpanel" aria-labelledby="gatheredRoles-tab" data-filter-list="content-list-body">
-                            <div class="row content-list-head">
-                                <div class="col-auto">
-                                    <h3>Gathered Roles</h3>
-                                </div>
-                                <!-- <form class="col-md-auto">
-                                    <div class="input-group input-group-round">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">
-                                                <i class="material-icons">filter_list</i>
-                                            </span>
-                                        </div>
-                                        <input type="search" class="form-control filter-list-input" placeholder="Filter roles" aria-label="Filter roles" aria-describedby="filter-roles">
-                                    </div>
-                                </form> -->
-                            </div>
-                            @if(count($rolesGained) > 0)   
-                            <div class="content-list-body row">
-                                @foreach($rolesGained as $roleGained)
-                                <div class="col-md-6">
-                                    <div class="card card-team">
-                                        <div class="card-body">
-                                            <div class="card-title" style="text-align: center; max-width: 100%;">
-                                                <h5 data-filter-by="text"><a href="/roles/{{$roleGained->role->slug}}">{{$roleGained->role->title}}</a></h5>
-                                            </div>
-                                            @foreach($roleGained->competency_scores as $competencyScore)
-                                            <div class="row">
-                                                <div class="col-lg-9">
-                                                    <p>{{$competencyScore->competency->title}}</p>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <span class="fas fa-star star-rating" style="color: #6c757d !important;"></span>
-                                                    <span>{{$competencyScore->score}}</span>
-                                                </div>
-                                            </div>
-                                            @if(!$loop->last)
-                                                <hr/>
-                                            @endif
-                                            @endforeach
-                                            @if(count($roleGained->competency_scores) > 3)
-                                            <div style="text-align: center; margin-top: 1.5rem;">
-                                                <a href="#">See {{count($roleGained->competency_scores)-3}} more</a>
-                                            </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                            @else 
-                            <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
-                text-align: center; text-align: center;">
-                                <h1>🤨</h1>
-                                <h6>You have not gathered roles yet because you <br />have not attempted and completed any project yet</h6>
-                            </div>
-                            @endif
-                        </div>
-                        @endif
                         <div class="tab-pane fade" id="attemptedProjects" role="tabpanel" aria-labelledby="attemptedProjects-tab" data-filter-list="content-list-body">
                             <div class="content-list">
                                 <div class="row content-list-head">
@@ -289,7 +223,11 @@
                                 <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
                     text-align: center; text-align: center;">
                                     <h1>🤨</h1>
+                                    @if(Auth::id() == $user->id)
                                     <h6>You have not attempted any project yet</h6>
+                                    @else
+                                    <h6>{{$user->name}} has not attempted any project yet</h6>
+                                    @endif
                                 </div>
                                 @endif
                                 <!--end of content list body-->
@@ -407,7 +345,11 @@
                                 <div class="alert alert-light" role="alert" style="height: 450px !important; padding-top: 9.5rem !important;
                     text-align: center; text-align: center;">
                                     <h1>🤨</h1>
+                                    @if(Auth::id() == $user->id)
                                     <h6>You have no reviews given to you by other users yet</h6>
+                                    @else
+                                    <h6>{{$user->name}} has no reviews given by other users yet</h6>
+                                    @endif
                                 </div>
                                 @endif
                                 <!--end of content list body-->

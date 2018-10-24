@@ -208,6 +208,7 @@ class MessagesController extends Controller
             'messages' => $messages,
             'messageChannel' => 'messages_'.$subscribeString,
             'clickedUserId' => $clickedUserId,
+            'clickedUser' => User::select('name')->where('id', $clickedUserId)->first(),
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
     }
