@@ -637,7 +637,7 @@ class ProjectsController extends Controller
 
         // need to validate inputs first before trying to store to database
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:projects, title',
+            'title' => 'required|unique:projects',
             'description' => 'required',
             'brief' => 'required',
             'hours' => 'required',
