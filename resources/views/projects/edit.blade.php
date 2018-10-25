@@ -225,11 +225,13 @@
                       <div class="row content-list-head">
                           <div class="col-auto">
                               <h3>Competencies</h3>
+                              <button class="btn btn-primary" style="margin-left: 1.5rem;" onclick="addCompetency()">Add Competency</button>
                           </div>
                       </div>
                       <!--end of content list head-->
                       <div class="content-list-body">
                           @foreach($role->competencies as $competency)
+                            @if($competency->user_id == 0)
                             <div class="row">
                                 <div class="form-group col">
                                     <div class="form-check">
@@ -245,7 +247,35 @@
                                 </div>
                                 <!--end of form group-->
                             </div>
+                            @endif
                           @endforeach
+
+                          @foreach($role->competencies as $key=>$competency)
+                            @if($key==0) 
+                              <h3 id="defaultCustomCompetencyHeading">Custom Competencies</h3>
+                            @endif
+                            @if($competency->user_id != 0)
+                            <div class="row custom-competency-row">
+                                <div class="form-group col">
+                                    <div class="form-check">
+                                      @if(in_array($competency->id, $competencyIdArray))
+                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}" checked>
+                                      @else
+                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}">
+                                      @endif
+                                      <p>
+                                        {{$competency->title}}
+                                      </p>
+                                    </div>
+                                </div>
+                                <!--end of form group-->
+                            </div>
+                            @endif
+                          @endforeach
+                          <h3 style="display: none;" id="customCompetencyHeading">Custom Competencies</h3>
+                          <div id="competenciesList_{{$customCount}}">
+                          </div>
+                          <input type="hidden" id="customCount" value="{{$customCount}}" />
                       </div>
                   </div>
                   <!--end of content list-->
@@ -279,10 +309,12 @@
               </div>
             </div>
             <div style="margin-top: 1.5rem !important;">
-              <button class="btn btn-primary" style="float: right; margin-right: 0.5rem;" type="submit" id="saveProject">Save Project</button>
-              <button class="btn btn-default" style="float: right; margin-right: 0.5rem;" onclick="cancel()">Cancel</button>
+              <button class="btn btn-primary" style="float: right; margin-right: 0.5rem; display:none;" type="submit" id="saveProject">Save Project</button>
             </div>
           </form>
+
+          <button class="btn btn-primary pull-right" onclick="saveProject()" style="margin-right: 0.5rem;">Save Project</button>
+          <button class="btn btn-default pull-right" onclick="cancel()" style="margin-right: 0.5rem;">Cancel</button>
         </div>
       </div>
   </div>
@@ -363,6 +395,26 @@
       document.getElementById("answersList_" + taskId + "_" + answerId).insertAdjacentHTML('afterend', "<div class='accordion answer-accordion' id='answersList_" + taskId + "_" + (answerId+1) + "'></div>");
     }
 
+    function saveProject() {
+      event.preventDefault();
+
+      // tag all custom competency values
+      let competencyCount = document.getElementsByClassName("added-custom-competency").length;
+
+      let startingPoint = parseInt(document.getElementById("customCount").value);
+
+      let finalCount = competencyCount + startingPoint;
+
+      for (i = startingPoint; i < finalCount; i++) {  
+          i = parseInt(i);
+
+          let x = document.getElementById("custom-competency-checkbox_" + i);
+          x.value = document.getElementById("custom-competency-input_" + i).value;
+      }
+
+      document.getElementById("saveProject").click();
+    }
+
     function deleteAnswer() {
       let answerIdString = event.target.id.split("_");
       let taskId = answerIdString[1];
@@ -406,6 +458,25 @@
 
       let z = document.getElementById("answersList_" + taskId + "_" + (answerCount+1));
       z.id = "answersList_" + taskId + "_" + answerCount;
+    }
+
+    function addCompetency() {
+      // adding of competencies is only for the one who created the competency
+      // it is not shared across other creators
+      event.preventDefault();
+      if(document.getElementById("defaultCustomCompetencyHeading") == null) {
+        document.getElementById('customCompetencyHeading').style.display = 'block';
+      }
+
+      console.log(document.querySelectorAll('.custom-competency-row').length);
+
+      let competencyCounter = document.querySelectorAll('.custom-competency-row').length + 1;
+
+      console.log("competenciesList_" + competencyCounter);
+
+      document.getElementById("competenciesList_" + competencyCounter).innerHTML += "<div class='row custom-competency-row'><div class='form-group col'><div class='form-check'><input type='checkbox' name='custom-competency[]' class='form-check-input' value='' id='custom-competency-checkbox_" + competencyCounter + "' style='margin-top: 12.5px;'><div class='input-group'><input type='text' class='form-control custom-competency added-custom-competency' id='custom-competency-input_" + competencyCounter + "' placeholder='Enter custom competency " + competencyCounter + "'><div class='input-group-append' style='height: 40px;'><span class='input-group-text remove-competency' id='delete-competency_" + competencyCounter + "' onclick='deleteCompetency()'><i class='fas fa-times-circle' id='span_" + competencyCounter + "'></i></span></div></div></div></div></div>";
+
+      document.getElementById("competenciesList_" + competencyCounter).insertAdjacentHTML('afterend', "<div id='competenciesList_" + (competencyCounter+1) + "'></div>");
     }
 
     function addTask() {

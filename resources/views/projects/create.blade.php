@@ -119,6 +119,7 @@
                         <div class="row content-list-head">
                             <div class="col-auto">
                                 <h3>Competencies</h3>
+                                <button class="btn btn-primary" style="margin-left: 1.5rem;" onclick="addCompetency()">Add Competency</button>
                             </div>
                         </div>
                         <!--end of content list head-->
@@ -136,6 +137,10 @@
                                 <!--end of form group-->
                             </div>
                           @endforeach
+                          <!-- to add more competencies -->
+                          <h3 style="display: none;" id="customCompetencyHeading">Custom Competencies</h3>
+                          <div id="competenciesList_1">
+                          </div>
                         </div>
                     </div>
                     <!--end of content list-->
@@ -246,6 +251,17 @@
 
     function saveProject() {
       event.preventDefault();
+
+      // tag all custom competency values
+      let competencyCount = document.getElementsByClassName("custom-competency").length;
+
+      for (i = 1; i <= competencyCount; i++) {  
+          i = parseInt(i);
+
+          let x = document.getElementById("custom-competency-checkbox_" + i);
+          x.value = document.getElementById("custom-competency-input_" + i).value;
+      }
+
       document.getElementById("projectForm").action = "/projects/save-project";
       document.getElementById("saveProject").click();
     }
@@ -270,6 +286,49 @@
       document.getElementById("answersList_" + taskId + "_" + answerId).innerHTML += "<div class='input-group'><input type='text' name='answer_" + taskId + "_" + answerId + "' class='form-control todo-answer-input_" + taskId + "' id='todo-answer-input_" + taskId + "_" + answerId + "' placeholder='Enter answer " + answerId + "' style='margin-top: 1.5rem;'><div class='input-group-append' style='height: 40px; margin-top: 1.5rem;'><span class='input-group-text remove-answer' id='delete-answer_" + taskId + "_" + answerId + "' onclick='deleteAnswer()'><i class='fas fa-times-circle' id='span_" + taskId + "_" + answerId + "'></i></span></div></div>"
 
       document.getElementById("answersList_" + taskId + "_" + answerId).insertAdjacentHTML('afterend', "<div class='accordion answer-accordion' id='answersList_" + taskId + "_" + (answerId+1) + "'></div>");
+    }
+
+    function deleteCompetency() {
+      let competencyIdString = event.target.id.split("_");
+      let competencyId = competencyIdString[1];
+      let competenciesListId = "competenciesList_" + competencyId;
+
+      // find total number of custom competencies first
+      let competencyCount = document.getElementsByClassName("custom-competency").length;
+
+      let elem = document.getElementById(competenciesListId);
+      elem.parentNode.removeChild(elem);
+
+      // need to recalculate all the ids
+      // start with competenciesList
+      let x = document.getElementsByClassName("custom-competency");
+
+      for (i = competencyId; i < competencyCount; i++) {  
+          i = parseInt(i);
+
+          let x = document.getElementById("custom-competency-checkbox_" + (i + 1));
+          x.id = "custom-competency-checkbox_" + i;
+
+          let y = document.getElementById("custom-competency-input_" + (i + 1));
+          y.id = "custom-competency-input_" + i;
+          y.placeholder = "Enter custom competency " + i;
+
+          let u = document.getElementById("delete-competency_" + (i+1));
+          u.id = "delete-competency_" + i;
+
+          let v = document.getElementById("span_" + (i+1));
+          v.id = "span_" + i;
+
+          let z = document.getElementById("competenciesList_" + (i+1));
+          z.id = "competenciesList_" + i;
+      }
+
+      let z = document.getElementById("competenciesList_" + (competencyCount+1));
+      z.id = "competenciesList_" + competencyCount;
+
+      if(competencyCount == 1) {
+        document.getElementById("customCompetencyHeading").style.display="none";
+      }
     }
 
     function deleteAnswer() {
@@ -307,6 +366,22 @@
 
       let z = document.getElementById("answersList_" + taskId + "_" + (answerCount+1));
       z.id = "answersList_" + taskId + "_" + answerCount;
+    }
+
+    function addCompetencyValue() {
+      console.log("addCompetencyValue");
+    }
+
+    function addCompetency() {
+      // adding of competencies is only for the one who created the competency
+      // it is not shared across other creators
+      event.preventDefault();
+      document.getElementById('customCompetencyHeading').style.display = 'block';
+      let competencyCounter = document.querySelectorAll('.custom-competency-row').length + 1;
+
+      document.getElementById("competenciesList_" + competencyCounter).innerHTML += "<div class='row custom-competency-row'><div class='form-group col'><div class='form-check'><input type='checkbox' name='custom-competency[]' class='form-check-input' value='' id='custom-competency-checkbox_" + competencyCounter + "' style='margin-top: 12.5px;'><div class='input-group'><input type='text' class='form-control custom-competency' id='custom-competency-input_" + competencyCounter + "' placeholder='Enter custom competency " + competencyCounter + "'><div class='input-group-append' style='height: 40px;'><span class='input-group-text remove-competency' id='delete-competency_" + competencyCounter + "' onclick='deleteCompetency()'><i class='fas fa-times-circle' id='span_" + competencyCounter + "'></i></span></div></div></div></div></div>";
+
+      document.getElementById("competenciesList_" + competencyCounter).insertAdjacentHTML('afterend', "<div id='competenciesList_" + (competencyCounter+1) + "'></div>");
     }
 
     function addTask() {

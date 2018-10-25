@@ -508,9 +508,17 @@ class ProjectsController extends Controller
             $competencyIdArray[$key] = $competencyArray['id'];
         }
 
+        $customCount = Competency::whereIn('id', $competencyIdArray)->where('user_id' , '!=', 0)->count();
+
+        // dd($customCount);
+
+        $customCompetencies = Competency::where('role_id', $role->id)->where('user_id', Auth::id());
+
         return view('projects.edit', [
             'project' => $project,
             'role' => $role,
+            'customCount' => $customCompetencies->count()+1,
+            'customCompetencies' => $customCompetencies->get(),
             'competencyIdArray' => $competencyIdArray,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
@@ -765,6 +773,26 @@ class ProjectsController extends Controller
         $competencies = Competency::find($request->input('competency'));
         $project->competencies()->attach($competencies);
 
+        // need to create new custom competencies before attaching
+        if($request->input('custom-competency')) {
+            $newCompetencyArray = array();
+            $customCompetencies = $request->input('custom-competency');
+
+            foreach($customCompetencies as $customCompetency) {
+                $newCompetency = new Competency;
+
+                $newCompetency->title = $customCompetency;
+                $newCompetency->role_id = $project->role_id;
+                $newCompetency->user_id = Auth::id();
+
+                $newCompetency->save();
+                array_push($newCompetencyArray, $newCompetency->id);
+            }
+
+            $newCompetencies = Competency::find($newCompetencyArray);
+            $project->competencies()->attach($newCompetencies);
+        }
+
         $taskCounter = 1;
         while($request->input('todo-title_'.$taskCounter) != null || $request->input('todo-description_'.$taskCounter) != null || $request->input('todo_'.$taskCounter) != null) {
 
@@ -864,6 +892,25 @@ class ProjectsController extends Controller
             $competencies = Competency::find($request->input('competency'));
             $newProject->competencies()->attach($competencies);
 
+            if($request->input('custom-competency')) {
+                $newCompetencyArray = array();
+                $customCompetencies = $request->input('custom-competency');
+
+                foreach($customCompetencies as $customCompetency) {
+                    $newCompetency = new Competency;
+
+                    $newCompetency->title = $customCompetency;
+                    $newCompetency->role_id = $project->role_id;
+                    $newCompetency->user_id = Auth::id();
+
+                    $newCompetency->save();
+                    array_push($newCompetencyArray, $newCompetency->id);
+                }
+
+                $newCompetencies = Competency::find($newCompetencyArray);
+                $project->competencies()->attach($newCompetencies);
+            }
+
             $taskCounter = 1;
             while($request->input('todo-title_'.$taskCounter) != null || $request->input('todo-description_'.$taskCounter) != null || $request->input('todo_'.$taskCounter) != null) {
 
@@ -957,6 +1004,25 @@ class ProjectsController extends Controller
             $project->competencies()->detach();
             $competencies = Competency::find($request->input('competency'));
             $project->competencies()->attach($competencies);
+
+            if($request->input('custom-competency')) {
+                $newCompetencyArray = array();
+                $customCompetencies = $request->input('custom-competency');
+
+                foreach($customCompetencies as $customCompetency) {
+                    $newCompetency = new Competency;
+
+                    $newCompetency->title = $customCompetency;
+                    $newCompetency->role_id = $project->role_id;
+                    $newCompetency->user_id = Auth::id();
+
+                    $newCompetency->save();
+                    array_push($newCompetencyArray, $newCompetency->id);
+                }
+
+                $newCompetencies = Competency::find($newCompetencyArray);
+                $project->competencies()->attach($newCompetencies);
+            }
 
             $project->save();
 
