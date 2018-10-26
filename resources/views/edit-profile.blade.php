@@ -12,6 +12,11 @@
         <form method="POST" action="/profile/save" enctype="multipart/form-data">
         @csrf
         <div class="content-list-body">
+            @if ($errors->has('slug') && strlen($errors->first('slug')) > 0)
+            <div class="alert alert-danger">
+                <p style="color: #721c24 !important;">The custom url has already been taken.</p>
+            </div>
+            @endif
             <h5 style="margin-top: 1.5rem;">Profile Image</h5>
             <div class="media mb-4">
                 @if($user->avatar)
@@ -30,6 +35,13 @@
                     </div>
                     <small>Smile for the camera!</small>
                 </div>
+            </div>
+            <h5 style="margin-top: 1.5rem;">Custom Url</h5>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">https://talentail.com/profile/</span>
+              </div>
+              <input type="text" name="slug" class="form-control" id="slug" placeholder="Enter your custom link (e.g. j.orange)" value="{{$user->slug}}">
             </div>
             <h5 style="margin-top: 1.5rem;">Full Name</h5>
             <input type="text" name="name" class="form-control" id="name" placeholder="Enter your full name (e.g. Johnie Orange)" value="{{$user->name}}">

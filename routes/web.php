@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\SendContactMail;
+use Illuminate\Validation\Rule;
 
 use App\Experience;
 use App\User;
@@ -209,49 +210,63 @@ Route::post('/projects/apply', function(Request $request) {
 });
 
 Route::post('/profile/save', function(Request $request) {
-    $user = Auth::user();
+    $validator = Validator::make($request->all(), [
+        'slug' => [
+            Rule::unique('users')->ignore(Auth::id()),
+        ],
+    ]);
 
-    if (Input::has('name')) { $user->name = Input::get('name'); }
-    if (Input::has('email')) { $user->email = Input::get('email'); }
-    if (Input::has('website')) { $user->website = Input::get('website'); }
-    if (Input::has('facebook')) { $user->facebook = Input::get('facebook'); }
-    if (Input::has('linkedin')) { $user->linkedin = Input::get('linkedin'); }
-    if (Input::has('twitter')) { $user->twitter = Input::get('twitter'); }
-    if (Input::has('description')) { $user->description = Input::get('description'); }
-    if (Input::has('avatar-file')) {
-        // $user->avatar = $request->file('avatar-file')->store('/assets', 'gcs');
-        $user->avatar = Storage::disk('gcs')->put('/avatars', $request->file('avatar-file'), 'public');
-    }
 
-    $counter = 1;
+    if($validator->fails()) {
+        return redirect('/profile/edit')
+                    ->withErrors($validator)
+                    ->withInput();
+    } else {
+        $user = Auth::user();
 
-    if(Experience::where('user_id', $user->id)) {
-        Experience::where('user_id', $user->id)->delete();
-    }
-
-    while (Input::has('company_'.$counter) || Input::has('role_'.$counter) || Input::has('work-description_'.$counter) || Input::has('start-date_'.$counter) || Input::has('end-date_'.$counter)) {
-
-        $experience = new Experience;
-
-        $experience->company = Input::get('company_'.$counter);
-        $experience->role = Input::get('role_'.$counter);
-        $experience->description = preg_replace("/[\r\n]/","\r\n",Input::get('work-description_'.$counter));
-        $experience->user_id = $user->id;
-        $experience->start_date = Input::get('start-date_'.$counter);
-        if($experience->end_date == null) {
-            $experience->end_date = 0;
-        } else {
-            $experience->end_date = Input::get('end-date_'.$counter);
+        if (Input::has('name')) { $user->name = Input::get('name'); }
+        if (Input::has('email')) { $user->email = Input::get('email'); }
+        if (Input::has('slug')) { $user->slug = Input::get('slug'); }
+        if (Input::has('website')) { $user->website = Input::get('website'); }
+        if (Input::has('facebook')) { $user->facebook = Input::get('facebook'); }
+        if (Input::has('linkedin')) { $user->linkedin = Input::get('linkedin'); }
+        if (Input::has('twitter')) { $user->twitter = Input::get('twitter'); }
+        if (Input::has('description')) { $user->description = Input::get('description'); }
+        if (Input::has('avatar-file')) {
+            // $user->avatar = $request->file('avatar-file')->store('/assets', 'gcs');
+            $user->avatar = Storage::disk('gcs')->put('/avatars', $request->file('avatar-file'), 'public');
         }
 
-        $experience->save();
+        $counter = 1;
 
-        $counter++;
+        if(Experience::where('user_id', $user->id)) {
+            Experience::where('user_id', $user->id)->delete();
+        }
+
+        while (Input::has('company_'.$counter) || Input::has('role_'.$counter) || Input::has('work-description_'.$counter) || Input::has('start-date_'.$counter) || Input::has('end-date_'.$counter)) {
+
+            $experience = new Experience;
+
+            $experience->company = Input::get('company_'.$counter);
+            $experience->role = Input::get('role_'.$counter);
+            $experience->description = preg_replace("/[\r\n]/","\r\n",Input::get('work-description_'.$counter));
+            $experience->user_id = $user->id;
+            $experience->start_date = Input::get('start-date_'.$counter);
+            if($experience->end_date == null) {
+                $experience->end_date = 0;
+            } else {
+                $experience->end_date = Input::get('end-date_'.$counter);
+            }
+
+            $experience->save();
+
+            $counter++;
+        }
+
+        $user->save();
+
+        return redirect('profile');
     }
-
-    $user->save();
-
-    return redirect('profile');
 })->middleware('auth');
 
 Route::get('/profile', function() {
