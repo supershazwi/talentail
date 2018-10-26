@@ -9,13 +9,27 @@
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
-            <section class="py-4 py-lg-5">
-                <h1 class="display-4 mb-3">Clone a Sample Project</h1>
-                <p class="lead">We have populated several sample projects to make it easier for you to create your own project. Dive into the details of the project to check whether it is similar to the project you would like to create.</p>
-            </section>
-            <div class="content-list-body row">
-                @foreach($projects as $project)
-                <div class="col-lg-12">
+          <section class="py-4 py-lg-5">
+              <h1 class="display-4 mb-3">Clone a Project</h1>
+              <p class="lead">We have populated several sample projects to make it easier for you to create your own project. Dive into the details of the project to check whether it is similar to the project you would like to create.</p>
+          </section>
+          <ul class="nav nav-tabs nav-fill" style="margin-bottom: 1.5rem;">
+              <li class="nav-item">
+                  <a class="nav-link active" data-toggle="tab" href="#sample" role="tab" aria-controls="sample" aria-selected="true">Sample Projects</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#created" role="tab" aria-controls="created" aria-selected="false">Your Created Projects</a>
+              </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="sample" role="tabpanel" aria-labelledby="sample-tab" data-filter-list="card-list-body">
+              <div class="row content-list-head">
+                  <div class="col-auto">
+                      <h3>Sample Projects</h3>
+                  </div>
+              </div>
+              <div class="content-list-body">
+                @foreach($createdProjects as $project)
                   <div class="card mb-3">
                     <div class="card-body">
                       <div class="col-lg-10" style="float: left; padding: 0px;">
@@ -37,10 +51,43 @@
                       </div>
                     </div>
                   </div>
-                </div>
                 @endforeach
+              </div>
+            </div>
+            <div class="tab-pane fade" id="created" role="tabpanel" aria-labelledby="created-tab" data-filter-list="card-list-body">
+              <div class="row content-list-head">
+                  <div class="col-auto">
+                      <h3>Your Created Projects</h3>
+                  </div>
+              </div>
+              <div class="content-list-body">
+                @foreach($sampleProjects as $project)
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="col-lg-10" style="float: left; padding: 0px;">
+                        <h5><a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}">{{$project->title}}</a></h5>
+                        <p style="margin-top: 0.5rem;">{{$project->description}}</p>
+                        <a href="/profile/{{$project->user->id}}" data-toggle="tooltip" data-placement="top" title="">
+                          @if($project->user->avatar)
+                          <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$project->user->avatar}}">
+                          @else
+                          <img class="avatar" src="/img/avatar.png">
+                          @endif
+                        </a>
+                        <a href="/profile/{{$project->user->id}}">
+                          <span style="font-size: .875rem; line-height: 1.3125rem;">{{$project->user->name}}</span>
+                        </a>
+                      </div>
+                      <div class="col-lg-1" style="text-align: center; float: right; padding: 0px;">
+                        <h5 style="float: right; color: #16a085;">${{$project->amount}}</h5>
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+              </div>
             </div>
           </div>
+        </div>
       </div>
   </div>
 
@@ -61,6 +108,7 @@
     });
 
   </script>
+  <script src="/js/languages/en.js"></script>
   <script type="text/javascript">
 
     var selDiv = "";

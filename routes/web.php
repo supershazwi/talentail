@@ -190,7 +190,8 @@ Route::get('projects/clone', function() {
     }
 
     return view('projects.clone', [
-        'projects' => Project::where('sample', 1)->get(),
+        'sampleProjects' => Project::where('sample', 1)->get(),
+        'createdProjects' => Project::where('user_id', Auth::id())->get(),
         'selectedRole' => $selectedRole,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
     ]);

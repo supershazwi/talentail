@@ -5,7 +5,7 @@
   <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
     You are currently creating a project for <strong>{{$selectedRole->title}}</strong>.<a href="/projects/select-role" style="float: right;">Select different role</a>
   </div>
-  <a href="/projects/clone" class="btn btn-primary pull-right" style="margin-right: 1.5rem;">Check Sample Projects</a>
+  <a href="/projects/clone" class="btn btn-primary pull-right" style="margin-right: 1.5rem;">Clone a Project</a>
   @endif
   <div class="container">
       <div class="row justify-content-center">
@@ -249,6 +249,7 @@
     });
 
   </script>
+  <script src="/js/languages/en.js"></script>
   <script type="text/javascript">
 
     var selDiv = "";

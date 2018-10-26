@@ -40,11 +40,11 @@
             <input name="id" class="form-control" id="id" type="hidden" value="{{$project->id}}">
             <h3>Project Title</h3>
             <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" value="{{$project->title}}">
-            <h3 style="margin-top: 1.5rem;">Project Summary</h3>
+            <h3 style="margin-top: 1.5rem;">Project Short Description</h3>
             <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter summary">{{$project->description}}</textarea>
             <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Detailed Role Brief</a>
+                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Role Brief</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="false">Tasks</a>
@@ -63,7 +63,7 @@
               <div class="tab-pane fade show active" id="brief" role="tabpanel" aria-labelledby="brief-tab" data-filter-list="card-list-body">
                   <div class="row content-list-head">
                       <div class="col-auto">
-                          <h3>Detailed Role Brief</h3>
+                          <h3>Project Full Description & Role Brief</h3>
                       </div>
                   </div>
                     <div class="content-list-body">
@@ -685,6 +685,7 @@
       window.location.replace(url.slice(0, -5));
     }
   </script>
+  <script src="/js/languages/en.js"></script>
 @endsection
 
 @section ('footer')
