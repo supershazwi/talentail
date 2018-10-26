@@ -40,8 +40,10 @@
             @csrf
               <h3 style="margin-top: 1.5rem;">Project Title</h3>
               <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" value="{{ old('title') }}" autofocus>
-              <h3 style="margin-top: 1.5rem;">Project Description</h3>
-              <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description">{{ old('description') }}</textarea>
+              <h3 style="margin-top: 1.5rem;">Project Short Description</h3>
+              <textarea class="form-control" name="description" id="description" maxlength="280" rows="5" placeholder="Enter description" style="resize: none;">{{ old('description') }}</textarea>
+              <p class="text-small" style="float: right; color: #8F9194 !important;">280 characters left</p>
+              <br/>
               <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
                   <li class="nav-item">
                       <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Step 1: Brief</a>
@@ -63,7 +65,7 @@
                 <div class="tab-pane fade show active" id="brief" role="tabpanel" aria-labelledby="brief-tab" data-filter-list="card-list-body">
                     <div class="row content-list-head">
                         <div class="col-auto">
-                            <h3>Role Brief</h3>
+                            <h3>Project Full Description & Role Brief</h3>
                         </div>
                     </div>
                     <div class="content-list-body">
@@ -125,6 +127,7 @@
                         <!--end of content list head-->
                         <div class="content-list-body">
                           @foreach($selectedRole->competencies as $competency)
+                            @if($competency->user_id == 0)
                             <div class="row">
                                 <div class="form-group col">
                                     <div class="form-check">
@@ -136,11 +139,31 @@
                                 </div>
                                 <!--end of form group-->
                             </div>
+                            @endif
                           @endforeach
-                          <!-- to add more competencies -->
+
+                          @foreach($selectedRole->competencies as $key=>$competency)
+                            @if($key==0) 
+                              <h3 id="defaultCustomCompetencyHeading">Custom Competencies</h3>
+                            @endif
+                            @if($competency->user_id != 0)
+                            <div class="row custom-competency-row">
+                                <div class="form-group col">
+                                    <div class="form-check">
+                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}">
+                                      <p>
+                                        {{$competency->title}}
+                                      </p>
+                                    </div>
+                                </div>
+                                <!--end of form group-->
+                            </div>
+                            @endif
+                          @endforeach
                           <h3 style="display: none;" id="customCompetencyHeading">Custom Competencies</h3>
-                          <div id="competenciesList_1">
+                          <div id="competenciesList_{{$customCount}}">
                           </div>
+                          <input type="hidden" id="customCount" value="{{$customCount}}" />
                         </div>
                     </div>
                     <!--end of content list-->
@@ -215,7 +238,7 @@
         id   : "test-editormd3",
         path : "/lib/",
         height: 640,
-        placeholder: "Start creating your role brief...",
+        placeholder: "Start creating your project full description & role brief...",
         onload : function() {
             //this.watch();
             //this.setMarkdown("###test onloaded");
@@ -376,10 +399,18 @@
       // adding of competencies is only for the one who created the competency
       // it is not shared across other creators
       event.preventDefault();
-      document.getElementById('customCompetencyHeading').style.display = 'block';
+      if(document.getElementById("defaultCustomCompetencyHeading") == null) {
+        console.log("nulpl");
+        document.getElementById('customCompetencyHeading').style.display = 'block';
+      }
+
+      console.log(document.querySelectorAll('.custom-competency-row').length);
+
       let competencyCounter = document.querySelectorAll('.custom-competency-row').length + 1;
 
-      document.getElementById("competenciesList_" + competencyCounter).innerHTML += "<div class='row custom-competency-row'><div class='form-group col'><div class='form-check'><input type='checkbox' name='custom-competency[]' class='form-check-input' value='' id='custom-competency-checkbox_" + competencyCounter + "' style='margin-top: 12.5px;'><div class='input-group'><input type='text' class='form-control custom-competency' id='custom-competency-input_" + competencyCounter + "' placeholder='Enter custom competency " + competencyCounter + "'><div class='input-group-append' style='height: 40px;'><span class='input-group-text remove-competency' id='delete-competency_" + competencyCounter + "' onclick='deleteCompetency()'><i class='fas fa-times-circle' id='span_" + competencyCounter + "'></i></span></div></div></div></div></div>";
+      console.log("competenciesList_" + competencyCounter);
+
+      document.getElementById("competenciesList_" + competencyCounter).innerHTML += "<div class='row custom-competency-row'><div class='form-group col'><div class='form-check'><input type='checkbox' name='custom-competency[]' class='form-check-input' value='' id='custom-competency-checkbox_" + competencyCounter + "' style='margin-top: 12.5px;'><div class='input-group'><input type='text' class='form-control custom-competency added-custom-competency' id='custom-competency-input_" + competencyCounter + "' placeholder='Enter custom competency " + competencyCounter + "'><div class='input-group-append' style='height: 40px;'><span class='input-group-text remove-competency' id='delete-competency_" + competencyCounter + "' onclick='deleteCompetency()'><i class='fas fa-times-circle' id='span_" + competencyCounter + "'></i></span></div></div></div></div></div>";
 
       document.getElementById("competenciesList_" + competencyCounter).insertAdjacentHTML('afterend', "<div id='competenciesList_" + (competencyCounter+1) + "'></div>");
     }
@@ -388,7 +419,7 @@
       event.preventDefault();
       let cardCounter = document.querySelectorAll('.task-card').length + 1;
 
-      document.getElementById("tasksList_" + cardCounter).innerHTML += "<div class='card task-card' id='card_" + cardCounter + "' style='margin-bottom: 1.5rem;'><div class='card-header' id='heading_" + cardCounter + "'><h5 class='todo-title'>To-do #" + cardCounter + " Title</h5><input type='text' name='todo-title_" + cardCounter + "' class='form-control todo-title-input' id='todo-title-input_" + cardCounter + "' placeholder='Enter title'></div><div id='collapse_" + cardCounter + "' class='collapse show collapse-heading' data-parent='#tasksList'><div class='card-body'><h5 class='todo-description'>To-do #" + cardCounter + " Description</h5><input type='text' name='todo-description_" + cardCounter + "' class='form-control todo-description-input' id='todo-description-input_" + cardCounter + "' placeholder='Enter description'><div style='margin-top: 1.5rem;'><input type='radio' name='todo_" + cardCounter + "' value='mcq' class='radio-mcq' id='radio-mcq_" + cardCounter + "' onclick='launchMcq()'> <span class='text-small'>Multiple Choice Question</span> </div><div class='accordion answer-accordion' id='answersList_" + cardCounter + "_1'></div><div style='margin-top: 1.5rem; display: none;' id='mcq-buttons_" + cardCounter + "'><input type='checkbox' name='checkbox-multiple-select_" + cardCounter + "' value='file-upload' class='checkbox-multiple-select_" + cardCounter + "' id='checkbox-multiple-select_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>Enable Multiple Select</span><button class='btn btn-primary btn-sm add-task' style='float: right;' id='add-task_" + cardCounter + "' onclick='addAnswer()'>Add Answer</button><hr></div><div> <input type='radio' name='todo_" + cardCounter + "' value='open-ended' class='radio-open-ended' id='radio-open-ended_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>Open-ended</span></div><div><input type='radio' name='todo_" + cardCounter + "' value='na' class='radio-na' id='radio-na_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>N.A.</span></div><hr><input type='checkbox' name='checkbox-file-upload_" + cardCounter + "' value='file-upload' class='checkbox-file-upload_" + cardCounter + "' id='checkbox-file-upload_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>File Upload</span><br><button class='btn btn-danger delete-task btn-sm' id='delete-task_" + cardCounter + "' onclick='deleteTask()' style='float: right; margin-bottom: 1.5rem;'>Delete</button></div></div></div>";
+      document.getElementById("tasksList_" + cardCounter).innerHTML += "<div class='card task-card' id='card_" + cardCounter + "' style='margin-bottom: 1.5rem;'><div class='card-header' id='heading_" + cardCounter + "'><h5 class='todo-title'>To-do #" + cardCounter + " Title</h5><input type='text' name='todo-title_" + cardCounter + "' class='form-control todo-title-input' id='todo-title-input_" + cardCounter + "' placeholder='Enter title'></div><div id='collapse_" + cardCounter + "' class='collapse show collapse-heading' data-parent='#tasksList'><div class='card-body'><h5 class='todo-description'>To-do #" + cardCounter + " Description</h5><input type='text' name='todo-description_" + cardCounter + "' class='form-control todo-description-input' id='todo-description-input_" + cardCounter + "' placeholder='Enter description'><div style='margin-top: 1.5rem;'><input type='radio' name='todo_" + cardCounter + "' value='mcq' class='radio-mcq' id='radio-mcq_" + cardCounter + "' onclick='launchMcq()'> <span class='text-small'>Multiple Choice Question</span> </div><div class='accordion answer-accordion' id='answersList_" + cardCounter + "_1'></div><div style='margin-top: 1.5rem; display: none;' id='mcq-buttons_" + cardCounter + "'><input type='checkbox' name='checkbox-multiple-select_" + cardCounter + "' value='file-upload' class='checkbox-multiple-select_" + cardCounter + "' id='checkbox-multiple-select_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>Enable Multiple Select</span><button class='btn btn-primary btn-sm add-task' style='float: right;' id='add-task_" + cardCounter + "' onclick='addAnswer()'>Add Answer</button><hr></div><div> <input type='radio' name='todo_" + cardCounter + "' value='open-ended' class='radio-open-ended' id='radio-open-ended_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>Open-ended</span></div><div><input type='radio' name='todo_" + cardCounter + "' value='na' class='radio-na' id='radio-na_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>N.A.</span></div><hr><input type='checkbox' name='checkbox-file-upload_" + cardCounter + "' value='file-upload' class='checkbox-file-upload_" + cardCounter + "' id='checkbox-file-upload_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>Enable users to upload files</span><br><button class='btn btn-danger delete-task btn-sm' id='delete-task_" + cardCounter + "' onclick='deleteTask()' style='float: right; margin-bottom: 1.5rem;'>Delete</button></div></div></div>";
 
         document.getElementById("tasksList_" + cardCounter).insertAdjacentHTML('afterend', "<div class='accordion task-accordion' id='tasksList_" + (cardCounter+1) + "'></div>");
     }

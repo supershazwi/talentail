@@ -36,6 +36,24 @@ use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
+Route::get('tutorials/create-projects', function() {
+    return view('tutorials.create-projects',[
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
+});
+
+Route::get('tutorials/attempt-projects', function() {
+    return view('tutorials.attempt-projects',[
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
+});
+
+Route::get('tutorials', function() {
+    return view('tutorials.index',[
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
+});
+
 Route::get('privacy-policy', function() {
     return view('privacy',[
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -219,7 +237,11 @@ Route::post('/profile/save', function(Request $request) {
         $experience->description = preg_replace("/[\r\n]/","\r\n",Input::get('work-description_'.$counter));
         $experience->user_id = $user->id;
         $experience->start_date = Input::get('start-date_'.$counter);
-        $experience->end_date = Input::get('end-date_'.$counter);
+        if($experience->end_date == null) {
+            $experience->end_date = 0;
+        } else {
+            $experience->end_date = Input::get('end-date_'.$counter);
+        }
 
         $experience->save();
 

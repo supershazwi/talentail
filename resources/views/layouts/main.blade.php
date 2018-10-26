@@ -11,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/normalize.css" />
 	<link rel="stylesheet" type="text/css" href="/css/component.css" />
 	<link rel="stylesheet" type="text/css" href="/css/toastr.css" />
+	<link rel="stylesheet" type="text/css" href="/css/introjs.css" />
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	<link href="/img/favicon.ico" rel="icon" type="image/x-icon">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -181,7 +182,8 @@
 				        <div class="col-lg-2">
 							<a href="/about-us" style="font-size: .875rem;">About Us</a><br />
 							<a href="/contact-us" style="font-size: .875rem;">Contact Us</a><br />
-							<a href="/faq" style="font-size: .875rem;">Frequently Asked Questions</a>
+							<a href="/faq" style="font-size: .875rem;">Frequently Asked Questions</a><br />
+							<a href="/tutorials" style="font-size: .875rem;">Tutorials</a>
 		                </div>
 				        <div class="col-lg-3">
 							<a href="/terms-and-conditions" style="font-size: .875rem;">Terms & Conditions</a><br />
@@ -203,6 +205,8 @@
 	        toastr.options = {
 	            positionClass: 'toast-bottom-right'
 	        }; 
+
+	        introJs().start();
 
 	        var pusher = new Pusher("5491665b0d0c9b23a516", {
 	          cluster: 'ap1',

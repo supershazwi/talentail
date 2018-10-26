@@ -533,8 +533,12 @@ class ProjectsController extends Controller
                 $selectedRole = Role::find(session('selectedRole')); 
             }
 
+            $customCompetencies = Competency::where('role_id', $selectedRole->id)->where('user_id', Auth::id());
+
             return view('projects.create', [
                 'selectedRole' => $selectedRole,
+                'customCount' => $customCompetencies->count()+1,
+                'customCompetencies' => $customCompetencies->get(),
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             ]);
         } else {

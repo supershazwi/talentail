@@ -85,7 +85,11 @@
                                                     <p>@parsedown($experience->description)</p>
                                                 </div>
                                                 <div class="col-lg-3">
+                                                    @if($experience->end_date == "0000-00-00")
+                                                    <p>{{date("M Y", strtotime($experience->start_date))}} - Present</p>
+                                                    @else
                                                     <p>{{date("M Y", strtotime($experience->start_date))}} - {{date("M Y", strtotime($experience->end_date))}}</p>
+                                                    @endif
                                                 </div>
                                             </div>
                                             @if(!$loop->last)
