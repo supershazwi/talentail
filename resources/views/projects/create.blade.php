@@ -41,8 +41,8 @@
               <h3 style="margin-top: 1.5rem;">Project Title</h3>
               <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" value="{{ old('title') }}" autofocus>
               <h3 style="margin-top: 1.5rem;">Project Short Description</h3>
-              <textarea class="form-control" name="description" id="description" maxlength="280" rows="5" placeholder="Enter description" style="resize: none;">{{ old('description') }}</textarea>
-              <p class="text-small" style="float: right; color: #8F9194 !important;">280 characters left</p>
+              <textarea class="form-control" name="description" id="description" maxlength="280" rows="5" placeholder="Enter description" style="resize: none;" onkeypress="keyDescription()">{{ old('description') }}</textarea>
+              <p class="text-small" style="float: right; color: #8F9194 !important;" id="charactersLeft">280 characters left</p>
               <br/>
               <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
                   <li class="nav-item">
@@ -251,6 +251,20 @@
   </script>
   <script src="/js/languages/en.js"></script>
   <script type="text/javascript">
+    var input = document.getElementById('description');
+
+    input.onkeyup = function() {
+        var key = event.keyCode || event.charCode;
+
+        if( key == 8 || key == 46 ) {
+          let descriptionLength = document.getElementById("description").value.length;
+          if(descriptionLength >= 0) {
+            document.getElementById("charactersLeft").innerHTML = (280 - descriptionLength) + " characters left";
+          } else {
+            document.getElementById("charactersLeft").innerHTML = "280 characters left";
+          }
+        }
+    };
 
     var selDiv = "";
     
@@ -298,6 +312,13 @@
 
     function cancel() {
         window.location.replace('/projects/select-role');
+    }
+
+    function keyDescription() {
+      let descriptionLength = document.getElementById("description").value.length+1;
+      if(descriptionLength != 281) {
+        document.getElementById("charactersLeft").innerHTML = (280 - descriptionLength) + " characters left";
+      }
     }
 
     function addAnswer() {

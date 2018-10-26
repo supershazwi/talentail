@@ -36,13 +36,13 @@
                     <small>Smile for the camera!</small>
                 </div>
             </div>
-            <h5 style="margin-top: 1.5rem;">Custom Url</h5>
+            <!-- <h5 style="margin-top: 1.5rem;">Custom Url</h5>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon3">https://talentail.com/profile/</span>
               </div>
               <input type="text" name="slug" class="form-control" id="slug" placeholder="Enter your custom link (e.g. j.orange)" value="{{$user->slug}}">
-            </div>
+            </div> -->
             <h5 style="margin-top: 1.5rem;">Full Name</h5>
             <input type="text" name="name" class="form-control" id="name" placeholder="Enter your full name (e.g. Johnie Orange)" value="{{$user->name}}">
             <h5 style="margin-top: 1.5rem;">Email</h5>
