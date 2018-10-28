@@ -8,7 +8,7 @@
     <div>
         <div class="row">
             @if(Auth::id() == null)
-            <div class="col-lg-1" style="margin-bottom: 1.5rem;">
+            <div class="col-lg-1" style="margin-bottom: 1.5rem; ">
 
             </div>
             <div class="col-lg-5" style="margin-bottom: 1.5rem;">
