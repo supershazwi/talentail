@@ -52,7 +52,7 @@
 	        </a>
 	    @else
 	    	<a class="navbar-brand" href="/">
-	    	    <img alt="Pipeline" src="/img/logo-updated3.png" style="width: 10rem;"/>
+	    	    <img alt="Pipeline" src="/img/logo-updated4.png" style="width: 10rem;"/>
 	    	</a>
 	    @endif
 	        <div class="d-flex align-items-center">
@@ -62,7 +62,7 @@
 	            </button>
 	            @else
 	            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-	                <span class="navbar-toggler-icon" style="color: #63a3f2;"></span>
+	                <span class="navbar-toggler-icon" style="color: #007bff;"></span>
 	            </button>
 	            @endif
 	            @if(Auth::id())
