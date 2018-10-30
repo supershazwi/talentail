@@ -46,13 +46,25 @@
 	    @else
 	    <div class="navbar navbar-expand-lg sticky-top" style="background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;">
 	    @endif
+	    @if(Request::path() == "/")
 	        <a class="navbar-brand" href="/">
-	            <img alt="Pipeline" src="/img/logo.svg" />
+	            <img alt="Pipeline" src="/img/logo-updated2.png" style="width: 10rem;"/>
 	        </a>
+	    @else
+	    	<a class="navbar-brand" href="/">
+	    	    <img alt="Pipeline" src="/img/logo-updated3.png" style="width: 10rem;"/>
+	    	</a>
+	    @endif
 	        <div class="d-flex align-items-center">
+	        	@if(Request::path() == "/")
 	            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
 	                <span class="navbar-toggler-icon" style="color: white;"></span>
 	            </button>
+	            @else
+	            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+	                <span class="navbar-toggler-icon" style="color: #63a3f2;"></span>
+	            </button>
+	            @endif
 	            @if(Auth::id())
 	            <div class="d-block d-lg-none ml-2">
 	                <div class="dropdown">
