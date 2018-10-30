@@ -20,7 +20,7 @@
                                   </div>
                                   <div class="col-lg-10">
                                     <h5 data-filter-by="text">Shazwi Suwandi</h5>
-                                    <p>Shazwi has been working as a tech consultant since graduation and has gained significant experience in digital transformation projects. He likes to overthink in his everyday life and sometimes land himself onto problems that he wants to solve. When push comes to shove, he will roll up his sleeves, his pants, tie up his hair and sit tight till a solution is found. He still can't afford his own bat signal yet, so he can only be contactable on the other channels below.</p>
+                                    <p>Shazwi has been working as a tech consultant since graduating from National University of Singapore and has gained significant experience in digital transformation projects. He likes to overthink in his everyday life and sometimes land himself onto problems that he wants to solve. When push comes to shove, he will roll up his sleeves, his pants, tie up his hair and sit tight till a solution is found. He still can't afford his own bat signal yet, so he can only be contactable on the other channels below.</p>
                                     <a target="_blank" href="https://www.linkedin.com/in/shazwi/"><i class="fab fa-linkedin"></i></a>
                                     <a target="_blank" href="https://t.me/supershazwi" style="margin-left: 0.5rem;"><i class="fab fa-telegram"></i></a>
                                     <a target="_blank" href="https://wa.me/6593839053" style="margin-left: 0.5rem;"><i class="fab fa-whatsapp-square"></i></a>
