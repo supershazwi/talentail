@@ -42,9 +42,9 @@
 <body>
 	<div class="layout layout-nav-top">
 		@if(Request::path() == "/")
-	    <div class="navbar navbar-expand-lg" style=" background: #3a7bd5; background: -webkit-linear-gradient(to right, #3a7bd5, #3a6073); background: linear-gradient(to right, #3a7bd5, #3a6073);">
+	    <div class="navbar navbar-expand-lg" style=" padding-left: 12px; padding-right: 12px; background: #3a7bd5; background: -webkit-linear-gradient(to right, #3a7bd5, #3a6073); background: linear-gradient(to right, #3a7bd5, #3a6073);">
 	    @else
-	    <div class="navbar navbar-expand-lg sticky-top" style="background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;">
+	    <div class="navbar navbar-expand-lg sticky-top" style="padding-left: 12px; padding-right: 12px; background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;">
 	    @endif
 	    @if(Request::path() == "/")
 	        <a class="navbar-brand" href="/">
