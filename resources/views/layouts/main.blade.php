@@ -70,7 +70,7 @@
 	                <div class="dropdown">
 	                    <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	                    	@if(Auth::user()->avatar)
-	                        <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
+	                        <img alt="Image" src="http://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
 	                        @else
 	                        <img alt="Image" src="/img/avatar.png" class="avatar" />
 	                        @endif
@@ -154,7 +154,7 @@
 	                    <div class="dropdown">
 	                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         	                    @if(Auth::user()->avatar)
-                                <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
+                                <img alt="Image" src="http://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
                                 @else
                                 <img alt="Image" src="/img/avatar.png" class="avatar" />
                                 @endif

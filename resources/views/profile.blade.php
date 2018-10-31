@@ -15,7 +15,7 @@
                     <div class="page-header mb-4">
                         <div class="media">
                             @if($user->avatar)
-                            <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" />
+                            <img alt="Image" src="http://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" />
                             @else
                             <img alt="Image" src="/img/avatar.png" class="avatar avatar-lg mt-1" />
                             @endif
@@ -210,7 +210,7 @@
                                                 <br />
                                                 <a href="/profile/{{$attemptedProject->project->user_id}}" data-toggle="tooltip" data-placement="top" title="">
                                                     @if($user->avatar)
-                                                    <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}">
+                                                    <img class="avatar" src="http://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}">
                                                     @else
                                                     <img alt="Image" class="avatar" src="/img/avatar.png"/>
                                                     @endif
@@ -332,7 +332,7 @@
                                                 <p>{{$received_review->description}}</p>
                                                 <a href="/profile/{{$received_review->project->user->id}}" data-toggle="tooltip" data-placement="top" title="">
                                                     @if($user->avatar)
-                                                    <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$received_review->project->user->avatar}}">
+                                                    <img class="avatar" src="http://storage.googleapis.com/talentail-123456789/{{$received_review->project->user->avatar}}">
                                                     @else
                                                     <img alt="Image" src="/img/avatar.png" class="avatar" />
                                                     @endif
@@ -586,7 +586,7 @@
                             @foreach($messages as $message)
                             <div class="media chat-item">
                                 @if($message->user->avatar)
-                                <img alt="{{$message->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
+                                <img alt="{{$message->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
                                 @else
                                 <img alt="{{$message->user->name}}" src="/img/avatar.png" class="avatar" />
                                 @endif
@@ -673,7 +673,7 @@
             if(data.avatar == "") {
               document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='/img/avatar.png' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
             } else {
-              document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+              document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='http://storage.googleapis.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
             }
             
             document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;

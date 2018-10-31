@@ -26,7 +26,7 @@
                           <ul class="avatars">
                               <li>
                                 @if($notification->user->avatar)
-                                  <img alt="{{$notification->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$notification->user->avatar}}"" class="avatar" data-filter-by="alt" />
+                                  <img alt="{{$notification->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$notification->user->avatar}}"" class="avatar" data-filter-by="alt" />
                                 @else
                                   <img alt="{{$notification->user->name}}" src="/img/avatar.png"" class="avatar" data-filter-by="alt" />
                                 @endif

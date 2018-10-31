@@ -42,7 +42,7 @@
                         <div class="dropdown">
                             <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @if(Auth::user()->avatar)
-                                <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
+                                <img alt="Image" src="http://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
                                 @else
                                 <img alt="Image" src="/img/avatar.png" class="avatar" />
                                 @endif
@@ -100,7 +100,7 @@
                             <div class="dropdown">
                                 <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     @if(Auth::user()->avatar)
-                                    <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
+                                    <img alt="Image" src="http://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" class="avatar" />
                                     @else
                                     <img alt="Image" src="/img/avatar.png" class="avatar" />
                                     @endif
@@ -169,7 +169,7 @@
                                                 <a class="list-group-item list-group-item-action" href="/messages/{{$user->id}}">
                                                     <div class="media media-member mb-0">
                                                         @if($user->avatar)
-                                                        <img alt="{{$user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar" />
+                                                        <img alt="{{$user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" class="avatar" />
                                                         @else
                                                         <img alt="Image" src="/img/avatar.png" class="avatar" />
                                                         @endif
@@ -243,7 +243,7 @@
                                                 <a class="list-group-item list-group-item-action" href="/messages/{{$userProjectObject->user->id}}/projects/{{$userProjectObject->project->id}}">
                                                     <div class="media media-member mb-0">
                                                         @if($user->avatar)
-                                                        <img alt="{{$userProjectObject->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar" />
+                                                        <img alt="{{$userProjectObject->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar" />
                                                         @else
                                                         <img alt="Image" src="/img/avatar.png" class="avatar" />
                                                         @endif
@@ -276,7 +276,7 @@
                                                 <a class="list-group-item list-group-item-action" href="/messages/{{$user->id}}">
                                                     <div class="media media-member mb-0">
                                                         @if($user->avatar)
-                                                        <img alt="{{$user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar" />
+                                                        <img alt="{{$user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" class="avatar" />
                                                         @else
                                                         <img alt="Image" src="/img/avatar.png" class="avatar" />
                                                         @endif
@@ -350,7 +350,7 @@
                                                 <a class="list-group-item list-group-item-action" href="/messages/{{$userProjectObject->user->id}}/projects/{{$userProjectObject->project->id}}">
                                                     <div class="media media-member mb-0">
                                                         @if($user->avatar)
-                                                        <img alt="{{$userProjectObject->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar" />
+                                                        <img alt="{{$userProjectObject->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar" />
                                                         @else
                                                         <img alt="Image" src="/img/avatar.png" class="avatar" />
                                                         @endif
@@ -401,7 +401,7 @@
                                     @foreach($messages as $message)
                                     <div class="media chat-item">
                                         @if($user->avatar)
-                                        <img alt="{{$message->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
+                                        <img alt="{{$message->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
                                         @else
                                         <img alt="Image" src="/img/avatar.png" class="avatar" />
                                         @endif
@@ -500,7 +500,7 @@
                     if(data.avatar == "") {
                      document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='/img/avatar.png' class='avatar'><div class='media-body'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
                     } else {
-                      document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+                      document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='http://storage.googleapis.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
                     }
                     
                     document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;

@@ -33,7 +33,7 @@
                                     <div class="row">
                                       <div class="col-lg-4">
                                         @if($creator->avatar)
-                                        <img src="https://storage.cloud.google.com/talentail-123456789/{{$creator->avatar}}" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
+                                        <img src="http://storage.googleapis.com/talentail-123456789/{{$creator->avatar}}" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
                                         @else
                                         <img src="/img/avatar.png" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
                                         @endif
