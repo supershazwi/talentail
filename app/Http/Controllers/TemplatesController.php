@@ -31,10 +31,15 @@ class TemplatesController extends Controller
 
         $template = Template::find($routeParameters['templateId']);
 
-        return view('templates.show', [
-            'template' => $template,
-            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        ]);
+        if($template) {
+            return view('templates.show', [
+                'template' => $template,
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            ]);
+        } else {
+            return redirect('templates');
+        }
+        
     }
 
     public function upload() {
