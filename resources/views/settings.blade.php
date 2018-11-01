@@ -15,6 +15,16 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane fade show active" role="tabpanel" id="password" aria-labelledby="password-tab">
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    <p style="color: #721c24 !important;">{{session('error')}}</p>
+                                </div>
+                            @endif
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    <p style="color: #155724 !important;">{{session('success')}}</p>
+                                </div>
+                            @endif
                             @if (($errors->has('password-current') && strlen($errors->first('password-current')) > 0) || $errors->has('password-new') && strlen($errors->first('password-new')) > 0 || $errors->has('password-new-confirm') && strlen($errors->first('password-new-confirm')) > 0)
                             <div class="alert alert-danger">
                               @if ($errors->has('password-current') && strlen($errors->first('password-current')) > 0)

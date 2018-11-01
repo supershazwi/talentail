@@ -355,11 +355,13 @@ Route::post('/settings', function(Request $request) {
             if($newPassword == $newPasswordConfirm) {
                 $user->password = Hash::make($newPassword);
                 $user->save();
+
+                return redirect('settings')->with('success', 'Password updated.');;
             } else {
-                return redirect('settings');
+                return redirect('settings')->with('error', 'The new password and the new password confirmation do not match.');
             }
         } else {
-            return redirect('settings');
+            return redirect('settings')->with('error', 'The username and current password entered do not match.');
         }
     }
 })->middleware('auth');
