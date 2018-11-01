@@ -64,9 +64,9 @@ class TemplatesController extends Controller
 
     	$template->title = $request->input('title');
     	$template->description = $request->input('description');
-    	$template->url = $request->file('file')->store('/assets', 'gcs');
-    	$template->mime_type = $request->file('file')->getMimeType();
-    	$template->size = $request->file('file')->getSize();
+    	$template->url = $request->file('file')[0]->store('/assets', 'gcs');
+    	$template->mime_type = $request->file('file')[0]->getMimeType();
+    	$template->size = $request->file('file')[0]->getSize();
 
     	$template->save();
 
