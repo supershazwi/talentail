@@ -411,8 +411,8 @@ Route::resources([
     'notifications' => 'NotificationController',
 ]);
 
-
 Route::get('/templates/upload', 'TemplatesController@upload');
+Route::get('/templates/{templateId}', 'TemplatesController@show');
 Route::post('/templates/upload', 'TemplatesController@uploadFile');
 Route::get('/templates', 'TemplatesController@index');
 
