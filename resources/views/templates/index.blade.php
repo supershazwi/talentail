@@ -1,6 +1,13 @@
 @extends ('layouts.main')
 
 @section ('content')
+    @if(Auth::user()->creator)
+    <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box; padding: 0.75rem;">
+        <nav aria-label="breadcrumb">
+        </nav>
+        <button onclick="uploadTemplate()" class="btn btn-primary">Upload</button>
+    </div>
+    @endif
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-11">
@@ -46,6 +53,12 @@
             });
         })
     </script>
+
+    <script type="text/javascript">
+      function uploadTemplate() {
+        window.location.replace('/templates/upload'); 
+      }
+    </script> 
 
 @endsection
 

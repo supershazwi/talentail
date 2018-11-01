@@ -38,7 +38,7 @@ class TemplatesController extends Controller
     }
 
     public function upload() {
-    	if(Auth::user()->admin) {
+    	if(Auth::user()->creator) {
 	    	return view('templates.upload', [
 	            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
 	        ]);
