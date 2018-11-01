@@ -411,6 +411,11 @@ Route::resources([
     'notifications' => 'NotificationController',
 ]);
 
+
+Route::get('/templates/upload', 'TemplatesController@upload');
+Route::post('/templates/upload', 'TemplatesController@uploadFile');
+Route::get('/templates', 'TemplatesController@index');
+
 Route::get('/', function() {
 	return view('index', [
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),

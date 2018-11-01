@@ -96,6 +96,18 @@
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/creators" style="color: white;">Creators</a>
 	                </li>
+	                <li class="nav-item">
+	                    <a class="nav-link" href="/templates" style="color: white;">Templates</a>
+	                </li>
+	                <!-- <li class="nav-item">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="nav-dropdown-3" style="color: white;">Resources</a>
+                            <div class="dropdown-menu" aria-labelledby="nav-dropdown-3">
+                                <a class="dropdown-item" href="components-bootstrap.html">Templates</a>
+                                <a class="dropdown-item" href="components-pipeline.html">Pipeline</a>
+                            </div>
+                        </div>
+                    </li> -->
 	                @if(Auth::id())
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/messages" style="color: white;">Messages
@@ -119,6 +131,9 @@
 	                </li>
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/creators">Creators</a>
+	                </li>
+	                <li class="nav-item">
+	                    <a class="nav-link" href="/templates">Templates</a>
 	                </li>
 	                @if(Auth::id())
 	                <li class="nav-item">
