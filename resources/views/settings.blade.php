@@ -15,7 +15,21 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane fade show active" role="tabpanel" id="password" aria-labelledby="password-tab">
-                            <form>
+                            @if (($errors->has('password-current') && strlen($errors->first('password-current')) > 0) || $errors->has('password-new') && strlen($errors->first('password-new')) > 0 || $errors->has('password-new-confirm') && strlen($errors->first('password-new-confirm')) > 0)
+                            <div class="alert alert-danger">
+                              @if ($errors->has('password-current') && strlen($errors->first('password-current')) > 0)
+                                <p style="color: #721c24 !important;">The current password field is required.</p>
+                              @endif
+                              @if ($errors->has('password-new') && strlen($errors->first('password-new')) > 0)
+                                <p style="color: #721c24 !important;">The new password field is required.</p>
+                              @endif
+                              @if ($errors->has('password-new-confirm') && strlen($errors->first('password-new-confirm')) > 0)
+                                <p style="color: #721c24 !important;">The confirm new password field is required.</p>
+                              @endif
+                            </div>
+                            @endif
+                            <form method="POST" action="/settings">
+                                @csrf
                                 <div class="form-group row align-items-center">
                                     <label class="col-3">Current Password</label>
                                     <div class="col">
@@ -30,7 +44,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row align-items-center">
-                                    <label class="col-3">Confirm Password</label>
+                                    <label class="col-3">Confirm New Password</label>
                                     <div class="col">
                                         <input type="password" placeholder="Confirm your new password" name="password-new-confirm" class="form-control" />
                                     </div>

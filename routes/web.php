@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\SendContactMail;
@@ -327,30 +328,40 @@ Route::get('/file-upload', function() {
 Route::get('/projects/select-role', 'ProjectsController@selectRole');
 Route::post('/projects/select-role', 'ProjectsController@selectRole');
 
-Route::post('/settings', function() {
+Route::post('/settings', function(Request $request) {
     $user = Auth::user();
 
-    if (Input::has('name'))
-    {
-    	$user->name = Input::get('name');
+    $validator = Validator::make($request->all(), [
+        'password-current' => 'required',
+        'password-new' => 'required',
+        'password-new-confirm' => 'required'
+    ]);
+
+
+    if($validator->fails()) {
+        return redirect('/settings')
+                    ->withErrors($validator)
+                    ->withInput();
+    } else {
+        $userdata = array(
+            'email'     => $user->email,
+            'password'  => Input::get('password-current')
+        );
+
+        if(Auth::attempt($userdata)) {
+            $newPassword = Input::get('password-new');
+            $newPasswordConfirm = Input::get('password-new-confirm');
+
+            if($newPassword == $newPasswordConfirm) {
+                $user->password = Hash::make($newPassword);
+                $user->save();
+            } else {
+                return redirect('settings');
+            }
+        } else {
+            return redirect('settings');
+        }
     }
-
-    if (Input::has('email'))
-    {
-    	$user->email = Input::get('email');
-    }
-
-    if (Input::has('description'))
-    {
-    	$user->description = Input::get('description');
-    }
-
-    $user->save();
-
-	return view('settings', [
-		'user' => $user,
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-	]);
 })->middleware('auth');
 
 Route::get('/settings', function() {

@@ -28,8 +28,6 @@ use App\ReviewedAnsweredTaskFile;
 
 use Validator;
 
-use Illuminate\Support\Facades\Storage;
-
 class ProjectsController extends Controller
 {
     var $pusher;
