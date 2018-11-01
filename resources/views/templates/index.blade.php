@@ -23,6 +23,16 @@
                                 <div class="card-body">
                                     <h5 data-filter-by="text"><a href="/templates/{{$template->id}}">{{$template->title}}</a></h5>
                                     <p style="margin-top: 0.5rem;">{{$template->description}}</p>
+                                    <a href="/profile/{{$template->user_id}}" data-toggle="tooltip" data-placement="top" title="">
+                                      @if($template->user->avatar)
+                                      <img class="avatar" src="http://storage.googleapis.com/talentail-123456789/{{$template->user->avatar}}">
+                                      @else
+                                      <img class="avatar" src="/img/avatar.png">
+                                      @endif
+                                    </a>
+                                    <a href="/profile/{{$template->user_id}}">
+                                      <span style="font-size: .875rem; line-height: 1.3125rem;">{{$template->user->name}}</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

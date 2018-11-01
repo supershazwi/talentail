@@ -64,6 +64,10 @@ class User extends Authenticatable
         return $this->hasMany(ReviewedAnsweredTaskFile::class);
     }
 
+    public function templates() {
+        return $this->hasMany(Template::class);
+    }
+
     public function verifyUser()
     {
         return $this->hasOne('App\VerifyUser');
