@@ -16,7 +16,7 @@
                 </section>
                  <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
                    <div class="carousel-inner">
-                    @foreach($template->template_shots as $templateShot)
+                    <!-- @foreach($template->template_shots as $templateShot)
                       @if($loop->first)
                        <div class="carousel-item active">
                          <img class="d-block w-100" src="http://storage.googleapis.com/talentail-123456789/{{$templateShot->url}}" alt="">
@@ -26,7 +26,12 @@
                          <img class="d-block w-100" src="http://storage.googleapis.com/talentail-123456789/{{$templateShot->url}}" alt="">
                        </div>
                        @endif
-                    @endforeach
+                    @endforeach -->
+                    <div class="your-class">
+                      @foreach($template->template_shots as $templateShot)
+                      <div><img class="d-block w-100" src="http://storage.googleapis.com/talentail-123456789/{{$templateShot->url}}" alt=""></div>
+                      @endforeach
+                    </div>
                    </div>
                    <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -68,8 +73,7 @@
       function downloadTemplate() {
         window.location.replace(document.getElementById("templateUrl").value); 
       }
-    </script> 
-
+    </script>
 @endsection
 
 @section ('footer')
