@@ -8,9 +8,31 @@
                     <h1 class="display-4 mb-3">{{$template->title}}</h1>
                     <p class="lead">{{$template->description}}</p>
                 </section>
-                <div class="tab-pane fade show active" id="templates" role="tabpanel" aria-labelledby="teams-tab" data-filter-list="content-list-body">
+                <div class="tab-pane fade show active" id="templates">
                     <div class="content-list-body row">
-                       
+                       <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+                         <div class="carousel-inner">
+                          @foreach($template->template_shots as $templateShot)
+                            @if($loop->first)
+                             <div class="carousel-item active">
+                               <img class="d-block w-100" src="http://storage.googleapis.com/talentail-123456789/{{$templateShot->url}}" alt="">
+                             </div>
+                             @else
+                             <div class="carousel-item">
+                               <img class="d-block w-100" src="http://storage.googleapis.com/talentail-123456789/{{$templateShot->url}}" alt="">
+                             </div>
+                             @endif
+                          @endforeach
+                         </div>
+                         <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+                           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                           <span class="sr-only">Previous</span>
+                         </a>
+                         <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+                           <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                           <span class="sr-only">Next</span>
+                         </a>
+                     </div>
                     </div>
                 </div>
             </div>
@@ -35,6 +57,8 @@
             purchaseChannel.bind('new-purchase', function(data) {
                 toastr.success(data.username + ' ' + data.message); 
             });
+
+            $('.carousel').carousel();
         })
     </script>
 

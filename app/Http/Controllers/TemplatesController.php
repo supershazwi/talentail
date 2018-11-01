@@ -64,7 +64,7 @@ class TemplatesController extends Controller
 
     	$template->title = $request->input('title');
     	$template->description = $request->input('description');
-    	$template->url = $request->file('file')[0]->store('/assets', 'gcs');
+        $template->url = Storage::disk('gcs')->put('/assets', $request->file('file')[0], 'public');
     	$template->mime_type = $request->file('file')[0]->getMimeType();
     	$template->size = $request->file('file')[0]->getSize();
 
@@ -74,7 +74,7 @@ class TemplatesController extends Controller
 
             $templateShot = new TemplateShot;
 
-            $templateShot->url = $request->file('shot')[$fileCounter]->store('/assets', 'gcs');
+            $templateShot->url = Storage::disk('gcs')->put('/assets', $request->file('shot')[$fileCounter], 'public');
             $templateShot->template_id = $template->id;
 
             $templateShot->save();
