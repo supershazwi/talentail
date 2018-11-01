@@ -1,7 +1,7 @@
 @extends ('layouts.main')
 
 @section ('content')
-    @if(Auth::user()->creator)
+    @if(!empty(Auth::user()) && Auth::user()->creator)
     <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box; padding: 0.75rem;">
         <nav aria-label="breadcrumb">
         </nav>
