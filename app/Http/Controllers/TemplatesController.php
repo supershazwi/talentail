@@ -68,6 +68,7 @@ class TemplatesController extends Controller
         $template->url = Storage::disk('gcs')->put('/assets', $request->file('file')[0], 'public');
     	$template->mime_type = $request->file('file')[0]->getMimeType();
     	$template->size = $request->file('file')[0]->getSize();
+        $template->user_id = Auth::id();
 
     	$template->save();
 
