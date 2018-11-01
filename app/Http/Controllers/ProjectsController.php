@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
@@ -87,7 +88,7 @@ class ProjectsController extends Controller
 
                     $reviewedAnsweredTaskFile->title = $request->file('file_' . $answeredTask['id'])[$fileCounter]->getClientOriginalName();
                     $reviewedAnsweredTaskFile->size = $request->file('file_' . $answeredTask['id'])[$fileCounter]->getSize();
-                    $reviewedAnsweredTaskFile->url = $request->file('file_' . $answeredTask['id'])[$fileCounter]->store('/assets', 'gcs');
+                    $reviewedAnsweredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_' . $answeredTask['id'])[$fileCounter], 'public');
                     $reviewedAnsweredTaskFile->mime_type = $request->file('file_' . $answeredTask['id'])[$fileCounter]->getMimeType();
                     $reviewedAnsweredTaskFile->answered_task_id = $answeredTask['id'];
                     $reviewedAnsweredTaskFile->project_id = $project->id;
@@ -242,7 +243,7 @@ class ProjectsController extends Controller
 
                         $answeredTaskFile->title = $request->file('file_' . $taskCounter)[$fileCounter]->getClientOriginalName();
                         $answeredTaskFile->size = $request->file('file_' . $taskCounter)[$fileCounter]->getSize();
-                        $answeredTaskFile->url = $request->file('file_' . $taskCounter)[$fileCounter]->store('/assets', 'gcs');
+                        $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_' . $taskCounter)[$fileCounter], 'public');
                         $answeredTaskFile->mime_type = $request->file('file_' . $taskCounter)[$fileCounter]->getMimeType();
                         $answeredTaskFile->answered_task_id = $answeredTask->id;
                         $answeredTaskFile->project_id = $request->input('project_id');
@@ -734,7 +735,7 @@ class ProjectsController extends Controller
 
                 $projectFile->title = $request->file('file-1')[$fileCounter]->getClientOriginalName();
                 $projectFile->size = $request->file('file-1')[$fileCounter]->getSize();
-                $projectFile->url = $request->file('file-1')[$fileCounter]->store('/assets', 'gcs');
+                $projectFile->url = Storage::disk('gcs')->put('/assets', $request->file('file-1')[$fileCounter], 'public');
                 $projectFile->mime_type = $request->file('file-1')[$fileCounter]->getMimeType();
                 $projectFile->project_id = $project->id;
 
@@ -850,7 +851,7 @@ class ProjectsController extends Controller
 
                 $projectFile->title = $request->file('file-1')[$fileCounter]->getClientOriginalName();
                 $projectFile->size = $request->file('file-1')[$fileCounter]->getSize();
-                $projectFile->url = $request->file('file-1')[$fileCounter]->store('/assets', 'gcs');
+                $projectFile->url = Storage::disk('gcs')->put('/assets', $request->file('file-1')[$fileCounter], 'public');
                 $projectFile->mime_type = $request->file('file-1')[$fileCounter]->getMimeType();
                 $projectFile->project_id = $project->id;
 
@@ -968,7 +969,7 @@ class ProjectsController extends Controller
 
                     $projectFile->title = $request->file('file-1')[$fileCounter]->getClientOriginalName();
                     $projectFile->size = $request->file('file-1')[$fileCounter]->getSize();
-                    $projectFile->url = $request->file('file-1')[$fileCounter]->store('/assets', 'gcs');
+                    $projectFile->url = Storage::disk('gcs')->put('/assets', $request->file('file-1')[$fileCounter], 'public');
                     $projectFile->mime_type = $request->file('file-1')[$fileCounter]->getMimeType();
                     $projectFile->project_id = $project->id;
 
@@ -1148,7 +1149,7 @@ class ProjectsController extends Controller
 
                     $projectFile->title = $request->file('file-1')[$fileCounter]->getClientOriginalName();
                     $projectFile->size = $request->file('file-1')[$fileCounter]->getSize();
-                    $projectFile->url = $request->file('file-1')[$fileCounter]->store('/assets', 'gcs');
+                    $projectFile->url = Storage::disk('gcs')->put('/assets', $request->file('file-1')[$fileCounter], 'public');
                     $projectFile->mime_type = $request->file('file-1')[$fileCounter]->getMimeType();
                     $projectFile->project_id = $project->id;
 

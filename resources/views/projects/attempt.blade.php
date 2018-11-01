@@ -10,7 +10,7 @@
           <section class="py-4 py-lg-5">
               @if($project->user->avatar)
               <a href="/profile/{{$project->user_id}}" data-toggle="tooltip" data-placement="top" title="">
-                  <img class="avatar" src="https://storage.cloud.google.com/talentail-123456789/{{$project->user->avatar}}">
+                  <img class="avatar" src="http://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}">
               </a>
               @else
               <a href="/profile/{{$project->user_id}}" data-toggle="tooltip" data-placement="top" title="">
@@ -163,7 +163,7 @@
                                       </ul>
                                       <div class="media-body d-flex justify-content-between align-items-center">
                                           <div>
-                                              <a href="https://storage.cloud.google.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" data-filter-by="text">{{$projectFile->title}}</a>
+                                              <a href="http://storage.googleapis.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" data-filter-by="text">{{$projectFile->title}}</a>
                                               <br>
                                               <span class="text-small" data-filter-by="text">{{round($projectFile->size/1048576, 2)}} MB, {{$projectFile->mime_type}}</span>
                                           </div>
@@ -232,7 +232,7 @@
                             @foreach($messages as $message)
                             <div class="media chat-item">
                                 @if($message->user->avatar)
-                                <img alt="{{$message->user->name}}" src="https://storage.cloud.google.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
+                                <img alt="{{$message->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
                                 @else
                                 <img alt="{{$message->user->name}}" src="/img/avatar.png" class="avatar" />
                                 @endif
@@ -321,7 +321,7 @@
             if(data.avatar == "") {
               document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='/img/avatar.png' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
             } else {
-              document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.cloud.google.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+              document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='http://storage.googleapis.com/talentail-123456789/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
             }
             
             document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;

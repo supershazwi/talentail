@@ -5,6 +5,7 @@
       <nav aria-label="breadcrumb">
       </nav>
       <button onclick="downloadTemplate()" class="btn btn-primary">Download</button>
+      <input type="hidden" id="templateUrl" value="http://storage.googleapis.com/talentail-123456789/{{$template->url}}" />
   </div>
     <div class="container">
         <div class="row justify-content-center">
@@ -62,6 +63,12 @@
             $('.carousel').carousel();
         })
     </script>
+
+    <script type="text/javascript">
+      function downloadTemplate() {
+        window.location.replace(document.getElementById("templateUrl").value); 
+      }
+    </script> 
 
 @endsection
 
