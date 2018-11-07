@@ -12,8 +12,8 @@
 
             </div>
             <div class="col-lg-5" style="margin-bottom: 1.5rem;">
-                <h1 style="font-size: 58px; color: white; font-weight: bold;">Discover real world projects & build a portfolio</h1>
-                <p style="color: white !important;">Talentail is the platform for you to not just say what you can do but show what you can do. Portfolios are not meant for just creative professionals.</p>
+                <h1 style="font-size: 3rem; margin-top: 0; color: white; font-weight: bold;">Discover real world projects, apply your knowledge and gain experience</h1>
+                <p style="color: white !important;">Talentail is the go-to platform for you to gain the necessary experience and build a portfolio containing tangible work deliverables. Supercharge your CV today and don't settle for just words on it.</p>
             </div>
             <div class="col-lg-1" style="margin-bottom: 1.5rem;">
 
