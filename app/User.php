@@ -32,6 +32,10 @@ class User extends Authenticatable
         return $this->hasMany(Experience::class);
     }
 
+    public function shopping_carts() {
+        return $this->hasMany(ShoppingCart::class);
+    }
+
     public function projects() {
         return $this->hasMany(Project::class);
     }

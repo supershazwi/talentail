@@ -19,6 +19,8 @@ use App\Answer;
 use App\ProjectFile;
 use App\Role;
 use App\RoleGained;
+use App\ShoppingCart;
+use App\ShoppingCartLineItem;
 use App\Competency;
 use App\CompetencyScore;
 use App\Message;
@@ -485,10 +487,20 @@ class ProjectsController extends Controller
                     return redirect('/roles/' . $routeParameters['roleSlug']);
                 }
             } else {
+                // check whether added to cart
+
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+                if($shoppingCart) {
+                    $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
+                } else {
+                    $addedToCart = null;
+                }
+
                 return view('projects.show', [
                     'project' => $project,
                     'role' => $role,
                     'messages' => $messages3,
+                    'addedToCart' => $addedToCart,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                     'clickedUserId' => $clickedUserId,
                     'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -589,6 +601,40 @@ class ProjectsController extends Controller
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             ]);
         }
+    }
+
+    public function addProjectToCart(Request $request) {
+        $project = Project::find($request->input('project_id'));
+
+        // find whether or not there is an existing shopping cart
+        $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+
+        if($shoppingCart) {
+            // already has a shopping cart
+        } else {
+            // no shopping cart, create new one
+
+            $shoppingCart = new ShoppingCart;
+
+            $shoppingCart->status = "pending";
+            $shoppingCart->total = 0;
+            $shoppingCart->no_of_items = 0;
+            $shoppingCart->user_id = Auth::id();
+        }
+
+        $shoppingCart->no_of_items = $shoppingCart->no_of_items + 1;
+        $shoppingCart->total = $shoppingCart->total + $project->amount;
+
+        $shoppingCart->save();
+
+        $shoppingCartLineItem = new ShoppingCartLineItem;
+
+        $shoppingCartLineItem->project_id = $project->id;
+        $shoppingCartLineItem->shopping_cart_id = $shoppingCart->id;
+
+        $shoppingCartLineItem->save();
+
+        return redirect('/roles/' . $project->role->slug . "/projects/" . $project->slug);
     }
 
     public function purchaseProject(Request $request) {

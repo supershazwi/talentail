@@ -294,15 +294,15 @@
                         <h5 style="margin-top: 1.5rem;">Project Price</h5>
                         <div class="input-group mb-3">
                           <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">$</span>
+                            <span class="input-group-text">$</span>
                           </div>
-                          <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1" name="price" value="{{$project->amount}}">
+                          <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" name="price" value="{{$project->amount}}">
                         </div>
                         <h5 style="margin-top: 1.5rem;">Project Duration</h5>
                         <div class="input-group mb-3">
-                          <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Recipient's username" aria-describedby="basic-addon2" name="hours" value="{{$project->hours}}">
+                          <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Project duration" name="hours" value="{{$project->hours}}">
                           <div class="input-group-append">
-                            <span class="input-group-text" id="basic-addon2">hours</span>
+                            <span class="input-group-text">hours</span>
                           </div>
                         </div>
                       </div>

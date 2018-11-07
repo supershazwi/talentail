@@ -561,10 +561,10 @@
                     </form>
         </div>
         @if(Auth::id() && !empty($clickedUserId) && $clickedUserId != null)
-        <button class="btn btn-primary btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" style="margin-right: 1.5rem; height: 48px;" id="rectangleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
+        <button class="btn btn-primary btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" style="margin-right: 2.65rem; height: 48px;" id="rectangleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
             Ask me anything!
         </button>
-        <button class="btn btn-primary btn-round btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" id="circleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
+        <button class="btn btn-primary btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" id="circleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
             <i class="material-icons">chat_bubble</i>
             <i class="material-icons">close</i>
         </button>

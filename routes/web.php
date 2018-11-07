@@ -27,6 +27,8 @@ use App\User;
 use App\Role;
 use App\Project;
 use App\RoleGained;
+use App\ShoppingCart;
+use App\ShoppingCartLineItem;
 use App\Message;
 use App\ContactMessage;
 use App\CreatorApplication;
@@ -37,6 +39,46 @@ use Pusher\Laravel\Facades\Pusher;
 use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
+
+Route::get('welcome', function() {
+    return view('welcome');
+});
+
+Route::post('/shopping-cart/empty-cart', function(Request $request) {
+    $shoppingCartId = Input::get('shopping_cart_id');
+
+    ShoppingCartLineItem::where('shopping_cart_id', $shoppingCartId)->delete();
+    ShoppingCart::destroy($shoppingCartId);
+
+    return redirect('/shopping-cart');
+});
+
+Route::post('/shopping-cart/remove-line-item', function(Request $request) {
+    ShoppingCartLineItem::destroy(Input::get('shopping_cart_line_item_id'));
+
+    $shoppingCart = ShoppingCart::find(Input::get('shopping_cart_id'));
+    $shoppingCart->no_of_items = $shoppingCart->no_of_items - 1;
+
+    $shoppingCart->total = 0;
+
+    foreach($shoppingCart->shopping_cart_line_items as $shoppingCartLineItem) {
+        $shoppingCart->total = $shoppingCart->total + $shoppingCartLineItem->project->amount;
+    }
+
+    $shoppingCart->save();
+
+    return redirect('/shopping-cart');
+});
+
+Route::get('/shopping-cart', function() {
+    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+    return view('shoppingCart', [
+        'shoppingCart' => $shoppingCart,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
+})->middleware('auth');;
+
+Route::get('/payment/process', 'PaymentsController@process')->name('payment.process');
 
 Route::get('tutorials/create-projects', function() {
     return view('tutorials.create-projects',[
@@ -253,7 +295,7 @@ Route::post('/profile/save', function(Request $request) {
             $experience->description = preg_replace("/[\r\n]/","\r\n",Input::get('work-description_'.$counter));
             $experience->user_id = $user->id;
             $experience->start_date = Input::get('start-date_'.$counter);
-            if($experience->end_date == null) {
+            if(Input::get('end-date_'.$counter) == null) {
                 $experience->end_date = 0;
             } else {
                 $experience->end_date = Input::get('end-date_'.$counter);
@@ -404,6 +446,7 @@ Route::post('/roles/{roleSlug}/projects/{projectSlug}/clone', 'ProjectsControlle
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/toggle-visibility-project', 'ProjectsController@toggleVisibilityProject');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/submit-project-attempt', 'ProjectsController@submitProjectAttempt');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/purchase-project', 'ProjectsController@purchaseProject');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/add-project-to-cart', 'ProjectsController@addProjectToCart');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/save-project', 'ProjectsController@saveChanges');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/edit', 'ProjectsController@edit')->middleware('auth');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/attempt', 'ProjectsController@attempt')->middleware('auth');

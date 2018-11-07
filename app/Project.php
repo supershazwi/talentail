@@ -19,6 +19,10 @@ class Project extends Model
     	return $this->hasMany(Task::class);
     }
 
+    public function shopping_cart_line_items() {
+        return $this->hasMany(ShoppingCartLineItem::class);
+    }
+
     public function messages() {
         return $this->hasMany(Message::class);
     }

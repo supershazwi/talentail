@@ -1,7 +1,7 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box;">
+  <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box; padding: 1rem;">
       <nav aria-label="breadcrumb">
       </nav>
       @if(Auth::id())
@@ -19,7 +19,13 @@
             <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/edit" class="btn btn-primary">Edit Project</a>
           @else
               <button class="btn btn-link" style="color: #6c757d;"><strong>${{$project->amount}}</strong></button>
+              <!-- <button onclick="purchaseProject()" class="btn btn-success" data-toggle="modal" data-target="#purchase-project-modal">Purchase</button> -->
               <button onclick="purchaseProject()" class="btn btn-success">Purchase</button>
+              <!-- @if($addedToCart)
+              <button class="btn btn-success" disabled>Added to Cart</button>
+              @else
+              <button onclick="addProjectToCart()" class="btn btn-success">Add to Cart</button>
+              @endif -->
           @endif
         @endif
       @endif
@@ -83,6 +89,13 @@
     <input type="hidden" name="role_slug" value="{{$project->role->slug}}" />
     <input type="hidden" name="project_slug" value="{{$project->slug}}" />
     <button type="submit" style="display: none;" id="purchaseProjectButton">Submit</button>
+  </form>
+  <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/add-project-to-cart" id="addProjectToCart">
+    @csrf
+    <input type="hidden" name="project_id" value="{{$project->id}}" />
+    <input type="hidden" name="role_slug" value="{{$project->role->slug}}" />
+    <input type="hidden" name="project_slug" value="{{$project->slug}}" />
+    <button type="submit" style="display: none;" id="addProjectToCartButton">Submit</button>
   </form>
   <div class="container">
       <div class="row justify-content-center">
@@ -275,10 +288,10 @@
         </div>
         @if(Auth::id())
         @if(Auth::id() != $project->user_id)
-        <button class="btn btn-primary btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" style="margin-right: 1.5rem; height: 48px;" id="rectangleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
+        <button class="btn btn-primary btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" style="margin-right: 2.65rem; height: 48px;" id="rectangleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
             Ask me anything!
         </button>
-        <button class="btn btn-primary btn-round btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" id="circleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
+        <button class="btn btn-primary btn-floating btn-lg" type="button" data-toggle="collapse" data-target="#floating-chat" aria-expanded="false" aria-controls="sidebar-floating-chat" id="circleChat" onmouseover="highlightButtons()" onmouseleave="unhighlightButtons()">
             <i class="material-icons">chat_bubble</i>
             <i class="material-icons">close</i>
         </button>
@@ -340,6 +353,29 @@
   </div>
 
   <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
+
+  <form class="modal fade" id="purchase-project-modal" tabindex="-1" role="dialog" aria-labelledby="purchase-project-modal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header" style="padding: 1rem;">
+                  <h5 class="modal-title">Purchase Project</h5>
+                  <button type="button" class="close btn btn-round" data-dismiss="modal" aria-label="Close">
+                      <i class="material-icons">close</i>
+                  </button>
+              </div>
+              <!--end of modal head-->
+              <div class="modal-body" style="padding: 1rem;">
+                  <div id="dropin-container" style="margin-top: -2rem; margin-bottom: -0.5rem;"></div>
+              </div>
+              <!--end of modal body-->
+              <div class="modal-footer" style="padding: 1rem;">
+                  <button role="button" class="btn btn-primary" id="submit-button">
+                      Confirm Purchase
+                  </button>
+              </div>
+          </div>
+      </div>
+  </form>
 
   <script type="text/javascript">
     $.ajaxSetup({
@@ -435,6 +471,10 @@
       document.getElementById("purchaseProjectButton").click();
     }
 
+    function addProjectToCart() {
+      document.getElementById("addProjectToCartButton").click();
+    }
+
     function highlightButtons() {
       document.getElementById("circleChat").style.background = "#0156cf";
       document.getElementById("circleChat").style.borderColor = "#0156cf";
@@ -448,6 +488,27 @@
       document.getElementById("rectangleChat").style.background = "#076bff";
       document.getElementById("rectangleChat").style.borderColor = "#076bff";
     }
+
+    var button = document.querySelector('#submit-button');
+
+    braintree.dropin.create({
+      authorization: "{{ Braintree_ClientToken::generate() }}",
+      container: '#dropin-container'
+    }, function (createErr, instance) {
+      button.addEventListener('click', function () {
+        instance.requestPaymentMethod(function (err, payload) {
+
+          $.get('{{ route('payment.process') }}', {payload}, function (response) {
+            if (response.success) {
+              alert('Payment successfull!');
+            } else {
+              alert('Payment failed');
+            }
+          }, 'json');
+
+        });
+      });
+    });
 
   </script>
 

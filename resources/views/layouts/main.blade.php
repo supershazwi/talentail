@@ -37,6 +37,8 @@
 
 	  gtag('config', 'UA-122657233-1');
 	</script>
+
+	<script src="https://js.braintreegateway.com/web/dropin/1.8.1/js/dropin.min.js"></script>
 </head>
 
 <body>
@@ -151,6 +153,13 @@
 	            @endif
 	            <div class="d-lg-flex align-items-center">
 	            	@if(Auth::id())
+	            	<!-- <div class="d-lg-block">
+	            		@if(Request::path() == "/")
+	            		<a href="/shopping-cart" style="color: white;"><i class="fas fa-shopping-cart"></i></a>
+	            		@else
+	            		<a href="/shopping-cart"><i class="fas fa-shopping-cart"></i></a>
+	            		@endif
+	            	</div> -->
 	                <div class="dropdown mx-lg-2">
 	                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="newContentButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	                        Add New

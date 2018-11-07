@@ -79,6 +79,16 @@ class RegisterController extends Controller
 
         $user->save();
 
+        $response = \Braintree_Customer::create([
+            'id' => $user->id
+        ]);
+
+        if($response->success) {
+            $user->braintree_customer_id = $response->customer->id;
+        }
+
+        $user->save();
+
         $verifyUser = VerifyUser::create([
             'user_id' => $user->id,
             'token' => str_random(40)
