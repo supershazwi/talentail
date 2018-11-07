@@ -101,27 +101,6 @@
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/templates" style="color: white;">Templates</a>
 	                </li>
-	                <!-- <li class="nav-item">
-                        <div class="dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" id="nav-dropdown-3" style="color: white;">Resources</a>
-                            <div class="dropdown-menu" aria-labelledby="nav-dropdown-3">
-                                <a class="dropdown-item" href="components-bootstrap.html">Templates</a>
-                                <a class="dropdown-item" href="components-pipeline.html">Pipeline</a>
-                            </div>
-                        </div>
-                    </li> -->
-	                @if(Auth::id())
-	                <li class="nav-item">
-	                    <a class="nav-link" href="/messages" style="color: white;">Messages
-	                    	@if($messageCount > 0)
-	                    		<span class="badge badge-light" style="margin-left: 0.5rem;">{{$messageCount}}</span>
-	                    	@endif
-	                    </a>	
-	                </li>
-	                <li class="nav-item">
-	                    <a class="nav-link" href="/notifications" style="color: white;">Notifications</a>
-	                </li>
-	                @endif
 	            </ul>
 	            @else
 	            <ul class="navbar-nav">
@@ -137,29 +116,33 @@
 	                <li class="nav-item">
 	                    <a class="nav-link" href="/templates">Templates</a>
 	                </li>
-	                @if(Auth::id())
-	                <li class="nav-item">
-	                    <a class="nav-link" href="/messages">Messages
-	                    	@if($messageCount > 0)
-	                    		<span class="badge badge-primary" style="margin-left: 0.5rem;">{{$messageCount}}</span>
-	                    	@endif
-	                    </a>
-	                </li>
-	                <li class="nav-item">
-	                    <a class="nav-link" href="/notifications">Notifications</a>
-	                </li>
-	                @endif
 	            </ul>
 	            @endif
 	            <div class="d-lg-flex align-items-center">
 	            	@if(Auth::id())
-	            	<!-- <div class="d-lg-block">
+	            	<div class="d-lg-block">
 	            		@if(Request::path() == "/")
-	            		<a href="/shopping-cart" style="color: white;"><i class="fas fa-shopping-cart"></i></a>
+	            		<a class="nav-link" href="/messages" style="display: inline; color: white;">
+	            			<i class="fas fa-comment-alt"></i>
+	            			@if($messageCount > 0)
+	            				<sup>{{$messageCount}}</sup>
+	            			@endif
+	            		</a>
+	            		<a class="nav-link" href="/notifications" style="display: inline; color: white;">
+	            			<i class="fas fa-globe-asia"></i>
+	            		</a>
+	            		<a class="nav-link" href="/shopping-cart" style="display: inline; color: white;"><i class="fas fa-shopping-cart"></i></a>
 	            		@else
-	            		<a href="/shopping-cart"><i class="fas fa-shopping-cart"></i></a>
+	            		<a class="nav-link" href="/messages" style="display: inline;">
+	            			<i class="fas fa-comment-alt"></i>
+	            			@if($messageCount > 0)
+	            				<sup>{{$messageCount}}</sup>
+	            			@endif
+	            		</a>
+	            		<a class="nav-link" href="/notifications" style="display: inline;"><i class="fas fa-globe-asia"></i></a>
+	            		<a class="nav-link" href="/shopping-cart" style="display: inline;"><i class="fas fa-shopping-cart"></i></a>
 	            		@endif
-	            	</div> -->
+	            	</div>
 	                <div class="dropdown mx-lg-2">
 	                    <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="newContentButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	                        Add New

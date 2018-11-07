@@ -29,9 +29,9 @@
     <body>
 
         <div class="layout layout-nav-top layout-sidebar">
-            <div class="navbar navbar-expand-lg sticky-top" style="background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;">
+            <div class="navbar navbar-expand-lg sticky-top" style="padding-left: 12px; padding-right: 12px; background-color: #F7F9FA; border-bottom: 1px solid #E5E5E5;">
                 <a class="navbar-brand" href="/">
-                    <img alt="Pipeline" src="/img/logo.svg" />
+                    <img alt="Pipeline" src="/img/logo-updated4.png" style="width: 10rem;"/>
                 </a>
                 <div class="d-flex align-items-center">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,21 +67,22 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/creators">Creators</a>
                         </li>
-                        @if(Auth::id())
                         <li class="nav-item">
-                            <a class="nav-link" href="/messages">Messages
-                                @if($messageCount > 0)
-                                    <span class="badge badge-primary" style="margin-left: 0.5rem;">{{$messageCount}}</span>
-                                @endif
-                            </a>
+                            <a class="nav-link" href="/templates">Templates</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/notifications">Notifications</a>
-                        </li>
-                        @endif
                     </ul>
                     <div class="d-lg-flex align-items-center">
                         @if(Auth::id())
+                        <div class="d-lg-block">
+                            <a class="nav-link" href="/messages" style="display: inline;">
+                                <i class="fas fa-comment-alt"></i>
+                                @if($messageCount > 0)
+                                    <sup>{{$messageCount}}</sup>
+                                @endif
+                            </a>
+                            <a class="nav-link" href="/notifications" style="display: inline;"><i class="fas fa-globe-asia"></i></a>
+                            <a class="nav-link" href="/shopping-cart" style="display: inline;"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
                         <div class="dropdown mx-lg-2">
                             <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="newContentButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Add New
