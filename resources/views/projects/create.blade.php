@@ -142,17 +142,17 @@
                             @endif
                           @endforeach
 
-                          @foreach($selectedRole->competencies as $key=>$competency)
+                          @foreach($customCompetencies as $key=>$customCompetency)
                             @if($key==0) 
                               <h3 id="defaultCustomCompetencyHeading">Custom Competencies</h3>
                             @endif
-                            @if($competency->user_id != 0)
+                            @if($customCompetency->user_id != 0)
                             <div class="row custom-competency-row">
                                 <div class="form-group col">
                                     <div class="form-check">
-                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}">
+                                      <input type="checkbox" name="custom-competency[]" class="form-check-input" value="{{$customCompetency->id}}">
                                       <p>
-                                        {{$competency->title}}
+                                        {{$customCompetency->title}}
                                       </p>
                                     </div>
                                 </div>
@@ -422,11 +422,8 @@
       // it is not shared across other creators
       event.preventDefault();
       if(document.getElementById("defaultCustomCompetencyHeading") == null) {
-        console.log("nulpl");
         document.getElementById('customCompetencyHeading').style.display = 'block';
       }
-
-      console.log(document.querySelectorAll('.custom-competency-row').length);
 
       let competencyCounter = document.querySelectorAll('.custom-competency-row').length + 1;
 

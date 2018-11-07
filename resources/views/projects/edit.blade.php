@@ -252,21 +252,21 @@
                             @endif
                           @endforeach
 
-                          @foreach($role->competencies as $key=>$competency)
+                          @foreach($customCompetencies as $key=>$customCompetency)
                             @if($key==0) 
                               <h3 id="defaultCustomCompetencyHeading">Custom Competencies</h3>
                             @endif
-                            @if($competency->user_id != 0)
+                            @if($customCompetency->user_id != 0)
                             <div class="row custom-competency-row">
                                 <div class="form-group col">
                                     <div class="form-check">
-                                      @if(in_array($competency->id, $competencyIdArray))
-                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}" checked>
+                                      @if(in_array($customCompetency->id, $competencyIdArray))
+                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$customCompetency->id}}" checked>
                                       @else
-                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}">
+                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$customCompetency->id}}">
                                       @endif
                                       <p>
-                                        {{$competency->title}}
+                                        {{$customCompetency->title}}
                                       </p>
                                     </div>
                                 </div>
