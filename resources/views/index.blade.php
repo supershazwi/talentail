@@ -16,7 +16,6 @@
                 <p style="color: white !important;">Talentail is the go-to platform for you to gain the necessary experience and build a portfolio containing tangible work deliverables. Supercharge your CV today and don't settle for just words on it.</p>
             </div>
             <div class="col-lg-1" style="margin-bottom: 1.5rem;">
-
             </div>
             
             <div class="col-lg-4" style="margin-bottom: 1.5rem;">
