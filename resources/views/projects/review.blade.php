@@ -105,9 +105,9 @@
                         @foreach($answeredTasks as $key=>$answeredTask)
                         <div class="card">
                           <div class="card-header" id="headingOne">
-                            <a data-toggle="collapse" aria-expanded="true" href="#">
+                            <p style="color: #007bff !important;">
                               {{$key+1}}. {{$answeredTask->task->title}}
-                            </a>
+                            </p>
                           </div>
 
                           <div class="collapse show" data-parent="#accordionExample">

@@ -168,9 +168,9 @@
                       @foreach($project->tasks as $key=>$task)
                       <div class="card">
                         <div class="card-header" id="headingOne">
-                          <a data-toggle="collapse" data-target="#collapse{{$key+1}}" aria-expanded="true" aria-controls="collapse{{$key+1}}" href="#">
+                          <p style="color: #007bff !important;">
                             {{$key+1}}. {{$task->title}}
-                          </a>
+                          </p>
                         </div>
 
                         <div id="collapse{{$key+1}}" class="collapse show" aria-labelledby="heading{{$key+1}}" data-parent="#accordionExample">
