@@ -44,6 +44,10 @@ Route::get('welcome', function() {
     return view('welcome');
 });
 
+Route::get('/portfolio', function() {
+    return view('portfolio');
+});
+
 Route::post('/shopping-cart/empty-cart', function(Request $request) {
     $shoppingCartId = Input::get('shopping_cart_id');
 
