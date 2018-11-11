@@ -26,7 +26,7 @@
                     <!--end of content list head-->
                     <div class="content-list-body row">
                         @foreach($roles as $role)
-                        <div class="col-xl-4 col-6">
+                        <div class="col-xl-12 col-6">
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <h5 data-filter-by="text"><a href="/roles/{{$role->slug}}">{{$role->title}}</a></h5>
