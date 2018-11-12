@@ -16,7 +16,7 @@
                             <div class="card-body">
                                 <div class="row">
                                   <div class="col-lg-2">
-                                    <img src="/img/1235519_10151680956467939_1487085179_n.jpg" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
+                                    <img src="/img/gray-avatar.png" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
                                   </div>
                                   <div class="col-lg-10">
                                     <h5 data-filter-by="text">Shazwi Suwandi</h5>
