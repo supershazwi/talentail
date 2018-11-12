@@ -156,7 +156,7 @@
                     <img alt="Wallpaper" src="/img/resume.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
                     <h4>Step 4: Auto-populate your portfolio with your work and reviews</h4>
                     <p>Nothing speaks louder than the work you create while attempting projects on the platform. Upon completion, you will be given a link to your very own portfolio.</p>
-                    <!-- <a href="#">See sample portfolio</a> -->
+                    <a href="/portfolio">See sample portfolio</a>
                 </div>
             </div>
         </div>
