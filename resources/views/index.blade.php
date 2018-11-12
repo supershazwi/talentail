@@ -95,7 +95,7 @@
                 <div class="card-body" id="wallpaper1" style="text-align: center;">
                     <img alt="Wallpaper" src="/img/resume.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
                     <h4>Build your very own portfolio through applied knowledge</h4>
-                    <p>There are countless other portfolio websites like Dribbble, Behance and Carbonmade that allow creative professionals to maintain their own portfolios. On Talentail, you build your own portfolio by attempting projects designed by our creators and getting assessed by them.</p>
+                    <p>Your competency should be accurately gauged by looking at your work, not just your CV. On Talentail, you build your own portfolio by attempting projects designed by our creators and getting assessed by them.</p>
                 </div>
             </div>
         </div>
@@ -103,8 +103,8 @@
             <div class="card mb-3">
                 <div class="card-body" id="wallpaper3" style="text-align: center;">
                     <img alt="Wallpaper" src="/img/real-world.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
-                    <h4>Projects based on real world experience</h4>
-                    <p>Our creators' reputation lie in the quality of their projects and the feedback they provide you. We go the extra length to make sure that our creators design projects that reflect their past experience as much as possible. This way, you are assured relevance and also usefulness.</p>
+                    <h4>Get equipped for real world execution</h4>
+                    <p>We go the extra mile to populate the platform with projects that best simulate what is needed from you in real world environments. This is not just another classroom exercise. By attempting projects, you will be sufficiently geared to tackle challenges at work.</p>
                 </div>
             </div>
         </div>
@@ -137,7 +137,7 @@
                 <div class="card-body" id="wallpaper5" style="text-align: center;">
                     <img alt="Wallpaper" src="/img/web-design2.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
                     <h4>Step 2: Complete the tasks tagged to the project</h4>
-                    <p>Together with supplementary files that are given to you and also the ability to ask questions to the project creators, you are advised to complete the project and submit your answers before the deadline.</p>
+                    <p>Together with supplementary files that are given to you and also the ability to ask questions to the project creator, you are required to complete the project and submit your deliverables before the deadline.</p>
                 </div>
             </div>
         </div>
@@ -146,7 +146,7 @@
                 <div class="card-body" id="wallpaper6" style="text-align: center;">
                     <img alt="Wallpaper" src="/img/rating.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
                     <h4>Step 3: Receive assesssment by project creators</h4>
-                    <p>Based on your answers, your competencies will be graded and also given a comprehensive review by project creators.</p>
+                    <p>Based on your answers, your competencies will be graded and also given a comprehensive review by the project creator.</p>
                 </div>
             </div>
         </div>
