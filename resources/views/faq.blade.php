@@ -24,7 +24,7 @@
                 <div class="card mb-3">
                   <div class="card-body">
                       <h5>3. Why come up with this idea?</h5>
-                      <p style="margin-top: 0.5rem;">We have come a long way in using resumes to introduce ourselves and our capabilities. However, with the introduction of Applicant Tracking Systems & strict recruitment processes, it has led to practices such as "resume hacking". We serve to supercharge your resumes by making it easier for you to gather your "tangibles".</p>
+                      <p style="margin-top: 0.5rem;">There are a lot of people getting into a new career or wanting to switch careers. The similar problem they face is the lack of experience. Other professions such as creative designers can create beautiful art pieces and use that as a portfolio to show their capabilities. Why not other not so direct roles such as business analysts? They simply need a project/use case to apply their knowledge on and those projects/use cases are what Talentail is consolidating.</p>
                   </div>
                 </div>
               </div>
