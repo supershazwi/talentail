@@ -74,7 +74,7 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password'])
         ]);
 
-        $user->creator = true;
+        // $user->creator = true;
 
         $user->save();
 
