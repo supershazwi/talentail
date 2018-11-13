@@ -29,7 +29,7 @@
                   </div>
               </div>
               <div class="content-list-body">
-                @foreach($createdProjects as $project)
+                @foreach($sampleProjects as $project)
                   <div class="card mb-3">
                     <div class="card-body">
                       <div class="col-lg-10" style="float: left; padding: 0px;">
@@ -61,7 +61,7 @@
                   </div>
               </div>
               <div class="content-list-body">
-                @foreach($sampleProjects as $project)
+                @foreach($createdProjects as $project)
                   <div class="card mb-3">
                     <div class="card-body">
                       <div class="col-lg-10" style="float: left; padding: 0px;">
