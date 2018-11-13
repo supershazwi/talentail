@@ -401,7 +401,7 @@
                                 <div class="chat-module-body" id="newMessagesDiv">
                                     @foreach($messages as $message)
                                     <div class="media chat-item">
-                                        @if($user->avatar)
+                                        @if($message->user->avatar)
                                         <img alt="{{$message->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$message->user->avatar}}" class="avatar" />
                                         @else
                                         <img alt="Image" src="/img/avatar.png" class="avatar" />
