@@ -13,7 +13,7 @@
             </div>
             <div class="col-lg-5" style="margin-bottom: 1.5rem;">
                 <h1 style="font-size: 3rem; margin-top: 0; color: white; font-weight: bold;">Discover real world projects, apply your knowledge and gain experience</h1>
-                <p style="color: white !important;">Talentail is the go-to platform for you to gain the necessary experience and build a portfolio containing tangible work deliverables. Supercharge your CV today and don't settle for just words on it.</p>
+                <p style="color: white !important;">Talentail is the go-to platform for gaining the necessary experience to build a tangible work portfolio. This way, your CV can be more than just words.</p>
             </div>
             <div class="col-lg-1" style="margin-bottom: 1.5rem;">
             </div>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="col-lg-6" style="margin-bottom: 1.5rem; text-align: center;">
                     <h1 style="font-size: 3rem; margin-top: 0; color: white; font-weight: bold;">Discover real world projects, apply your knowledge and gain experience</h1>
-                    <p style="color: white !important;">Talentail is the go-to platform for you to gain the necessary experience and build a portfolio containing tangible work deliverables. Supercharge your CV today and don't settle for just words on it.</p>
+                    <p style="color: white !important;">Talentail is the go-to platform for gaining the necessary experience to build a tangible work portfolio. This way, your CV can be more than just words.</p>
                 </div>
             @endif
         </div>
