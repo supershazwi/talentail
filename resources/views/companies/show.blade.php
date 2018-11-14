@@ -14,7 +14,7 @@
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
                 <div class="mb-3 d-flex">
-                    <img alt="Pipeline" src="https://media.licdn.com/dms/image/C4E0BAQHGdEBFMKrWAw/company-logo_200_200/0?e=1542844800&v=beta&t=uIFmDYe1mWP8no811npLHCfB4-dYN1GNI4yUyE1F0po" class="avatar avatar-lg mr-1" />
+                    <img alt="Pipeline" src="{{$company->avatar}}" class="avatar avatar-lg mr-1" style="border-radius: 0.5rem;"/>
                 </div>
                 <h1 class="display-4 mb-3">{{$company->title}} Opportunities</h1>
                 <p class="lead">{{$company->description}}</p>
