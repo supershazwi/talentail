@@ -10,7 +10,7 @@
             </section>
             <div class="row">
                 @foreach($role->projects as $project)
-                  @if($project->published)
+                  @if($project->published && !$project->sample)
                   <div class="col-lg-12">
                     <div class="card mb-3">
                       <div class="card-body">
