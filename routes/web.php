@@ -463,7 +463,7 @@ Route::get('/roles/{roleSlug}/projects/{projectSlug}', 'ProjectsController@show'
     
 Route::post('/notifications/notify', 'NotificationController@postNotify');
 Route::resources([
-    // 'companies' => 'CompaniesController',
+    'companies' => 'CompaniesController',
     'opportunities' => 'OpportunitiesController',
     'roles' => 'RolesController',
     'messages' => 'MessagesController',

@@ -150,8 +150,8 @@
 	                    <div class="dropdown-menu" aria-labelledby="newContentButton">
 	                        <a class="dropdown-item" href="/projects/select-role">Project</a>
 	                        @if(Auth::user() && Auth::user()->admin)
-	                        <!-- <a class="dropdown-item" href="/companies/create">Company</a> -->
-	                        <!-- <a class="dropdown-item" href="/projects/create">Competency</a> -->
+	                        <a class="dropdown-item" href="/companies/create">Company</a>
+	                        <a class="dropdown-item" href="/projects/create">Competency</a>
 	                        <a class="dropdown-item" href="/opportunities/create">Opportunity</a>
 	                        <a class="dropdown-item" href="/roles/create">Role</a>
 	                    	@endif
