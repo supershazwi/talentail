@@ -13,6 +13,14 @@ class ShoppingCartLineItem extends Model
     	return $this->belongsTo(Project::class);
     }
 
+    public function credit() {
+    	return $this->belongsTo(Credit::class);
+    }
+
+    public function portfolio() {
+        return $this->belongsTo(Portfolio::class);
+    }
+
     public function shopping_cart() {
     	return $this->belongsTo(ShoppingCart::class);
     }

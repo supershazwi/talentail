@@ -11,7 +11,10 @@ use Illuminate\Validation\Rule;
 use App\Template;
 use App\TemplateShot;
 use App\Competency;
+use App\Notification;
 use App\Message;
+use App\ShoppingCart;
+use App\Credit;
 
 use Validator;
 
@@ -21,8 +24,11 @@ class TemplatesController extends Controller
         $templates = Template::all();
 
     	return view('templates.index', [
+            
             'templates' => $templates,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
@@ -33,8 +39,11 @@ class TemplatesController extends Controller
 
         if($template) {
             return view('templates.show', [
+                
                 'template' => $template,
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
             ]);
         } else {
             return redirect('templates');
@@ -45,7 +54,10 @@ class TemplatesController extends Controller
     public function upload() {
     	if(Auth::user()->creator) {
 	    	return view('templates.upload', [
+                
 	            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
 	        ]);
     	} else {
     		return redirect('templates');

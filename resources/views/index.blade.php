@@ -1,212 +1,102 @@
 @extends ('layouts.main')
 
 @section ('content')
-<div class="jumbotron" style="
-  background: #3a7bd5;
-  background: -webkit-linear-gradient(to right, #3a7bd5, #3a6073);
-  background: linear-gradient(to right, #3a7bd5, #3a6073); border-radius: 0px;">
-    <div>
-        <div class="row">
-            @if(Auth::id() == null)
-            <div class="col-lg-1" style="margin-bottom: 1.5rem; ">
-
-            </div>
-            <div class="col-lg-5" style="margin-bottom: 1.5rem;">
-                <h1 style="font-size: 3rem; margin-top: 0; color: white; font-weight: bold;">Discover real world projects, apply your knowledge and gain experience</h1>
-                <p style="color: white !important;">Talentail is the go-to platform for gaining the necessary experience to build a tangible work portfolio. This way, your CV can be more than just words.</p>
-            </div>
-            <div class="col-lg-1" style="margin-bottom: 1.5rem;">
-            </div>
-            
-            <div class="col-lg-4" style="margin-bottom: 1.5rem;">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
-                            @csrf
-                            <div class="form-group">
-                                <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" placeholder="Name" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <input id="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Email Address" required autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="Password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password" required>
-                            </div>
-
-                            <input id="url" type="hidden" name="url" value="/">
-
-                            <button class="btn btn-block btn-primary" role="button" type="submit">
-                                Create account
-                            </button>
-                            <br />
-                            <div style="width: 100%; text-align: center;">
-                        </div>
-                        <div style="width: 100%; text-align: center;">
-                            <small>By clicking 'Create account' you agree to our <a href="/terms-and-conditions">Terms of Service</a>
-                            </small>
-                        </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-1" style="margin-bottom: 1.5rem;">
-
-            </div>
-
-            @else
-                <div class="col-lg-3" style="margin-bottom: 1.5rem;">
-
-                </div>
-                <div class="col-lg-6" style="margin-bottom: 1.5rem; text-align: center;">
-                    <h1 style="font-size: 3rem; margin-top: 0; color: white; font-weight: bold;">Discover real world projects, apply your knowledge and gain experience</h1>
-                    <p style="color: white !important;">Talentail is the go-to platform for gaining the necessary experience to build a tangible work portfolio. This way, your CV can be more than just words.</p>
-                </div>
-            @endif
-        </div>
+<div class="container">
+  <div class="row align-items-center" style="margin-top: 5rem;">
+    <div class="col-12 col-md-6 offset-xl-2 offset-md-1 order-md-2 mb-5 mb-md-0">
+      <div class="text-center">
+        <img src="/img/illustrations/happiness.svg" alt="..." class="img-fluid">
+      </div>
     </div>
-</div>    
-<div class="container" style="padding-left: 1rem; padding-right: 1rem; padding-bottom: 1.5rem;">
-    <h1 style="text-align: center !important; margin-top: 4.5rem;">Attempt projects to take your skills to the next level</h1>
-    <div class="row" style="margin-top: 4.5rem;">
-        <div class="col-lg-4" style="margin-bottom: 1.5rem;">
-            <div class="card mb-3">
-                <div class="card-body" id="wallpaper1" style="text-align: center;">
-                    <img alt="Wallpaper" src="/img/resume.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
-                    <h4>Build your very own portfolio through applied knowledge</h4>
-                    <p>Your competency should be accurately gauged by looking at your work, not just your CV. On Talentail, you build your own portfolio by attempting projects designed by our creators and getting assessed by them.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4" style="margin-bottom: 1.5rem;">
-            <div class="card mb-3">
-                <div class="card-body" id="wallpaper3" style="text-align: center;">
-                    <img alt="Wallpaper" src="/img/real-world.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
-                    <h4>Get equipped for real world execution</h4>
-                    <p>We go the extra mile to populate the platform with projects that best simulate what is needed from you in real world environments. This is not just another classroom exercise. By attempting projects, you will be sufficiently geared to tackle challenges at work.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4" style="margin-bottom: 1.5rem;">
-            <div class="card mb-3">
-                <div class="card-body" id="wallpaper2" style="text-align: center;">
-                    <img alt="Wallpaper" src="/img/creator.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
-                    <h4>High quality creators carefully selected from top firms</h4>
-                    <p>The brightest diamonds are crafted by master gemcutters. To equip you with the right skill sets to excel at their work, we have meticulously sourced and assessed our creators from reputable companies.</p>
-                </div>
-            </div>
-        </div>
+    <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
+      <h1 class="display-4 mb-3">
+      <span style="color: #0984e3;">Break into</span> a new career with an endorsed portfolio.
+      </h1>
+      <h1 style="color: #777d7f;">In today's day and age, learning is never enough. Attempt projects to apply your knowledge and show the world what you're made of.</h1>
     </div>
+  </div>
+  <hr style="margin-top: 5rem;"/>
+  <div class="row" style="margin-top: 5rem;">
+    <div class="col-12 col-md-6 order-md-1 mb-5 mb-md-0">
+      <div class="text-center">
+        <img src="/img/illustrations/lost.svg" alt="..." class="img-fluid">
+      </div>
+    </div>
+    <div class="col-12 col-md-5 col-xl-4 offset-xl-1 offset-md-1 order-md-1 my-5">
+      <h1 class="display-4 mb-3">
+        Common <span style="color: #e74c3c;">challenges</span> faced by new job seekers:
+      </h1>
+      <ul style="list-style: none;margin-left: 0;padding-left: 2.2em;text-indent: -2.2em;">
+        <li><h1 style="color: #777d7f;">😫 No relevant work experience</h1></li>
+        <li><h1 style="color: #777d7f;">😫 Not given an opportunity to showcase competencies</h1></li>
+        <li><h1 style="color: #777d7f;">😫 Staying ahead of the competition</h1></li>
+      </ul>
+    </div>
+  </div>
+  <hr style="margin-top: 5rem;"/>
+  <div class="row" style="margin-top: 5rem;">
+    <div class="col-12 col-md-6 offset-xl-2 offset-md-1 order-md-2 mb-5 mb-md-0">
+      <div class="text-center">
+        <img src="/img/illustrations/scale.svg" alt="..." class="img-fluid">
+      </div>
+    </div>
+    <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
+      <h1 class="display-4 mb-3">
+        <span style="color: #0984e3;">Execute projects</span> and be given a platform to:
+      </h1>
+      <ul style="list-style: none;margin-left: 0;padding-left: 2.2em;text-indent: -2.2em;">
+        <li><h1 style="color: #777d7f;">😁 Showcase your competencies through tangible work</h1></li>
+        <li><h1 style="color: #777d7f;">😁 Get endorsed by experts within the role that you're interested in</h1></li>
+        <li><h1 style="color: #777d7f;">😁 Set yourself apart from other job seekers</h1></li>
+      </ul>
+    </div>
+  </div>
+  <hr style="margin-top: 5rem;"/>
+  <div class="row" style="margin-top: 5rem;">
+    <div class="col-12 col-lg-4">
+      <div class="row no-gutters align-items-center justify-content-center">
+        <div class="col-auto">
+          <div class="display-2 mb-0">25</div>
+        </div>
+      </div>
+      <div class="text-center">
+        <h1 style="color: #777d7f; margin-bottom: 0;">Projects</h1>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4">
+      <div class="row no-gutters align-items-center justify-content-center">
+        <div class="col-auto">
+          <div class="display-2 mb-0">15</div>
+        </div>
+      </div>
+      <div class="text-center">
+        <h1 style="color: #777d7f; margin-bottom: 0;">Porfolios Endorsed</h1>
+      </div>
+    </div>
+    <div class="col-12 col-lg-4">
+      <div class="row no-gutters align-items-center justify-content-center">
+        <div class="col-auto">
+          <div class="display-2 mb-0">10</div>
+        </div>
+      </div>
+      <div class="text-center">
+        <h1 style="color: #777d7f; margin-bottom: 0;">Companies</h1>
+      </div>
+    </div>
+  </div>
+  @if(!Auth::id())
+  <hr style="margin-top: 5rem;"/>
+  <div class="row justify-content-center" style="margin-top: 5rem; display: block; text-align: center;">
+    <h1 class="display-4 mb-3">
+        Begin your journey today
+      </h1>
+    <a href="/register" class="btn btn-lg btn-primary mb-3">
+        Register
+    </a>
+  </div>
+  @endif
 </div>
-<hr/>
-<div class="container" style="padding-left: 1rem; padding-right: 1rem; padding-bottom: 1.5rem;">
-    <h1 style="text-align: center !important; margin-top: 4.5rem;">How it works</h1>
-    <div class="row" style="margin-top: 4.5rem;">
-        <div class="col-lg-3" style="margin-bottom: 1.5rem;">
-            <div class="card mb-3">
-                <div class="card-body" id="wallpaper4" style="text-align: center;">
-                    <img alt="Wallpaper" src="/img/web-design.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
-                    <h4>Step 1: Browse and select project</h4>
-                    <p>All our projects are based and adapted from real world experiences. They are designed to assess specific competencies.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3" style="margin-bottom: 1.5rem;">
-            <div class="card mb-3">
-                <div class="card-body" id="wallpaper5" style="text-align: center;">
-                    <img alt="Wallpaper" src="/img/web-design2.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
-                    <h4>Step 2: Complete the tasks tagged to the project</h4>
-                    <p>Together with supplementary files that are given to you and also the ability to ask questions to the project creator, you are required to complete the project and submit your deliverables before the deadline.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3" style="margin-bottom: 1.5rem;">
-            <div class="card mb-3">
-                <div class="card-body" id="wallpaper6" style="text-align: center;">
-                    <img alt="Wallpaper" src="/img/rating.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
-                    <h4>Step 3: Receive assesssment by project creators</h4>
-                    <p>Based on your answers, your competencies will be graded and also given a comprehensive review by the project creator.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3" style="margin-bottom: 1.5rem;">
-            <div class="card mb-3">
-                <div class="card-body" id="wallpaper7" style="text-align: center;">
-                    <img alt="Wallpaper" src="/img/resume.png" style="width: 25%; height: auto; margin-bottom: 1.5rem;">
-                    <h4>Step 4: Auto-populate your portfolio with your work and reviews</h4>
-                    <p>Nothing speaks louder than the work you create while attempting projects on the platform. Upon completion, you will be given a link to your very own portfolio.</p>
-                    <a href="/portfolio">See sample portfolio</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- <div class="container" style="padding-left: 1rem; padding-right: 1rem; padding-bottom: 1.5rem;">
-    <h1 style="text-align: center !important; margin-top: 4.5rem;">How it works</h1>
-    <div class="row" style="margin-top: 4.5rem; text-align: center;">
-        <div class="col-lg-12" style="margin-bottom: 1.5rem;">
-            <div class="card mb-3">
-                <div class="card-body" id="">
-                    <img alt="Wallpaper" src="/img/high-level-process.png">
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-<script type="text/javascript">
-
-// $(function() {
-//     let wallpaper1Height = document.getElementById("wallpaper1").clientHeight;
-//     let wallpaper2Height = document.getElementById("wallpaper2").clientHeight;
-//     let wallpaper3Height = document.getElementById("wallpaper3").clientHeight;
-
-//     let maxHeight = Math.max(wallpaper1Height, wallpaper2Height, wallpaper3Height);
-
-//     document.getElementById("wallpaper1").style.height = maxHeight+"px";
-//     document.getElementById("wallpaper2").style.height = maxHeight+"px";
-//     document.getElementById("wallpaper3").style.height = maxHeight+"px";
-
-
-//     let wallpaper4Height = document.getElementById("wallpaper4").clientHeight;
-//     let wallpaper5Height = document.getElementById("wallpaper5").clientHeight;
-//     let wallpaper6Height = document.getElementById("wallpaper6").clientHeight;
-//     let wallpaper7Height = document.getElementById("wallpaper7").clientHeight;
-
-//     console.log(wallpaper4Height);
-
-//     maxHeight = Math.max(wallpaper4Height, wallpaper5Height, wallpaper6Height, wallpaper7Height);
-
-//     document.getElementById("wallpaper4").style.height = maxHeight+"px";
-//     document.getElementById("wallpaper5").style.height = maxHeight+"px";
-//     document.getElementById("wallpaper6").style.height = maxHeight+"px";
-//     document.getElementById("wallpaper7").style.height = maxHeight+"px";
-// });
-
-</script>
 @endsection
 
-@section ('footer')
-    
+@section ('footer')    
 @endsection

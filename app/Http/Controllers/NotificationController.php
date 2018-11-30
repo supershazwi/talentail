@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Notification;
 use App\Message;
+use App\Credit;
+use App\ShoppingCart;
 
 
 class NotificationController extends Controller
@@ -24,10 +26,19 @@ class NotificationController extends Controller
     public function index()
     {
         $notifications = Notification::where('recipient_id', Auth::id())->orderBy('created_at', 'desc')->get();
+
+        foreach($notifications as $notification) {
+            $notification->read = true;
+
+            $notification->save();
+        }
         
         return view('notifications', [
+            
             'notifications' => $notifications,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 

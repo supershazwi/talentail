@@ -9,6 +9,9 @@ use App\Opportunity;
 use App\Role;
 use App\Company;
 use App\Message;
+use App\Credit;
+use App\Notification;
+use App\ShoppingCart;
 
 
 class OpportunitiesController extends Controller
@@ -18,14 +21,29 @@ class OpportunitiesController extends Controller
         $this->middleware('auth');
     }
 
+    public function index() {
+        $opportunities = Opportunity::all();
+
+        return view('opportunities.index', [
+            
+            'opportunities' => $opportunities,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]);
+    }
+
     public function create() {
         $roles = Role::select('id', 'title')->orderBy('title', 'asc')->get();
         $companies = Company::select('id', 'title')->orderBy('title', 'asc')->get();
 
         return view('opportunities.create', [
+            
             'roles' => $roles,
             'companies' => $companies,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
@@ -35,6 +53,7 @@ class OpportunitiesController extends Controller
     	$opportunity->title = request('title');
     	$opportunity->description = request('description');
         $opportunity->role_id = request('role_id');
+        $opportunity->location = request('location');
         $opportunity->company_id = request('company_id');
 
         $company = Company::select('title')->where('id', request('company_id'))->first();
@@ -50,8 +69,11 @@ class OpportunitiesController extends Controller
         $opportunity = Opportunity::where('slug', $slug)->first();
 
         return view('opportunities.show', [
+            
             'opportunity' => $opportunity,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 }

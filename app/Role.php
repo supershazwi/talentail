@@ -22,4 +22,14 @@ class Role extends Model
     public function roles_gained() {
         return $this->hasMany(RoleGained::class);
     }
+
+    public function portfolios()
+    {
+        return $this->belongsToMany(Portfolio::class);
+    }
+
+    public function industries()
+    {
+        return $this->belongsToMany(Industry::class);
+    }
 }

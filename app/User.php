@@ -32,6 +32,14 @@ class User extends Authenticatable
         return $this->hasMany(Experience::class);
     }
 
+    public function referrals() {
+        return $this->hasMany(Referral::class, 'referrer_id', 'id');
+    }
+
+    public function referred() {
+        return $this->hasOne(Referral::class, 'referred_id', 'id');
+    }
+
     public function shopping_carts() {
         return $this->hasMany(ShoppingCart::class);
     }
@@ -77,8 +85,16 @@ class User extends Authenticatable
         return $this->hasOne('App\VerifyUser');
     }
 
-    public function creator_applications() {
-        return $this->hasMany(CreatorApplication::class);
+    public function creator_application() {
+        return $this->hasOne(CreatorApplication::class);
+    }
+
+    public function portfolio() {
+        return $this->hasOne(Portfolio::class);
+    }
+
+    public function company_application() {
+        return $this->hasOne(CompanyApplication::class);
     }
 
     public function received_reviews() {

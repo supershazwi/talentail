@@ -27,12 +27,20 @@ class Project extends Model
         return $this->hasMany(Message::class);
     }
 
+    public function portfolios() {
+        return $this->belongsToMany(Portfolio::class);
+    }
+
     public function reviews() {
         return $this->hasMany(Review::class);
     }
 
     public function project_files() {
         return $this->hasMany(ProjectFile::class);
+    }
+
+    public function industry() {
+        return $this->hasOne(Industry::class);
     }
 
     public function competencies()

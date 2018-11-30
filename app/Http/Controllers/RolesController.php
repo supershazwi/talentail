@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Role;
 use App\Competency;
 use App\Message;
+use App\Credit;
+use App\Notification;
+use App\ShoppingCart;
 
 
 class RolesController extends Controller
@@ -16,14 +19,20 @@ class RolesController extends Controller
         $roles = Role::all();
 
     	return view('roles.index', [
+            
             'roles' => $roles,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
     public function create() {
     	return view('roles.create', [
+            
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
@@ -45,9 +54,12 @@ class RolesController extends Controller
         $competencies = Competency::where('role_id', $role->id)->get();
 
         return view('roles.show', [
+            
             'role' => $role,
             'competencies' => $competencies,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 }

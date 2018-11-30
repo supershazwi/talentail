@@ -17,7 +17,11 @@
                     </div>
                     <div class="form-group">
                       <h3>Description</h3>
-                      <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description" maxlength="255"></textarea>
+                      <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <h3>Location</h3>
+                      <input type="text" name="location" class="form-control" id="location" placeholder="Enter location">
                     </div>
                     <div class="form-group">
                       <h3>Company</h3>

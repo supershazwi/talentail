@@ -17,7 +17,7 @@
      <div class="row">
        <div class="col-md-8 col-md-offset-2">
          <div id="dropin-container"></div>
-         <button id="submit-button">Request payment method</button>
+         <button id="submit-button">Make Payment</button>
        </div>
      </div>
   </div>

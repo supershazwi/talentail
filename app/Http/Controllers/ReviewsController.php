@@ -12,6 +12,7 @@ use App\Review;
 use App\AttemptedProject;
 use App\AnsweredTask;
 use App\AnsweredTaskFile;
+use App\Credit;
 use App\Task;
 use App\Answer;
 use App\ProjectFile;
@@ -22,6 +23,7 @@ use App\CompetencyScore;
 use App\Message;
 use App\User;
 use App\Notification;
+use App\ShoppingCart;
 use App\ReviewedAnsweredTaskFile;
 
 use Validator;
@@ -52,20 +54,26 @@ class ReviewsController extends Controller
         $routeParameters = Route::getCurrentRoute()->parameters();
 
         $role = Role::select('id', 'title', 'slug', 'description')->where('slug', $routeParameters['roleSlug'])->get()[0];
-        $project = Project::select('id', 'title', 'slug')->where('slug', $routeParameters['projectSlug'])->get()[0];
+        $project = Project::select('id', 'title', 'slug', 'user_id', 'description')->where('slug', $routeParameters['projectSlug'])->get()[0];
 
         if(array_key_exists('userId', $routeParameters)) {
             return view('reviews.create', [
+                
                 'project' => $project,
                 'role' => $role,
                 'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get()[0],
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
             ]);
         } else {
             return view('reviews.create', [
+                
                 'project' => $project,
                 'role' => $role,
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
             ]);
         }
     }

@@ -10,8 +10,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Message;
+use App\Credit;
+use App\ShoppingCart;
 use App\User;
 use App\Project;
+use App\Notification;
 use App\Http\Controllers\stdClass;
 use DB;
 
@@ -110,17 +113,26 @@ class MessagesController extends Controller
         $users = User::find($allUsersIdArray);
         $projectUsers = User::find($allProjectsUsersIdArray);
 
+
+
         return view('messages.index', [
+            
             'users' => $users,
             'projectUsers' => $projectUsers,
             'messages' => null,
             'userProjectObjectArray' => $allNewArray,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
     public function showIndividualChannel() {
         $routeParameters = Route::getCurrentRoute()->parameters();
+
+        if(Auth::id() == $routeParameters['userId']) {
+            return redirect('/messages');
+        } 
 
         $messages = Message::where('recipient_id', Auth::id())->orWhere('sender_id', Auth::id())->get();
 
@@ -201,8 +213,11 @@ class MessagesController extends Controller
             $message->save();
         }
 
+        // dd($allNewArray);
+
 
         return view('messages.index', [
+            
             'users' => $users,
             'userProjectObjectArray' => $allNewArray,
             'messages' => $messages,
@@ -210,6 +225,8 @@ class MessagesController extends Controller
             'clickedUserId' => $clickedUserId,
             'clickedUser' => User::select('name')->where('id', $clickedUserId)->first(),
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
@@ -297,6 +314,7 @@ class MessagesController extends Controller
         }
 
         return view('messages.index', [
+            
             'users' => $users,
             'userProjectObjectArray' => $allNewArray,
             'messages' => $messages,
@@ -304,6 +322,8 @@ class MessagesController extends Controller
             'clickedUserId' => $clickedUserId,
             'clickedProject' => Project::find($clickedProjectId),
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
@@ -312,6 +332,7 @@ class MessagesController extends Controller
         $messageToSave->message = $request->input('message_text');
         $messageToSave->sender_id = Auth::id();
         $messageToSave->recipient_id = $request->input('clickedUserId');
+
         $messageToSave->user_id = Auth::id();
 
         $messageToSave->project_id = 0;

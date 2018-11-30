@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Company;
+use App\ShoppingCart;
 use App\Message;
+use App\Credit;
+use App\Notification;
 
 class CompaniesController extends Controller
 {
@@ -19,14 +22,20 @@ class CompaniesController extends Controller
         $companies = Company::all();
 
     	return view('companies.index', [
+            
             'companies' => $companies,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
     public function create() {
     	return view('companies.create', [
+            
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
@@ -52,8 +61,11 @@ class CompaniesController extends Controller
         $company = Company::where('slug', $slug)->first();
 
         return view('companies.show', [
+            
             'company' => $company,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 }

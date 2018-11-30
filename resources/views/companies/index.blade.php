@@ -13,7 +13,7 @@
                     <div class="col-lg-6">
                         <div class="card mb-3">
                             <div class="card-body">
-                                <img src="{{$company->avatar}}" style="height: 48px; margin-bottom: 1rem;" />
+                                <img src="{{$company->avatar}}" style="height: 48px; margin-bottom: 1rem; border-radius: 0.5rem;" />
                                 <h5><a href="/companies/{{$company->slug}}">{{$company->title}}</a></h5>
                                 <p style="margin-top: 0.5rem;">{{$company->description}}</p>
                             </div>

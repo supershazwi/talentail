@@ -2,7 +2,7 @@
 
 @section ('content')
   <div class="container">
-      <div class="row justify-content-center">
+      <div class="row justify-content-center" style="margin-top: 3rem;">
         <div class="col-xl-10 col-lg-11">
             <section class="py-4 py-lg-5">
                 <h1 class="display-4 mb-3">The platform to achieve greater control over one's career</h1>
@@ -19,7 +19,7 @@
                                     <img src="/img/gray-avatar.png" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
                                   </div>
                                   <div class="col-lg-10">
-                                    <h5 data-filter-by="text">Shazwi Suwandi</h5>
+                                    <h3 data-filter-by="text">Shazwi Suwandi</h3>
                                     <p>Shazwi has been working as a tech consultant since graduating from National University of Singapore and has gained significant experience in digital transformation projects. He likes to overthink in his everyday life and sometimes land himself onto problems that he wants to solve. When push comes to shove, he will roll up his sleeves, his pants, tie up his hair and sit tight till a solution is found. He still can't afford his own bat signal yet, so he can only be contactable on the other channels below.</p>
                                     <a target="_blank" href="https://www.linkedin.com/in/shazwi/"><i class="fab fa-linkedin"></i></a>
                                     <a target="_blank" href="https://t.me/supershazwi" style="margin-left: 0.5rem;"><i class="fab fa-telegram"></i></a>

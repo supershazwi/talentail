@@ -15,6 +15,7 @@ use App\AttemptedProject;
 use App\AnsweredTask;
 use App\AnsweredTaskFile;
 use App\Task;
+use App\Credit;
 use App\Answer;
 use App\ProjectFile;
 use App\Role;
@@ -157,6 +158,180 @@ class ProjectsController extends Controller
         return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
     }
 
+    public function reviewFiles() {
+        $loggedInUserId = Auth::id();
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $clickedUserId = $project->user_id;
+
+        $subscribeString;
+
+        if($loggedInUserId < $clickedUserId) {
+            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+        } else {
+            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        }
+
+        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+        $messages3 = $messages1->merge($messages2);
+
+        $messages3 = $messages3->sortBy('created_at');
+
+        $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
+
+        $answeredTasksArray = $answeredTasks->toArray();
+
+        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
+
+        $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
+
+        foreach($answeredTasksArray as $key=>$answeredTask) {
+            $answeredTasksArray[$key] = $answeredTask['id'];
+        }
+
+        if(Auth::id() == $routeParameters['userId']) {
+            return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug);
+        } else {
+            return view('projects.review', [
+                
+                'project' => $project,
+                'role' => $role,
+                'messages' => $messages3,
+                'parameter' => 'file',
+                'attemptedProject' => $attemptedProject,
+                'answeredTasks' => $answeredTasks,
+                'answeredTasksArray' => $answeredTasksArray,
+                'competencyScores' => $competencyScores,
+                'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                'clickedUserId' => $clickedUserId,
+                'reviewedUserId' => $routeParameters['userId'],
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+            ]);
+        }
+    }
+
+    public function reviewCompetencies() {
+        $loggedInUserId = Auth::id();
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $clickedUserId = $project->user_id;
+
+        $subscribeString;
+
+        if($loggedInUserId < $clickedUserId) {
+            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+        } else {
+            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        }
+
+        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+        $messages3 = $messages1->merge($messages2);
+
+        $messages3 = $messages3->sortBy('created_at');
+
+        $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
+
+        $answeredTasksArray = $answeredTasks->toArray();
+
+        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
+
+        $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
+
+        foreach($answeredTasksArray as $key=>$answeredTask) {
+            $answeredTasksArray[$key] = $answeredTask['id'];
+        }
+
+        if(Auth::id() == $routeParameters['userId']) {
+            return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug);
+        } else {
+            return view('projects.review', [
+                
+                'project' => $project,
+                'role' => $role,
+                'messages' => $messages3,
+                'parameter' => 'competency',
+                'attemptedProject' => $attemptedProject,
+                'answeredTasks' => $answeredTasks,
+                'answeredTasksArray' => $answeredTasksArray,
+                'competencyScores' => $competencyScores,
+                'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                'clickedUserId' => $clickedUserId,
+                'reviewedUserId' => $routeParameters['userId'],
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+            ]);
+        }
+    }
+
+    public function reviewTasks() {
+        $loggedInUserId = Auth::id();
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $clickedUserId = $project->user_id;
+
+        $subscribeString;
+
+        if($loggedInUserId < $clickedUserId) {
+            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+        } else {
+            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        }
+
+        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+        $messages3 = $messages1->merge($messages2);
+
+        $messages3 = $messages3->sortBy('created_at');
+
+        $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
+
+        $answeredTasksArray = $answeredTasks->toArray();
+
+        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
+
+        $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
+
+        foreach($answeredTasksArray as $key=>$answeredTask) {
+            $answeredTasksArray[$key] = $answeredTask['id'];
+        }
+
+        if(Auth::id() == $routeParameters['userId']) {
+            return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug);
+        } else {
+            return view('projects.review', [
+                
+                'project' => $project,
+                'role' => $role,
+                'messages' => $messages3,
+                'parameter' => 'task',
+                'attemptedProject' => $attemptedProject,
+                'answeredTasks' => $answeredTasks,
+                'answeredTasksArray' => $answeredTasksArray,
+                'competencyScores' => $competencyScores,
+                'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                'clickedUserId' => $clickedUserId,
+                'reviewedUserId' => $routeParameters['userId'],
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+            ]);
+        }
+    }
+
     public function review() {
         $loggedInUserId = Auth::id();
 
@@ -196,9 +371,11 @@ class ProjectsController extends Controller
             return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug);
         } else {
             return view('projects.review', [
+                
                 'project' => $project,
                 'role' => $role,
                 'messages' => $messages3,
+                'parameter' => 'overview',
                 'attemptedProject' => $attemptedProject,
                 'answeredTasks' => $answeredTasks,
                 'answeredTasksArray' => $answeredTasksArray,
@@ -207,6 +384,8 @@ class ProjectsController extends Controller
                 'clickedUserId' => $clickedUserId,
                 'reviewedUserId' => $routeParameters['userId'],
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
             ]);
         }
     }
@@ -338,6 +517,615 @@ class ProjectsController extends Controller
         return redirect('/roles/' . $role->slug . '/projects/' . $project->slug . '/edit');
     }
 
+    public function showTasks($slug) {
+        $loggedInUserId = Auth::id();
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $clickedUserId = $project->user_id;
+
+        $subscribeString;
+
+        if($loggedInUserId < $clickedUserId) {
+            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+        } else {
+            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        }
+
+        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+        $messages3 = $messages1->merge($messages2);
+
+        $messages3 = $messages3->sortBy('created_at');
+
+        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first();
+
+
+        if($attemptedProject) {
+            //here
+            $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+            $answeredTasksArray = $answeredTasks->toArray();
+
+            foreach($answeredTasksArray as $key=>$answeredTask) {
+                $answeredTasksArray[$key] = $answeredTask['id'];
+            }
+
+            if($attemptedProject->status == "Completed") {
+
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                return view('projects.completed', [
+                    
+                    'project' => $project,
+                    'role' => $role,
+                    'parameter' => 'task',
+                    'messages' => $messages3,
+                    'answeredTasks' => $answeredTasks,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]);
+            } elseif($attemptedProject->status == "Assessed") {
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
+
+                if(Auth::id() != $project->user_id) {
+                    $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
+
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'task',
+                        'reviewLeftByApplicant' => $reviewLeftByApplicant,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                } else {
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'task',
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                }
+            } elseif($attemptedProject->status == "Reviewed") {
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
+
+                if(Auth::id() != $project->user_id) {
+                    $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
+
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'task',
+                        'reviewLeftByApplicant' => $reviewLeftByApplicant,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                } else {
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'task',
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                }
+            } else {
+                return view('projects.attempt', [
+                    
+                    'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first(),
+                    'project' => $project,
+                    'role' => $role,
+                    'parameter' => 'task',
+                    'messages' => $messages3,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]);
+            }
+        } else {
+            if($project->published == 0 && $project->user_id != Auth::id()) {
+                if(Auth::user()->admin) {
+                    return view('projects.show', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'task',
+                        'messages' => $messages3,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]); 
+                } else {
+                    return redirect('/roles/' . $routeParameters['roleSlug']);
+                }
+            } else {
+                // check whether added to cart
+
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+                if($shoppingCart) {
+                    $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
+                } else {
+                    $addedToCart = null;
+                }
+
+                return view('projects.show', [
+                    
+                    'project' => $project,
+                    'role' => $role,
+                    'parameter' => 'task',
+                    'messages' => $messages3,
+                    'addedToCart' => $addedToCart,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]); 
+            }
+        }
+    }
+
+    public function showFiles($slug) {
+        $loggedInUserId = Auth::id();
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $clickedUserId = $project->user_id;
+
+        $subscribeString;
+
+        if($loggedInUserId < $clickedUserId) {
+            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+        } else {
+            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        }
+
+        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+        $messages3 = $messages1->merge($messages2);
+
+        $messages3 = $messages3->sortBy('created_at');
+
+        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first();
+
+
+        if($attemptedProject) {
+            //here
+            $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+            $answeredTasksArray = $answeredTasks->toArray();
+
+            foreach($answeredTasksArray as $key=>$answeredTask) {
+                $answeredTasksArray[$key] = $answeredTask['id'];
+            }
+
+            if($attemptedProject->status == "Completed") {
+
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                return view('projects.completed', [
+                    
+                    'project' => $project,
+                    'role' => $role,
+                    'parameter' => 'file',
+                    'messages' => $messages3,
+                    'answeredTasks' => $answeredTasks,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]);
+            } elseif($attemptedProject->status == "Assessed") {
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
+
+                if(Auth::id() != $project->user_id) {
+                    $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
+
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'file',
+                        'reviewLeftByApplicant' => $reviewLeftByApplicant,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                } else {
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'file',
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                }
+            } elseif($attemptedProject->status == "Reviewed") {
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
+
+                if(Auth::id() != $project->user_id) {
+                    $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
+
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'file',
+                        'reviewLeftByApplicant' => $reviewLeftByApplicant,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                } else {
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'file',
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                }
+            } else {
+                return view('projects.attempt', [
+                    
+                    'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first(),
+                    'project' => $project,
+                    'role' => $role,
+                    'parameter' => 'file',
+                    'messages' => $messages3,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]);
+            }
+        } else {
+            if($project->published == 0 && $project->user_id != Auth::id()) {
+                if(Auth::user()->admin) {
+                    return view('projects.show', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'file',
+                        'messages' => $messages3,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]); 
+                } else {
+                    return redirect('/roles/' . $routeParameters['roleSlug']);
+                }
+            } else {
+                // check whether added to cart
+
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+                if($shoppingCart) {
+                    $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
+                } else {
+                    $addedToCart = null;
+                }
+
+                return view('projects.show', [
+                    
+                    'project' => $project,
+                    'role' => $role,
+                    'parameter' => 'file',
+                    'messages' => $messages3,
+                    'addedToCart' => $addedToCart,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]); 
+            }
+        }
+    }
+
+    public function showCompetencies($slug) {
+        $loggedInUserId = Auth::id();
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $clickedUserId = $project->user_id;
+
+        $subscribeString;
+
+        if($loggedInUserId < $clickedUserId) {
+            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+        } else {
+            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        }
+
+        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+        $messages3 = $messages1->merge($messages2);
+
+        $messages3 = $messages3->sortBy('created_at');
+
+        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first();
+
+
+        if($attemptedProject) {
+            //here
+            $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+            $answeredTasksArray = $answeredTasks->toArray();
+
+            foreach($answeredTasksArray as $key=>$answeredTask) {
+                $answeredTasksArray[$key] = $answeredTask['id'];
+            }
+
+            if($attemptedProject->status == "Completed") {
+
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                return view('projects.completed', [
+                    
+                    'project' => $project,
+                    'role' => $role,
+                    'parameter' => 'competency',
+                    'messages' => $messages3,
+                    'answeredTasks' => $answeredTasks,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]);
+            } elseif($attemptedProject->status == "Assessed") {
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
+
+                if(Auth::id() != $project->user_id) {
+                    $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
+
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'competency',
+                        'reviewLeftByApplicant' => $reviewLeftByApplicant,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                } else {
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'competency',
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                }
+            } elseif($attemptedProject->status == "Reviewed") {
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
+
+                $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
+
+                if(Auth::id() != $project->user_id) {
+                    $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
+
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'competency',
+                        'reviewLeftByApplicant' => $reviewLeftByApplicant,
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                } else {
+                    return view('projects.review', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'competency',
+                        'messages' => $messages3,
+                        'attemptedProject' => $attemptedProject,
+                        'answeredTasksArray' => $answeredTasksArray,
+                        'answeredTasks' => $answeredTasks,
+                        'competencyScores' => $competencyScores,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'reviewedUserId' => 0,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]);
+                }
+            } else {
+                return view('projects.attempt', [
+                    
+                    'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first(),
+                    'project' => $project,
+                    'role' => $role,
+                    'parameter' => 'competency',
+                    'messages' => $messages3,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]);
+            }
+        } else {
+            if($project->published == 0 && $project->user_id != Auth::id()) {
+                if(Auth::user()->admin) {
+                    return view('projects.show', [
+                        
+                        'project' => $project,
+                        'role' => $role,
+                        'parameter' => 'competency',
+                        'messages' => $messages3,
+                        'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                        'clickedUserId' => $clickedUserId,
+                        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                    ]); 
+                } else {
+                    return redirect('/roles/' . $routeParameters['roleSlug']);
+                }
+            } else {
+                // check whether added to cart
+
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+                if($shoppingCart) {
+                    $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
+                } else {
+                    $addedToCart = null;
+                }
+
+                return view('projects.show', [
+                    
+                    'project' => $project,
+                    'role' => $role,
+                    'parameter' => 'competency',
+                    'messages' => $messages3,
+                    'addedToCart' => $addedToCart,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]); 
+            }
+        }
+    }
+
     public function show($slug) {
         $loggedInUserId = Auth::id();
 
@@ -379,13 +1167,17 @@ class ProjectsController extends Controller
                 $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
 
                 return view('projects.completed', [
+                    
                     'project' => $project,
                     'role' => $role,
+                    'parameter' => 'overview',
                     'messages' => $messages3,
                     'answeredTasks' => $answeredTasks,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                     'clickedUserId' => $clickedUserId,
                     'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
                 ]);
             } elseif($attemptedProject->status == "Assessed") {
                 $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
@@ -396,8 +1188,10 @@ class ProjectsController extends Controller
                     $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
 
                     return view('projects.review', [
+                        
                         'project' => $project,
                         'role' => $role,
+                        'parameter' => 'overview',
                         'reviewLeftByApplicant' => $reviewLeftByApplicant,
                         'messages' => $messages3,
                         'attemptedProject' => $attemptedProject,
@@ -408,11 +1202,15 @@ class ProjectsController extends Controller
                         'clickedUserId' => $clickedUserId,
                         'reviewedUserId' => 0,
                         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
                     ]);
                 } else {
                     return view('projects.review', [
+                        
                         'project' => $project,
                         'role' => $role,
+                        'parameter' => 'overview',
                         'messages' => $messages3,
                         'attemptedProject' => $attemptedProject,
                         'answeredTasksArray' => $answeredTasksArray,
@@ -422,6 +1220,8 @@ class ProjectsController extends Controller
                         'clickedUserId' => $clickedUserId,
                         'reviewedUserId' => 0,
                         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
                     ]);
                 }
             } elseif($attemptedProject->status == "Reviewed") {
@@ -433,8 +1233,10 @@ class ProjectsController extends Controller
                     $reviewLeftByApplicant = Review::where('project_id', $project->id)->where('sender_id', Auth::id())->first();
 
                     return view('projects.review', [
+                        
                         'project' => $project,
                         'role' => $role,
+                        'parameter' => 'overview',
                         'reviewLeftByApplicant' => $reviewLeftByApplicant,
                         'messages' => $messages3,
                         'attemptedProject' => $attemptedProject,
@@ -445,11 +1247,15 @@ class ProjectsController extends Controller
                         'clickedUserId' => $clickedUserId,
                         'reviewedUserId' => 0,
                         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
                     ]);
                 } else {
                     return view('projects.review', [
+                        
                         'project' => $project,
                         'role' => $role,
+                        'parameter' => 'overview',
                         'messages' => $messages3,
                         'attemptedProject' => $attemptedProject,
                         'answeredTasksArray' => $answeredTasksArray,
@@ -459,29 +1265,39 @@ class ProjectsController extends Controller
                         'clickedUserId' => $clickedUserId,
                         'reviewedUserId' => 0,
                         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
                     ]);
                 }
             } else {
                 return view('projects.attempt', [
+                    
                     'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first(),
                     'project' => $project,
                     'role' => $role,
+                    'parameter' => 'overview',
                     'messages' => $messages3,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                     'clickedUserId' => $clickedUserId,
                     'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
                 ]);
             }
         } else {
             if($project->published == 0 && $project->user_id != Auth::id()) {
                 if(Auth::user()->admin) {
                     return view('projects.show', [
+                        
                         'project' => $project,
                         'role' => $role,
+                        'parameter' => 'overview',
                         'messages' => $messages3,
                         'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                         'clickedUserId' => $clickedUserId,
                         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
                     ]); 
                 } else {
                     return redirect('/roles/' . $routeParameters['roleSlug']);
@@ -497,13 +1313,17 @@ class ProjectsController extends Controller
                 }
 
                 return view('projects.show', [
+                    
                     'project' => $project,
                     'role' => $role,
+                    'parameter' => 'overview',
                     'messages' => $messages3,
                     'addedToCart' => $addedToCart,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                     'clickedUserId' => $clickedUserId,
                     'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
                 ]); 
             }
         }
@@ -526,12 +1346,15 @@ class ProjectsController extends Controller
         $customCompetencies = Competency::where('role_id', $role->id)->where('user_id', Auth::id());
 
         return view('projects.edit', [
+            
             'project' => $project,
             'role' => $role,
             'customCount' => $customCompetencies->count()+1,
             'customCompetencies' => $customCompetencies->get(),
             'competencyIdArray' => $competencyIdArray,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
@@ -547,14 +1370,20 @@ class ProjectsController extends Controller
             $customCompetencies = Competency::where('role_id', $selectedRole->id)->where('user_id', Auth::id());
 
             return view('projects.create', [
+                
                 'selectedRole' => $selectedRole,
                 'customCount' => $customCompetencies->count()+1,
                 'customCompetencies' => $customCompetencies->get(),
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
             ]);
         } else {
             return view('projects.apply', [
+                
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
             ]);
         }
     }
@@ -584,21 +1413,27 @@ class ProjectsController extends Controller
 
         if(Auth::id() != $project->user->id) {
             return view('projects.attempt', [
+                
                 'project' => $project,
                 'role' => $role,
                 'messages' => $messages3,
                 'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                 'clickedUserId' => $clickedUserId,
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
             ]);
         } else {
             return view('projects.show', [
+                
                 'project' => $project,
                 'role' => $role,
                 'messages' => $messages3,
                 'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                 'clickedUserId' => $clickedUserId,
                 'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
             ]);
         }
     }
@@ -637,19 +1472,50 @@ class ProjectsController extends Controller
         return redirect('/roles/' . $project->role->slug . "/projects/" . $project->slug);
     }
 
-    public function purchaseProject(Request $request) {
-        $project = Project::find($request->input('project_id'));
+    public function purchaseProjects(Request $request) {
+        $projectsArray = $request->input('projectsArray');
+        $interviewsArray = $request->input('interviewsArray');
+        $lessonsArray = $request->input('lessonsArray');
+        $creditsArray = $request->input('creditsArray');
 
-        $attemptedProject = new AttemptedProject;
+        $projectsArray = explode(",", $projectsArray);
+        $interviewsArray = explode(",", $interviewsArray);
+        $lessonsArray = explode(",", $lessonsArray);
+        $creditsArray = explode(",", $creditsArray);
 
-        $attemptedProject->project_id = $request->input('project_id');
-        $attemptedProject->user_id = Auth::id();
-        $attemptedProject->status = "Attempting";
+        foreach($projectsArray as $projectId) {
+            $project = Project::find($projectId);
 
-        // calculate the deadline of the project by adding project hours to current date
-        $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
+            $attemptedProject = new AttemptedProject;
 
-        $attemptedProject->save();
+            $attemptedProject->project_id = $projectId;
+            $attemptedProject->user_id = Auth::id();
+            $attemptedProject->status = "Attempting";
+
+            // calculate the deadline of the project by adding project hours to current date
+            $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
+
+            $attemptedProject->save();
+        }
+
+        $totalCreditsToBeAddedToUserTotal = 0;
+
+        foreach($creditsArray as $creditId) {
+            $credit = Credit::find($creditId);
+
+            $user = User::find(Auth::id());
+
+            $totalCreditsToBeAddedToUserTotal += $credit->credits;
+        }
+
+        $user->credits += $totalCreditsToBeAddedToUserTotal;
+
+        $user->save();
+
+        $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+        $shoppingCart->status = "paid";
+
+        $shoppingCart->save();
 
         // notify creator
         $notification = new Notification;
@@ -671,8 +1537,52 @@ class ProjectsController extends Controller
         ];
 
         $this->pusher->trigger('notifications_' . $project->user_id, 'new-notification', $message);
+    }
 
-        return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug'));
+    public function purchaseProject(Request $request) {
+        // if(Auth::id()) {
+            $project = Project::find($request->input('project_id'));
+
+            $attemptedProject = new AttemptedProject;
+
+            $attemptedProject->project_id = $request->input('project_id');
+            $attemptedProject->user_id = Auth::id();
+            $attemptedProject->status = "Attempting";
+
+            // calculate the deadline of the project by adding project hours to current date
+            $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
+
+            $attemptedProject->save();
+
+            // create invoice and change shopping cart to done
+            $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+            $shoppingCart->status = "paid";
+
+            $shoppingCart->save();
+
+            // notify creator
+            $notification = new Notification;
+
+            $notification->message = "purchased project: " . $project->title;
+            $notification->recipient_id = $project->user_id;
+            $notification->user_id = Auth::id();
+            $notification->url = "/roles/" . $project->role->slug . "/projects/" . $project->slug;
+
+            $notification->save();
+
+            $message = [
+                'text' => e("purchased project: " . $project->title),
+                'username' => Auth::user()->name,
+                'avatar' => Auth::user()->avatar,
+                'timestamp' => (time()*1000),
+                'projectId' => $project->id,
+                'url' => '/notifications'
+            ];
+
+            $this->pusher->trigger('notifications_' . $project->user_id, 'new-notification', $message);
+
+            // return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug'));  
+        // }
     }
 
     public function selectRole() {
@@ -686,8 +1596,11 @@ class ProjectsController extends Controller
         $roles = Role::select('id', 'title')->orderBy('title', 'asc')->get();
 
         return view('projects.selectRole', [
+            
             'roles' => $roles,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
     }
 
@@ -794,6 +1707,7 @@ class ProjectsController extends Controller
 
     public function saveProject(Request $request) {
 
+        // dd($request);
         // need to validate inputs first before trying to store to database
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:projects'
@@ -816,6 +1730,11 @@ class ProjectsController extends Controller
         $project->hours = $request->input('hours');
         $project->amount = $request->input('price');
         $project->published = false;
+
+        if($request->file('thumbnail')) {
+            $project->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+            $project->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         $project->save();
 
@@ -889,6 +1808,7 @@ class ProjectsController extends Controller
         }
 
         if($request->file('file-1')) {
+
             for($fileCounter = 0; $fileCounter < count($request->file('file-1')); $fileCounter++) {
 
                 $projectFile = new ProjectFile;
@@ -1052,6 +1972,7 @@ class ProjectsController extends Controller
             // detach all competencies so that i can reattach the new ones
             $project->competencies()->detach();
             $competencies = Competency::find($request->input('competency'));
+
             $project->competencies()->attach($competencies);
 
             if($request->input('custom-competency')) {
@@ -1072,6 +1993,16 @@ class ProjectsController extends Controller
                 $newCompetencies = Competency::find($newCompetencyArray);
                 $project->competencies()->attach($newCompetencies);
             }
+
+            if($request->input('thumbnail-deleted')) {
+                if($request->file('thumbnail')) {
+                    $project->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+                    $project->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
+                } else {
+                    $project->thumbnail = "";
+                    $project->url = "";
+                }
+            } 
 
             $project->save();
 

@@ -7,6 +7,14 @@
   width: 100% !important;
 }
 
+.braintree-toggle {
+  margin-bottom: 0.8rem;
+}
+
+.role-brief {
+  padding-bottom: 0.5rem !important;
+}
+
 p, li, ul, ol {
   color: #292e32 !important;
 }

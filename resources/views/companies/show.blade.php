@@ -1,14 +1,6 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="breadcrumb-bar navbar bg-white sticky-top">
-      <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/companies">Companies</a>&nbsp;> {{$company->title}}
-              </li>
-          </ol>
-      </nav>
-  </div>
   <div class="container">
       <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-11">
@@ -28,8 +20,8 @@
                       <p style="margin-top: 0.5rem;">{{$opportunity->description}}</p>
                     </div>
                     <div class="col-lg-2" style="float: right; padding: 0px;">
-                      <strong>Skill</strong>
-                      <p>{{$opportunity->skill->title}}</p>
+                      <strong>Role</strong>
+                      <p>{{$opportunity->Role->title}}</p>
                       <strong>Competencies</strong>
                       <p>15</p>
                       <strong>Projects</strong>

@@ -2,131 +2,311 @@
 
 @section ('content')    
 <div class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-lg-3 mb-3">
-            <ul class="nav nav-tabs flex-lg-column">
-                <li class="nav-item">
-                    <a class="nav-link active" id="password-tab" data-toggle="tab" href="#password" role="tab" aria-controls="password" aria-selected="false">Authentication</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-xl-8 col-lg-9">
-            <div class="card">
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" role="tabpanel" id="password" aria-labelledby="password-tab">
-                            @if (session('error'))
-                                <div class="alert alert-danger">
-                                    <p style="color: #721c24 !important;">{{session('error')}}</p>
-                                </div>
-                            @endif
-                            @if (session('success'))
-                                <div class="alert alert-success">
-                                    <p style="color: #155724 !important;">{{session('success')}}</p>
-                                </div>
-                            @endif
-                            @if (($errors->has('password-current') && strlen($errors->first('password-current')) > 0) || $errors->has('password-new') && strlen($errors->first('password-new')) > 0 || $errors->has('password-new-confirm') && strlen($errors->first('password-new-confirm')) > 0)
-                            <div class="alert alert-danger">
-                              @if ($errors->has('password-current') && strlen($errors->first('password-current')) > 0)
-                                <p style="color: #721c24 !important;">The current password field is required.</p>
-                              @endif
-                              @if ($errors->has('password-new') && strlen($errors->first('password-new')) > 0)
-                                <p style="color: #721c24 !important;">The new password field is required.</p>
-                              @endif
-                              @if ($errors->has('password-new-confirm') && strlen($errors->first('password-new-confirm')) > 0)
-                                <p style="color: #721c24 !important;">The confirm new password field is required.</p>
-                              @endif
-                            </div>
-                            @endif
-                            <form method="POST" action="/settings">
-                                @csrf
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">Current Password</label>
-                                    <div class="col">
-                                        <input type="password" placeholder="Enter your current password" name="password-current" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">New Password</label>
-                                    <div class="col">
-                                        <input type="password" placeholder="Enter a new password" name="password-new" class="form-control" />
-                                        <small>Password must be at least 8 characters long</small>
-                                    </div>
-                                </div>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">Confirm New Password</label>
-                                    <div class="col">
-                                        <input type="password" placeholder="Confirm your new password" name="password-new-confirm" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="row justify-content-end">
-                                    <div class="col">
-                                        <button type="submit" class="btn btn-primary pull-right">Update Password</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="tab-pane fade" role="tabpanel" id="notifications" aria-labelledby="notifications-tab">
-                            <form>
-                                <h6>Activity Notifications</h6>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox custom-checkbox-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notify-1" checked>
-                                        <label class="custom-control-label" for="notify-1">Someone assigns me to a task</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox custom-checkbox-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notify-2" checked>
-                                        <label class="custom-control-label" for="notify-2">Someone mentions me in a conversation</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox custom-checkbox-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notify-3" checked>
-                                        <label class="custom-control-label" for="notify-3">Someone adds me to a project</label>
-                                    </div>
-                                </div>
-                                <div class="form-group mb-md-4">
-                                    <div class="custom-control custom-checkbox custom-checkbox-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notify-4">
-                                        <label class="custom-control-label" for="notify-4">Activity on a project I am a member of</label>
-                                    </div>
-                                </div>
-                                <h6>Service Notifications</h6>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox custom-checkbox-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notify-5">
-                                        <label class="custom-control-label" for="notify-5">Monthly newsletter</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox custom-checkbox-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notify-6" checked>
-                                        <label class="custom-control-label" for="notify-6">Major feature enhancements</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox custom-checkbox-switch">
-                                        <input type="checkbox" class="custom-control-input" id="notify-7">
-                                        <label class="custom-control-label" for="notify-7">Minor updates and bug fixes</label>
-                                    </div>
-                                </div>
-                                <div class="row justify-content-end">
-                                    <button type="submit" class="btn btn-primary">Save preferences</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10 col-xl-8">
+      
+      <!-- Header -->
+      <div class="header mt-md-5">
+        <div class="header-body">
+          <div class="row align-items-center">
+            <div class="col">
+              
+              <!-- Pretitle -->
+              <h6 class="header-pretitle">
+                Overview
+              </h6>
+
+              <!-- Title -->
+              <h1 class="header-title">
+                Settings
+              </h1>
+
             </div>
+          </div> <!-- / .row -->
+          <div class="row align-items-center">
+            <div class="col">
+              
+              <!-- Nav -->
+              <ul class="nav nav-tabs nav-overflow header-tabs">
+                <li class="nav-item">
+                  <a href="#!" class="nav-link active">
+                    Profile
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#!" class="nav-link">
+                    Authentication
+                  </a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Form -->
+      <form class="mb-4">
+
+        <div class="row">
+          <div class="col-12 col-md-6">
+            
+            <!-- First name -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label>
+                Name
+              </label>
+
+              <!-- Input -->
+              <input type="text" class="form-control">
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6">
+            
+            <!-- Last name -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label>
+                Last name
+              </label>
+
+              <!-- Input -->
+              <input type="text" class="form-control">
+
+            </div>
+
+          </div>
+          <div class="col-12">
+            
+            <!-- Email address -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label class="mb-1">
+                Email address
+              </label>
+
+              <!-- Form text -->
+              <small class="form-text text-muted">
+                This contact will be shown to others publicly, so choose it carefully.
+              </small>
+
+              <!-- Input -->
+              <input type="email" class="form-control">
+
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6">
+            
+            <!-- Phone -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label>
+                Phone
+              </label>
+
+              <!-- Input -->
+              <input type="text" class="form-control mb-3" placeholder="(___)___-____" data-mask="(000) 000-0000">
+
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6">
+            
+            <!-- Birthday -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label>
+                Birthday
+              </label>
+
+              <!-- Input -->
+              <input type="text" class="form-control" data-toggle="flatpickr">
+
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+
+        <!-- Divider -->
+        <hr class="mt-4 mb-5">
+
+        <div class="row">
+          <div class="col-12 col-md-6">
+            
+            <!-- Public profile -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label class="mb-1">
+                Public profile
+              </label>
+
+              <!-- Form text -->
+              <small class="form-text text-muted">
+                Making your profile public means that anyone on the Dashkit network will be able to find you.
+              </small>
+
+              <div class="row">
+                <div class="col-auto">
+                  
+                  <!-- Toggle -->
+                  <div class="custom-control custom-checkbox-toggle">
+                    <input type="checkbox" class="custom-control-input" id="toggleOne">
+                    <label class="custom-control-label" for="toggleOne"></label>
+                  </div>
+
+                </div>
+                <div class="col ml--2">
+                  
+                  <!-- Help text -->
+                  <small class="text-muted">
+                    You're currently invisible
+                  </small>
+
+                </div>
+              </div> <!-- / .row -->
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6">
+            
+            <!-- Allow for additional Bookings -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label class="mb-1">
+                Allow for additional Bookings
+              </label>
+
+              <!-- Form text -->
+              <small class="form-text text-muted">
+                If you are available for hire outside of the current situation, you can encourage others to hire you.
+              </small>
+
+              <div class="row">
+                <div class="col-auto">
+                  
+                  <!-- Toggle -->
+                  <div class="custom-control custom-checkbox-toggle">
+                    <input type="checkbox" class="custom-control-input" id="toggleTwo" checked>
+                    <label class="custom-control-label" for="toggleTwo"></label>
+                  </div>
+
+                </div>
+                <div class="col ml--2">
+                  
+                  <!-- Help text -->
+                  <small class="text-muted">
+                    You're currently available
+                  </small>
+
+                </div>
+              </div> <!-- / .row -->
+            </div>
+
+          </div>
+        </div> <!-- / .row -->
+
+        <!-- Divider -->
+        <hr class="mt-4 mb-5">
+
+        <div class="row">
+          <div class="col-12 col-md-6 order-md-2">
+            
+            <!-- Card -->
+            <div class="card bg-light border ml-md-4">
+              <div class="card-body">
+                
+                <p class="mb-2">
+                  Password requirements
+                </p>
+
+                <p class="small text-muted mb-2">
+                  To create a new password, you have to meet all of the following requirements:
+                </p>
+
+                <ul class="small text-muted pl-4 mb-0">
+                  <li>
+                    Minimum 8 character
+                  </li>
+                  <li>
+                    At least one special character
+                  </li>
+                  <li>
+                    At least one number
+                  </li>
+                  <li>
+                  Can’t be the same as a previous password
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-md-6">
+
+            <!-- Password -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label>
+                Password
+              </label>
+
+              <!-- Input -->
+              <input type="password" class="form-control">
+
+            </div>
+
+            <!-- New password -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label>
+                New password
+              </label>
+
+              <!-- Input -->
+              <input type="password" class="form-control">
+
+            </div>
+
+            <!-- Confirm new password -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label>
+                Confirm new password
+              </label>
+
+              <!-- Input -->
+              <input type="password" class="form-control">
+
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-primary">
+              Update password
+            </button>
+            
+          </div>
+        </div> <!-- / .row -->
+
+      </form>
+
     </div>
+  </div> <!-- / .row -->
 </div>
 @endsection
 
 @section ('footer')
-	
-	
-
 @endsection

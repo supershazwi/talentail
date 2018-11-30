@@ -1,31 +1,24 @@
-<script type="text/javascript" src="/js/autosize.min.js"></script>
-<script type="text/javascript" src="/js/popper.min.js"></script>
-<script type="text/javascript" src="/js/prism.js"></script>
-<script type="text/javascript" src="/js/draggable.bundle.legacy.js"></script>
-<script type="text/javascript" src="/js/swap-animation.js"></script>
-<script type="text/javascript" src="/js/dropzone.min.js"></script>
-<script type="text/javascript" src="/js/list.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap.js"></script>
-<script type="text/javascript" src="/js/theme.js"></script>
-<script type="text/javascript" src="/js/custom-file-input.js"></script>
-<script type="text/javascript" src="/js/toastr.js"></script>
-<script type="text/javascript" src="/js/intro.js"></script>
+<script src="/jquery/dist/jquery.min.js"></script>
+<script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/chart.js/dist/Chart.min.js"></script>
+<script src="/libs/chart.js/Chart.extension.js"></script>
+<script src="/highlightjs/highlight.pack.min.js"></script>
+<script src="/flatpickr/dist/flatpickr.min.js"></script>
+<script src="/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
+<script src="/list.js/dist/list.min.js"></script>
+<script src="/quill/dist/quill.min.js"></script>
+<script src="/dropzone/dist/min/dropzone.min.js"></script>
+<script src="/select2/dist/js/select2.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-<script type="text/javascript">
-
-$(document).ready(function() {
-    $('.js-example-basic-single').select2();
-});
-</script>
-
-<!-- <script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="/js/autosize.min.js"></script>
-<script type="text/javascript" src="/js/popper.min.js"></script>
-<script type="text/javascript" src="/js/prism.js"></script>
-<script type="text/javascript" src="/js/draggable.bundle.legacy.js"></script>
-<script type="text/javascript" src="/js/swap-animation.js"></script>
-<script type="text/javascript" src="/js/dropzone.min.js"></script>
-<script type="text/javascript" src="/js/list.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap.js"></script>
-<script type="text/javascript" src="/js/theme.js"></script> -->
+<script src="/js/charts.js"></script>
+<script src="/js/dashkit.js"></script>
+<script src="/js/dropdowns.js"></script>
+<script src="/js/dropzone.js"></script>
+<script src="/js/flatpickr.js"></script>
+<script src="/js/highlight.js"></script>
+<script src="/js/list.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/popover.js"></script>
+<script src="/js/quill.js"></script>
+<script src="/js/select2.js"></script>
+<script src="/js/tooltip.js"></script>

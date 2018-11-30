@@ -1,122 +1,143 @@
 @extends ('layouts.main')
 
 @section ('content')
-  <div class="breadcrumb-bar navbar bg-white sticky-top" style="display: -webkit-box;">
-      <nav aria-label="breadcrumb">
-      </nav>
-      <div id="cancel-url" style="display: none;">{{Request::url()}}</div>
-  </div>
   <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-xl-10 col-lg-11">
-            <section class="py-4 py-lg-5">
-                <h1 class="display-4 mb-3">Edit a {{$role->title}} Project</h1>
-                <p class="lead">{{$role->description}}</p>
-            </section>
-            @if (($errors->has('title') && strlen($errors->first('title')) > 0) || $errors->has('description') && strlen($errors->first('description')) > 0 || $errors->has('brief') && strlen($errors->first('brief')) > 0 || $errors->has('hours') && strlen($errors->first('hours')) > 0 || $errors->has('price') && strlen($errors->first('price')) > 0 || $errors->has('competency') && strlen($errors->first('competency')) > 0)
-            <div class="alert alert-danger">
-              @if ($errors->has('title') && strlen($errors->first('title')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('title') }}</p>
-              @endif
-              @if ($errors->has('description') && strlen($errors->first('description')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('description') }}</p>
-              @endif
-              @if ($errors->has('brief') && strlen($errors->first('brief')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('brief') }}</p>
-              @endif
-              @if ($errors->has('hours') && strlen($errors->first('hours')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('hours') }}</p>
-              @endif
-              @if ($errors->has('price') && strlen($errors->first('price')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('price') }}</p>
-              @endif
-              @if ($errors->has('competency') && strlen($errors->first('competency')) > 0)
-                <p style="color: #721c24 !important;">{{ $errors->first('competency') }}</p>
-              @endif
-            </div>
-            @endif
-            <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/save-project" enctype="multipart/form-data">
-            @csrf
-            <input name="id" class="form-control" id="id" type="hidden" value="{{$project->id}}">
-            <h3>Project Title</h3>
+    <div class="row">
+      <div class="col-12 col-lg-12">
+        
+        <!-- Header -->
+        <div class="header mt-md-5">
+          <div class="header-body">
+            <div class="row align-items-center">
+              <div class="col">
+                
+                <!-- Pretitle -->
+                <h6 class="header-pretitle">
+                  Project Management
+                </h6>
+
+                <!-- Title -->
+                <h1 class="header-title">
+                  Edit a Project
+                </h1>
+
+              </div>
+            </div> <!-- / .row -->
+          </div>
+        </div>
+
+        <!-- Form -->
+          <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/save-project" enctype="multipart/form-data">
+          @csrf
+
+          <input name="id" class="form-control" id="id" type="hidden" value="{{$project->id}}">
+
+          <!-- Project name -->
+          <div class="form-group">
+            <label>
+              Project title
+            </label>
             <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" value="{{$project->title}}">
-            <h3 style="margin-top: 1.5rem;">Project Short Description</h3>
+          </div>
+
+          <!-- Project description -->
+          <div class="form-group">
+            <label class="mb-1">
+              Project short description
+            </label>
             <textarea class="form-control" name="description" id="description" maxlength="280" rows="5" placeholder="Enter summary" onkeypress="keyDescription()">{{$project->description}}</textarea>
+
             <p class="text-small" style="float: right; color: #8F9194 !important;" id="charactersLeft">{{280 - strlen($project->description)}} characters left</p>
-            <br/>
-            <ul class="nav nav-tabs nav-fill" style="margin-top: 1.5rem;">
-                <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#brief" role="tab" aria-controls="brief" aria-selected="true">Role Brief</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-controls="tasks" aria-selected="false">Tasks</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#competencies" role="tab" aria-controls="competencies" aria-selected="false">Competencies</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#miscellaneous" role="tab" aria-controls="miscellaneous" aria-selected="false">Miscellaneous</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane fade show active" id="brief" role="tabpanel" aria-labelledby="brief-tab" data-filter-list="card-list-body">
-                  <div class="row content-list-head">
-                      <div class="col-auto">
-                          <h3>Project Full Description & Role Brief</h3>
+          </div>
+
+          <div class="form-group">
+            <label class="mb-1">
+              Project full description & role brief
+            </label>
+
+            <div id="test-editormd2" style="border-radius: 0.5rem;">
+                <textarea style="display:none;" name="brief"></textarea>
+            </div>
+            <div id="brief-info" style="display: none;">{{$project->brief}}</div>
+          </div>
+
+          <!-- Divider -->
+          <hr class="mt-4 mb-5">
+
+          <div class="form-group">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-auto" style="padding-left: 0px;">
+                  <label class="mb-1">
+                    Tasks
+                  </label>
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col-auto mr--3">
+                  <button class="btn btn-primary" style="margin-bottom: 0.1875rem !important;" onclick="addTask()">Add Task</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-list-body">
+              @foreach($project->tasks as $key=>$task)
+                <div class="task-accordion" id="tasksList_{{$key+1}}">
+                  <div class="card" id="tasksList_{{$key+1}}">
+                    <div class="card-body task-card" id="card_{{$key+1}}">
+                      <div class="row">
+                        <div class="col-12 col-md-12">
+                          <div class="form-group">
+                            <label class="todo-title">To-do #{{$key+1}} Title</label>
+                            <input type="text" name="todo-title_{{$key+1}}" class="form-control todo-title-input" id="todo-title-input_{{$key+1}}" placeholder="Enter title" value="{{$task->title}}">
+                            <input type="hidden" name="task-id_{{$key+1}}" value="{{$task->id}}" class="task-hidden">
+                          </div>
+                        </div>
                       </div>
-                  </div>
-                    <div class="content-list-body">
-                        <div class="card">
-                          <div class="card-body">
-                            <div id="layout">
-                                <div id="test-editormd2" style="border-radius: 0.5rem;">
-                                    <textarea style="display:none;" name="brief"></textarea>
-                                </div>
-                                <div id="brief-info" style="display: none;">{{$project->brief}}</div>
+                      <div class="row">
+                        <div class="col-12 col-md-12">
+                          <div class="form-group">
+                            <label class="todo-description">To-do #{{$key+1}} Description</label>
+                            <input type="text" name="todo-description_{{$key+1}}" class="form-control todo-description-input" id="todo-description-input_{{$key+1}}" placeholder="Enter description" value="{{$task->description}}">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 col-md-12">
+                          <div class="form-group">
+                            <div class="btn-group-toggle" data-toggle="buttons">
+                              @if($task->mcq)
+                                <label class="btn btn-white radio-mcq-label active" onclick="launchMcq()" id="radio-mcq_{{$key+1}}">
+                              @else
+                                <label class="btn btn-white radio-mcq-label" onclick="launchMcq()" id="radio-mcq_{{$key+1}}">
+                              @endif
+                              <input type="radio" name="todo_{{$key+1}}" value="mcq" class="radio-mcq" id="radio-mcq_{{$key+1}}"> <i class="fe fe-check-circle check-mcq" id="radio-mcq-check_{{$key+1}}"></i> Multiple Choice Question</label>
+                              @if($task->open_ended)
+                                <label class="btn btn-white radio-open-ended-label active" onclick="removeMcq()" id="radio-open-ended_{{$key+1}}">
+                              @else
+                                <label class="btn btn-white radio-open-ended-label" onclick="removeMcq()" id="radio-open-ended_{{$key+1}}">
+                              @endif
+                              <input type="radio" name="todo_{{$key+1}}" value="open-ended" class="radio-open-ended" id="radio-open-ended_{{$key+1}}"> <i class="fe fe-check-circle check-open-ended" id="radio-open-ended-check_{{$key+1}}"></i> Open-ended</label>
+                              @if($task->na)
+                                <label class="btn btn-white radio-na-label active" onclick="removeMcq()" id="radio-na_{{$key+1}}">
+                              @else
+                                <label class="btn btn-white radio-na-label" onclick="removeMcq()" id="radio-na_{{$key+1}}">
+                              @endif
+                              <input type="radio" name="todo_{{$key+1}}" value="na" class="radio-na" id="radio-na_{{$key+1}}"> <i class="fe fe-check-circle check-na" id="radio-na-check_{{$key+1}}"></i> Not Applicable</label>
                             </div>
                           </div>
                         </div>
-                    </div>
-                  <!--end of content list-->
-              </div>
-              <div class="tab-pane fade" id="tasks" role="tabpanel" aria-labelledby="tasks-tab" data-filter-list="card-list-body">
-                  <div class="row content-list-head">
-                      <div class="col-auto">
-                          <h3>Tasks</h3>
-                          <button class="btn btn-primary" style="margin-left: 1.5rem;" onclick="addTask()">Add Task</button>
                       </div>
-                  </div>
-                  <!-- <span class="dz-message">No tasks added yet</span> -->
-                  <div class="content-list-body">
-                    @foreach($project->tasks as $key=>$task)
-                    <div class="accordion task-accordion" id="tasksList_{{$key+1}}">
-                      <div class="card task-card" id="card_{{$key+1}}" style="margin-bottom: 1.5rem;">
-                        <div class="card-header" id="heading_{{$key+1}}">
-                          <h5 class="todo-title">To-do #{{$key+1}} Title</h5>
-                          <input type="text" name="todo-title_{{$key+1}}" class="form-control todo-title-input" id="todo-title-input_{{$key+1}}" placeholder="Enter title" value="{{$task->title}}">
-                          <input type="hidden" name="task-id_{{$key+1}}" value="{{$task->id}}">
-                        </div>
-                        <div id="collapse_{{$key+1}}" class="collapse show collapse-heading" data-parent="#tasksList">
-                          <div class="card-body">
-                            <h5 class="todo-description">To-do #{{$key+1}} Description</h5>
-                            <input type="text" name="todo-description_{{$key+1}}" class="form-control todo-description-input" id="todo-description-input_{{$key+1}}" placeholder="Enter description" value="{{$task->description}}">
-                            <div style="margin-top: 1.5rem;">
-                              @if($task->mcq)
-                              <input type="radio" name="todo_{{$key+1}}" value="mcq" class="radio-mcq" id="radio-mcq_{{$key+1}}" onclick="launchMcq()" checked> 
-                              @else
-                              <input type="radio" name="todo_{{$key+1}}" value="mcq" class="radio-mcq" id="radio-mcq_{{$key+1}}" onclick="launchMcq()" >
-                              @endif
-                              <span class="text-small">Multiple Choice Question</span> 
-                            </div>
-                            @if($task->mcq)
-                            @foreach($task->answers as $answerKey=>$answer)
-                              <div class="accordion answer-accordion" id="answersList_{{$key+1}}_{{$answerKey+1}}">
+                      @if($task->mcq)
+                        @foreach($task->answers as $answerKey=>$answer)
+                        <div class="accordion answer-accordion answer-accordion_{{$key+1}}" id="answersList_{{$key+1}}_{{$answerKey+1}}">
+                          <div class="row">
+                            <div class="col-12 col-md-12">
+                              <div class="form-group">
                                 <div class="input-group">
-                                  <input type="text" name="answer_{{$key+1}}_{{$answerKey+1}}" class="form-control todo-answer-input_{{$key+1}}" id="todo-answer-input_{{$key+1}}_{{$answerKey+1}}" placeholder="Enter answer {{$answerKey+1}}" style="margin-top: 1.5rem;" value="{{$answer->title}}">
-                                  <div class="input-group-append" style="height: 40px; margin-top: 1.5rem;">
+                                  <input type="text" name="answer_{{$key+1}}_{{$answerKey+1}}" class="form-control todo-answer-input_{{$key+1}}" id="todo-answer-input_{{$key+1}}_{{$answerKey+1}}" placeholder="Enter answer {{$answerKey+1}}" value="{{$answer->title}}">
+                                  <div class="input-group-append" style="height: 40px;">
                                     <span class="input-group-text remove-answer" id="delete-answer_{{$key+1}}_{{$answerKey+1}}" onclick="deleteAnswer()">
                                       <input type="hidden" class="deleted-answer-id" name="deleted-answer-id_{{$key+1}}_{{$answerKey+1}}" id="deleted-answer-id_{{$key+1}}_{{$answerKey+1}}" value="{{$answer->id}}" />
                                       <i class="fas fa-times-circle" id="span_{{$key+1}}_{{$answerKey+1}}"></i>
@@ -124,253 +145,247 @@
                                   </div>
                                 </div>
                               </div>
-                            @endforeach
-                            <input type="hidden" name="answers-deleted" value="" id="answers-deleted" />
-                            <div class="accordion answer-accordion" id="answersList_{{$key+1}}_{{count($task->answers)+1}}">
                             </div>
-                            <div style="margin-top: 1.5rem;" id="mcq-buttons_{{$key+1}}">
-                              @if($task->mcq)
-                              <input type="checkbox" name="checkbox-multiple-select_{{$key+1}}" value="file-upload" class="checkbox-multiple-select_{{$key+1}}" id="checkbox-multiple-select_{{$key+1}}" checked>
-                              @else
-                              <input type="checkbox" name="checkbox-multiple-select_{{$key+1}}" value="file-upload" class="checkbox-multiple-select_{{$key+1}}" id="checkbox-multiple-select_{{$key+1}}">
-
-                              @endif
-                              <span class="text-small" style="margin-left: 0.5rem;">Enable Multiple Select</span>
-                              <button class="btn btn-primary btn-sm add-task" style="float: right;" id="add-task_{{$key+1}}" onclick="addAnswer()">Add Answer</button><hr>
-                            </div>
-                            @endif
-                            <div>
-                              @if($task->open_ended) 
-                              <input type="radio" name="todo_{{$key+1}}" value="open-ended" class="radio-open-ended" id="radio-open-ended_{{$key+1}}" onclick="removeMcq()" checked> 
-                              @else
-                              <input type="radio" name="todo_{{$key+1}}" value="open-ended" class="radio-open-ended" id="radio-open-ended_{{$key+1}}" onclick="removeMcq()"> 
-                              @endif
-                              <span class="text-small">Open-ended</span>
-                            </div>
-                            <div>
-                              @if($task->na) 
-                              <input type="radio" name="todo_{{$key+1}}" value="na" class="radio-na" id="radio-na_{{$key+1}}" onclick="removeMcq()" checked> 
-                              @else
-                              <input type="radio" name="todo_{{$key+1}}" value="na" class="radio-na" id="radio-na_{{$key+1}}" onclick="removeMcq()"> 
-                              @endif
-                              <span class="text-small">N.A.</span>
-                            </div>
-                            <hr>
-                            @if($task->file_upload)
-                            <input type="checkbox" name="checkbox-file-upload_{{$key+1}}" value="file-upload" class="checkbox-file-upload_{{$key+1}}" id="checkbox-file-upload_1" checked>
-                            @else
-                            <input type="checkbox" name="checkbox-file-upload_{{$key+1}}" value="file-upload" class="checkbox-file-upload_{{$key+1}}" id="checkbox-file-upload_1">
-                            @endif
-                            <span class="text-small" style="margin-left: 0.5rem;">File Upload</span>
-                            <br>
-                            <button class="btn btn-danger delete-task btn-sm" id="delete-task_{{$key+1}}" onclick="deleteTask()" style="float: right; margin-bottom: 1.5rem;">Delete</button>
-                            <input type="hidden" class="deleted-task-id" id="deleted-task-id_{{$key+1}}" name="deleted-task-id_{{$key+1}}" value="{{$task->id}}" />
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    @endforeach
-                    <div class="accordion task-accordion" id="tasksList_{{count($project->tasks)+1}}">
-                    </div>
-                  </div>
-                  <input type="hidden" name="tasks-deleted" value="" id="tasks-deleted" />
-                  <!--end of content list-->
-              </div>
-              <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab" data-filter-list="dropzone-previews">
-                  <div class="content-list">
-                      <div class="row content-list-head">
+                        @endforeach
+                        <input type="hidden" name="answers-deleted" value="" id="answers-deleted" />
+                        <div class="accordion answer-accordion answer-accordion_{{$key+1}}" id="answersList_{{$key+1}}_{{count($task->answers)+1}}"></div>
+                      @else
+                        <!-- <input type="hidden" name="answers-deleted" value="" id="answers-deleted" /> -->
+                        <div class="accordion answer-accordion answer-accordion_{{$key+1}}" id="answersList_{{$key+1}}_{{count($task->answers)+1}}"></div>
+                      @endif
+                      @if($task->mcq)
+                      <div id="mcq-buttons_{{$key+1}}">
+                      @else
+                      <div id="mcq-buttons_{{$key+1}}" style="display: none;">
+                      @endif
+                        <div class="row align-items-center">
                           <div class="col-auto">
-                              <h3>Files</h3>
+                            <div class="custom-control custom-checkbox-toggle">
+                              @if($task->multiple_select)
+                              <input type="checkbox" class="custom-control-input" id="checkbox-multiple-select_{{$key+1}}" name="checkbox-multiple-select_{{$key+1}}" checked>
+                              @else
+                              <input type="checkbox" class="custom-control-input" id="checkbox-multiple-select_{{$key+1}}" name="checkbox-multiple-select_{{$key+1}}">
+                              @endif
+                              <label class="custom-control-label" id="checkbox-multiple-select-label_{{$key+1}}" for="checkbox-multiple-select_{{$key+1}}"></label>
+                            </div>
                           </div>
-                      </div>
-                      <!--end of content list head-->
-                      <div class="content-list-body row">
                           <div class="col">
-                              <div class="box">
-                                <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; margin-bottom: 1.5rem;"/>
-                                <label for="file-1" style="position: absolute; left: 0; margin-left: 12px; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.2rem 1.25rem; height: 36px;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
-                              </div>
-                              <div id="selectedFiles"></div>
-                              <ul class="list-group list-group-activity dropzone-previews flex-column-reverse" style="margin-top: 1rem;">
-                                @foreach($project->project_files as $projectFile) 
-                                  <li class="list-group-item" id="file-group_{{$projectFile->id}}">
-                                      <div class="media align-items-center">
-                                          <ul class="avatars">
-                                              <li>
-                                                  <div class="avatar bg-primary">
-                                                      <i class="material-icons">insert_drive_file</i>
-                                                  </div>
-                                              </li>
-                                          </ul>
-                                          <div class="media-body d-flex justify-content-between align-items-center">
-                                              <div>
-                                                  <a href="https://storage.cloud.google.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" data-filter-by="text">{{$projectFile->title}}</a>
-                                                  <br>
-                                                  <span class="text-small" data-filter-by="text">{{round($projectFile->size/1048576, 2)}} MB, {{$projectFile->mime_type}}</span>
-                                              </div>
-                                          </div>
-                                          <span class="input-group-text remove-file" id="delete-file_{{$projectFile->id}}" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;">
-                                            <i class="fas fa-times-circle" id="span_{{$projectFile->id}}"></i>
-                                          </span>
-                                      </div>
-                                  </li>
-                                @endforeach 
-                              </ul>
-                              <input type="hidden" name="files-deleted" value="" id="files-deleted" />
+                            <span>Enable Multiple Select</span>
                           </div>
-                      </div>
-                  </div>
-                  <!--end of content list-->
-              </div>
-              <div class="tab-pane fade" id="competencies" role="tabpanel" aria-labelledby="competencies-tab">
-                  <div class="content-list">
-                      <div class="row content-list-head">
                           <div class="col-auto">
-                              <h3>Competencies</h3>
-                              <button class="btn btn-primary" style="margin-left: 1.5rem;" onclick="addCompetency()">Add Competency</button>
-                          </div>
-                      </div>
-                      <!--end of content list head-->
-                      <div class="content-list-body">
-                          @foreach($role->competencies as $competency)
-                            @if($competency->user_id == 0)
-                            <div class="row">
-                                <div class="form-group col">
-                                    <div class="form-check">
-                                      @if(in_array($competency->id, $competencyIdArray))
-                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}" checked>
-                                      @else
-                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$competency->id}}">
-                                      @endif
-                                      <p>
-                                        {{$competency->title}}
-                                      </p>
-                                    </div>
-                                </div>
-                                <!--end of form group-->
-                            </div>
-                            @endif
-                          @endforeach
-
-                          @foreach($customCompetencies as $key=>$customCompetency)
-                            @if($key==0) 
-                              <h3 id="defaultCustomCompetencyHeading">Custom Competencies</h3>
-                            @endif
-                            @if($customCompetency->user_id != 0)
-                            <div class="row custom-competency-row">
-                                <div class="form-group col">
-                                    <div class="form-check">
-                                      @if(in_array($customCompetency->id, $competencyIdArray))
-                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$customCompetency->id}}" checked>
-                                      @else
-                                      <input type="checkbox" name="competency[]" class="form-check-input" value="{{$customCompetency->id}}">
-                                      @endif
-                                      <p>
-                                        {{$customCompetency->title}}
-                                      </p>
-                                    </div>
-                                </div>
-                                <!--end of form group-->
-                            </div>
-                            @endif
-                          @endforeach
-                          <h3 style="display: none;" id="customCompetencyHeading">Custom Competencies</h3>
-                          <div id="competenciesList_{{$customCount}}">
-                          </div>
-                          <input type="hidden" id="customCount" value="{{$customCount}}" />
-                      </div>
-                  </div>
-                  <!--end of content list-->
-              </div>
-              <div class="tab-pane fade" id="miscellaneous" role="tabpanel" aria-labelledby="miscellaneous-tab">
-                  <div class="content-list">
-                      <div class="row content-list-head">
-                          <div class="col-auto">
-                              <h3>Miscellaneous</h3>
-                          </div>
-                      </div>
-                      <!--end of content list head-->
-                      <div class="content-list-body">
-                        <h5 style="margin-top: 1.5rem;">Project Price</h5>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">$</span>
-                          </div>
-                          <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" name="price" value="{{$project->amount}}">
-                        </div>
-                        <h5 style="margin-top: 1.5rem;">Project Duration</h5>
-                        <div class="input-group mb-3">
-                          <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Project duration" name="hours" value="{{$project->hours}}">
-                          <div class="input-group-append">
-                            <span class="input-group-text">hours</span>
+                            <button class="btn btn-primary add-task" style="float: right;" id="add-task_{{$key+1}}" onclick="addAnswer()">Add Answer</button>
                           </div>
                         </div>
+                        <hr>
                       </div>
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <div class="custom-control custom-checkbox-toggle">
+                            @if($task->file_upload)
+                            <input type="checkbox" class="custom-control-input" id="checkbox-file-upload_{{$key+1}}" name="checkbox-file-upload_{{$key+1}}" checked>
+                            @else
+                            <input type="checkbox" class="custom-control-input" id="checkbox-file-upload_{{$key+1}}" name="checkbox-file-upload_{{$key+1}}">
+                            @endif
+                            <label class="custom-control-label" id="checkbox-file-upload-label_{{$key+1}}" for="checkbox-file-upload_{{$key+1}}"></label>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <span>Allow user to upload file</span>
+                        </div>
+                        <div class="col-auto">
+                          <button class="btn btn-danger delete-task" id="delete-task_{{$key+1}}" onclick="deleteTask()">Delete Task</button>
+                          <input type="hidden" class="deleted-task-id" id="deleted-task-id_{{$key+1}}" name="deleted-task-id_{{$key+1}}" value="{{$task->id}}" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <!--end of content list-->
+                </div>
+              @endforeach
+            </div>
+            <input type="hidden" name="tasks-deleted" value="" id="tasks-deleted" />
+          </div>
+
+
+          <hr class="mt-4 mb-5">
+          <!-- Project cover -->
+          <div class="form-group">
+            <label class="mb-1">
+              Project thumbnail
+            </label>
+            <small class="form-text text-muted">
+              An ideal thumbnail is 600px * 450px 
+            </small>
+            <div class="box">
+              <input type="file" name="thumbnail" id="thumbnail" class="inputfile inputfile-1" style="visibility: hidden; margin-bottom: 1.5rem;"/>
+              <label for="thumbnail" style="position: absolute; left: 0; margin-left: 12px; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Thumbnail</span></label>
+            </div>
+            @if($project->thumbnail)
+            <div id="projectThumbnail">
+              <a href="{{$project->url}}">{{$project->thumbnail}}</a> <span id="delete-thumbnail" class="remove-file" onclick="deleteThumbnail()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle"></i></span>
+            </div>
+            @endif
+            <div id="selectedThumbnail">
+            </div>
+            <input type="hidden" name="thumbnail-deleted" value="false" id="thumbnail-deleted" />
+          </div>
+
+          <!-- Divider -->
+          <hr class="mt-5 mb-5">
+
+          <!-- Starting files -->
+          <div class="form-group">
+            <label class="mb-1">
+              Supporting files
+            </label>
+            <small class="form-text text-muted">
+              Upload any files you want to start the project with.
+            </small>
+            <div class="box">
+              <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; margin-bottom: 1.5rem;"/>
+              <label for="file-1" style="position: absolute; left: 0; margin-left: 12px; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
+            </div>
+            @foreach($project->project_files as $projectFile)
+            <div id="file-group_{{$projectFile->id}}">
+              <a href="https://storage.cloud.google.com/talentail-123456789/{{$projectFile->url}}">{{$projectFile->title}}</a> <span id="delete-file_{{$projectFile->id}}" class="remove-file" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle" id="span_{{$projectFile->id}}"></i></span><br/>
+            </div>
+            @endforeach
+            <div id="selectedFiles">
+            </div>
+            <input type="hidden" name="files-deleted" value="" id="files-deleted" />
+          </div>
+
+          <!-- Divider -->
+          <hr class="mt-5 mb-5">
+
+          <div class="form-group">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-auto" style="padding-left: 0px;">
+                  <label class="mb-1">
+                    Competencies
+                  </label>
+                </div>
+                <div class="col">
+
+                </div>
               </div>
             </div>
-            <div style="margin-top: 1.5rem !important;">
-              <button class="btn btn-primary" style="float: right; margin-right: 0.5rem; display:none;" type="submit" id="saveProject">Save Project</button>
-            </div>
-          </form>
 
-          <button class="btn btn-primary pull-right" onclick="saveProject()" style="margin-right: 0.5rem;">Save Project</button>
-          <button class="btn btn-default pull-right" onclick="cancel()" style="margin-right: 0.5rem;">Cancel</button>
-        </div>
+            @foreach($role->competencies as $competency)
+              @if($competency->user_id == 0)
+                @if(!$loop->last)
+                    <div class="row align-items-center" style="margin-bottom: 1rem;">
+                @else
+                    <div class="row align-items-center">
+                @endif
+                  <div class="col-auto">
+                    <div class="custom-control custom-checkbox-toggle">
+                      @if(in_array($competency->id, $competencyIdArray))
+                      <input type="checkbox" class="custom-control-input" name="competency[]" id="competency_{{$competency->id}}" value="{{$competency->id}}" checked>
+                      @else
+                      <input type="checkbox" class="custom-control-input" name="competency[]" id="competency_{{$competency->id}}" value="{{$competency->id}}">
+                      @endif
+                      <label class="custom-control-label" for="competency_{{$competency->id}}" id="competency_{{$competency->id}}"></label>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <span>{{$competency->title}}</span>
+                  </div>
+                </div>
+              @endif
+            @endforeach
+
+          </div>
+
+          <hr class="mt-5 mb-5">
+
+          <div class="form-group">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-auto" style="padding-left: 0px;">
+                  <label class="mb-1">
+                    Miscellaneous
+                  </label>
+                </div>
+                <div class="col">
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label>
+                  Price
+                </label>
+
+                <div class="input-group mb-3">
+                  <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1" name="price" value="{{$project->amount}}">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon1">credits</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label>
+                  Duration given to complete project
+                </label>
+                <div class="input-group mb-3">
+                  <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Recipient's username" aria-describedby="basic-addon2" name="hours" value="{{$project->hours}}">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">hours</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="mt-5 mb-5" style="margin-top: 0.875rem !important;">
+
+          <!-- Buttons -->
+          <button class="btn btn-primary" id="createProject" type="submit" style="float: right; display: none;">Create Project</button>
+          <button class="btn btn-default" id="saveProject" type="submit" style="float: right; margin-right: 0.5rem; display: none;">Save</button>
+          <button class="btn btn-default" onclick="cancel()" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
+
+        </form>
+        <button onclick="saveProject()" class="btn btn-block btn-primary">
+          Save project
+        </button>
+        <a href="#" class="btn btn-block btn-link text-muted">
+          Cancel
+        </a>
+
       </div>
+    </div> <!-- / .row -->
   </div>
 
-  <script type="text/javascript" src="/js/jquery.min.js"></script>
-  <script type="text/javascript" src="/js/autosize.min.js"></script>
-  <script type="text/javascript" src="/js/popper.min.js"></script>
-  <script type="text/javascript" src="/js/prism.js"></script>
-  <script type="text/javascript" src="/js/draggable.bundle.legacy.js"></script>
-  <script type="text/javascript" src="/js/swap-animation.js"></script>
-  <script type="text/javascript" src="/js/dropzone.min.js"></script>
-  <script type="text/javascript" src="/js/list.min.js"></script>
-  <script type="text/javascript" src="/js/bootstrap.js"></script>
-  <script type="text/javascript" src="/js/theme.js"></script>
   <script type="text/javascript" src="/js/editormd.js"></script>
-  <script type="text/javascript" src="/languages/en.js"></script>
-  <script type="text/javascript" src="/js/custom-file-input.js"></script>
+  <script src="/js/languages/en.js"></script>
   <script type="text/javascript">
-    var input = document.getElementById('description');
 
-    input.onkeyup = function() {
-        var key = event.keyCode || event.charCode;
-
-        if( key == 8 || key == 46 ) {
-          let descriptionLength = document.getElementById("description").value.length;
-          if(descriptionLength >= 0) {
-            document.getElementById("charactersLeft").innerHTML = (280 - descriptionLength) + " characters left";
-          } else {
-            document.getElementById("charactersLeft").innerHTML = "280 characters left";
-          }
-        }
-    };
-
-    var editor2 = editormd({
-        id   : "test-editormd2",
-        path : "/lib/",
-        height: 640,
-        placeholder: "Start creating your project full description & role brief...",
-        onload : function() {
-            //this.watch();
-            //this.setMarkdown("###test onloaded");
-            //testEditor.setMarkdown("###Test onloaded");
-            editor2.insertValue(document.getElementById("brief-info").innerHTML);
-            console.log("fire");
-        }
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
     });
 
     var selDiv = "";
+    var selThumbnailDiv = "";
     
     document.addEventListener("DOMContentLoaded", init, false);
     
     function init() {
       document.querySelector('#file-1').addEventListener('change', handleFileSelect, false);
       selDiv = document.querySelector("#selectedFiles");
+
+      document.querySelector('#thumbnail').addEventListener('change', handleThumbnailSelect, false);
+      selThumbnailDiv = document.querySelector("#selectedThumbnail");
     }
     
     function handleFileSelect(e) {
@@ -385,26 +400,32 @@
       }
     }
 
-    function keyDescription() {
-      let descriptionLength = document.getElementById("description").value.length+1;
-      if(descriptionLength != 281) {
-        document.getElementById("charactersLeft").innerHTML = (280 - descriptionLength) + " characters left";
+    function handleThumbnailSelect(e) {
+      if(document.getElementById("projectThumbnail") != null)
+        deleteThumbnail();
+      if(!e.target.files) return;
+      selThumbnailDiv.innerHTML = "";
+      
+      var files = e.target.files;
+      for(var i=0; i<files.length; i++) {
+        var f = files[i];
+        
+        selThumbnailDiv.innerHTML += f.name + "<br/>";
       }
     }
 
-    function deleteFile() {
-      let fileIdString = event.target.id.split("_");
-      let fileId = fileIdString[1];
-
-      if(document.getElementById("files-deleted").value == "") {
-        document.getElementById("files-deleted").value += fileId;
-      } else {
-        document.getElementById("files-deleted").value += ", " + fileId;
-      }
-
-      let elem = document.getElementById("file-group_"+fileId);
-      elem.parentNode.removeChild(elem);
-    }
+    var editor2 = editormd({
+        id   : "test-editormd2",
+        path : "/lib/",
+        height: 640,
+        placeholder: "Start creating your project full description & role brief...",
+        onload : function() {
+            //this.watch();
+            //this.setMarkdown("###test onloaded");
+            //testEditor.setMarkdown("###Test onloaded");
+            editor2.insertValue(document.getElementById("brief-info").innerHTML);
+        }
+    });
 
     function addAnswer() {
       event.preventDefault();
@@ -413,29 +434,44 @@
       let taskId = taskIdString[1];
       let answerId = document.querySelectorAll('.todo-answer-input_' + taskId).length + 1; 
 
-      document.getElementById("answersList_" + taskId + "_" + answerId).innerHTML += "<div class='input-group'><input type='text' name='answer_" + taskId + "_" + answerId + "' class='form-control todo-answer-input_" + taskId + "' id='todo-answer-input_" + taskId + "_" + answerId + "' placeholder='Enter answer " + answerId + "' style='margin-top: 1.5rem;'><div class='input-group-append' style='height: 40px; margin-top: 1.5rem;'><span class='input-group-text remove-answer' id='delete-answer_" + taskId + "_" + answerId + "' onclick='deleteAnswer()'><i class='fas fa-times-circle' id='span_" + taskId + "_" + answerId + "'></i></span></div></div>"
+      document.getElementById("answersList_" + taskId + "_" + answerId).innerHTML += "<div class='row'><div class='col-12 col-md-12'><div class='form-group'><div class='input-group'><input type='text' name='answer_" + taskId + "_" + answerId + "' class='form-control todo-answer-input_" + taskId + "' id='todo-answer-input_" + taskId + "_" + answerId + "' placeholder='Enter answer " + answerId + "'><div class='input-group-append' style='height: 40px;'><span class='input-group-text remove-answer' id='delete-answer_" + taskId + "_" + answerId + "' onclick='deleteAnswer()'><i class='fas fa-times-circle' id='span_" + taskId + "_" + answerId + "'></i></span></div></div></div></div></div>";
 
-      document.getElementById("answersList_" + taskId + "_" + answerId).insertAdjacentHTML('afterend', "<div class='accordion answer-accordion' id='answersList_" + taskId + "_" + (answerId+1) + "'></div>");
+      document.getElementById("answersList_" + taskId + "_" + answerId).insertAdjacentHTML('afterend', "<div class='accordion answer-accordion answer-accordion_" + taskId + "' id='answersList_" + taskId + "_" + (answerId+1) + "'></div>");
     }
 
-    function saveProject() {
-      event.preventDefault();
+    function launchMcq() {
+      let idString = event.target.id.split("_");
+      let mcqButtons = document.getElementById("mcq-buttons_" + idString[1]);
+      mcqButtons.style.display = "block";
 
-      // tag all custom competency values
-      let competencyCount = document.getElementsByClassName("added-custom-competency").length;
+      let answers = document.getElementsByClassName("answer-accordion_" + idString[1]);
 
-      let startingPoint = parseInt(document.getElementById("customCount").value);
-
-      let finalCount = competencyCount + startingPoint;
-
-      for (i = startingPoint; i < finalCount; i++) {  
-          i = parseInt(i);
-
-          let x = document.getElementById("custom-competency-checkbox_" + i);
-          x.value = document.getElementById("custom-competency-input_" + i).value;
+      var arrayLength = answers.length;
+      for (var i = 0; i < arrayLength; i++) {
+          answers[i].style.display = "block";
       }
+    }
 
-      document.getElementById("saveProject").click();
+    function removeMcq() {
+      let idString = event.target.id.split("_");
+      let mcqButtons = document.getElementById("mcq-buttons_" + idString[1]);
+      mcqButtons.style.display = "none";
+
+      let answers = document.getElementsByClassName("answer-accordion_" + idString[1]);
+
+      var arrayLength = answers.length;
+      for (var i = 0; i < arrayLength; i++) {
+          answers[i].style.display = "none";
+      }
+    }
+
+    function addTask() {
+      event.preventDefault();
+      let cardCounter = document.querySelectorAll('.task-card').length + 1;
+
+      document.getElementById("tasksList_" + cardCounter).innerHTML += "<div class='card' id='tasksList_" + cardCounter + "'><div class='card-body task-card' id='card_" + cardCounter + "'><div class='row'><div class='col-12 col-md-12'><div class='form-group'><label class='todo-title'>To-do #" + cardCounter + " Title</label><input type='text' name='todo-title_" + cardCounter + "' class='form-control todo-title-input' id='todo-title-input_" + cardCounter + "' placeholder='Enter title'></div></div></div><div class='row'><div class='col-12 col-md-12'><div class='form-group'><label class='todo-description'>To-do #" + cardCounter + " Description</label><input type='text' name='todo-description_" + cardCounter + "' class='form-control todo-description-input' id='todo-description-input_" + cardCounter + "' placeholder='Enter description'></div></div></div><div class='row'><div class='col-12 col-md-12'><div class='form-group'><div class='btn-group-toggle' data-toggle='buttons'><label class='btn btn-white radio-mcq-label' onclick='launchMcq()' id='radio-mcq_" + cardCounter + "'><input type='radio' name='todo_" + cardCounter + "' value='mcq' class='radio-mcq' id='radio-mcq_" + cardCounter + "'> <i class='fe fe-check-circle'></i> Multiple Choice Question</label><label class='btn btn-white radio-open-ended-label' onclick='removeMcq()' id='radio-open-ended_" + cardCounter + "'><input type='radio' name='todo_" + cardCounter + "' value='open-ended' class='radio-open-ended' id='radio-open-ended_" + cardCounter + "'> <i class='fe fe-check-circle'></i> Open-ended</label><label class='btn btn-white radio-na-label' onclick='removeMcq()' id='radio-na_" + cardCounter + "'><input type='radio' name='todo_" + cardCounter + "' value='na' class='radio-na' id='radio-na_" + cardCounter + "'> <i class='fe fe-check-circle'></i> Not Applicable</label></div></div></div></div><div class='accordion answer-accordion answer-accordion_" + cardCounter + "' id='answersList_" + cardCounter + "_1' ></div><div id='mcq-buttons_" + cardCounter + "' style='display: none;'><div class='row align-items-center'><div class='col-auto'><div class='custom-control custom-checkbox-toggle'><input type='checkbox' class='custom-control-input' id='checkbox-multiple-select_" + cardCounter + "' name='checkbox-multiple-select_" + cardCounter + "'><label class='custom-control-label' id='checkbox-multiple-select-label_" + cardCounter + "' for='checkbox-multiple-select_" + cardCounter + "'></label></div></div><div class='col'><span>Enable Multiple Select</span></div><div class='col-auto'><button class='btn btn-primary add-task' style='float: right;' id='add-task_" + cardCounter + "' onclick='addAnswer()'>Add Answer</button></div></div><hr/></div><div class='row align-items-center'><div class='col-auto'><div class='custom-control custom-checkbox-toggle'><input type='checkbox' class='custom-control-input' id='checkbox-file-upload_" + cardCounter + "' name='checkbox-file-upload_" + cardCounter + "'><label class='custom-control-label' id='checkbox-file-upload-label_" + cardCounter + "' for='checkbox-file-upload_" + cardCounter + "'></label></div></div><div class='col'><span>Allow user to upload file</span></div><div class='col-auto'><button class='btn btn-danger delete-task' id='delete-task_" + cardCounter + "' onclick='deleteTask()'>Delete Task</button></div></div></div></div>";
+
+      document.getElementById("tasksList_" + cardCounter).insertAdjacentHTML('afterend', "<div class='task-accordion' id='tasksList_" + (cardCounter+1) + "'></div>");
     }
 
     function deleteAnswer() {
@@ -449,8 +485,6 @@
       } else {
         document.getElementById("answers-deleted").value += ", " + document.getElementById("deleted-answer-id_" + taskId + "_" + answerId).value;
       }
-
-      console.log(document.getElementById("answers-deleted").value);
 
       // find total number of answers first
       let answerCount = document.getElementsByClassName("todo-answer-input_" + taskId).length;
@@ -475,6 +509,10 @@
           let u = document.getElementById("delete-answer_" + taskId + "_" + (i+1));
           u.id = "delete-answer_" + taskId + "_" + i;
 
+          let zz = document.getElementById("deleted-answer-id_" + taskId + "_" + (i+1));
+          zz.id = "deleted-answer-id_" + taskId + "_" + i;
+          zz.name = "deleted-answer-id_" + taskId + "_" + i;
+
           let v = document.getElementById("span_" + taskId + "_" + (i+1));
           v.id = "span_" + taskId + "_" + i;
       }
@@ -483,41 +521,30 @@
       z.id = "answersList_" + taskId + "_" + answerCount;
     }
 
-    function addCompetency() {
-      // adding of competencies is only for the one who created the competency
-      // it is not shared across other creators
-      event.preventDefault();
-      if(document.getElementById("defaultCustomCompetencyHeading") == null) {
-        document.getElementById('customCompetencyHeading').style.display = 'block';
-      }
+    function deleteThumbnail() {
+      document.getElementById("thumbnail-deleted").value = true;
 
-      console.log(document.querySelectorAll('.custom-competency-row').length);
-
-      let competencyCounter = document.querySelectorAll('.custom-competency-row').length + 1;
-
-      console.log("competenciesList_" + competencyCounter);
-
-      document.getElementById("competenciesList_" + competencyCounter).innerHTML += "<div class='row custom-competency-row'><div class='form-group col'><div class='form-check'><input type='checkbox' name='custom-competency[]' class='form-check-input' value='' id='custom-competency-checkbox_" + competencyCounter + "' style='margin-top: 12.5px;'><div class='input-group'><input type='text' class='form-control custom-competency added-custom-competency' id='custom-competency-input_" + competencyCounter + "' placeholder='Enter custom competency " + competencyCounter + "'><div class='input-group-append' style='height: 40px;'><span class='input-group-text remove-competency' id='delete-competency_" + competencyCounter + "' onclick='deleteCompetency()'><i class='fas fa-times-circle' id='span_" + competencyCounter + "'></i></span></div></div></div></div></div>";
-
-      document.getElementById("competenciesList_" + competencyCounter).insertAdjacentHTML('afterend', "<div id='competenciesList_" + (competencyCounter+1) + "'></div>");
+      let elem = document.getElementById("projectThumbnail");
+      elem.parentNode.removeChild(elem);
     }
 
-    function addTask() {
-      event.preventDefault();
-      let cardCounter = document.querySelectorAll('.task-card').length + 1;
+    function deleteFile() {
+      let fileIdString = event.target.id.split("_");
+      let fileId = fileIdString[1];
 
-      document.getElementById("tasksList_" + cardCounter).innerHTML += "<div class='card task-card' id='card_" + cardCounter + "' style='margin-bottom: 1.5rem;'><div class='card-header' id='heading_" + cardCounter + "'><h5 class='todo-title'>To-do #" + cardCounter + " Title</h5><input type='text' name='todo-title_" + cardCounter + "' class='form-control todo-title-input' id='todo-title-input_" + cardCounter + "' placeholder='Enter title'></div><div id='collapse_" + cardCounter + "' class='collapse show collapse-heading' data-parent='#tasksList'><div class='card-body'><h5 class='todo-description'>To-do #" + cardCounter + " Description</h5><input type='text' name='todo-description_" + cardCounter + "' class='form-control todo-description-input' id='todo-description-input_" + cardCounter + "' placeholder='Enter description'><div style='margin-top: 1.5rem;'><input type='radio' name='todo_" + cardCounter + "' value='mcq' class='radio-mcq' id='radio-mcq_" + cardCounter + "' onclick='launchMcq()'> <span class='text-small'>Multiple Choice Question</span> </div><div class='accordion answer-accordion' id='answersList_" + cardCounter + "_1'></div><div style='margin-top: 1.5rem; display: none;' id='mcq-buttons_" + cardCounter + "'><input type='checkbox' name='checkbox-multiple-select_" + cardCounter + "' value='file-upload' class='checkbox-multiple-select_" + cardCounter + "' id='checkbox-multiple-select_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>Enable Multiple Select</span><button class='btn btn-primary btn-sm add-task' style='float: right;' id='add-task_" + cardCounter + "' onclick='addAnswer()'>Add Answer</button><hr></div><div> <input type='radio' name='todo_" + cardCounter + "' value='open-ended' class='radio-open-ended' id='radio-open-ended_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>Open-ended</span></div><div><input type='radio' name='todo_" + cardCounter + "' value='na' class='radio-na' id='radio-na_" + cardCounter + "' onclick='removeMcq()'> <span class='text-small'>N.A.</span></div><hr><input type='checkbox' name='checkbox-file-upload_" + cardCounter + "' value='file-upload' class='checkbox-file-upload_" + cardCounter + "' id='checkbox-file-upload_" + cardCounter + "'><span class='text-small' style='margin-left: 0.5rem;'>File Upload</span><br><button class='btn btn-danger delete-task btn-sm' id='delete-task_" + cardCounter + "' onclick='deleteTask()' style='float: right; margin-bottom: 1.5rem;'>Delete</button></div></div></div>";
+      if(document.getElementById("files-deleted").value == "") {
+        document.getElementById("files-deleted").value += fileId;
+      } else {
+        document.getElementById("files-deleted").value += ", " + fileId;
+      }
 
-        document.getElementById("tasksList_" + cardCounter).insertAdjacentHTML('afterend', "<div class='accordion task-accordion' id='tasksList_" + (cardCounter+1) + "'></div>");
+      let elem = document.getElementById("file-group_"+fileId);
+      elem.parentNode.removeChild(elem);
     }
 
     function deleteTask() {
-      event.preventDefault();
-
       let taskIdString = event.target.id.split("_");
       let tasksListId = "tasksList_"+taskIdString[1];
-
-      console.log(taskIdString[1]);
 
       if(document.getElementById("deleted-task-id_"+taskIdString[1]) != null) {
         if(document.getElementById("tasks-deleted").value == "") {
@@ -536,6 +563,31 @@
       // need to recalculate all the ids
       // task-card
       let x = document.getElementsByClassName("task-card");
+      for (i = 0; i < x.length; i++) {        
+          x[i].id = "card_"+(i+1);
+      }
+
+      x = document.getElementsByClassName("check-mcq");
+      for (i = 0; i < x.length; i++) {        
+          x[i].id = "radio-mcq-check_"+(i+1);
+      }
+
+      x = document.getElementsByClassName("check-open-ended");
+      for (i = 0; i < x.length; i++) {        
+          x[i].id = "radio-open-ended-check_"+(i+1);
+      }
+
+      x = document.getElementsByClassName("task-hidden");
+      for (i = 0; i < x.length; i++) {        
+          x[i].name = "task-id_"+(i+1);
+      }
+
+      x = document.getElementsByClassName("check-na");
+      for (i = 0; i < x.length; i++) {        
+          x[i].id = "radio-na-check_"+(i+1);
+      }
+
+      x = document.getElementsByClassName("card");
       for (i = 0; i < x.length; i++) {        
           x[i].id = "card_"+(i+1);
       }
@@ -571,12 +623,6 @@
           x[i].name = "deleted-answer-id_"+(i+1);
       }
 
-      // collapse-heading
-      x = document.getElementsByClassName("collapse-heading");
-      for (i = 0; i < x.length; i++) {        
-          x[i].id = "collapse_"+(i+1);
-      }
-
       // todo-description
       x = document.getElementsByClassName("todo-description");
       for (i = 0; i < x.length; i++) {        
@@ -597,6 +643,11 @@
           x[i].name = "todo_"+(i+1);
       }
 
+      x = document.getElementsByClassName("radio-mcq-label");
+      for (i = 0; i < x.length; i++) {        
+          x[i].id = "radio-mcq_"+(i+1);   
+      }
+
       // radio-open-ended
       x = document.getElementsByClassName("radio-open-ended");
       for (i = 0; i < x.length; i++) {        
@@ -604,11 +655,22 @@
           x[i].name = "todo_"+(i+1);
       }
 
+      x = document.getElementsByClassName("radio-open-ended-label");
+      for (i = 0; i < x.length; i++) {        
+          x[i].id = "radio-open-ended_"+(i+1);   
+      }
+
+
       // radio-na
       x = document.getElementsByClassName("radio-na");
       for (i = 0; i < x.length; i++) {        
           x[i].id = "radio-na_"+(i+1);   
           x[i].name = "todo_"+(i+1);
+      }
+
+      x = document.getElementsByClassName("radio-na-label");
+      for (i = 0; i < x.length; i++) {        
+          x[i].id = "radio-na_"+(i+1);   
       }
 
       // delete-task
@@ -633,7 +695,10 @@
             let a = document.getElementById("answersList_" + (i + 1) + "_" + counter);
             if(a != null) {
               a.id = "answersList_" + i + "_" + counter;
+              a.className = "accordion answer-accordion answer-accordion_" + i;
             }
+
+            a = document.getElementById("radio-mcq_")
 
             a = document.getElementById("todo-answer-input_" + (i + 1) + "_" + counter);
             if(a != null) {
@@ -660,15 +725,26 @@
             a = document.getElementById("checkbox-file-upload_" + (i+1));
             if(a != null) {
               a.id = "checkbox-file-upload_" + i;
-              a.className = "checkbox-file-upload_" + i;
               a.name = "checkbox-file-upload_" + i;
+            }
+
+            a = document.getElementById("checkbox-file-upload-label_" + (i+1));
+            if(a != null) {
+              a.id = "checkbox-file-upload-label_" + i;
+              console.log($("#checkbox-file-upload-label_2").attr('for'));
+              $("#checkbox-file-upload-label_2").attr('for', 'checkbox-file-upload_1');
             }
 
             a = document.getElementById("checkbox-multiple-select_" + (i+1));
             if(a != null) {
               a.id = "checkbox-multiple-select_" + i;
-              a.className = "checkbox-multiple-select_" + i;
               a.name = "checkbox-multiple-select_" + i;
+            }
+
+            a = document.getElementById("checkbox-multiple-select-label_" + (i+1));
+            if(a != null) {
+              a.id = "checkbox-multiple-select-label_" + i;
+              $("#checkbox-multiple-select-label_"+i).attr('for', 'checkbox-multiple-select_'+i);
             }
 
             a = document.getElementById("add-task_" + (i+1));
@@ -685,30 +761,12 @@
       }
     }
 
-    function launchMcq() {
-      let idString = event.target.id.split("_");
-      let mcqButtons = document.getElementById("mcq-buttons_" + idString[1]);
-      mcqButtons.style.display = "block";
-    }
+    function saveProject() {
+      event.preventDefault();
 
-    function removeMcq() {
-      let idString = event.target.id.split("_");
-      let mcqButtons = document.getElementById("mcq-buttons_" + idString[1]);
-      mcqButtons.style.display = "none";
-    }
-
-    function removeFile(event) {
-      console.log(event.parentElement.parentElement.parentElement);
-      let a = event.parentElement.parentElement.parentElement;
-      a.parentNode.removeChild(a);
-    }
-
-    function cancel() {
-      let url = document.getElementById("cancel-url").innerHTML;
-      window.location.replace(url.slice(0, -5));
+      document.getElementById("saveProject").click();
     }
   </script>
-  <script src="/js/languages/en.js"></script>
 @endsection
 
 @section ('footer')
