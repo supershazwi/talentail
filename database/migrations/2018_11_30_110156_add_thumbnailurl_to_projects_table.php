@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddThumbnailToProjectsTable extends Migration
+class AddThumbnailurlToProjectsTable extends Migration
 {
     /**
      * Run the migrations.
