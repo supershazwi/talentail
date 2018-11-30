@@ -654,40 +654,7 @@
 
     var button = document.querySelector('#submit-button');
 
-    // braintree.dropin.create({
-    //   authorization: "{{ Braintree_ClientToken::generate() }}",
-    //   container: '#dropin-container'
-    // }, function (createErr, instance) {
-    //   button.addEventListener('click', function () {
-    //     instance.requestPaymentMethod(function (err, payload) {
-    //       if(err == null) {
-    //           document.getElementById("dropin-container").style.marginTop = "0rem";
-    //           document.getElementById("submit-button").style.display = "none";
-    //           document.getElementById("make-payment").style.display = "block";
-
-    //           document.getElementById("make-payment").onclick = function(){
-    //             $.get('{{ route('payment.process') }}', {payload}, function (response) {
-    //               if (response.success) {
-    //                   document.getElementById("purchaseProjectsButton").click();
-    //               } else {
-    //                 alert('Payment failed');
-    //               }
-    //             }, 'json');
-    //           }
-    //           $(".braintree-toggle").click(function() {
-    //               document.getElementById("submit-button").style.display = "block";
-    //               document.getElementById("make-payment").style.display = "none";
-    //           });
-
-    //           $(".braintree-methods").click(function() {
-    //               document.getElementById("submit-button").style.display = "none";
-    //               document.getElementById("make-payment").style.display = "block";
-    //           });
-    //       }
-
-    //     });
-    //   });
-    // });
+    
   </script>
 
   <script type="text/javascript">
