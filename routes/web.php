@@ -409,6 +409,95 @@ Route::get('/shopping-cart', function() {
     ]);
 })->middleware('auth');;
 
+Route::post('/process-payment', function(Request $request) {
+    $payload = $request->input('payload', false);
+
+    $nonce = $payload;
+
+    $status = \Braintree_Transaction::sale([
+    'amount' => '10.00',
+    'paymentMethodNonce' => $nonce,
+    'options' => [
+        'submitForSettlement' => True
+    ]
+    ]);
+
+    $projectsArray = $request->input('projectsArray');
+    $interviewsArray = $request->input('interviewsArray');
+    $lessonsArray = $request->input('lessonsArray');
+    $creditsArray = $request->input('creditsArray');
+
+    if($projectsArray != null) {
+        $projectsArray = explode(",", $projectsArray);
+        if(sizeof($projectsArray) > 0) {
+            foreach($projectsArray as $projectId) {
+                $project = Project::find($projectId);
+
+                $attemptedProject = new AttemptedProject;
+
+                $attemptedProject->project_id = $projectId;
+                $attemptedProject->user_id = Auth::id();
+                $attemptedProject->status = "Attempting";
+
+                // calculate the deadline of the project by adding project hours to current date
+                $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
+
+                $attemptedProject->save();
+
+                // notify creator
+                $notification = new Notification;
+
+                $notification->message = "purchased project: " . $project->title;
+                $notification->recipient_id = $project->user_id;
+                $notification->user_id = Auth::id();
+                $notification->url = "/roles/" . $project->role->slug . "/projects/" . $project->slug;
+
+                $notification->save();
+
+                $message = [
+                    'text' => e("purchased project: " . $project->title),
+                    'username' => Auth::user()->name,
+                    'avatar' => Auth::user()->avatar,
+                    'timestamp' => (time()*1000),
+                    'projectId' => $project->id,
+                    'url' => '/notifications'
+                ];
+
+                $this->pusher->trigger('notifications_' . $project->user_id, 'new-notification', $message);
+            }
+        }
+    }
+    $interviewsArray = explode(",", $interviewsArray);
+    $lessonsArray = explode(",", $lessonsArray);
+
+    if($creditsArray != null) {
+        $creditsArray = explode(",", $creditsArray);
+        $totalCreditsToBeAddedToUserTotal = 0;
+
+        if(sizeof($creditsArray) > 0) {
+            foreach($creditsArray as $creditId) {
+                $credit = Credit::find($creditId);
+
+                $user = User::find(Auth::id());
+
+                $totalCreditsToBeAddedToUserTotal += $credit->credits;
+            }
+        }
+
+        $user->credits += $totalCreditsToBeAddedToUserTotal;
+    }
+
+    $user->save();
+
+    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+
+    $shoppingCart->status = "paid";
+
+    $shoppingCart->save();
+
+    return redirect('/shopping-cart');
+});
+
 Route::get('/payment/process', 'PaymentsController@process')->name('payment.process');
 
 Route::get('tutorials/create-projects', function() {

@@ -467,6 +467,16 @@
       <button type="submit" style="display: none;" id="purchaseProjectsButton">Submit</button>
     </form>
 
+    <form method="POST" action="/process-payment" id="processPayment">
+      @csrf
+      <input type="hidden" id="payload" name="payload" />
+      <input type="hidden" id="projectsArray" name="projectsArray" value="{{$projectsArray}}"/>
+      <input type="hidden" id="lessonsArray" name="lessonsArray" value="{{$lessonsArray}}"/>
+      <input type="hidden" id="interviewsArray" name="interviewsArray" value="{{$interviewsArray}}"/>
+      <input type="hidden" id="creditsArray" name="creditsArray" value="{{$creditsArray}}"/>
+      <button type="submit" style="display: none;" id="processPaymentButton">Submit</button>
+    </form>
+
     <div class="modal fade" id="modalMembers" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -474,7 +484,7 @@
             <div class="card-body" style="padding: 0.8rem; max-height: 10000px;">
                 <div id="dropin-container" style="margin-top: -2rem;"></div>
                 <button class="btn btn-primary" id="submit-button">Select Payment Type</button>
-                <button class="btn btn-primary" id="make-payment" style="display: none;">Make Payment</button>
+                <button class="btn btn-primary" id="make-payment" style="display: none;" onclick="makePayment()">Make Payment</button>
             </div>
           </div>
         </div>
@@ -666,15 +676,8 @@
               document.getElementById("submit-button").style.display = "none";
               document.getElementById("make-payment").style.display = "block";
 
-              document.getElementById("make-payment").onclick = function(){
-                $.get('{{ route('payment.process') }}', {payload}, function (response) {
-                  if (response.success) {
-                      document.getElementById("purchaseProjectsButton").click();
-                  } else {
-                    alert('Payment failed');
-                  }
-                }, 'json');
-              }
+              document.getElementById("payload").value = payload.nonce;
+
               $(".braintree-toggle").click(function() {
                   document.getElementById("submit-button").style.display = "block";
                   document.getElementById("make-payment").style.display = "none";
@@ -689,6 +692,10 @@
         });
       });
     });
+
+    function makePayment() {
+      document.getElementById("processPaymentButton").click();
+    }
   </script>
 
   <script type="text/javascript">
