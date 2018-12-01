@@ -23,8 +23,8 @@
         </div>
 
           <div class="text-center" style="margin-bottom: 1.2rem;">
-            <span class="badge badge-warning">Telecommunications</span>
-            <span class="badge badge-warning">Energy</span>
+            <span class="badge badge-warning">Food & Beverages</span>
+            <span class="badge badge-warning">E-Commerce</span>
         </div>
       
         <a target="_blank" href="https://www.linkedin.com/in/shazwi/" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>

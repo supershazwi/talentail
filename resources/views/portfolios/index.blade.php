@@ -67,8 +67,8 @@
 			  </div>
 
 		      <div class="text-center" style="margin-bottom: 1.2rem;">
-			      <span class="badge badge-warning">Telecommunications</span>
-			      <span class="badge badge-warning">Energy</span>
+			      <span class="badge badge-warning">Food & Beverages</span>
+			      <span class="badge badge-warning">E-Commerce</span>
 			  </div>
 
 		      <!-- Divider -->
