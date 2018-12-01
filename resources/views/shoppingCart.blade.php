@@ -465,6 +465,7 @@
       <input type="hidden" id="lessonsArray" name="lessonsArray" value="{{$lessonsArray}}"/>
       <input type="hidden" id="interviewsArray" name="interviewsArray" value="{{$interviewsArray}}"/>
       <input type="hidden" id="creditsArray" name="creditsArray" value="{{$creditsArray}}"/>
+      <input type="hidden" id="braintreeClientToken" name="braintreeClientToken" value="{{$braintreeClientToken}}" />
       <button type="submit" style="display: none;" id="processPaymentButton">Submit</button>
     </form>
 
@@ -641,7 +642,7 @@
   </div>
 
   <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
-  <input type="hidden" id="braintreeClientToken" value="{{$braintreeClientToken}}" />
+  <input type="hidden" id="braintreeClientToken" name="braintreeClientToken" value="{{$braintreeClientToken}}" />
 
   <script type="text/javascript">
     $.ajaxSetup({
