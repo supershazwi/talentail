@@ -48,8 +48,6 @@ use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
-require_once '/var/www/html/talentail/current/vendor/braintree/braintree_php/lib/Braintree.php';
-
 Route::get('/portfolios/0', function() {
     return view('portfolios.sample', [
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -398,16 +396,8 @@ Route::get('/shopping-cart', function() {
 
     $braintreeClientToken = \Braintree_ClientToken::generate();
 
-    $gateway = new Braintree_Gateway([
-        'environment' => env('BRAINTREE_ENV'),
-        'merchantId' => env('BRAINTREE_MERCHANT_ID'),
-        'publicKey' => env('BRAINTREE_PUBLIC_KEY'),
-        'privateKey' => env('BRAINTREE_PRIVATE_KEY')
-    ]);
-
     return view('shoppingCart', [
         'braintreeClientToken' => $braintreeClientToken,
-        'gateway' => $gateway,
         'shoppingCart' => $shoppingCart,
         'projectsArray' => implode(",", $projectsArray),
         'lessonsArray' => implode(",", $lessonsArray),
