@@ -505,7 +505,7 @@
 
               <!-- Title -->
               <h1 class="header-title">
-                Shopping Cart
+                Shopping Cart 
               </h1>
 
             </div>
@@ -655,7 +655,7 @@
     var button = document.querySelector('#submit-button');
 
     braintree.dropin.create({
-      authorization: "{{ Braintree_ClientToken::generate() }}",
+      authorization: "{{ \Braintree_ClientToken::generate() }}",
       container: '#dropin-container'
     }, function (createErr, instance) {
       button.addEventListener('click', function () {
