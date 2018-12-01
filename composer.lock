@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0da1feb3239b1f838a083f88ce3eabff",
+    "content-hash": "354aa38a0d007d14613c4093e0ea82a3",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -88,6 +88,53 @@
                 "sdk"
             ],
             "time": "2018-11-30T00:01:18+00:00"
+        },
+        {
+            "name": "braintree/braintree_php",
+            "version": "3.37.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/braintree/braintree_php.git",
+                "reference": "3ec5450912dc4839157d1872810ea2908b0dfd41"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/3ec5450912dc4839157d1872810ea2908b0dfd41",
+                "reference": "3ec5450912dc4839157d1872810ea2908b0dfd41",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-hash": "*",
+                "ext-openssl": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Braintree": "lib/"
+                },
+                "psr-4": {
+                    "Braintree\\": "lib/Braintree"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Braintree",
+                    "homepage": "https://www.braintreepayments.com"
+                }
+            ],
+            "description": "Braintree PHP Client Library",
+            "time": "2018-11-30T16:46:47+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -3830,53 +3877,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "braintree/braintree_php",
-            "version": "3.37.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/braintree/braintree_php.git",
-                "reference": "3ec5450912dc4839157d1872810ea2908b0dfd41"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/3ec5450912dc4839157d1872810ea2908b0dfd41",
-                "reference": "3ec5450912dc4839157d1872810ea2908b0dfd41",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-dom": "*",
-                "ext-hash": "*",
-                "ext-openssl": "*",
-                "ext-xmlwriter": "*",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Braintree": "lib/"
-                },
-                "psr-4": {
-                    "Braintree\\": "lib/Braintree"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Braintree",
-                    "homepage": "https://www.braintreepayments.com"
-                }
-            ],
-            "description": "Braintree PHP Client Library",
-            "time": "2018-11-30T16:46:47+00:00"
-        },
         {
             "name": "deployer/deployer",
             "version": "v6.3.0",
