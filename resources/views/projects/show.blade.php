@@ -85,7 +85,7 @@
               @if($project->url)
               <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
               @else
-              <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
+              <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
               @endif
             </div>
 
@@ -304,7 +304,7 @@
                 </button>
                 @else
                 <button class="btn btn-block btn-primary" onclick="addProjectToCart()">
-                  Add to Cart | {{$project->amount}} Credits
+                  Add to Cart<br/>{{$project->amount}} Credits
                 </button>
                 @endif
               @else
