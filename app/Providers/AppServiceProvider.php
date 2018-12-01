@@ -21,15 +21,6 @@ class AppServiceProvider extends ServiceProvider
         \Braintree_Configuration::publicKey(env('BRAINTREE_PUBLIC_KEY'));
         \Braintree_Configuration::privateKey(env('BRAINTREE_PRIVATE_KEY'));
 
-        $this->app->bind('PaymentGateway', function ($app) {
-            return new Braintree_Gateway([
-                'environment' => env('BRAINTREE_ENV'),
-                'merchantId' => env('BRAINTREE_MERCHANT_ID'),
-                'publicKey' => env('BRAINTREE_PUBLIC_KEY'),
-                'privateKey' => env('BRAINTREE_PRIVATE_KEY')
-            ]);
-        });
-
         $pusher = $this->app->make('pusher');
         $pusher->set_logger( new LaravelLoggerProxy() );
     }

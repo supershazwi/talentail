@@ -48,6 +48,8 @@ use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
+require_once '/vendor/braintree/braintree_php/lib/Braintree.php';
+
 Route::get('/portfolios/0', function() {
     return view('portfolios.sample', [
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
