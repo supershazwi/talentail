@@ -640,6 +640,7 @@
   </div>
 
   <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
+  <input type="hidden" id="braintreeClientToken" value="{{$braintreeClientToken}}" />
 
   <script type="text/javascript">
     $.ajaxSetup({
@@ -654,10 +655,8 @@
 
     var button = document.querySelector('#submit-button');
 
-    console.log(braintree);
-
     braintree.dropin.create({
-      authorization: "{{ Braintree_ClientToken::generate() }}",
+      authorization: document.getElementById("braintreeClientToken").value,
       container: '#dropin-container'
     }, function (createErr, instance) {
       button.addEventListener('click', function () {

@@ -394,8 +394,10 @@ Route::get('/shopping-cart', function() {
         }
     }
 
+    $braintreeClientToken = \Braintree_ClientToken::generate();
+
     return view('shoppingCart', [
-        
+        'braintreeClientToken' => $braintreeClientToken,
         'shoppingCart' => $shoppingCart,
         'projectsArray' => implode(",", $projectsArray),
         'lessonsArray' => implode(",", $lessonsArray),
