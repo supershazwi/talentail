@@ -48,7 +48,7 @@ use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
-require_once '/vendor/braintree/braintree_php/lib/Braintree.php';
+require_once '/var/www/html/talentail/current/vendor/braintree/braintree_php/lib/Braintree.php';
 
 Route::get('/portfolios/0', function() {
     return view('portfolios.sample', [
