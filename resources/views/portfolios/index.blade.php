@@ -42,6 +42,66 @@
 	</div> <!-- / .row -->
 
 	<div class="row">
+		<div class="col-12 col-md-6 col-xl-4">
+		  <div class="card">
+		    <div class="card-body">
+		      <div class="text-center">
+		        <a href="/portfolios/0" class="card-avatar avatar avatar-lg mx-auto">
+					<img src="/img/gray-avatar.png" alt="..." class="avatar-img rounded">
+		        </a>
+		      </div>
+
+		      <!-- Title -->
+		      <a href="/portfolios/0"><h2 class="card-title text-center mb-3">
+		        Shazwi Suwandi
+		      </h2></a>
+
+		      <div class="text-center" style="margin-bottom: 0.75rem;">
+		      	<span class="badge badge-secondary">Sample Portfolio</span>
+			  </div>
+
+		      <p class="text-center" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">Shazwi has been working as a tech consultant since graduating from National University of Singapore and has gained significant experience in digital transformation projects. He likes to overthink in his everyday life and sometimes land himself onto problems that he wants to solve. When push comes to shove, he will roll up his sleeves, his pants, tie up his hair and sit tight till a solution is found. He still can't afford his own bat signal yet, so he can only be contactable on the other channels below.</p>
+
+		      <div class="text-center" style="margin-bottom: 0.75rem;">
+			      <span class="badge badge-primary">Business Analyst</span>
+			  </div>
+
+		      <div class="text-center" style="margin-bottom: 1.2rem;">
+			      <span class="badge badge-warning">Telecommunications</span>
+			      <span class="badge badge-warning">Energy</span>
+			  </div>
+
+		      <!-- Divider -->
+		      <hr>
+
+		      <div class="row align-items-right">
+		        <div class="col">
+		          
+		          <!-- Time -->
+		          <p class="card-text small text-muted" style="margin-bottom: 0;">Overall rating</p>
+		          <p class="card-text small text-muted">
+		            ⭐️ 4.5
+		          </p>
+
+		        </div>
+		        <div class="col-auto">
+		          
+		          <!-- Avatar group -->
+		          <p class="card-text small text-muted" style="margin-bottom: 0;">Endorsed by</p>
+		          <div class="avatar-group">
+		            <a href="/profile/16" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="Steve McIntosh">
+		            	<img src="http://storage.googleapis.com/talentail-123456789/avatars/pTzOJNAKBA85qGI9B4c9gictjkWTbRYaBZbyU3Zt.jpeg" alt="..." class="avatar-img rounded-circle"/>
+		            </a>
+		            <a href="/profile/18" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="Roshan Satpute">
+		            	<img src="http://storage.googleapis.com/talentail-123456789/avatars/JKyKhb7wRRQxgMDwC7waREJ1TKy0pNiqLSczL1Ih.jpeg" alt="..." class="avatar-img rounded-circle"/>
+		            </a>
+		          </div>
+
+		        </div>
+		      </div> <!-- / .row -->
+		    </div> <!-- / .card-body -->
+		  </div>
+		</div>
 		@foreach($portfolios as $portfolio)
 		<div class="col-12 col-md-6 col-xl-4">
 		  <div class="card">

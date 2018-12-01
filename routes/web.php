@@ -48,6 +48,14 @@ use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
+Route::get('/portfolios/0', function() {
+    return view('portfolios.sample', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
 Route::get('/referrals', function() {
     $referred = Referral::where('referrer_id', Auth::id())->get();
 
