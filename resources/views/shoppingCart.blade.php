@@ -458,15 +458,6 @@
   </nav>
   <div class="main-content">
 
-    <form method="POST" action="/purchase-projects" id="purchaseProjects">
-      @csrf
-      <input type="hidden" id="projectsArray" name="projectsArray" value="{{$projectsArray}}"/>
-      <input type="hidden" id="lessonsArray" name="lessonsArray" value="{{$lessonsArray}}"/>
-      <input type="hidden" id="interviewsArray" name="interviewsArray" value="{{$interviewsArray}}"/>
-      <input type="hidden" id="creditsArray" name="creditsArray" value="{{$creditsArray}}"/>
-      <button type="submit" style="display: none;" id="purchaseProjectsButton">Submit</button>
-    </form>
-
     <form method="POST" action="/process-payment" id="processPayment">
       @csrf
       <input type="hidden" id="payload" name="payload" />
