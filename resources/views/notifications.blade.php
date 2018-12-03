@@ -18,6 +18,19 @@
       </div>
 
       <!-- Card -->
+      @if(sizeof($notifications) == 0)
+      <div class="card">
+        <div class="card-body">
+          <div class="row justify-content-center" style="margin-top:1rem;">
+            <div class="col-12 col-md-5 col-xl-4 my-5">
+              <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😬</p>
+              <h2 class="text-center mb-3" style="margin-bottom: 2.25rem !important;"> This section seems empty. We will notify you once something comes in!
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      @else
       @foreach($notifications as $notification)
       <div class="card">
         <div class="card-body">
@@ -37,6 +50,7 @@
         </div>
       </div>
       @endforeach
+      @endif
 
     </div>
   </div> <!-- / .row -->
