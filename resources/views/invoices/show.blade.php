@@ -58,14 +58,26 @@
                 </thead>
                 <tbody>
                   @foreach($invoice->shopping_cart_line_items as $lineItem)
+                    @if($lineItem->project_id)
                     <tr>
                       <td class="px-0">
-                        <a href="#">{{$lineItem->project->title}}</a>
+                        <a href="/roles/{{$lineItem->project->role->slug}}/projects/{{$lineItem->project->slug}}">{{$lineItem->project->title}}</a>
                       </td>
                       <td class="px-0 text-right">
-                        ${{$lineItem->project->amount}}
+                        {{$lineItem->project->amount}} Credits
                       </td>
                     </tr>
+                    @elseif($lineItem->credit_id)
+                    <tr>
+                      <td class="px-0">
+                        <a href="/credits">{{$lineItem->credit->type}}</a>
+                        <p class="text-small SPAN-filter-by-text" data-filter-by="text" style="margin-bottom: 0;">{{$lineItem->credit->credits}} credits @ ${{number_format($lineItem->credit->amount / $lineItem->credit->credits, 1)}}/credit</p>
+                      </td>
+                      <td class="px-0 text-right">
+                        {{$lineItem->credit->amount}} Credits
+                      </td>
+                    </tr>
+                    @endif
                   @endforeach
                   <tr>
                     <td class="px-0 border-top border-top-2">
@@ -73,7 +85,7 @@
                     </td>
                     <td colspan="2" class="px-0 text-right border-top border-top-2">
                       <span class="h3">
-                        ${{$invoice->total}}
+                        {{$invoice->total}} Credits
                       </span>
                     </td>
                   </tr>

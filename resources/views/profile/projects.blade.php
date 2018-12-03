@@ -151,11 +151,7 @@
             <div class="col">
               
               <!-- Time -->
-              <p class="card-text small text-muted" style="margin-bottom: 0;">Last Updated</p>
-              <p class="card-text small text-muted">
-                {{$project->created_at->diffForHumans()}}
-              </p>
-
+              <p class="card-text" style="margin-bottom: 0;">{{$project->amount}} Credits</p>
             </div>
             <div class="col-auto">
               
@@ -219,11 +215,7 @@
                 <div class="col">
                   
                   <!-- Time -->
-                  <p class="card-text small text-muted" style="margin-bottom: 0;">Last Updated</p>
-                  <p class="card-text small text-muted">
-                    {{$project->created_at->diffForHumans()}}
-                  </p>
-
+                  <p class="card-text" style="margin-bottom: 0;">{{$project->amount}} Credits</p>
                 </div>
                 <div class="col-auto">
                   

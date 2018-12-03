@@ -24,7 +24,7 @@
       <div class="row" style="margin-bottom: 1.5rem;">
         <div class="col-lg-12">
           <div class="input-group input-group-lg mb-3">
-            <input type="text" class="form-control referral-link" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2" value="https://talentail.com/r={{Auth::user()->referral_link}}" disabled id="link">
+            <input type="text" class="form-control referral-link" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2" value="{{URL::to('/')}}/?r={{Auth::user()->referral_link}}" disabled id="link">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary js-linkcopybutton" type="button" id="button-addon2">Copy Link</button>
             </div>
@@ -48,7 +48,11 @@
                   
                   <!-- Heading -->
                   <span class="h2 mb-0">
-                    Send Referral Link
+                    Send Referral Link & User Registers
+                  </span>
+
+                  <span class="badge badge-secondary mt--1">
+                    Pending
                   </span>
 
                 </div>
@@ -72,7 +76,7 @@
                   
                   <!-- Heading -->
                   <span class="h2 mb-0">
-                    User Registers
+                    User Verifies Account
                   </span>
 
                   <span class="badge badge-secondary mt--1">
@@ -126,7 +130,10 @@
                   
                   <!-- Heading -->
                   <span class="h2 mb-0">
-                    You Receive Credits
+                    You and Your Friend Receive 5 Credits 
+                  </span>
+                  <span class="icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="Your friend has to purchase a project for both of you to receive this reward.">
+                    <i class="fe fe-help-circle"></i>
                   </span>
 
                   <span class="badge badge-primary mt--1">

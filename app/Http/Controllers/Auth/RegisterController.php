@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Mail\VerifyMail;
+use App\Mail\UserRegistered;
 use App\User;
+use App\Referral;
 use App\Http\Controllers\Controller;
 use App\VerifyUser;
 use Illuminate\Http\Request;
@@ -67,7 +69,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        // dd('hi');
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -77,6 +78,18 @@ class RegisterController extends Controller
         // $user->creator = true;
 
         $user->save();
+
+        if($data['referral-link']) {
+            //find referrer
+            $referrer = User::where('referral_link', $data['referral-link'])->first();
+
+            $referral = new Referral;
+
+            $referral->referred_id = $user->id;
+            $referral->referrer_id = $referrer->id;
+            $referral->status = "Pending";
+            $referral->save();
+        }
 
         // $response = \Braintree_Customer::create([
         //     'id' => $user->id
@@ -107,6 +120,8 @@ class RegisterController extends Controller
                 $verifyUser->user->verified = 1;
                 $verifyUser->user->save();
                 $status = "Your e-mail is verified. You can now login.";
+
+                Mail::to($verifyUser->user->email)->send(new UserRegistered($user));
             }else{
                 $status = "Your e-mail is already verified. You can now login.";
             }

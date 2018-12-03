@@ -49,7 +49,7 @@
           
           
           <!-- Form -->
-          <form method="POST" action="{{ route('password.request') }}" aria-label="{{ __('Reset Password') }}">
+          <form method="POST" action="{{ route('password.update') }}">
             @csrf
 
             <!-- Email address -->

@@ -22,7 +22,7 @@
 
             <!-- Card -->
             <div class="card">
-                <table class="table table-nowrap">
+                <table class="table table-nowrap" style="margin-bottom: 0;">
                   <thead>
                     <tr>
                       <th scope="col">#</th>

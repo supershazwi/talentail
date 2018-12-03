@@ -29,6 +29,6 @@ class VerifyMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.verifyUser');
+        return $this->subject('Please verify your email')->view('emails.verifyUser');
     }
 }

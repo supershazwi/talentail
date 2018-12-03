@@ -34,13 +34,14 @@
 
           <!-- Heading -->
           <h1 class="display-4 text-center mb-3" style="margin-bottom: 2.25rem !important;">
-            Begin your journey.
+            Begin your journey. 
           </h1>
           
           
           <!-- Form -->
           <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
             @csrf
+            <input type="hidden" name="referral-link" value="{{Session::get('referral-link')}}" />
             <!-- Name -->
             <div class="form-group">
                 <label>Name</label>

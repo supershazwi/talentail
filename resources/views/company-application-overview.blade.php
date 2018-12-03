@@ -21,7 +21,6 @@
       </div>
 
       <div class="card">
-        <div class="card-body">
           <table class="table table-nowrap" style="margin-bottom: 0;">
             <thead>
               <tr>
@@ -44,7 +43,6 @@
               @endforeach
             </tbody>
           </table>
-        </div>
       </div>
 
     </div>

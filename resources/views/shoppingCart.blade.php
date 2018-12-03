@@ -458,16 +458,24 @@
   </nav>
   <div class="main-content">
 
-    <form method="POST" action="/process-payment" id="processPayment">
+    @if(!empty($creditShoppingCart))
+    <form method="POST" action="/process-credit-payment" id="processCreditPayment">
       @csrf
       <input type="hidden" id="payload" name="payload" />
       <input type="hidden" id="projectsArray" name="projectsArray" value="{{$projectsArray}}"/>
-      <input type="hidden" id="lessonsArray" name="lessonsArray" value="{{$lessonsArray}}"/>
-      <input type="hidden" id="interviewsArray" name="interviewsArray" value="{{$interviewsArray}}"/>
-      <input type="hidden" id="creditsArray" name="creditsArray" value="{{$creditsArray}}"/>
-      <input type="hidden" id="braintreeClientToken" name="braintreeClientToken" value="{{$braintreeClientToken}}" />
-      <button type="submit" style="display: none;" id="processPaymentButton">Submit</button>
+      <input type="hidden" id="creditAmount" name="creditAmount" value="{{$creditShoppingCart->total}}"/>
+      <button type="submit" style="display: none;" id="processCreditPaymentButton">Submit</button>
     </form>
+    @endif
+
+    @if(!empty($dollarShoppingCart))
+    <form method="POST" action="/process-dollar-payment" id="processDollarPayment">
+      @csrf
+      <input type="hidden" id="creditsArray" name="creditsArray" value="{{$creditsArray}}"/>
+      <input type="hidden" id="dollarAmount" name="dollarAmount" value="{{$dollarShoppingCart->total}}"/>
+      <button type="submit" style="display: none;" id="processDollarPaymentButton">Submit</button>
+    </form>
+    @endif
 
 
     <!-- -->
@@ -479,33 +487,94 @@
             <div class="card-body" style="padding: 0.8rem; max-height: 10000px;">
                 <div id="dropin-container" style="margin-top: -2rem;"></div>
                 <button class="btn btn-primary" id="submit-button">Select Payment Type</button>
-                <button class="btn btn-primary" id="make-payment" style="display: none;" onclick="makePayment()">Make Payment</button>
+                <button class="btn btn-primary" id="make-payment" style="display: none;" onclick="makeDollarPayment()">Make Payment</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
+
+    @if(!empty($creditShoppingCart))
+    <div class="modal fade" id="modalCredits" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-card card" data-toggle="lists" data-lists-values='["name"]'>
+            <div class="card-body" style="padding: 0.8rem; max-height: 10000px;">
+                <div class="row justify-content-center" style="margin-top:1rem;">
+                  <div class="col-lg-4">
+                    <p class="text-center">Your Current Total Credits</p>
+                    <h1 class="display-4 text-center mb-3" style="margin-bottom: 2.25rem !important;"> {{Auth::user()->credits}}
+                    </h1>
+                  </div>
+                  <div class="col-lg-4">
+                    <p class="text-center">Shopping Cart Credit Amount</p>
+                    <h1 class="display-4 text-center mb-3" style="margin-bottom: 2.25rem !important;"> {{$creditShoppingCart->total}}
+                    </h1>
+                  </div>
+                  <div class="col-lg-4">
+                    <p class="text-center">Updated Total Credits</p>
+                    <h1 class="display-4 text-center mb-3" style="margin-bottom: 2.25rem !important;"> {{$updatedCreditTotal}}
+                    </h1>
+                  </div>
+                </div>
+                <button class="btn btn-primary" id="submit-button" onclick="makeCreditPayment()">Make Payment</button>
             </div>
           </div>
         </div>
       </div>
     </div>
+    @endif  
 
-    @if(!empty($shoppingCart))
+    @if(!empty($creditShoppingCart))
     <form method="POST" action="/shopping-cart/remove-line-item" id="removeLineItem">
     @csrf
-    <input type="hidden" name="shopping_cart_id" value="{{$shoppingCart->id}}" />
+    <input type="hidden" name="shopping_cart_id" value="{{$creditShoppingCart->id}}" />
     <input type="hidden" name="shopping_cart_line_item_id" id="shopping_cart_line_item_id" value="" />
     <button type="submit" style="display: none;" id="removeLineItemButton">Submit</button>
     </form>
 
     <form method="POST" action="/shopping-cart/empty-cart" id="emptyCart">
     @csrf
-    <input type="hidden" name="shopping_cart_id" value="{{$shoppingCart->id}}" />
+    <input type="hidden" name="shopping_cart_id" value="{{$creditShoppingCart->id}}" />
     <button type="submit" style="display: none;" id="emptyCartButton">Submit</button>
     </form>
     @endif
+
+    @if(!empty($dollarShoppingCart))
+    <form method="POST" action="/shopping-cart/remove-line-item" id="removeLineItem">
+    @csrf
+    <input type="hidden" name="shopping_cart_id" value="{{$dollarShoppingCart->id}}" />
+    <input type="hidden" name="shopping_cart_line_item_id" id="shopping_cart_line_item_id" value="" />
+    <button type="submit" style="display: none;" id="removeLineItemButton">Submit</button>
+    </form>
+
+    <form method="POST" action="/shopping-cart/empty-cart" id="emptyCart">
+    @csrf
+    <input type="hidden" name="shopping_cart_id" value="{{$dollarShoppingCart->id}}" />
+    <button type="submit" style="display: none;" id="emptyCartButton">Submit</button>
+    </form>
+    @endif
+
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-10 col-xl-8">
           
           <!-- Header -->
           <div class="header mt-md-5">
+            @if(session('projectsNameArray'))
+            <div class="alert alert-primary" role="alert" id="successAlert">
+              <h4 class="alert-heading" style="margin-bottom: 0;">You have successfully purchased the project(s): </h4>
+              <ul style="margin-bottom: 0;">
+                @foreach(session('projectsNameArray') as $name)
+                <li style="color: white !important;">{{$name}}</li>
+                @endforeach
+              </ul>
+              <br/>
+              <a href="#" style="color: white !important; text-decoration: underline;"><h4 class="alert-heading" style="margin-bottom: 0;">View the project(s)</h4></a>
+            </div>
+            @endif
+
+
             <div class="header-body">
 
               <!-- Title -->
@@ -522,95 +591,123 @@
         </div>
       </div> <!-- / .row -->
       <div class="row justify-content-center">
-          <div class="col-12 col-lg-10 col-xl-8">
-              @if(!empty($shoppingCart) && $shoppingCart->no_of_items != 0)
-                <div class="card">
-                    <ol class="list-group list-group-activity filter-list-1541347497074"><li class="list-group-item" style="padding: 1.0rem 1.25rem;">
-                            <div class="media align-items-center">
-                                <div class="media-body">
-                                    @foreach($shoppingCart->shopping_cart_line_items as $shoppingCartLineItem)
-                                    @if($shoppingCartLineItem->project_id)
-                                    <div class="row">
-                                        <div class="col-lg-9">
-                                            <a href="/roles/{{$shoppingCartLineItem->project->role->slug}}/projects/{{$shoppingCartLineItem->project->slug}}">{{$shoppingCartLineItem->project->title}}</a>
-                                            <p class="text-small SPAN-filter-by-text" data-filter-by="text" style="margin-bottom: 0;">{{$shoppingCartLineItem->project->user->name}}</p>
-                                        </div>
-                                        <div class="col-lg-1">
-                                            <a href="#" style="float: right;" onclick="removeLineItem(this.id)" id="{{$shoppingCartLineItem->id}}">Remove</a>
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <p style="float: right; color: #16a085 !important;">{{$shoppingCartLineItem->project->amount}} Credits</p>
-                                        </div>
-                                    </div>
-                                    @elseif($shoppingCartLineItem->credit_id)
-                                    <div class="row">
-                                        <div class="col-lg-9">
-                                            <a href="/credits/add">{{$shoppingCartLineItem->credit->type}}</a>
-                                            <p class="text-small SPAN-filter-by-text" data-filter-by="text" style="margin-bottom: 0;">{{$shoppingCartLineItem->credit->credits}} credits @ ${{number_format($shoppingCartLineItem->credit->amount / $shoppingCartLineItem->credit->credits, 1)}}/credit</p>
-                                        </div>
-                                        <div class="col-lg-1">
-                                            <a href="#" style="float: right;" onclick="removeLineItem(this.id)" id="{{$shoppingCartLineItem->id}}">Remove</a>
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <p style="float: right; color: #16a085 !important;">{{$shoppingCartLineItem->credit->amount}} Credits</p>
-                                        </div>
-                                    </div>
-                                    @elseif($shoppingCartLineItem->portfolio_id)
-                                    <div class="row">
-                                        <div class="col-lg-9">
-                                            <a href="/credits/add">{{$shoppingCartLineItem->portfolio->name}}</a>
-                                            <p class="text-small SPAN-filter-by-text" data-filter-by="text" style="margin-bottom: 0;">Portfolio</p>
-                                        </div>
-                                        <div class="col-lg-1">
-                                            <a href="#" style="float: right;" onclick="removeLineItem(this.id)" id="{{$shoppingCartLineItem->id}}">Remove</a>
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <p style="float: right; color: #16a085 !important;">25 Credits</p>
-                                        </div>
-                                    </div>
-                                    @endif
-                                    @if(!$loop->last)
-                                        <hr style="margin-top: 1rem; margin-bottom: 1rem;" />
-                                    @endif
-                                    @endforeach
-                                    <hr style="margin-top: 1rem; margin-bottom: 1rem;" />
-                                    <div class="row">
-                                        <div class="col-lg-9">
-                                            <a href="#" style="float: right;" onclick="emptyCart()">Empty Cart</a>
-                                        </div>
-                                        <!-- <div class="col-lg-2">
-                                            <p style="float: right;"><strong>Total</strong></p>
-                                            <h5 style="float: right; color: #16a085;">$198.00</h5>
+        @if(!empty($creditShoppingCart) && $creditShoppingCart->no_of_items != 0)
+        <div class="col-12 col-lg-10 col-xl-8">
+          <div class="card">
+              <ol class="list-group list-group-activity filter-list-1541347497074"><li class="list-group-item" style="padding: 1.0rem 1.25rem;">
+                      <div class="media align-items-center">
+                          <div class="media-body">
+                              @foreach($creditShoppingCart->shopping_cart_line_items as $shoppingCartLineItem)
+                              @if($shoppingCartLineItem->project_id)
+                              <div class="row">
+                                  <div class="col-lg-9">
+                                      <a href="/roles/{{$shoppingCartLineItem->project->role->slug}}/projects/{{$shoppingCartLineItem->project->slug}}">{{$shoppingCartLineItem->project->title}}</a>
+                                      <p class="text-small SPAN-filter-by-text" data-filter-by="text" style="margin-bottom: 0;">{{$shoppingCartLineItem->project->user->name}}</p>
+                                  </div>
+                                  <div class="col-lg-1">
+                                      <a href="#" style="float: right;" onclick="removeLineItem(this.id)" id="{{$shoppingCartLineItem->id}}">Remove</a>
+                                  </div>
+                                  <div class="col-lg-2">
+                                      <p style="float: right; color: #16a085 !important;">{{$shoppingCartLineItem->project->amount}} Credits</p>
+                                  </div>
+                              </div>
+                              @endif
+                              @if(!$loop->last)
+                                  <hr style="margin-top: 1rem; margin-bottom: 1rem;" />
+                              @endif
+                              @endforeach
+                              <hr style="margin-top: 1rem; margin-bottom: 1rem;" />
+                              <div class="row">
+                                  <div class="col-lg-9">
+                                      <a href="#" style="float: right;" onclick="emptyCart()">Empty Cart</a>
+                                  </div>
+                                  <!-- <div class="col-lg-2">
+                                      <p style="float: right;"><strong>Total</strong></p>
+                                      <h5 style="float: right; color: #16a085;">$198.00</h5>
 
 
-                                        </div> -->
-                                        <div class="col-lg-1">
-                                            <p style="float: right;">Total</p>
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <p style="float: right; color: #16a085 !important;">{{$shoppingCart->total}} Credits</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ol>
-                </div>
-                <a href="#modalMembers" class="btn btn-primary" style="margin-bottom: 0.5rem;" data-toggle="modal">Confirm Purchase</a>
-              @else
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row justify-content-center" style="margin-top:1rem;">
-                      <div class="col-12 col-md-5 col-xl-4 my-5">
-                        <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">🛒</p>
-                        <h1 class="display-4 text-center mb-3" style="margin-bottom: 2.25rem !important;"> Shopping cart currently empty.
-                        </h1>
+                                  </div> -->
+                                  <div class="col-lg-1">
+                                      <p style="float: right;">Total</p>
+                                  </div>
+                                  <div class="col-lg-2">
+                                      <p style="float: right; color: #16a085 !important;">{{$creditShoppingCart->total}} Credits</p>
+                                  </div>
+                              </div>
+                          </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              @endif
+                  </li>
+              </ol>
           </div>
+          <a href="#modalCredits" class="btn btn-primary" style="margin-bottom: 1.5rem;" data-toggle="modal">Purchase with Credits</a>
+        </div>
+        @endif
+        @if(!empty($dollarShoppingCart) && $dollarShoppingCart->no_of_items != 0)
+        <div class="col-12 col-lg-10 col-xl-8">
+          <div class="card">
+              <ol class="list-group list-group-activity filter-list-1541347497074"><li class="list-group-item" style="padding: 1.0rem 1.25rem;">
+                      <div class="media align-items-center">
+                          <div class="media-body">
+                              @foreach($dollarShoppingCart->shopping_cart_line_items as $shoppingCartLineItem)
+                              @if($shoppingCartLineItem->credit_id)
+                              <div class="row">
+                                  <div class="col-lg-9">
+                                      <a href="/credits/add">{{$shoppingCartLineItem->credit->type}}</a>
+                                      <p class="text-small SPAN-filter-by-text" data-filter-by="text" style="margin-bottom: 0;">{{$shoppingCartLineItem->credit->credits}} credits @ ${{number_format($shoppingCartLineItem->credit->amount / $shoppingCartLineItem->credit->credits, 1)}}/credit</p>
+                                  </div>
+                                  <div class="col-lg-1">
+                                      <a href="#" style="float: right;" onclick="removeLineItem(this.id)" id="{{$shoppingCartLineItem->id}}">Remove</a>
+                                  </div>
+                                  <div class="col-lg-2">
+                                      <p style="float: right; color: #16a085 !important;">${{$shoppingCartLineItem->credit->amount}}</p>
+                                  </div>
+                              </div>
+                              @endif
+                              @if(!$loop->last)
+                                  <hr style="margin-top: 1rem; margin-bottom: 1rem;" />
+                              @endif
+                              @endforeach
+                              <hr style="margin-top: 1rem; margin-bottom: 1rem;" />
+                              <div class="row">
+                                  <div class="col-lg-9">
+                                      <a href="#" style="float: right;" onclick="emptyCart()">Empty Cart</a>
+                                  </div>
+                                  <!-- <div class="col-lg-2">
+                                      <p style="float: right;"><strong>Total</strong></p>
+                                      <h5 style="float: right; color: #16a085;">$198.00</h5>
+
+
+                                  </div> -->
+                                  <div class="col-lg-1">
+                                      <p style="float: right;">Total</p>
+                                  </div>
+                                  <div class="col-lg-2">
+                                      <p style="float: right; color: #16a085 !important;">${{$dollarShoppingCart->total}}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </li>
+              </ol>
+          </div>
+          <a href="#modalMembers" class="btn btn-primary" style="margin-bottom: 0.5rem;" data-toggle="modal">Purchase with Card</a>
+        </div>
+        @endif
+        @if(empty($dollarShoppingCart) && empty($creditShoppingCart)) 
+        <div class="col-12 col-lg-10 col-xl-8">
+          <div class="card">
+            <div class="card-body">
+              <div class="row justify-content-center" style="margin-top:1rem;">
+                <div class="col-12 col-md-5 col-xl-4 my-5">
+                  <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">🛒</p>
+                  <h1 class="display-4 text-center mb-3" style="margin-bottom: 2.25rem !important;"> Shopping cart currently empty.
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        @endif
       </div>
     </div>
     <div class="container">
@@ -688,8 +785,12 @@
       });
     });
 
-    function makePayment() {
-      document.getElementById("processPaymentButton").click();
+    function makeCreditPayment() {
+      document.getElementById("processCreditPaymentButton").click();
+    }
+
+    function makeDollarPayment() {
+      document.getElementById("processDollarPaymentButton").click();
     }
   </script>
 

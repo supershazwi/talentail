@@ -161,7 +161,7 @@ Route::get('/credits', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
+})->middleware('auth');
 
 Route::post('/work-experience', function(Request $request) {
     $user = Auth::user();
@@ -345,7 +345,6 @@ Route::get('/invoices/{invoiceId}', function() {
     $invoice = ShoppingCart::find($routeParameters['invoiceId']);
 
     return view('invoices.show', [
-        
         'invoice' => $invoice,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -367,38 +366,42 @@ Route::get('/invoices', function() {
 });
 
 Route::get('/shopping-cart', function() {
-    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+    $creditShoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
+    $dollarShoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', false)->first();
 
     $projectsArray = array();
     $lessonsArray = array();
     $interviewsArray = array();
     $creditsArray = array();
 
-    if($shoppingCart) {
-        foreach($shoppingCart->shopping_cart_line_items as $shoppingCartLineItem) {
-            if($shoppingCartLineItem->project_id) {
-                array_push($projectsArray, $shoppingCartLineItem->project_id);
-            }
 
-            if($shoppingCartLineItem->lesson_id) {
-                array_push($lessonsArray, $shoppingCartLineItem->lesson_id);
-            }
+    $updatedCreditTotal = Auth::user()->credits;
 
-            if($shoppingCartLineItem->interview_id) {
-                array_push($interviewsArray, $shoppingCartLineItem->interview_id);
-            }
-
+    if($dollarShoppingCart) {
+        foreach($dollarShoppingCart->shopping_cart_line_items as $shoppingCartLineItem) {
             if($shoppingCartLineItem->credit_id) {
                 array_push($creditsArray, $shoppingCartLineItem->credit_id);
             }
         }
     }
 
+    if($creditShoppingCart) {
+        foreach($creditShoppingCart->shopping_cart_line_items as $shoppingCartLineItem) {
+            if($shoppingCartLineItem->project_id) {
+                array_push($projectsArray, $shoppingCartLineItem->project_id);
+            }
+        }
+
+        $updatedCreditTotal = Auth::user()->credits - $creditShoppingCart->total;
+    }
+
     $braintreeClientToken = \Braintree_ClientToken::generate();
 
     return view('shoppingCart', [
         'braintreeClientToken' => $braintreeClientToken,
-        'shoppingCart' => $shoppingCart,
+        'creditShoppingCart' => $creditShoppingCart,
+        'updatedCreditTotal' => $updatedCreditTotal,
+        'dollarShoppingCart' => $dollarShoppingCart,
         'projectsArray' => implode(",", $projectsArray),
         'lessonsArray' => implode(",", $lessonsArray),
         'creditsArray' => implode(",", $creditsArray),
@@ -409,7 +412,9 @@ Route::get('/shopping-cart', function() {
     ]);
 })->middleware('auth');;
 
-Route::post('/process-payment', function(Request $request) {
+Route::post('/process-dollar-payment', function(Request $request) {
+    $user = User::find(Auth::id());
+
     $payload = $request->input('payload', false);
 
     $nonce = $payload;
@@ -422,16 +427,50 @@ Route::post('/process-payment', function(Request $request) {
     ]
     ]);
 
-    $projectsArray = $request->input('projectsArray');
-    $interviewsArray = $request->input('interviewsArray');
-    $lessonsArray = $request->input('lessonsArray');
     $creditsArray = $request->input('creditsArray');
+
+    if($creditsArray != null) {
+        $creditsArray = explode(",", $creditsArray);
+        $totalCreditsToBeAddedToUserTotal = 0;
+
+        if(sizeof($creditsArray) > 0) {
+            foreach($creditsArray as $creditId) {
+                $credit = Credit::find($creditId);
+
+                $totalCreditsToBeAddedToUserTotal += $credit->credits;
+            }
+        }
+
+        $user->credits += $totalCreditsToBeAddedToUserTotal;
+    }
+
+    $user->save();
+
+    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', '0')->first();
+
+    $shoppingCart->status = "paid";
+
+    $shoppingCart->save();
+
+    return redirect('/shopping-cart');
+});
+
+Route::post('/process-credit-payment', function(Request $request) {
+    $pusher = App::make('pusher');
+
+    $user = User::find(Auth::id());
+
+    $projectsArray = $request->input('projectsArray');
+
+    $projectsNameArray = array();
 
     if($projectsArray != null) {
         $projectsArray = explode(",", $projectsArray);
         if(sizeof($projectsArray) > 0) {
             foreach($projectsArray as $projectId) {
                 $project = Project::find($projectId);
+
+                array_push($projectsNameArray, $project->title);
 
                 $attemptedProject = new AttemptedProject;
 
@@ -443,6 +482,8 @@ Route::post('/process-payment', function(Request $request) {
                 $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
 
                 $attemptedProject->save();
+
+                $user->credits -= $project->amount;
 
                 // notify creator
                 $notification = new Notification;
@@ -463,39 +504,20 @@ Route::post('/process-payment', function(Request $request) {
                     'url' => '/notifications'
                 ];
 
-                $this->pusher->trigger('notifications_' . $project->user_id, 'new-notification', $message);
+                $pusher->trigger('notifications_' . $project->user_id, 'new-notification', $message);
             }
         }
-    }
-    $interviewsArray = explode(",", $interviewsArray);
-    $lessonsArray = explode(",", $lessonsArray);
-
-    if($creditsArray != null) {
-        $creditsArray = explode(",", $creditsArray);
-        $totalCreditsToBeAddedToUserTotal = 0;
-
-        if(sizeof($creditsArray) > 0) {
-            foreach($creditsArray as $creditId) {
-                $credit = Credit::find($creditId);
-
-                $user = User::find(Auth::id());
-
-                $totalCreditsToBeAddedToUserTotal += $credit->credits;
-            }
-        }
-
-        $user->credits += $totalCreditsToBeAddedToUserTotal;
     }
 
     $user->save();
 
-    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', '1')->first();
 
     $shoppingCart->status = "paid";
 
     $shoppingCart->save();
 
-    return redirect('/shopping-cart');
+    return redirect('/shopping-cart')->with('projectsNameArray', $projectsNameArray);
 });
 
 Route::get('/payment/process', 'PaymentsController@process')->name('payment.process');
@@ -869,7 +891,7 @@ Route::get('/creator-application-status', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
+})->middleware('auth');
 
 Route::get('/company-application-status', function() {
     $companyApplication = CompanyApplication::where('user_id', Auth::id())->first();
@@ -881,7 +903,7 @@ Route::get('/company-application-status', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
+})->middleware('auth');
 
 Route::get('/company-applications/{userId}', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();
@@ -895,7 +917,7 @@ Route::get('/company-applications/{userId}', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
+})->middleware('auth');
 
 Route::get('/creator-applications/{userId}', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();
@@ -909,7 +931,7 @@ Route::get('/creator-applications/{userId}', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
+})->middleware('auth');
 
 Route::get('/creator-application-overview', function() {
     $creatorApplications = CreatorApplication::all();
@@ -921,7 +943,7 @@ Route::get('/creator-application-overview', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
+})->middleware('auth');
 
 Route::get('/company-application-overview', function() {
     $companyApplications = CompanyApplication::all();
@@ -933,7 +955,7 @@ Route::get('/company-application-overview', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
+})->middleware('auth');
 
 Route::get('/company-application', function() {
     $companies = Company::all();
@@ -945,7 +967,7 @@ Route::get('/company-application', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
+})->middleware('auth');
 
 Route::get('/creator-application', function() {
     return view('apply-creator', [
@@ -954,7 +976,7 @@ Route::get('/creator-application', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
+})->middleware('auth');
 
 Route::post('/projects/apply', function(Request $request) {
     $creatorApplication = new CreatorApplication;
@@ -1109,7 +1131,6 @@ Route::get('/contact-us', function() {
 
 Route::get('/faq', function() {
     return view('faq', [
-        
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -1248,9 +1269,11 @@ Route::get('/templates/{templateId}', 'TemplatesController@show');
 Route::post('/templates/upload', 'TemplatesController@uploadFile');
 Route::get('/templates', 'TemplatesController@index');
 
-Route::get('/', function() {
-
-
+Route::get('/', function(Request $request) {
+        if($request->input('r')) {
+            //referred
+            $request->session()->put('referral-link', $request->input('r'));
+        }
         return view('index', [
             
             'parameter' => 'index',

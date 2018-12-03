@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddThumbnailurlToProjectsTable extends Migration
+class AddTypeToShoppingCartTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddThumbnailurlToProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::table('projects', function (Blueprint $table) {
+        Schema::table('shopping_carts', function (Blueprint $table) {
             //
-            $table->string('thumbnail');
+            $table->boolean('credit');
         });
     }
 
@@ -26,9 +26,9 @@ class AddThumbnailurlToProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::table('projects', function (Blueprint $table) {
+        Schema::table('shopping_carts', function (Blueprint $table) {
             //
-            $table->dropColumn('thumbnail');
+            $table->dropColumn('credit');
         });
     }
 }
