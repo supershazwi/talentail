@@ -128,9 +128,8 @@
 		          <!-- Time -->
 		          <p class="card-text" style="margin-bottom: 0;">{{$project->amount}} Credits</p>
 		        </div>
-		        <div class="col-auto">
+		        <!-- <div class="col-auto">
 		          
-		          <!-- Avatar group -->
 		          <p class="card-text small text-muted" style="margin-bottom: 0;">Attempted by</p>
 		          <div class="avatar-group">
 		            <a href="profile-posts.html" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="">
@@ -144,7 +143,7 @@
 		            </a>
 		          </div>
 
-		        </div>
+		        </div> -->
 		      </div>
 		    </div> <!-- / .card-body -->
 		  </div>
