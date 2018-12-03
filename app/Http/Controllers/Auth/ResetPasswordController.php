@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+
+use App\User;
 
 class ResetPasswordController extends Controller
 {
@@ -55,7 +58,7 @@ class ResetPasswordController extends Controller
         if($password == null) {
             return back()->with('warning', 'Please provide a new password.')->withInput(); 
         }
-        
+
         $user->password = bcrypt($request->input('password'));
 
         $user->save();

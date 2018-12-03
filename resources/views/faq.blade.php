@@ -5,7 +5,7 @@
     <div class="row justify-content-center" style="margin-top: 3rem;">
       <div class="col-xl-10 col-lg-11">
           <section class="py-4 py-lg-5">
-              <h1 class="display-4 mb-3">Frequently Asked Questions</h1>
+              <h1 class="display-4 mb-3">FAQ</h1>
           </section>
       </div>
       <div class="col-xl-10 col-lg-11">

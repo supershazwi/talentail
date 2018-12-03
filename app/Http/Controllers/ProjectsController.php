@@ -26,6 +26,7 @@ use App\Competency;
 use App\CompetencyScore;
 use App\Message;
 use App\User;
+use App\CompetencyAndTaskReview;
 use App\Notification;
 use App\ReviewedAnsweredTaskFile;
 
@@ -51,26 +52,25 @@ class ProjectsController extends Controller
         $this->messageChannel = self::DEFAULT_message_CHANNEL;
     }
 
-    public function submitReview(Request $request) {
+    public function submitTasksReview(Request $request) {
         $loggedInUserId = Auth::id();
 
         $routeParameters = Route::getCurrentRoute()->parameters();
         $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
         $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
 
-        $clickedUserId = $project->user_id;
-        $subscribeString;
+        // check if role already gained
+        $roleHasBeenGained = RoleGained::where('role_id', $role->id)->where('user_id', $routeParameters['userId'])->first();
 
-        if($loggedInUserId < $clickedUserId) {
-            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
-        } else {
-            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+        if(!$roleHasBeenGained) {
+            $roleGained = new RoleGained;
+
+            $roleGained->role_id = $role->id;
+            $roleGained->user_id = $routeParameters['userId'];
+            $roleGained->project_id = $project->id;
+
+            $roleGained->save();
         }
-
-        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
-        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
-        $messages3 = $messages1->merge($messages2);
-        $messages3 = $messages3->sortBy('created_at');
 
         $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
 
@@ -102,58 +102,128 @@ class ProjectsController extends Controller
             $answeredTasksArray[$key] = $answeredTask['id'];
         }
 
-        // update attempted project
+        // check if both tasks and competencies are reviewed
         $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
 
-        $attemptedProject->status = "Assessed";
+        $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
 
-        $attemptedProject->save();
+        $competencyAndTaskReview->tasks_reviewed = 1;
+        $competencyAndTaskReview->save();
+
+
+        if($competencyAndTaskReview->tasks_reviewed && $competencyAndTaskReview->competencies_reviewed) {
+            // update attempted project
+
+            $attemptedProject->status = "Assessed";
+
+            $attemptedProject->save();
+
+            $notification = new Notification;
+
+            $notification->message = "submitted reviews to your answers for project: " . $attemptedProject->project->title;
+            $notification->recipient_id = $attemptedProject->user_id;
+            $notification->user_id = Auth::id();
+            $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug;
+
+            $notification->save();
+
+            $message = [
+                'text' => e("submitted reviews to your answers for project: " . $attemptedProject->project->title),
+                'username' => Auth::user()->name,
+                'avatar' => Auth::user()->avatar,
+                'timestamp' => (time()*1000),
+                'projectId' => $attemptedProject->project->id,
+                'url' => '/notifications'
+            ];
+
+            $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
+        }
+
+        return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
+    }
+
+    public function submitCompetenciesReview(Request $request) {
+        $loggedInUserId = Auth::id();
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
 
         // role gained
-        $roleGained = new RoleGained;
+        $roleHasBeenGained = RoleGained::where('role_id', $role->id)->where('user_id', $routeParameters['userId'])->first();
 
-        $roleGained->role_id = $role->id;
-        $roleGained->user_id = $routeParameters['userId'];
-        $roleGained->project_id = $project->id;
+        if(!$roleHasBeenGained) {
+            $roleGained = new RoleGained;
 
-        $roleGained->save();
+            $roleGained->role_id = $role->id;
+            $roleGained->user_id = $routeParameters['userId'];
+            $roleGained->project_id = $project->id;
+
+            $roleGained->save();
+        }
 
         // competency scores
         $competencies = Competency::where('role_id', $role->id)->get()->toArray();
 
         foreach($competencies as $competency) {
-            if($request->input('competencyScore_' . $competency['id']) != null) {
+            if($request->input('rating_' . $competency['id']) != null) {
                 $competencyScore = new CompetencyScore;
 
                 $competencyScore->competency_id = $competency['id'];
-                $competencyScore->role_gained_id = $roleGained->id;
-                $competencyScore->score = $request->input('competencyScore_' . $competency['id']);
+                $competencyScore->role_gained_id = $project->role->id;
+
+                if($request->input('rating_' . $competency['id']) == "Poor") {
+                    $competencyScore->score = 1;
+                } elseif($request->input('rating_' . $competency['id']) == "Fair") {
+                    $competencyScore->score = 2;
+                } elseif($request->input('rating_' . $competency['id']) == "Average") {
+                    $competencyScore->score = 3;
+                } elseif($request->input('rating_' . $competency['id']) == "Good") {
+                    $competencyScore->score = 4;
+                } else {
+                    $competencyScore->score = 5;
+                }
+
                 $competencyScore->project_id = $project->id;
                 $competencyScore->user_id = $routeParameters['userId'];
 
                 $competencyScore->save();
             }
         }
+        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
 
-        $notification = new Notification;
+        $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
 
-        $notification->message = "submitted reviews to your answers for project: " . $attemptedProject->project->title;
-        $notification->recipient_id = $attemptedProject->user_id;
-        $notification->user_id = Auth::id();
-        $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug;
+        $competencyAndTaskReview->competencies_reviewed = 1;
+        $competencyAndTaskReview->save();
 
-        $notification->save();
+        if($competencyAndTaskReview->tasks_reviewed && $competencyAndTaskReview->competencies_reviewed) {
+            // update attempted project
 
-        $message = [
-            'text' => e("submitted reviews to your answers for project: " . $attemptedProject->project->title),
-            'username' => Auth::user()->name,
-            'avatar' => Auth::user()->avatar,
-            'timestamp' => (time()*1000),
-            'projectId' => $attemptedProject->project->id,
-            'url' => '/notifications'
-        ];
+            $attemptedProject->status = "Assessed";
 
-        $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
+            $attemptedProject->save();
+
+            $notification = new Notification;
+
+            $notification->message = "submitted reviews to your answers for project: " . $attemptedProject->project->title;
+            $notification->recipient_id = $attemptedProject->user_id;
+            $notification->user_id = Auth::id();
+            $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug;
+
+            $notification->save();
+
+            $message = [
+                'text' => e("submitted reviews to your answers for project: " . $attemptedProject->project->title),
+                'username' => Auth::user()->name,
+                'avatar' => Auth::user()->avatar,
+                'timestamp' => (time()*1000),
+                'projectId' => $attemptedProject->project->id,
+                'url' => '/notifications'
+            ];
+
+            $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
+        }
 
         return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
     }
@@ -162,45 +232,70 @@ class ProjectsController extends Controller
         $loggedInUserId = Auth::id();
 
         $routeParameters = Route::getCurrentRoute()->parameters();
-        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
-        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
-
-        $clickedUserId = $project->user_id;
-
-        $subscribeString;
-
-        if($loggedInUserId < $clickedUserId) {
-            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
-        } else {
-            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
-        }
-
-        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
-        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
-        $messages3 = $messages1->merge($messages2);
-
-        $messages3 = $messages3->sortBy('created_at');
-
-        $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
-
-        $answeredTasksArray = $answeredTasks->toArray();
-
-        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
-
-        $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
-
-        foreach($answeredTasksArray as $key=>$answeredTask) {
-            $answeredTasksArray[$key] = $answeredTask['id'];
-        }
 
         if(Auth::id() == $routeParameters['userId']) {
             return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug);
         } else {
+            $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+            $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+            $clickedUserId = $project->user_id;
+
+            $subscribeString;
+
+            if($loggedInUserId < $clickedUserId) {
+                $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+            } else {
+                $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+            }
+
+            $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+            $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+            $messages3 = $messages1->merge($messages2);
+
+            $messages3 = $messages3->sortBy('created_at');
+
+            $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
+
+            $answeredTasksArray = $answeredTasks->toArray();
+
+            $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
+
+            $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
+
+            foreach($answeredTasksArray as $key=>$answeredTask) {
+                $answeredTasksArray[$key] = $answeredTask['id'];
+            }
+
+            $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+
+            $competencyAndTaskMessages = array();
+
+            $tasksReviewed = false;
+            $competenciesReviewed = false;
+
+            if(!$competencyAndTaskReview->competencies_reviewed) {
+                array_push($competencyAndTaskMessages, 'Competencies');
+            } else {
+                $competenciesReviewed = true;
+            }
+
+            if(!$competencyAndTaskReview->tasks_reviewed) {
+                array_push($competencyAndTaskMessages, 'Tasks');
+            } else {
+                $tasksReviewed = true;
+            }
+
+            $reviewLeftByCreator = Review::where('project_id', $project->id)->where('sender_id', $project->user_id)->first();
+
             return view('projects.review', [
-                
                 'project' => $project,
                 'role' => $role,
+                'tasksReviewed' => $tasksReviewed,
+                'reviewLeftByCreator' => $reviewLeftByCreator,
+                'competenciesReviewed' => $competenciesReviewed,
                 'messages' => $messages3,
+                'competencyAndTaskMessages' => $competencyAndTaskMessages,
                 'parameter' => 'file',
                 'attemptedProject' => $attemptedProject,
                 'answeredTasks' => $answeredTasks,
@@ -220,44 +315,70 @@ class ProjectsController extends Controller
         $loggedInUserId = Auth::id();
 
         $routeParameters = Route::getCurrentRoute()->parameters();
-        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
-        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
-
-        $clickedUserId = $project->user_id;
-
-        $subscribeString;
-
-        if($loggedInUserId < $clickedUserId) {
-            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
-        } else {
-            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
-        }
-
-        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
-        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
-        $messages3 = $messages1->merge($messages2);
-
-        $messages3 = $messages3->sortBy('created_at');
-
-        $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
-
-        $answeredTasksArray = $answeredTasks->toArray();
-
-        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
-
-        $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
-
-        foreach($answeredTasksArray as $key=>$answeredTask) {
-            $answeredTasksArray[$key] = $answeredTask['id'];
-        }
 
         if(Auth::id() == $routeParameters['userId']) {
             return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug);
         } else {
+            $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+            $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+            $clickedUserId = $project->user_id;
+
+            $subscribeString;
+
+            if($loggedInUserId < $clickedUserId) {
+                $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+            } else {
+                $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+            }
+
+            $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+            $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+            $messages3 = $messages1->merge($messages2);
+
+            $messages3 = $messages3->sortBy('created_at');
+
+            $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
+
+            $answeredTasksArray = $answeredTasks->toArray();
+
+            $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
+
+            $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
+
+            foreach($answeredTasksArray as $key=>$answeredTask) {
+                $answeredTasksArray[$key] = $answeredTask['id'];
+            }
+
+            $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+
+            $competencyAndTaskMessages = array();
+
+            $tasksReviewed = false;
+            $competenciesReviewed = false;
+
+            if(!$competencyAndTaskReview->competencies_reviewed) {
+                array_push($competencyAndTaskMessages, 'Competencies');
+            } else {
+                $competenciesReviewed = true;
+            }
+
+            if(!$competencyAndTaskReview->tasks_reviewed) {
+                array_push($competencyAndTaskMessages, 'Tasks');
+            } else {
+                $tasksReviewed = true;
+            }
+
+            $reviewLeftByCreator = Review::where('project_id', $project->id)->where('sender_id', $project->user_id)->first();
+
             return view('projects.review', [
                 
                 'project' => $project,
                 'role' => $role,
+                'tasksReviewed' => $tasksReviewed,
+                'reviewLeftByCreator' => $reviewLeftByCreator,
+                'competenciesReviewed' => $competenciesReviewed,
+                'competencyAndTaskMessages' => $competencyAndTaskMessages,
                 'messages' => $messages3,
                 'parameter' => 'competency',
                 'attemptedProject' => $attemptedProject,
@@ -278,45 +399,71 @@ class ProjectsController extends Controller
         $loggedInUserId = Auth::id();
 
         $routeParameters = Route::getCurrentRoute()->parameters();
-        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
-        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
-
-        $clickedUserId = $project->user_id;
-
-        $subscribeString;
-
-        if($loggedInUserId < $clickedUserId) {
-            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
-        } else {
-            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
-        }
-
-        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
-        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
-        $messages3 = $messages1->merge($messages2);
-
-        $messages3 = $messages3->sortBy('created_at');
-
-        $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
-
-        $answeredTasksArray = $answeredTasks->toArray();
-
-        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
-
-        $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
-
-        foreach($answeredTasksArray as $key=>$answeredTask) {
-            $answeredTasksArray[$key] = $answeredTask['id'];
-        }
 
         if(Auth::id() == $routeParameters['userId']) {
             return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug);
         } else {
+            $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+            $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+            $clickedUserId = $project->user_id;
+
+            $subscribeString;
+
+            if($loggedInUserId < $clickedUserId) {
+                $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+            } else {
+                $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+            }
+
+            $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+            $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+            $messages3 = $messages1->merge($messages2);
+
+            $messages3 = $messages3->sortBy('created_at');
+
+            $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
+
+            $answeredTasksArray = $answeredTasks->toArray();
+
+            $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
+
+            $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
+
+            foreach($answeredTasksArray as $key=>$answeredTask) {
+                $answeredTasksArray[$key] = $answeredTask['id'];
+            }
+
+            $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+
+            $competencyAndTaskMessages = array();
+
+            $tasksReviewed = false;
+            $competenciesReviewed = false;
+
+            if(!$competencyAndTaskReview->competencies_reviewed) {
+                array_push($competencyAndTaskMessages, 'Competencies');
+            } else {
+                $competenciesReviewed = true;
+            }
+
+            if(!$competencyAndTaskReview->tasks_reviewed) {
+                array_push($competencyAndTaskMessages, 'Tasks');
+            } else {
+                $tasksReviewed = true;
+            }
+
+            $reviewLeftByCreator = Review::where('project_id', $project->id)->where('sender_id', $project->user_id)->first();
+
             return view('projects.review', [
                 
                 'project' => $project,
                 'role' => $role,
+                'reviewLeftByCreator' => $reviewLeftByCreator,
+                'tasksReviewed' => $tasksReviewed,
+                'competenciesReviewed' => $competenciesReviewed,
                 'messages' => $messages3,
+                'competencyAndTaskMessages' => $competencyAndTaskMessages,
                 'parameter' => 'task',
                 'attemptedProject' => $attemptedProject,
                 'answeredTasks' => $answeredTasks,
@@ -333,47 +480,73 @@ class ProjectsController extends Controller
     }
 
     public function review() {
-        $loggedInUserId = Auth::id();
-
         $routeParameters = Route::getCurrentRoute()->parameters();
-        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
-        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
-
-        $clickedUserId = $project->user_id;
-
-        $subscribeString;
-
-        if($loggedInUserId < $clickedUserId) {
-            $subscribeString = $loggedInUserId . "_" . $clickedUserId;
-        } else {
-            $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
-        }
-
-        $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
-        $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
-        $messages3 = $messages1->merge($messages2);
-
-        $messages3 = $messages3->sortBy('created_at');
-
-        $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
-
-        $answeredTasksArray = $answeredTasks->toArray();
-
-        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
-
-        $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
-
-        foreach($answeredTasksArray as $key=>$answeredTask) {
-            $answeredTasksArray[$key] = $answeredTask['id'];
-        }
 
         if(Auth::id() == $routeParameters['userId']) {
             return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug);
         } else {
+            $loggedInUserId = Auth::id();
+
+            $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+            $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+            $clickedUserId = $project->user_id;
+
+            $subscribeString;
+
+            if($loggedInUserId < $clickedUserId) {
+                $subscribeString = $loggedInUserId . "_" . $clickedUserId;
+            } else {
+                $subscribeString = $clickedUserId . "_" . $loggedInUserId;   
+            }
+
+            $messages1 = Message::where('sender_id', $loggedInUserId)->where('recipient_id', $clickedUserId)->where('project_id', $project->id)->get();
+            $messages2 = Message::where('sender_id', $clickedUserId)->where('recipient_id', $loggedInUserId)->where('project_id', $project->id)->get();
+            $messages3 = $messages1->merge($messages2);
+
+            $messages3 = $messages3->sortBy('created_at');
+
+            $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
+
+            $answeredTasksArray = $answeredTasks->toArray();
+
+            $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
+
+            $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
+
+            foreach($answeredTasksArray as $key=>$answeredTask) {
+                $answeredTasksArray[$key] = $answeredTask['id'];
+            }
+
+            $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+
+            $competencyAndTaskMessages = array();
+
+            $tasksReviewed = false;
+            $competenciesReviewed = false;
+
+            if(!$competencyAndTaskReview->competencies_reviewed) {
+                array_push($competencyAndTaskMessages, 'Competencies');
+            } else {
+                $competenciesReviewed = true;
+            }
+
+            if(!$competencyAndTaskReview->tasks_reviewed) {
+                array_push($competencyAndTaskMessages, 'Tasks');
+            } else {
+                $tasksReviewed = true;
+            }
+
+            $reviewLeftByCreator = Review::where('project_id', $project->id)->where('sender_id', $project->user_id)->first();
+
             return view('projects.review', [
                 
                 'project' => $project,
                 'role' => $role,
+                'reviewLeftByCreator' => $reviewLeftByCreator,
+                'competenciesReviewed' => $competenciesReviewed,
+                'tasksReviewed' => $tasksReviewed,
+                'competencyAndTaskMessages' => $competencyAndTaskMessages,
                 'messages' => $messages3,
                 'parameter' => 'overview',
                 'attemptedProject' => $attemptedProject,
@@ -391,6 +564,7 @@ class ProjectsController extends Controller
     }
 
     public function submitProjectAttempt(Request $request) {
+        // dd($request);
         $taskCounter = 1;
 
         while($request->input('task_' . $taskCounter) != null) {
@@ -400,8 +574,8 @@ class ProjectsController extends Controller
             if($request->input('multiple-select_' . $taskCounter) == "true") {
                 $answeredTask->answer = implode(', ', $request->input('answer_' . $taskCounter));
             } else {
-                if($request->input('answer_' . $taskCounter)) {
-                    $answeredTask->answer = $request->input('answer_' . $taskCounter);
+                if($request->input('answer_' . $request->input('task_' . $taskCounter))) {
+                    $answeredTask->answer = $request->input('answer_' . $request->input('task_' . $taskCounter));
                 } else {
                     $answeredTask->answer = "";
                 }
@@ -415,15 +589,15 @@ class ProjectsController extends Controller
 
             // check if file upload is enabled
             if($request->input('file-upload_' . $taskCounter) == "true") {
-                if($request->file('file_' . $taskCounter)) {
-                    for($fileCounter = 0; $fileCounter < count($request->file('file_' . $taskCounter)); $fileCounter++) {
+                if($request->file('file_' . $request->input('task_' . $taskCounter))) {
+                    for($fileCounter = 0; $fileCounter < count($request->file('file_' . $request->input('task_' . $taskCounter))); $fileCounter++) {
 
                         $answeredTaskFile = new AnsweredTaskFile;
 
-                        $answeredTaskFile->title = $request->file('file_' . $taskCounter)[$fileCounter]->getClientOriginalName();
-                        $answeredTaskFile->size = $request->file('file_' . $taskCounter)[$fileCounter]->getSize();
-                        $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_' . $taskCounter)[$fileCounter], 'public');
-                        $answeredTaskFile->mime_type = $request->file('file_' . $taskCounter)[$fileCounter]->getMimeType();
+                        $answeredTaskFile->title = $request->file('file_' . $request->input('task_' . $taskCounter))[$fileCounter]->getClientOriginalName();
+                        $answeredTaskFile->size = $request->file('file_' . $request->input('task_' . $taskCounter))[$fileCounter]->getSize();
+                        $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_' . $request->input('task_' . $taskCounter))[$fileCounter], 'public');
+                        $answeredTaskFile->mime_type = $request->file('file_' . $request->input('task_' . $taskCounter))[$fileCounter]->getMimeType();
                         $answeredTaskFile->answered_task_id = $answeredTask->id;
                         $answeredTaskFile->project_id = $request->input('project_id');
                         $answeredTaskFile->user_id = Auth::id();
@@ -544,6 +718,7 @@ class ProjectsController extends Controller
 
 
         if($attemptedProject) {
+            
             //here
             $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
 
@@ -554,7 +729,6 @@ class ProjectsController extends Controller
             }
 
             if($attemptedProject->status == "Completed") {
-
                 $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
 
                 return view('projects.completed', [
@@ -571,6 +745,7 @@ class ProjectsController extends Controller
                     'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
                 ]);
             } elseif($attemptedProject->status == "Assessed") {
+
                 $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
 
                 $competencyScores = CompetencyScore::where('project_id', $project->id)->where('user_id', Auth::id())->get();
@@ -661,10 +836,18 @@ class ProjectsController extends Controller
                     ]);
                 }
             } else {
+
+                $tasksArray = array();
+
+                foreach($attemptedProject->project->tasks as $task) {
+                    array_push($tasksArray, $task->id);
+                }
+
                 return view('projects.attempt', [
                     
                     'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first(),
                     'project' => $project,
+                    'tasksArray' => implode(",", $tasksArray),
                     'role' => $role,
                     'parameter' => 'task',
                     'messages' => $messages3,
@@ -696,7 +879,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
                 if($shoppingCart) {
                     $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
                 } else {
@@ -899,7 +1082,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
                 if($shoppingCart) {
                     $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
                 } else {
@@ -1102,7 +1285,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
                 if($shoppingCart) {
                     $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
                 } else {
@@ -1305,7 +1488,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
                 if($shoppingCart) {
                     $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
                 } else {
@@ -1442,7 +1625,7 @@ class ProjectsController extends Controller
         $project = Project::find($request->input('project_id'));
 
         // find whether or not there is an existing shopping cart
-        $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+        $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
 
         if($shoppingCart) {
             // already has a shopping cart
@@ -1454,6 +1637,7 @@ class ProjectsController extends Controller
             $shoppingCart->status = "pending";
             $shoppingCart->total = 0;
             $shoppingCart->no_of_items = 0;
+            $shoppingCart->credit = 1;
             $shoppingCart->user_id = Auth::id();
         }
 
@@ -1489,6 +1673,7 @@ class ProjectsController extends Controller
                     $attemptedProject->project_id = $projectId;
                     $attemptedProject->user_id = Auth::id();
                     $attemptedProject->status = "Attempting";
+                    $attemptedProject->creator_id = $project->user_id;
 
                     // calculate the deadline of the project by adding project hours to current date
                     $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
@@ -1556,6 +1741,7 @@ class ProjectsController extends Controller
             $attemptedProject->project_id = $request->input('project_id');
             $attemptedProject->user_id = Auth::id();
             $attemptedProject->status = "Attempting";
+            $attemptedProject->creator_id = $project->user_id;
 
             // calculate the deadline of the project by adding project hours to current date
             $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));

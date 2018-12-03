@@ -132,6 +132,7 @@
 
 		    	    <!-- Menu -->
 		    	    <div class="dropdown-menu dropdown-menu-right">
+		    	      <a href="/" class="dropdown-item">Dashboard</a>
 		    	      <a href="/profile" class="dropdown-item">Profile</a>
 		    	      <a href="/settings" class="dropdown-item">Settings</a>
 		    	      <a href="/work-experience" class="dropdown-item">Work Experience</a>
@@ -139,7 +140,7 @@
 		    	      <a href="/referrals" class="dropdown-item">Referrals</a>
 		    	      
 		    	      <!-- <a href="/lessons-overview" class="dropdown-item">Lessons</a> -->
-		    	      <a href="/projects-overview" class="dropdown-item">Projects</a>
+		    	      <!-- <a href="/projects-overview" class="dropdown-item">Projects</a> -->
 		    	      @if(!(Auth::user()->company && Auth::user()->creator))
 		    	      <hr class="dropdown-divider">
 		    	      @endif
@@ -154,9 +155,9 @@
 
 						@if(!Auth::user()->company)
 							@if(Auth::user()->company_application != null && Auth::user()->company_application->status == "pending")
-								<a href="/company-application-status" class="dropdown-item">Check Company Application Status</a>
+								<!-- <a href="/company-application-status" class="dropdown-item">Check Company Application Status</a> -->
 							@else
-								<a href="/company-application" class="dropdown-item">Apply to be a Company</a>
+								<!-- <a href="/company-application" class="dropdown-item">Apply to be a Company</a> -->
 							@endif
 						@endif
 		    	      
@@ -164,7 +165,7 @@
 
 		    	      @if(Auth::user()->admin)
 		    	      <a href="/creator-application-overview" class="dropdown-item">View Creator Applications</a>
-		    	      <a href="/company-application-overview" class="dropdown-item">View Company Applications</a>
+		    	      <!-- <a href="/company-application-overview" class="dropdown-item">View Company Applications</a> -->
 		    	      @endif
 		    	      <!-- <a href="/interviews-overview" class="dropdown-item">Interviews</a> -->
 		    	      <hr class="dropdown-divider">
@@ -266,7 +267,7 @@
 			              <div class="col-lg-2">
 			                  <a href="/about-us" style="font-size: .875rem;">About Us</a><br />
 			                  <a href="/contact-us" style="font-size: .875rem;">Contact Us</a><br />
-			                  <a href="/faq" style="font-size: .875rem;">Frequently Asked Questions</a><br />
+			                  <a href="/faq" style="font-size: .875rem;">FAQ</a><br />
 			                  <!-- <a href="/tutorials" style="font-size: .875rem;">Tutorials</a> -->
 			              </div>
 			              <div class="col-lg-3">

@@ -169,6 +169,15 @@
       </div>
     </div>
   </div>
+  <hr/>
+  <div class="row justify-content-center" style="margin-top: 5rem; display: block; text-align: center;">
+    <h1 class="display-4 mb-3">
+        Refer your friend and gain credits
+      </h1>
+    <a href="/referrals" class="btn btn-lg btn-primary mb-3">
+        Refer a friend
+    </a>
+  </div>
 </div>
 
 <script type="text/javascript">

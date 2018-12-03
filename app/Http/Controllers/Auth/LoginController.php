@@ -29,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/profile';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -62,7 +62,7 @@ class LoginController extends Controller
         } else {
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
-                return redirect('/profile');
+                return redirect('/');
             } else {
                 if($request->input('password') == null && $request->input('email') == null) {
                     return back()->with('warning', 'Please provide a valid email address and password.')->withInput();

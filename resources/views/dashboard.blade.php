@@ -26,37 +26,74 @@
 	  </div>
 	</div> <!-- / .header -->
 	<div class="container">
+		@if(Auth::user()->creator)
+		@if(sizeof($creatorProjects) > 0)
+		<div class="row">
+			<div class="col-12 col-xl-12">
+				<div class="card">	
+				    <table class="table table-nowrap" style="margin-bottom: 0;">
+				      <thead>
+				        <tr>
+				          <th scope="col">#</th>
+				          <th scope="col">Invoice</th>
+				          <th scope="col">User</th>
+				          <th scope="col">Status</th>
+				        </tr>
+				      </thead>
+				      <tbody>
+				      		@foreach($creatorProjects as $key=>$creatorProject)
+				          <tr>
+				            <th scope="row">{{$key+1}}</th>
+				            <td><a href="/roles/{{$creatorProject->project->role->slug}}/projects/{{$creatorProject->project->slug}}/{{$creatorProject->user_id}}">{{$creatorProject->project->title}}</a></td>
+				            <td>{{$creatorProject->user->name}}</td>
+				            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
+				          </tr>
+				          @endforeach
+				      </tbody>
+				    </table>
+				</div>
+			</div>
+		</div>
+		@else
+		@endif
+		@endif
 		<div class="row">
 			<div class="col-12 col-xl-4">
 
 				<!-- Projects -->
 				<div class="card">
 				<div class="card-header">
-				<div class="row align-items-center">
+				<div class="row align-items-top">
 				  <div class="col">
 				    
 				    <!-- Title -->
 				    <h4 class="card-header-title">
-				      Lessons
+				      Projects in Progress
 				    </h4>
 
 				  </div>
 				  <div class="col-auto">
 
 				    <!-- Link -->
-				    <a href="/lessons-overview" class="small">View all</a>
+				    <!-- <a href="/lessons-overview" class="small">View all</a> -->
 				    
 				  </div>
 				</div> <!-- / .row -->
 				</div>
 				<div class="card-body">
 
-				<div class="row align-items-center">
+				@if(sizeof($attemptedProjects) > 0)
+				@foreach($attemptedProjects as $attemptedProject)
+				<div class="row align-items-top">
 				  <div class="col-auto">
 				    
 				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
+				    <a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}" class="avatar avatar-4by3">
+				    @if($attemptedProject->project->url)
+				    <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+				    @else
+				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
+				    @endif
 				    </a>
 
 				  </div>
@@ -66,180 +103,19 @@
 				    <h4 class="card-title mb-1">
 				      <a href="project-overview.html">Homepage Redesign</a>
 				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 5hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
 				    
 				  </div>
 				</div> <!-- / .row -->
 
 				<!-- Divider -->
+				@if(!$loop->last)
 				<hr>
-
-				<div class="row align-items-center">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-2.jpg" alt="..." class="avatar-img rounded">
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Travels & Time</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 3hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				<hr>
-
-				<div class="row align-items-center">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-3.jpg" alt="..." class="avatar-img rounded">
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Safari Exploration</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 10hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				<hr>
-
-				<div class="row align-items-center">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-5.jpg" alt="..." class="avatar-img rounded">
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Personal Site</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 4hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
+				@endif
+				@endforeach
+				@else
+				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
+				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. <a href="/discover">Discover projects</a> created by our project creators.</p>
+				@endif
 				</div> <!-- / .card-body -->
 				</div> <!-- / .card -->           
 
@@ -249,214 +125,60 @@
 				<!-- Projects -->
 				<div class="card">
 				<div class="card-header">
-				<div class="row align-items-center">
+				<div class="row align-items-top">
 				  <div class="col">
 				    
 				    <!-- Title -->
 				    <h4 class="card-header-title">
-				      Projects
+				      Submitted Projects
 				    </h4>
 
 				  </div>
 				  <div class="col-auto">
 
 				    <!-- Link -->
-				    <a href="/projects-overview" class="small">View all</a>
+				    <!-- <a href="/projects-overview" class="small">View all</a> -->
 				    
 				  </div>
 				</div> <!-- / .row -->
 				</div>
 				<div class="card-body">
 
-				<div class="row align-items-center">
+				@if(sizeof($submittedProjects) > 0)
+				@foreach($submittedProjects as $submittedProject)
+				<div class="row align-items-top">
 				  <div class="col-auto">
 				    
 				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
+				    <a href="/roles/{{$submittedProject->project->role->slug}}/projects/{{$submittedProject->project->slug}}" class="avatar avatar-4by3">
+				    @if($submittedProject->project->url)
+				    <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+				    @else
+				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
+				    @endif
 				    </a>
+				    
 
 				  </div>
 				  <div class="col ml--2">
 
 				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Homepage Redesign</a>
-				    </h4>
+				    <a href="project-overview.html"><h4 class="card-title mb-1">
+				      Homepage Redesign
+				    </h4></a>
 
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 5hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
 				  </div>
 				</div> <!-- / .row -->
 
 				<!-- Divider -->
+				@if(!$loop->last)
 				<hr>
-
-				<div class="row align-items-center">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-2.jpg" alt="..." class="avatar-img rounded">
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Travels & Time</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 3hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				<hr>
-
-				<div class="row align-items-center">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-3.jpg" alt="..." class="avatar-img rounded">
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Safari Exploration</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 10hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				<hr>
-
-				<div class="row align-items-center">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-5.jpg" alt="..." class="avatar-img rounded">
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Personal Site</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 4hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
+				@endif
+				@endforeach
+				@else
+				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
+				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. It's okay because perfection takes time.</p>
+				@endif
 				</div> <!-- / .card-body -->
 				</div> <!-- / .card -->           
 
@@ -467,217 +189,125 @@
 				<!-- Projects -->
 				<div class="card">
 				<div class="card-header">
-				<div class="row align-items-center">
+				<div class="row align-items-top">
 				  <div class="col">
 				    
 				    <!-- Title -->
 				    <h4 class="card-header-title">
-				      Interviews
+				      Reviewed Projects
 				    </h4>
 
 				  </div>
 				  <div class="col-auto">
 
 				    <!-- Link -->
-				    <a href="/interviews-overview" class="small">View all</a>
+				    <!-- <a href="/interviews-overview" class="small">View all</a> -->
 				    
 				  </div>
 				</div> <!-- / .row -->
 				</div>
 				<div class="card-body">
 
-				<div class="row align-items-center">
+				@if(sizeof($reviewedProjects) > 0)
+				@foreach($reviewedProjects as $reviewedProject)
+				<div class="row align-items-top">
 				  <div class="col-auto">
 				    
 				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
+				    <a href="/roles/{{$reviewedProject->project->role->slug}}/projects/{{$reviewedProject->project->slug}}" class="avatar avatar-4by3">
+				    @if($reviewedProject->project->url)
+				    <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+				    @else
+				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
+				    @endif
 				    </a>
 
 				  </div>
 				  <div class="col ml--2">
 
 				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Homepage Redesign</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 5hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
+				    <a href="/roles/{{$reviewedProject->project->role->slug}}/projects/{{$reviewedProject->project->slug}}"><h4 class="card-title mb-1">
+				      {{$reviewedProject->project->title}}
+				    </h4></a>
 				    
 				  </div>
 				</div> <!-- / .row -->
 
 				<!-- Divider -->
+				@if(!$loop->last)
 				<hr>
-
-				<div class="row align-items-center">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-2.jpg" alt="..." class="avatar-img rounded">
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Travels & Time</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 3hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				<hr>
-
-				<div class="row align-items-center">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-3.jpg" alt="..." class="avatar-img rounded">
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Safari Exploration</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 10hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				<hr>
-
-				<div class="row align-items-center">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="project-overview.html" class="avatar avatar-4by3">
-				      <img src="/img/avatars/projects/project-5.jpg" alt="..." class="avatar-img rounded">
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Personal Site</a>
-				    </h4>
-
-				    <!-- Time -->
-				    <p class="card-text small text-muted">
-				      <time datetime="2018-05-24">Updated 4hr ago</time>
-				    </p>
-				    
-				  </div>
-				  <div class="col-auto">
-				    
-				    <!-- Dropdown -->
-				    <div class="dropdown">
-				      <a href="#!" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-boundary="window">
-				        <i class="fe fe-more-vertical"></i>
-				      </a>
-				      <div class="dropdown-menu dropdown-menu-right">
-				        <a href="#!" class="dropdown-item">
-				          Action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Another action
-				        </a>
-				        <a href="#!" class="dropdown-item">
-				          Something else here
-				        </a>
-				      </div>
-				    </div>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
+				@endif
+				@endforeach
+				@else
+				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
+				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. A cup of coffee would be great right about now.</p>
+				@endif
 				</div> <!-- / .card-body -->
 				</div> <!-- / .card -->           
 
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-xl-4">
+
+				<!-- Projects -->
+				<div class="card">
+				<div class="card-header">
+					<div class="row align-items-top">
+					  <div class="col">
+					    
+					    <!-- Title -->
+					    <h4 class="card-header-title">
+					      Action Needed
+					    </h4>
+
+					  </div>
+					  <div class="col-auto">
+
+					    <!-- Link -->
+					    <!-- <a href="/lessons-overview" class="small">View all</a> -->
+					    
+					  </div>
+					</div> <!-- / .row -->
+				</div>
+				<div class="card-body">
+				@if(sizeof($actionsNeeded) > 0)
+				@foreach($actionsNeeded as $actionNeeded)
+				<div class="row align-items-top">
+				  <div class="col-auto">
+				    
+				    <!-- Avatar -->
+				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}" class="avatar avatar-4by3">
+				    @if($actionNeeded->project->url)
+				    <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+				    @else
+				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
+				    @endif
+				    </a>
+
+				  </div>
+				  <div class="col ml--2">
+
+				    <!-- Title -->
+				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}/review"><h4 class="card-title mb-1">
+				      {{$actionNeeded->project->title}}
+				    </h4></a>
+				    <p style="margin-bottom: 0;">Leave a review for {{$actionNeeded->project->user->name}}.</p>
+				    
+				  </div>
+				</div> <!-- / .row -->
+
+				<!-- Divider -->
+				@if(!$loop->last)
+				<hr>
+				@endif
+				@endforeach
+				@else
+				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
+				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. Don't worry. We will notify you once you are required to take action.</p>
+				@endif
+				</div> <!-- / .card-body -->
+				</div>
 			</div>
 		</div>
 	</div>

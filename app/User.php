@@ -93,6 +93,10 @@ class User extends Authenticatable
         return $this->hasOne(Portfolio::class);
     }
 
+    public function created_attempted_projects() {
+        return $this->hasMany(AttemptedProject::class, 'creator_id');
+    }
+
     public function company_application() {
         return $this->hasOne(CompanyApplication::class);
     }

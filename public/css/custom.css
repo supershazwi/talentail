@@ -7,6 +7,21 @@
   width: 100% !important;
 }
 
+.btn-highlight-positive {
+  color: #1abc9c !important;
+  border-color: #1abc9c !important;
+}
+
+.btn-highlight-neutral {
+  color: #34495e !important;
+  border-color: #34495e !important;
+}
+
+.btn-highlight-negative {
+  color: #e74c3c !important;
+  border-color: #e74c3c !important;
+}
+
 .braintree-toggle {
   margin-bottom: 0.8rem;
 }

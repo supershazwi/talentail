@@ -43,12 +43,12 @@
 
           <!-- Avatar -->
           <div class="avatar avatar-lg avatar-4by3">
-            @if($project->thumbnail)
-            <img src="http://storage.googleapis.com/talentail-123456789/{{$project->thumbnail}}" alt="..." class="avatar-img rounded">
-            @else
-            <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
-            @endif
-          </div>
+              @if($project->url)
+              <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+              @else
+              <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
+              @endif
+            </div>
 
         </div>
         <div class="col ml--3 ml-md--2">
@@ -86,49 +86,57 @@
                 @endif
             </section>
             @if (($errors->has('review') && strlen($errors->first('review')) > 0) || ($errors->has('rating') && strlen($errors->first('rating')) > 0))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" style="padding-bottom: 0.1875rem;">
                 @if ($errors->has('rating') && strlen($errors->first('rating')) > 0)
-                    <p style="color: #721c24 !important;">{{ $errors->first('rating') }}</p>
+                    <h4 class="alert-heading">{{ $errors->first('rating') }}</h4>
                 @endif
                 @if ($errors->has('review') && strlen($errors->first('review')) > 0)
-                    <p style="color: #721c24 !important;">{{ $errors->first('review') }}</p>
+                    <h4 class="alert-heading">{{ $errors->first('review') }}</h4>
                 @endif
             </div>
             @endif
             <form id="reviewForm" method="POST" action="/{{Request::path()}}">
             @csrf
               <p><strong>Rating</strong></p>
-              <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                @if(old('rating') == "Positive")
-                <label class="btn btn-success" id="label_positive" onclick="positive()">
-                  <input type="radio" name="rating" id="positive" autocomplete="off" onclick="positive()" value="Positive" checked> Positive
-                </label>
-                @else
-                <label class="btn btn-default" id="label_positive" onclick="positive()">
-                  <input type="radio" name="rating" id="positive" autocomplete="off" onclick="positive()" value="Positive"> Positive
-                </label>
-                @endif
-
-                @if(old('rating') == "Neutral")
-                <label class="btn btn-warning" id="label_neutral" onclick="neutral()">
-                  <input type="radio" name="rating" id="neutral" autocomplete="off" onclick="neutral()" value="Neutral" checked> Neutral
-                </label>
-                @else
-                <label class="btn btn-default" id="label_neutral" onclick="neutral()">
-                  <input type="radio" name="rating" id="neutral" autocomplete="off" onclick="neutral()" value="Neutral"> Neutral
-                </label>
-                @endif
-
-                @if(old('rating') == "Negative")
-                <label class="btn btn-danger" id="label_negative" onclick="negative()">
-                  <input type="radio" name="rating" id="negative" autocomplete="off" onclick="negative()" value="Negative" checked> Negative
-                </label>
-                @else
-                <label class="btn btn-default" id="label_negative" onclick="negative()">
-                  <input type="radio" name="rating" id="negative" autocomplete="off" onclick="negative()" value="Negative"> Negative
-                </label>
-                @endif
+              <div class="form-group">
+                <div class="btn-group-toggle" data-toggle="buttons">
+                  @if(old('rating') == "Negative")
+                  <label class="btn btn-white focus active" id="label_negative">
+                    <input type="radio" name="rating" value="Negative" id="radio-na_1"> 
+                    <i class="far fa-tired"></i> Negative
+                  </label>
+                  @else
+                  <label class="btn btn-white" id="label_negative">
+                    <input type="radio" name="rating" value="Negative" id="radio-na_1"> 
+                    <i class="far fa-tired"></i> Negative
+                  </label>
+                  @endif
+                  @if(old('rating') == "Neutral")
+                  <label class="btn btn-white focus active" id="label_neutral">
+                    <input type="radio" name="rating" value="Neutral" id="radio-open-ended_1"> 
+                    <i class="far fa-meh"></i> Neutral
+                  </label>
+                  @else
+                  <label class="btn btn-white" id="label_neutral">
+                    <input type="radio" name="rating" value="Neutral" id="radio-open-ended_1"> 
+                    <i class="far fa-meh"></i> Neutral
+                  </label>
+                  @endif
+                  @if(old('rating') == "Positive")
+                  <label class="btn btn-white focus active" id="label_positive">
+                    <input type="radio" name="rating" value="Positive" id="positive"> 
+                    <i class="far fa-grin-stars"></i> Positive
+                  </label>
+                  @else
+                  <label class="btn btn-white" id="label_positive">
+                    <input type="radio" name="rating" value="Positive" id="positive"> 
+                    <i class="far fa-grin-stars"></i> Positive
+                  </label>
+                  @endif
+                </div>
               </div>
+
+              
               <p style="margin-top: 1.5rem;"><strong>Review</strong></p>
               <textarea class="form-control" name="review" id="review" rows="5" placeholder="Enter review">{{ old('review') }}</textarea>
               <button class="btn btn-primary" onclick="saveProject()" style="margin-top: 1.5rem;">Submit Review</button>
@@ -158,21 +166,21 @@
     })
 
     function positive() {
-        document.getElementById("label_positive").className = "btn btn-success";
-        document.getElementById("label_neutral").className = "btn btn-default";
-        document.getElementById("label_negative").className = "btn btn-default";
+        document.getElementById("label_positive").className = "btn btn-white btn-highlight-positive";
+        document.getElementById("label_neutral").className = "btn btn-white";
+        document.getElementById("label_negative").className = "btn btn-white";
     }
 
     function neutral() {
-        document.getElementById("label_positive").className = "btn btn-default";
-        document.getElementById("label_neutral").className = "btn btn-warning";
-        document.getElementById("label_negative").className = "btn btn-default";
+        document.getElementById("label_positive").className = "btn btn-white";
+        document.getElementById("label_neutral").className = "btn btn-white btn-highlight-neutral";
+        document.getElementById("label_negative").className = "btn btn-white";
     }
 
     function negative() {
-        document.getElementById("label_positive").className = "btn btn-default";
-        document.getElementById("label_neutral").className = "btn btn-default";
-        document.getElementById("label_negative").className = "btn btn-danger";
+        document.getElementById("label_positive").className = "btn btn-white";
+        document.getElementById("label_neutral").className = "btn btn-white";
+        document.getElementById("label_negative").className = "btn btn-white btn-highlight-negative";
     }
 </script>
 @endsection

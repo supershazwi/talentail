@@ -1,7 +1,7 @@
 @extends ('layouts.main')
 
 @section ('content')
-
+  <input type="hidden" name="tasksArray" value={{$tasksArray}} id="tasksArray" />
   <div class="header">
     <div class="container">
       <div class="alert alert-primary" style="margin-top: 1.5rem;">
@@ -314,29 +314,24 @@
   </div>
 
   <script type="text/javascript">
+    var tasksArray = document.getElementById("tasksArray").value.split(",");
+
     var selDiv = "";
     
     document.addEventListener("DOMContentLoaded", init, false);
     
     function init() {
-      var fileCounter = 1;
       var selectedFile = 'selectedFiles_';
 
-      while(document.querySelector('#file_' + fileCounter) != null) {
+      for(var l=0; l<tasksArray.length; l++) {
+        var taskId = tasksArray[l];
 
-        if(document.querySelector('#file_' + fileCounter)) {
-          document.querySelector('#file_' + fileCounter).addEventListener('change', handleFileSelect, false);
-           // selectedFile + fileCounter = document.querySelector("#selectedFiles_" + fileCounter);
-        } 
-
-        fileCounter++;
+        document.querySelector('#file_' + taskId).addEventListener('change', handleFileSelect, false);
       }
     }
     
     function handleFileSelect(e) {
       if(!e.target.files) return;
-
-      console.log(e.target.id);
 
       var idString = e.target.id.split("_");
       var idFromString = idString[1];

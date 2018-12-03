@@ -483,6 +483,14 @@ Route::post('/process-credit-payment', function(Request $request) {
 
                 $attemptedProject->save();
 
+                $projectAndCompetencyReview = new ProjectAndCompetencyReview;
+
+                $projectAndCompetencyReview->attempted_project_id = $attemptedProject->id;
+                $projectAndCompetencyReview->tasks_reviewed = 0;
+                $projectAndCompetencyReview->competencies_reviewed = 0;
+                
+                $projectAndCompetencyReview->save();
+
                 $user->credits -= $project->amount;
 
                 // notify creator
@@ -1242,7 +1250,8 @@ Route::post('/roles/{roleSlug}/projects/{projectSlug}/add-project-to-cart', 'Pro
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/save-project', 'ProjectsController@saveChanges');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/edit', 'ProjectsController@edit')->middleware('auth');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/attempt', 'ProjectsController@attempt')->middleware('auth');
-Route::post('/roles/{roleSlug}/projects/{projectSlug}/{userId}', 'ProjectsController@submitReview')->middleware('auth');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/{userId}/tasks', 'ProjectsController@submitTasksReview')->middleware('auth');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/{userId}/competencies', 'ProjectsController@submitCompetenciesReview')->middleware('auth');
 
 
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/{userId}/tasks', 'ProjectsController@reviewTasks')->middleware('auth');
@@ -1273,6 +1282,37 @@ Route::get('/', function(Request $request) {
         if($request->input('r')) {
             //referred
             $request->session()->put('referral-link', $request->input('r'));
+        }
+        if(Auth::id()) {
+            $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->where('status', 'Attempting')->get();
+            $submittedProjects = AttemptedProject::where('user_id', Auth::id())->where('status', 'Completed')->get();
+            $reviewedProjects = AttemptedProject::where('user_id', Auth::id())->where('status', 'Assessed')->get();
+
+            $actionsNeeded = array();
+
+            // check for profiles needing review
+            foreach($reviewedProjects as $reviewedProject) {
+                $review = Review::where('sender_id', Auth::id())->where('project_id', $reviewedProject->project_id)->first();
+
+                if(!$review) {
+                    array_push($actionsNeeded, $reviewedProject);
+                }
+            }
+
+            $creatorProjects = AttemptedProject::where('creator_id', Auth::id())->get();
+
+            return view('dashboard', [
+                'creatorProjects' => $creatorProjects,
+                'attemptedProjects' => $attemptedProjects,
+                'submittedProjects' => $submittedProjects,
+                'reviewedProjects' => $reviewedProjects,
+                'actionsNeeded' => $actionsNeeded,
+                'parameter' => 'index',
+                'parameter' => 'none',
+                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            ]);
         }
         return view('index', [
             

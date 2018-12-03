@@ -119,6 +119,15 @@ class ReviewsController extends Controller
 
             $review->save();
 
+            $notification = new Notification;
+
+            $notification->message = "has left an overall review on your profile";
+            $notification->recipient_id = $review->receiver_id;
+            $notification->user_id = $review->sender_id;
+            $notification->url = "/profile/reviews";
+
+            $notification->save();
+
             if(array_key_exists('userId', $routeParameters)) {
                 $attemptedProject = AttemptedProject::where('user_id', $routeParameters['userId'])->where('project_id', $project->id)->first();
 

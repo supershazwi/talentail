@@ -173,28 +173,11 @@
 
                 @if($answeredTask->task->file_upload)
                   <strong>Your Files:</strong> 
-                  <ul class="list-group list-group-activity dropzone-previews flex-column-reverse">
+                  <br/>
                     @foreach($answeredTask->answered_task_files as $answered_task_file)
-                      <li class="list-group-item" style="border-color: transparent; padding-bottom: 0; padding-left: 0;">
-                          <div class="media align-items-center">
-                              <ul class="avatars">
-                                  <li>
-                                      <div class="avatar bg-primary">
-                                          <i class="material-icons">insert_drive_file</i>
-                                      </div>
-                                  </li>
-                              </ul>
-                              <div class="media-body d-flex justify-content-between align-items-center">
-                                  <div>
-                                      <a href="http://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}" download="{{$answered_task_file->title}}">{{$answered_task_file->title}}</a>
-                                      <br>
-                                      <span class="text-small" data-filter-by="text">{{round($answered_task_file->size/1048576, 2)}} MB, {{$answered_task_file->mime_type}}</span>
-                                  </div>
-                              </div>
-                          </div>
-                      </li>
+                      <a href="http://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}">{{$answered_task_file->title}}</a>
+                      <br/>
                     @endforeach 
-                  </ul>
                 @endif
               </div> <!-- / .card-body -->
             </div>

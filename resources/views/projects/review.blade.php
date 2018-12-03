@@ -5,13 +5,21 @@
   <div class="container">
     @if($attemptedProject->status == "Completed")
     <div class="alert alert-primary" style="margin-top: 1.5rem;">
-      <h4 style="margin-bottom: 0;">This project has been completed by {{$answeredTasks[0]->user->name}}. Please review the submission.</h4>
+      <h4>This project has been completed by {{$answeredTasks[0]->user->name}}. Please review the following:</h4>
+      <ul style="margin-bottom: 0;">
+        @foreach($competencyAndTaskMessages as $competencyAndTaskMessage)
+          <li style="color: white !important;">{{$competencyAndTaskMessage}}</li>
+        @endforeach
+      </ul>
     </div>
     @else
       @if($attemptedProject->user_id != Auth::id())
         @if($attemptedProject->status == "Assessed")
         <div class="alert alert-primary" style="margin-top: 1.5rem;">
-          <h4 style="margin-bottom: 0;">This project has been assessed. {{$attemptedProject->user->name}} has been notified. <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/{{$reviewedUserId}}/review" class="pull-right">Leave a review</a></h4>
+          <h4 style="margin-bottom: 0;">This project has been reviewed. {{$attemptedProject->user->name}} has been notified. 
+            @if(!$reviewLeftByCreator)
+            <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/{{$reviewedUserId}}/review" class="pull-right">Leave an overall review</a></h4>
+            @endif
         </div>
         @else
         <div class="alert alert-primary" style="margin-top: 1.5rem;">
@@ -20,11 +28,10 @@
         @endif
       @else
         @if($attemptedProject->status == "Assessed")
-        {{$reviewLeftByApplicant}}
         <div class="alert alert-primary" style="margin-top: 1.5rem;">
-          <h4 style="margin-bottom: 0;">This project has been assessed by {{$project->user->name}}. 
+          <h4 style="margin-bottom: 0;">This project has been reviewed by {{$project->user->name}}. 
             @if(!$reviewLeftByApplicant)
-              <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/review" class="pull-right">Leave a review</a>
+              <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/review" class="pull-right">Leave an overall review</a>
             @endif
           </h4>
         </div>
@@ -32,7 +39,7 @@
         <div class="alert alert-primary" style="margin-top: 1.5rem;">
           <h4 style="margin-bottom: 0;">This project has been reviewed by {{$project->user->name}}.
             @if(!$reviewLeftByApplicant)
-              <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/review" class="pull-right">Leave a review</a>
+              <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/review" class="pull-right">Leave an overall review</a>
             @endif
           </h4>
         </div>
@@ -142,6 +149,11 @@
                 @else
                 <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/{{$attemptedProject->user_id}}/tasks" class="nav-link active">
                   Tasks
+                  @if($tasksReviewed)
+                  <sup>Reviewed</sup>
+                  @else
+                  <sup>To Review</sup>
+                  @endif
                 </a>
                 @endif
               @else
@@ -152,6 +164,11 @@
                 @else
                 <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/{{$attemptedProject->user_id}}/tasks" class="nav-link">
                   Tasks
+                  @if($tasksReviewed)
+                  <sup>Reviewed</sup>
+                  @else
+                  <sup>To Review</sup>
+                  @endif
                 </a>
                 @endif
               @endif
@@ -188,6 +205,11 @@
                 @else
                 <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/{{$attemptedProject->user_id}}/competencies" class="nav-link active">
                   Competencies
+                  @if($competenciesReviewed)
+                  <sup>Reviewed</sup>
+                  @else
+                  <sup>To Review</sup>
+                  @endif
                 </a>
                 @endif
               @else
@@ -198,6 +220,11 @@
                 @else
                 <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/{{$attemptedProject->user_id}}/competencies" class="nav-link">
                   Competencies
+                  @if($competenciesReviewed)
+                  <sup>Reviewed</sup>
+                  @else
+                  <sup>To Review</sup>
+                  @endif
                 </a>
                 @endif
               @endif
@@ -222,7 +249,7 @@
       </div>
     </div>
     @elseif($parameter == 'task')
-      <form id="reviewProject" method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/{{$reviewedUserId}}" enctype="multipart/form-data">
+      <form id="reviewProject" method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/{{$reviewedUserId}}/tasks" enctype="multipart/form-data">
       @csrf
       @foreach($answeredTasks as $key=>$answeredTask)
         <div class="row">
@@ -238,38 +265,26 @@
 
                 @if($answeredTask->task->file_upload)
                   <strong>Submitted Files:</strong> 
-                  <ul class="list-group list-group-activity dropzone-previews flex-column-reverse">
+                  <br/>
                     @foreach($answeredTask->answered_task_files as $answered_task_file)
-                      <li class="list-group-item" style="border-color: transparent; padding-bottom: 0; padding-left: 0;">
-                          <div class="media align-items-center">
-                              <ul class="avatars">
-                                  <li>
-                                      <div class="avatar bg-primary">
-                                          <i class="material-icons">insert_drive_file</i>
-                                      </div>
-                                  </li>
-                              </ul>
-                              <div class="media-body d-flex justify-content-between align-items-center">
-                                  <div>
-                                      <a href="http://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}" download="{{$answered_task_file->title}}">{{$answered_task_file->title}}</a>
-                                      <br>
-                                      <span class="text-small" data-filter-by="text">{{round($answered_task_file->size/1048576, 2)}} MB, {{$answered_task_file->mime_type}}</span>
-                                  </div>
-                              </div>
-                          </div>
-                      </li>
+                      <a href="http://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}">{{$answered_task_file->title}}</a>
+                      <br/>
                     @endforeach 
-                  </ul>
                 @endif
                 <br/>
                 @if($attemptedProject->status=="Completed")
-                <strong>Your Response:</strong>
-                <textarea name="response_{{$answeredTask->id}}" class="form-control" placeholder="Type your response" rows="8"></textarea>
-                <div class="box" style="margin-top: 1.5rem;">
-                  <input type="file" name="file_{{$answeredTask->id}}[]" id="file_{{$answeredTask->id}}" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; background-color: #076BFF;"/>
-                  <label for="file_{{$answeredTask->id}}" style="position: absolute; left: 0; margin-left: 1.5rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
-                </div>
-                <div id="selectedFiles_{{$answeredTask->id}}" style="margin-top: 1.5rem;"></div>
+                  @if($tasksReviewed)
+                  <strong>Your Response:</strong>
+                  <p style="margin-bottom: 0;">{{$answeredTask->response}}</p>
+                  @else
+                  <strong>Your Response:</strong>
+                  <textarea name="response_{{$answeredTask->id}}" class="form-control" placeholder="Type your response" rows="8"></textarea>
+                  <div class="box" style="margin-top: 1.5rem;">
+                    <input type="file" name="file_{{$answeredTask->id}}[]" id="file_{{$answeredTask->id}}" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; background-color: #076BFF;"/>
+                    <label for="file_{{$answeredTask->id}}" style="position: absolute; left: 0; margin-left: 1.5rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
+                  </div>
+                  <div id="selectedFiles_{{$answeredTask->id}}" style="margin-top: 1.5rem;"></div>
+                  @endif
                 @else
                 <strong>Creator's Response:</strong>
                 <p style="margin-bottom: 0;">{{$answeredTask->response}}</p>
@@ -277,28 +292,11 @@
 
                 @if(count($answeredTask->reviewed_answered_task_files) > 0)
                   <strong>Creator's Submitted Files:</strong> 
-                  <ul class="list-group list-group-activity dropzone-previews flex-column-reverse">
+                  <br/>
                     @foreach($answeredTask->reviewed_answered_task_files as $reviewed_answered_task_file)
-                      <li class="list-group-item" style="border-color: transparent; padding-bottom: 0; padding-left: 0;">
-                          <div class="media align-items-center">
-                              <ul class="avatars">
-                                  <li>
-                                      <div class="avatar bg-primary">
-                                          <i class="material-icons">insert_drive_file</i>
-                                      </div>
-                                  </li>
-                              </ul>
-                              <div class="media-body d-flex justify-content-between align-items-center">
-                                  <div>
-                                      <a href="http://storage.googleapis.com/talentail-123456789/{{$reviewed_answered_task_file->url}}" download="{{$reviewed_answered_task_file->title}}">{{$reviewed_answered_task_file->title}}</a>
-                                      <br>
-                                      <span class="text-small" data-filter-by="text">{{round($reviewed_answered_task_file->size/1048576, 2)}} MB, {{$reviewed_answered_task_file->mime_type}}</span>
-                                  </div>
-                              </div>
-                          </div>
-                      </li>
-                    @endforeach 
-                  </ul>
+                      <a href="http://storage.googleapis.com/talentail-123456789/{{$reviewed_answered_task_file->url}}">{{$reviewed_answered_task_file->title}}</a>
+                      <br/>
+                    @endforeach
                 @endif
               </div> <!-- / .card-body -->
             </div>
@@ -387,29 +385,129 @@
         </div>
       </div>
     @else
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-body" style="padding-bottom: 0.5rem;">
-              @if(count($project->competencies))
-                @foreach($project->competencies as $competency)
-                <div class="form-group" style="margin-bottom: 0rem;">
+      <form id="reviewProject" method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/{{$reviewedUserId}}/competencies">
+      @csrf
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body" style="padding-bottom: 0.5rem;">
+                @if(count($project->competencies))
+                  @if($competenciesReviewed)
+                    @foreach($competencyScores as $competencyScore)
+                    <div class="form-group">
+                      <span style="float: left;">🌟</span>
+                      <p style="margin-left: 2rem;">
+                        {{$competencyScore->competency->title}}
+                      </p>
+                      <div class="btn-group-toggle" style="margin-bottom: 1rem;">
+                        @if($competencyScore->score == 1)
+                        <label class="btn btn-white active focus" id="label_poor" onclick="poor()">
+                          <input type="radio" value="Poor" id="poor" onclick="poor()" disabled> 
+                          <i class="far fa-tired"></i> Poor - 1
+                        </label>
+                        @else
+                        <label class="btn btn-white" id="label_poor" onclick="poor()">
+                          <input type="radio" value="Poor" id="poor" onclick="poor()" disabled> 
+                          <i class="far fa-tired"></i> Poor - 1
+                        </label>
+                        @endif
+                        @if($competencyScore->score == 2)
+                        <label class="btn btn-white active focus" id="label_fair" onclick="fair()">
+                          <input type="radio" value="Fair" id="fair" onclick="fair()" disabled> 
+                          <i class="far fa-frown"></i> Fair - 2
+                        </label>
+                        @else
+                        <label class="btn btn-white" id="label_fair" onclick="fair()">
+                          <input type="radio" value="Fair" id="fair" onclick="fair()" disabled> 
+                          <i class="far fa-frown"></i> Fair - 2
+                        </label>
+                        @endif
+                        @if($competencyScore->score == 3)
+                        <label class="btn btn-white active focus" id="label_average" onclick="average()">
+                          <input type="radio" value="Average" id="average" onclick="average()" disabled> 
+                          <i class="far fa-meh"></i> Average - 3
+                        </label>
+                        @else
+                        <label class="btn btn-white" id="label_average" onclick="average()">
+                          <input type="radio" value="Average" id="average" onclick="average()" disabled> 
+                          <i class="far fa-meh"></i> Average - 3
+                        </label>
+                        @endif
+                        @if($competencyScore->score == 4)
+                        <label class="btn btn-white active focus" id="label_good" onclick="good()">
+                          <input type="radio" value="Good" id="good" onclick="good()" disabled> 
+                          <i class="far fa-smile"></i> Good - 4
+                        </label>
+                        @else
+                        <label class="btn btn-white" id="label_good" onclick="good()">
+                          <input type="radio" value="Good" id="good" onclick="good()" disabled> 
+                          <i class="far fa-smile"></i> Good - 4
+                        </label>
+                        @endif
+                        @if($competencyScore->score == 5)
+                        <label class="btn btn-white focus active" id="label_excellent" onclick="excellent()">
+                          <input type="radio" value="Excellent" id="excellent" onclick="excellent()" disabled> 
+                          <i class="far fa-grin-stars"></i> Excellent - 5
+                        </label>
+                        @else
+                        <label class="btn btn-white" id="label_excellent" onclick="excellent()">
+                          <input type="radio" value="Excellent" id="excellent" onclick="excellent()" disabled> 
+                          <i class="far fa-grin-stars"></i> Excellent - 5
+                        </label>
+                        @endif
+                      </div>
+                    </div>
+                    @endforeach
+                  @else
+                    @foreach($project->competencies as $competency)
+                    <div class="form-group">
                       <span style="float: left;">🌟</span>
                       <p style="margin-left: 2rem;">
                         {{$competency->title}}
                       </p>
-                </div>
-              @endforeach
-              @else
-                <p>No competencies tagged to this project yet.</p>
-              @endif
+                      <div class="btn-group-toggle" data-toggle="buttons" style="margin-bottom: 1rem;">
+                        <label class="btn btn-white" id="label_poor" onclick="poor()">
+                          <input type="radio" name="rating_{{$competency->id}}" value="Poor" id="poor" onclick="poor()"> 
+                          <i class="far fa-tired"></i> Poor - 1
+                        </label>
+                        <label class="btn btn-white" id="label_fair" onclick="fair()">
+                          <input type="radio" name="rating_{{$competency->id}}" value="Fair" id="fair" onclick="fair()"> 
+                          <i class="far fa-frown"></i> Fair - 2
+                        </label>
+                        <label class="btn btn-white" id="label_average" onclick="average()">
+                          <input type="radio" name="rating_{{$competency->id}}" value="Average" id="average" onclick="average()"> 
+                          <i class="far fa-meh"></i> Average - 3
+                        </label>
+                        <label class="btn btn-white" id="label_good" onclick="good()">
+                          <input type="radio" name="rating_{{$competency->id}}" value="Good" id="good" onclick="good()"> 
+                          <i class="far fa-smile"></i> Good - 4
+                        </label>
+                        <label class="btn btn-white" id="label_excellent" onclick="excellent()">
+                          <input type="radio" name="rating_{{$competency->id}}" value="Excellent" id="excellent" onclick="excellent()"> 
+                          <i class="far fa-grin-stars"></i> Excellent - 5
+                        </label>
+                      </div>
+                    </div>
+                    @endforeach
+                  @endif
+                @else
+                  <p>No competencies tagged to this project yet.</p>
+                @endif
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
+      <input type="submit" style="display: none;" id="submitCompetencyReview" />
+      </form>
     @endif
     @if($attemptedProject->status == "Completed")
-    <button class="btn btn-primary" onclick="submitProjectReview()">Submit Review</button>
+      @if($parameter == 'task' && !$tasksReviewed)
+      <button class="btn btn-primary" onclick="submitProjectReview()">Submit Review</button>
+      @endif
+      @if($parameter == 'competency' && !$competenciesReviewed)
+      <button class="btn btn-primary" onclick="submitCompetencyReview()">Submit Review</button>
+      @endif
     @endif
   </div>
 
@@ -499,6 +597,10 @@
 
     function submitProjectReview() {
       document.getElementById("submitProjectReview").click();
+    }
+
+    function submitCompetencyReview() {
+      document.getElementById("submitCompetencyReview").click();
     }
 
     function highlightButtons() {
