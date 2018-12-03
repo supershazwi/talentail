@@ -33,6 +33,11 @@
             <h4 class="alert-heading" style="margin-bottom: 0;">{{session('message')}}</h4>
           </div>
           @endif
+          @if (session('passwordResetSuccess'))
+          <div class="alert alert-primary" role="alert" style="text-align: center;">
+            <h4 class="alert-heading" style="margin-bottom: 0;">Your password has been successfully updated.</h4>
+          </div>
+          @endif
           @if (session('status'))
               <div class="alert alert-primary">
                   {{ session('status') }}

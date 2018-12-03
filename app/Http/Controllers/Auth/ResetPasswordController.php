@@ -37,8 +37,16 @@ class ResetPasswordController extends Controller
         $this->middleware('guest');
     }
 
-    public function reset() 
+    public function reset(Request $request) 
     {
-        dd("hi");
+        $email = $request->input('email');
+
+        $user = User::where('email', $email)->first();
+
+        $user = bcrypt($request->input('password'));
+
+        $user->save();
+
+        return redirect('login')->with('passwordResetSuccess', true);
     }
 }
