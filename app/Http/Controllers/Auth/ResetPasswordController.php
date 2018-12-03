@@ -40,10 +40,23 @@ class ResetPasswordController extends Controller
     public function reset(Request $request) 
     {
         $email = $request->input('email');
+        $password = $request->input('password');
 
         $user = User::where('email', $email)->first();
 
-        $user = bcrypt($request->input('password'));
+        if(!$user && $email) {
+            return back()->with('warning', 'User with entered email address not found.')->withInput();
+        }
+
+        if(!$user && $email == null) {
+            return back()->with('warning', 'Please provide a valid email address.')->withInput();
+        }
+
+        if($password == null) {
+            return back()->with('warning', 'Please provide a new password.')->withInput(); 
+        }
+        
+        $user->password = bcrypt($request->input('password'));
 
         $user->save();
 

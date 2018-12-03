@@ -29,12 +29,12 @@
         <div class="col-12 col-md-5 col-xl-4 my-5">
           
           @if (session('message'))
-          <div class="alert alert-primary" role="alert" style="text-align: center;">
+          <div class="alert alert-primary" role="alert">
             <h4 class="alert-heading" style="margin-bottom: 0;">{{session('message')}}</h4>
           </div>
           @endif
           @if (session('passwordResetSuccess'))
-          <div class="alert alert-primary" role="alert" style="text-align: center;">
+          <div class="alert alert-primary" role="alert">
             <h4 class="alert-heading" style="margin-bottom: 0;">Your password has been successfully updated.</h4>
           </div>
           @endif
@@ -70,7 +70,13 @@
               <label>Email Address</label>
 
               <!-- Input -->
-              <input type="email" name="email" class="form-control" placeholder="Name@address.com">
+              <input type="email" name="email" class="form-control" placeholder="Name@address.com" value="{{ old('email') }}" required>
+
+              @if ($errors->has('email'))
+                  <span class="invalid-feedback" role="alert">
+                      <strong>{{ $errors->first('email') }}</strong>
+                  </span>
+              @endif
 
             </div>
 
@@ -95,7 +101,13 @@
               </div> <!-- / .row -->
 
                 <!-- Input -->
-                <input type="password" name="password" class="form-control form-control-appended" placeholder="Enter your password">
+                <input type="password" name="password" class="form-control form-control-appended" placeholder="Enter your password" required>
+
+                @if ($errors->has('password'))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('password') }}</strong>
+                    </span>
+                @endif
             </div>
 
             <!-- Submit -->

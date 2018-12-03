@@ -28,9 +28,9 @@
       <div class="row justify-content-center">
         <div class="col-12 col-md-5 col-xl-4 my-5">
           
-          @if (session('message'))
-          <div class="alert alert-primary" role="alert" style="text-align: center;">
-            <h4 class="alert-heading" style="margin-bottom: 0;">{{session('message')}}</h4>
+          @if (session('status'))
+          <div class="alert alert-primary" role="alert">
+            <h4 class="alert-heading" style="margin-bottom: 0;">{{session('status')}}</h4>
           </div>
           @endif
           <!-- Subheading -->

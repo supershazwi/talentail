@@ -81,12 +81,6 @@
                 @endif
             </div>
 
-            <div class="form-group">
-                <label>Confirm Password</label>
-
-                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Re-enter New Password" required>
-            </div>
-
             <!-- Submit -->
             <button class="btn btn-lg btn-block btn-primary mb-3" type="submit">
               Reset password
