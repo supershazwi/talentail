@@ -35,7 +35,7 @@
 				      <thead>
 				        <tr>
 				          <th scope="col">#</th>
-				          <th scope="col">Invoice</th>
+				          <th scope="col">Project</th>
 				          <th scope="col">User</th>
 				          <th scope="col">Status</th>
 				        </tr>
@@ -54,9 +54,196 @@
 				</div>
 			</div>
 		</div>
+		<hr style="margin-bottom: 2.5rem;"/>
 		@else
 		@endif
 		@endif
+		<div class="row">
+			@if(Auth::user()->creator)
+			<div class="col-12 col-xl-6">
+				<div class="card">
+					<div class="card-header">
+						<div class="row align-items-top">
+						  <div class="col">
+						    
+						    <!-- Title -->
+						    <h4 class="card-header-title">
+						      Created Projects
+						    </h4>
+
+						  </div>
+						  <div class="col-auto">
+
+						    <!-- Link -->
+						    <a href="/profile/projects">View All</a>
+						    |
+						    <a href="/projects/select-role">Add Project</a>
+						    
+						  </div>
+						</div> <!-- / .row -->
+					</div>
+					<div class="card-body">
+					@if(sizeof($createdProjects) > 0)
+					@foreach($createdProjects as $createdProject)
+					<div class="row align-items-top">
+					  <div class="col-auto">
+					    
+					    <!-- Avatar -->
+					    <a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}" class="avatar avatar-4by3">
+					    @if($createdProject->url)
+					    <img src="http://storage.googleapis.com/talentail-123456789/{{$createdProject->url}}" alt="..." class="avatar-img rounded">
+					    @else
+					    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
+					    @endif
+					    </a>
+
+					  </div>
+					  <div class="col ml--2">
+
+					    <!-- Title -->
+					    <a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}"><h4 class="card-title mb-1">
+					      {{$createdProject->title}}
+					    </h4></a>
+					  </div>
+					</div> <!-- / .row -->
+
+					<!-- Divider -->
+					@if(!$loop->last)
+					<hr>
+					@endif
+					@endforeach
+					@else
+					<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
+					<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. Don't worry. We will notify you once you are required to take action.</p>
+					@endif
+					</div> <!-- / .card-body -->
+				</div>
+			</div>
+			<div class="col-12 col-xl-6">
+
+				<!-- Projects -->
+				<div class="card">
+				<div class="card-header">
+					<div class="row align-items-top">
+					  <div class="col">
+					    
+					    <!-- Title -->
+					    <h4 class="card-header-title">
+					      Action Needed
+					    </h4>
+
+					  </div>
+					  <div class="col-auto">
+
+					    <!-- Link -->
+					    <!-- <a href="/lessons-overview" class="small">View all</a> -->
+					    
+					  </div>
+					</div> <!-- / .row -->
+				</div>
+				<div class="card-body">
+				@if(sizeof($actionsNeeded) > 0)
+				@foreach($actionsNeeded as $actionNeeded)
+				<div class="row align-items-top">
+				  <div class="col-auto">
+				    
+				    <!-- Avatar -->
+				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}" class="avatar avatar-4by3">
+				    @if($actionNeeded->project->url)
+				    <img src="http://storage.googleapis.com/talentail-123456789/{{$actionNeeded->project->url}}" alt="..." class="avatar-img rounded">
+				    @else
+				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
+				    @endif
+				    </a>
+
+				  </div>
+				  <div class="col ml--2">
+
+				    <!-- Title -->
+				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}/review"><h4 class="card-title mb-1">
+				      {{$actionNeeded->project->title}}
+				    </h4></a>
+				    <p style="margin-bottom: 0;">Leave a review for {{$actionNeeded->project->user->name}}.</p>
+				    
+				  </div>
+				</div> <!-- / .row -->
+
+				<!-- Divider -->
+				@if(!$loop->last)
+				<hr>
+				@endif
+				@endforeach
+				@else
+				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
+				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. Don't worry. We will notify you once you are required to take action.</p>
+				@endif
+				</div> <!-- / .card-body -->
+				</div>
+			</div>
+			@else
+			<div class="col-12 col-xl-12">
+
+				<!-- Projects -->
+				<div class="card">
+				<div class="card-header">
+					<div class="row align-items-top">
+					  <div class="col">
+					    
+					    <!-- Title -->
+					    <h4 class="card-header-title">
+					      Action Needed
+					    </h4>
+
+					  </div>
+					  <div class="col-auto">
+
+					    <!-- Link -->
+					    <!-- <a href="/lessons-overview" class="small">View all</a> -->
+					    
+					  </div>
+					</div> <!-- / .row -->
+				</div>
+				<div class="card-body">
+				@if(sizeof($actionsNeeded) > 0)
+				@foreach($actionsNeeded as $actionNeeded)
+				<div class="row align-items-top">
+				  <div class="col-auto">
+				    
+				    <!-- Avatar -->
+				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}" class="avatar avatar-4by3">
+				    @if($actionNeeded->project->url)
+				    <img src="http://storage.googleapis.com/talentail-123456789/{{$actionNeeded->project->url}}" alt="..." class="avatar-img rounded">
+				    @else
+				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
+				    @endif
+				    </a>
+
+				  </div>
+				  <div class="col ml--2">
+
+				    <!-- Title -->
+				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}/review"><h4 class="card-title mb-1">
+				      {{$actionNeeded->project->title}}
+				    </h4></a>
+				    <p style="margin-bottom: 0;">Leave a review for {{$actionNeeded->project->user->name}}.</p>
+				    
+				  </div>
+				</div> <!-- / .row -->
+
+				<!-- Divider -->
+				@if(!$loop->last)
+				<hr>
+				@endif
+				@endforeach
+				@else
+				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
+				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. Don't worry. We will notify you once you are required to take action.</p>
+				@endif
+				</div> <!-- / .card-body -->
+				</div>
+			</div>
+			@endif
+		</div>
 		<div class="row">
 			<div class="col-12 col-xl-4">
 
@@ -90,7 +277,7 @@
 				    <!-- Avatar -->
 				    <a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}" class="avatar avatar-4by3">
 				    @if($attemptedProject->project->url)
-				    <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+				    <img src="http://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->url}}" alt="..." class="avatar-img rounded">
 				    @else
 				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
 				    @endif
@@ -152,7 +339,7 @@
 				    <!-- Avatar -->
 				    <a href="/roles/{{$submittedProject->project->role->slug}}/projects/{{$submittedProject->project->slug}}" class="avatar avatar-4by3">
 				    @if($submittedProject->project->url)
-				    <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+				    <img src="http://storage.googleapis.com/talentail-123456789/{{$submittedProject->project->url}}" alt="..." class="avatar-img rounded">
 				    @else
 				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
 				    @endif
@@ -216,7 +403,7 @@
 				    <!-- Avatar -->
 				    <a href="/roles/{{$reviewedProject->project->role->slug}}/projects/{{$reviewedProject->project->slug}}" class="avatar avatar-4by3">
 				    @if($reviewedProject->project->url)
-				    <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+				    <img src="http://storage.googleapis.com/talentail-123456789/{{$reviewedProject->project->url}}" alt="..." class="avatar-img rounded">
 				    @else
 				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
 				    @endif
@@ -245,69 +432,6 @@
 				</div> <!-- / .card-body -->
 				</div> <!-- / .card -->           
 
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-12 col-xl-4">
-
-				<!-- Projects -->
-				<div class="card">
-				<div class="card-header">
-					<div class="row align-items-top">
-					  <div class="col">
-					    
-					    <!-- Title -->
-					    <h4 class="card-header-title">
-					      Action Needed
-					    </h4>
-
-					  </div>
-					  <div class="col-auto">
-
-					    <!-- Link -->
-					    <!-- <a href="/lessons-overview" class="small">View all</a> -->
-					    
-					  </div>
-					</div> <!-- / .row -->
-				</div>
-				<div class="card-body">
-				@if(sizeof($actionsNeeded) > 0)
-				@foreach($actionsNeeded as $actionNeeded)
-				<div class="row align-items-top">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}" class="avatar avatar-4by3">
-				    @if($actionNeeded->project->url)
-				    <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
-				    @else
-				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
-				    @endif
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}/review"><h4 class="card-title mb-1">
-				      {{$actionNeeded->project->title}}
-				    </h4></a>
-				    <p style="margin-bottom: 0;">Leave a review for {{$actionNeeded->project->user->name}}.</p>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				@if(!$loop->last)
-				<hr>
-				@endif
-				@endforeach
-				@else
-				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
-				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. Don't worry. We will notify you once you are required to take action.</p>
-				@endif
-				</div> <!-- / .card-body -->
-				</div>
 			</div>
 		</div>
 	</div>

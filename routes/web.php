@@ -1301,7 +1301,10 @@ Route::get('/', function(Request $request) {
 
             $creatorProjects = AttemptedProject::where('creator_id', Auth::id())->get();
 
+            $createdProjects = Project::where('user_id', Auth::id())->limit(3)->get();
+
             return view('dashboard', [
+                'createdProjects' => $createdProjects,
                 'creatorProjects' => $creatorProjects,
                 'attemptedProjects' => $attemptedProjects,
                 'submittedProjects' => $submittedProjects,
