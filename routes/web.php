@@ -334,7 +334,11 @@ Route::post('/shopping-cart/remove-line-item', function(Request $request) {
         }
     }
 
-    $shoppingCart->save();
+    if($shoppingCart->total == 0) {
+        ShoppingCart::destroy($shoppingCart->id);
+    } else {
+        $shoppingCart->save();
+    }
 
     return redirect('/shopping-cart');
 });
