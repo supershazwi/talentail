@@ -2139,6 +2139,8 @@ class ProjectsController extends Controller
 
             return redirect('/roles/'.$roleSlug.'/projects/'.$project->slug);
         } else {
+            // dd($request->input('thumbnail-deleted'));
+
 
             $validator = Validator::make($request->all(), [
                 'title' => [
@@ -2188,7 +2190,9 @@ class ProjectsController extends Controller
                 $project->competencies()->attach($newCompetencies);
             }
 
-            if($request->input('thumbnail-deleted')) {
+            // dd($request->input('thumbnail-deleted'));
+
+            if($request->input('thumbnail-deleted') != "false") {
                 if($request->file('thumbnail')) {
                     $project->thumbnail = $request->file('thumbnail')->getClientOriginalName();
                     $project->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
