@@ -69,11 +69,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
+        $referralLink = str_replace(' ', '-', $data['name']);
+        $referralLink = strtolower($referralLink);
+
+        //check if referral link exists
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password'])
+            'password' => bcrypt($data['password']),
         ]);
+
+        $user->referral_link = $referralLink;
 
         // $user->creator = true;
 
