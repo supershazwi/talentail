@@ -2202,6 +2202,11 @@ class ProjectsController extends Controller
                 }
             } 
 
+            if($request->file('thumbnail')) {
+                $project->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+                $project->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
+            }
+
             $project->save();
 
             // remove tasks if any
