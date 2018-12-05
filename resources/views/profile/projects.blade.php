@@ -13,7 +13,7 @@
           <!-- Avatar -->
           <div class="avatar avatar-xxl header-avatar-top">
               @if($user->avatar)
-               <img src="http://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="..." class="avatar-img rounded-circle border border-4 border-body">
+               <img src="http://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" alt="..." class="avatar-img rounded-circle border border-4 border-body">
               @else
               <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle border border-4 border-body">
               @endif
@@ -85,7 +85,7 @@
                 Projects
                 </a>
                 @else
-                <a href="/profile/{{$user->id}}/projects" class="nav-link">
+                <a href="/profile/{{$user->id}}/projects" class="nav-link active">
                 Projects
                 </a>
                 @endif
