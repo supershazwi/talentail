@@ -82,6 +82,7 @@
             </div>
 
             <div class="content-list-body">
+              @if(sizeof($project->tasks) > 0)
               @foreach($project->tasks as $key=>$task)
                 <div class="task-accordion" id="tasksList_{{$key+1}}">
                   <div class="card" id="tasksList_{{$key+1}}">
@@ -208,6 +209,11 @@
                 </div>
                 @endif
               @endforeach
+              @else
+                <div class="task-accordion" id="tasksList_1">
+
+                </div>
+              @endif
             </div>
             <input type="hidden" name="tasks-deleted" value="" id="tasks-deleted" />
           </div>
