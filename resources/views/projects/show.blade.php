@@ -295,7 +295,7 @@
                 <ul style="margin-left: -1.4rem;">
                   <li>Practical work experience</li>
                   <li>Assessment by a senior business analyst</li>
-                  <li>An endorsed work portfolio after completion of project (<a href="/portfolios/1">See example</a>)</li>
+                  <li>An endorsed work portfolio after completion of project (<a href="/portfolios/0">See example</a>)</li>
                   <li>A better shot at landing that interview</li>
                 </ul>
                 @if($addedToCart) 
