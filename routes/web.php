@@ -679,7 +679,7 @@ Route::get('/profile/{userId}/reviews', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-})->middleware('auth');
+});
 
 Route::get('/profile/{userId}/projects', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();
@@ -696,7 +696,7 @@ Route::get('/profile/{userId}/projects', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-})->middleware('auth');
+});
 
 Route::get('/profile/reviews', function() {
     $user = Auth::user();
