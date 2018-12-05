@@ -127,10 +127,11 @@
           <div class="row align-items-center">
             <div class="col">
             
-
+              @if(empty(request()->route()->parameters['userId']))
               <span class="badge badge-primary">
                 Published
               </span>
+              @endif
               <!-- Title -->
               
               <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}"><h2 class="card-title mb-2 name" style="margin-top: 0.75rem !important;">{{$project->title}}</h2></a>
