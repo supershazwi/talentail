@@ -221,8 +221,8 @@
       <div class="row" style="height: 70% !important;">
         <div class="col-12 col-lg-12 col-xl-8" style="height: 70% important;">
           <div class="card" style="height: 100% !important;">
-            <div class="card-body" style="height: 70% !important; overflow-y: scroll;">
-              <div class="chat-module-body" style="height: 70% !important;" id="newMessagesDiv">
+            <div class="card-body" style="height: 70% !important; overflow-y: scroll;" id="newMessagesDiv">
+              <div class="chat-module-body" style="height: 70% !important;" id="chatMessagesDiv">
                 @if($messages != null && request()->route()->parameters['userId'] != null)
                 @foreach($messages as $message)
                   @if($message->recipient_id == Auth::id())
@@ -458,6 +458,7 @@
   <input type="hidden" id="currentUrl" value="{{Request::path()}}" />
 
   <script type="text/javascript">
+      document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;
       $.ajaxSetup({
 
           headers: {
@@ -527,7 +528,7 @@
 
           var channel = pusher.subscribe(document.getElementById("messageChannel").value);
           channel.bind('new-message', function(data) {
-              document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='row'><div class='col-lg-12'><h4 style='display: inline-block; margin-bottom: 0;'>" + data.username + "</h4><p class='text-muted' style='float: right; display: inline-block; margin-bottom: 0;'>Just now</p></div></div><div class='row'><div class='col-lg-12'><p>" + data.text + "</p></div></div>");
+              document.getElementById("chatMessagesDiv").insertAdjacentHTML("beforeend", "<div class='row'><div class='col-lg-12'><h4 style='display: inline-block; margin-bottom: 0;'>" + data.username + "</h4><p class='text-muted' style='float: right; display: inline-block; margin-bottom: 0;'>Just now</p></div></div><div class='row'><div class='col-lg-12'><p>" + data.text + "</p></div></div>");
               
               document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;
               

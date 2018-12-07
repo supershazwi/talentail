@@ -226,9 +226,17 @@
 			    <div class="card card-inactive">
 			      <div class="card-body">
 			          <div class="row">
-			              <div class="col-lg-4">
+			              <div class="col-lg-5">
 			                  <h3>Talentail</h3>
-			                  <p class="text-muted" style="margin-bottom: 0;">At Talentail, we believe that everyone should be given an equal opportunity to control their career paths and ultimately their happiness.</p>
+			                  <p style="margin-bottom: 0; font-size: .875rem;">At Talentail, we believe that everyone should be given an equal opportunity to control their career paths and ultimately their happiness.</p>
+			              </div>
+			              <div class="col-lg-3">
+			              		<!-- <a target="_blank" href="https://www.instagram.com/talentail/"><i class="fab fa-instagram"></i></a>
+			              		<a target="_blank" href="https://fb.me/talentail" style="margin-left: 0.5rem;"><i class="fab fa-facebook"></i></a> -->
+			                  <!-- <p class="" style="margin-top: .65rem; margin-bottom: 0; font-size: .875rem;">7 Temasek Boulevard</p> -->
+			                  <p class="" style="margin-bottom: 0; font-size: .875rem;">7 Temasek Boulevard</p>
+			                  <p class="" style="margin-bottom: 0; font-size: .875rem;">#12-07 Suntec Tower One</p>
+			                  <p class="" style="margin-bottom: 0; font-size: .875rem;">Singapore 038987</p>
 			              </div>
 			              <div class="col-lg-2">
 			                  <a href="/about-us" style="font-size: .875rem;">About Us</a><br />
@@ -236,7 +244,7 @@
 			                  <a href="/faq" style="font-size: .875rem;">FAQ</a><br />
 			                  <!-- <a href="/tutorials" style="font-size: .875rem;">Tutorials</a> -->
 			              </div>
-			              <div class="col-lg-3">
+			              <div class="col-lg-2">
 			                  <a href="/blog" style="font-size: .875rem;">Blog</a><br />
 			                  <a href="/terms-and-conditions" style="font-size: .875rem;">Terms & Conditions</a><br />
 			                  <a href="/privacy-policy" style="font-size: .875rem;">Privacy Policy</a><br />
