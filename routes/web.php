@@ -540,10 +540,7 @@ Route::get('/shopping-cart', function() {
         $updatedCreditTotal = Auth::user()->credits - $creditShoppingCart->total;
     }
 
-    $braintreeClientToken = \Braintree_ClientToken::generate();
-
     return view('shoppingCart', [
-        'braintreeClientToken' => $braintreeClientToken,
         'creditShoppingCart' => $creditShoppingCart,
         'updatedCreditTotal' => $updatedCreditTotal,
         'dollarShoppingCart' => $dollarShoppingCart,
@@ -560,18 +557,6 @@ Route::get('/shopping-cart', function() {
 Route::post('/process-dollar-payment', function(Request $request) {
     // dd($request);
     $user = User::find(Auth::id());
-
-    $payload = $request->input('payload', false);
-
-    $nonce = $payload;
-
-    $status = \Braintree_Transaction::sale([
-    'amount' => '10.00',
-    'paymentMethodNonce' => $nonce,
-    'options' => [
-        'submitForSettlement' => True
-    ]
-    ]);
 
     $creditsArray = $request->input('creditsArray');
 
