@@ -486,9 +486,9 @@
         <div class="modal-content">
           <div class="modal-card card" data-toggle="lists" data-lists-values='["name"]'>
             <div class="card-body" style="padding: 0.8rem; max-height: 10000px;">
-                <div id="dropin-container" style="margin-top: -2rem;"></div>
+                <!-- <div id="dropin-container" style="margin-top: -2rem;"></div>
                 <button class="btn btn-primary" id="submit-button">Select Payment Type</button>
-                <button class="btn btn-primary" id="make-payment" style="display: none;" onclick="makeDollarPayment()">Make Payment</button>
+                <button class="btn btn-primary" id="make-payment" style="display: none;" onclick="makeDollarPayment()">Make Payment</button> -->
             </div>
           </div>
         </div>
@@ -704,7 +704,42 @@
                   </li>
               </ol>
           </div>
-          <a href="#modalMembers" class="btn btn-primary" style="margin-bottom: 0.5rem;" data-toggle="modal">Purchase with Card</a>
+          <!-- <a href="#modalMembers" class="btn btn-primary" style="margin-bottom: 0.5rem;" data-toggle="modal">Purchase with Card</a> -->
+          <!-- <form action="your-server-side-code" method="POST">
+            <script
+              src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+              data-key="pk_test_VHw0hMNwVFyRKIczzvPpISet"
+              data-amount="999"
+              data-name="Talentail"
+              data-description="Credits Purchase"
+              data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+              data-locale="auto"
+              data-currency="sgd"
+              data-zip-code="true">
+            </script>
+          </form> -->
+          <form action="/process-dollar-payment" method="POST">
+              @csrf
+              <input type="hidden" id="creditsArray" name="creditsArray" value="{{$creditsArray}}"/>
+              <input type="hidden" id="dollarAmount" name="dollarAmount" value="{{$dollarShoppingCart->total*100}}"/>
+              <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                  data-key="pk_test_VHw0hMNwVFyRKIczzvPpISet"
+                  data-image="https://media.licdn.com/dms/image/C510BAQHb9GqqTLC7RQ/company-logo_400_400/0?e=1551916800&v=beta&t=R6axcIs5i_WBy21p2Ouk9np6417sDSic3FCEmdmnPf4"
+                  data-email="{{Auth::user()->email}}"
+                  data-amount="{{$dollarShoppingCart->total*100}}"
+                  data-name="Talentail"
+                  data-description="Credits Purchase"
+                  data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                  data-locale="auto"
+                  data-zip-code="true">
+              </script>
+              <script>
+                  // Hide default stripe button, be careful there if you
+                  // have more than 1 button of that class
+                  document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
+              </script>
+              <button type="submit" class="btn btn-primary" style="margin-bottom: 0.5rem;" onclick="click()">Purchase with Card</button>
+          </form>
         </div>
         @endif
         @if(empty($dollarShoppingCart) && empty($creditShoppingCart)) 
@@ -885,5 +920,7 @@
           });
       })
   </script> 
+  <script type="text/javascript">
+    </script>
 </body>
 </html>

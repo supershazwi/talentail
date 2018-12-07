@@ -36,6 +36,7 @@ use App\Portfolio;
 use App\ShoppingCartLineItem;
 use App\Message;
 use App\ContactMessage;
+use App\Post;
 use App\Referral;
 use App\CreatorApplication;
 use App\CompanyApplication;
@@ -47,6 +48,146 @@ use Pusher\Laravel\Facades\Pusher;
 use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
+
+Route::post('/blog/posts/{postId}/update', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $post = Post::find($routeParameters['postId']);
+
+    $post->title = $request->input('title');
+    $post->content = $request->input('content');
+    $post->tags = $request->input('tags');
+    $post->notes = $request->input('notes');
+    $post->slug = str_slug($request->input('title'), '-');
+    $post->user_id = Auth::id();
+
+    if($request->input('thumbnail-deleted') != "false") {
+        if($request->file('thumbnail')) {
+            $post->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+            $post->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
+        } else {
+            $post->thumbnail = "";
+            $post->url = "";
+        }
+    } 
+
+    if($request->file('thumbnail')) {
+        $post->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+        $post->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
+    }
+
+    $post->save();
+
+    return redirect('/blog/posts/' . $post->slug);
+});
+
+Route::post('/blog/save', function(Request $request) {
+    $post = new Post;
+
+    $post->title = $request->input('title');
+    $post->content = $request->input('content');
+    $post->tags = $request->input('tags');
+    $post->notes = $request->input('notes');
+    $post->slug = str_slug($request->input('title'), '-');
+    $post->user_id = Auth::id();
+
+    if($request->file('thumbnail')) {
+        $post->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+        $post->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
+    }
+
+    $post->save();
+
+    return redirect('/blog/posts/' . $post->slug);
+});
+
+Route::get('/blog/posts/{slug}/edit', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $post = Post::where('slug', $routeParameters['slug'])->first();
+
+    return view('posts.edit', [
+        'post' => $post,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
+Route::get('/blog/posts/{slug}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $post = Post::where('slug', $routeParameters['slug'])->first();
+
+    $tags = explode(" ", $post->tags);
+
+    return view('posts.show', [
+        'post' => $post,
+        'tags' => $tags,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
+Route::post('/blog/posts/toggle-visibility', function(Request $request) {
+    $post = Post::find($request->input('post_id'));
+
+    $post->published = !$post->published;
+
+    $post->save();
+
+    return redirect('/blog/posts/'.$post->slug);
+});
+
+Route::post('/blog/posts/delete-post', function(Request $request) {
+    Post::destroy($request->input('post_id'));
+
+    return redirect('/blog/admin');
+});
+
+Route::get('/blog/add', function() {
+    return view('blog.add', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
+Route::get('/blog/admin', function() {
+    $posts = Post::all();
+
+    return view('blog.admin', [
+        'posts' => $posts,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
+Route::get('/blog', function() {
+    $posts = Post::all()->where('published', 1);
+
+    return view('blog.index', [
+        'posts' => $posts,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
+Route::get('/stripe', function() {
+    \Stripe\Stripe::setApiKey("sk_test_M3fWET2nMbe5RHdA65AqhlE5");
+
+    $charge = \Stripe\Charge::create([
+        'amount' => 99999999,
+        'currency' => 'usd',
+        'source' => 'tok_visa',
+        'receipt_email' => 'jenny.rosen@example.com',
+    ]);
+
+    dd($charge);
+});
 
 Route::get('/portfolios/0', function() {
     return view('portfolios.sample', [
@@ -417,6 +558,7 @@ Route::get('/shopping-cart', function() {
 })->middleware('auth');;
 
 Route::post('/process-dollar-payment', function(Request $request) {
+    // dd($request);
     $user = User::find(Auth::id());
 
     $payload = $request->input('payload', false);
@@ -448,15 +590,30 @@ Route::post('/process-dollar-payment', function(Request $request) {
         $user->credits += $totalCreditsToBeAddedToUserTotal;
     }
 
-    $user->save();
+    \Stripe\Stripe::setApiKey("sk_test_M3fWET2nMbe5RHdA65AqhlE5");
 
-    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', '0')->first();
+    $charge = \Stripe\Charge::create([
+        'amount' => $request->input('dollarAmount'),
+        "metadata" => ["customer_id" => Auth::id()],
+        'description' => Auth::user()->name . " purchased " . $totalCreditsToBeAddedToUserTotal . " credits.",
+        'currency' => 'usd',
+        'source' => 'tok_visa',
+        'receipt_email' => Auth::user()->email,
+    ]);
 
-    $shoppingCart->status = "paid";
+    if($charge == "succeeded") {
+        $user->save();
 
-    $shoppingCart->save();
+        $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', '0')->first();
 
-    return redirect('/shopping-cart');
+        $shoppingCart->status = "paid";
+
+        $shoppingCart->save();
+
+        return redirect('/shopping-cart');
+    } else {
+        return redirect('/shopping-cart')->with('error', 'Error in processing payment.');
+    }
 });
 
 Route::post('/process-credit-payment', function(Request $request) {

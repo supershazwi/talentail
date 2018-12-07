@@ -41,17 +41,17 @@
 	  <div class="container">
 
 	    <!-- Toggler -->
-	    <button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	    </button>
 
 	    <!-- Brand -->
-	    <a class="navbar-brand mr-auto" href="/">
+	    <a class="navbar-brand order-lg-first" href="/">
 	      <strong style="color: #0984e3; letter-spacing: 0.25rem;">TALENTAIL</strong>
 	    </a>
 
 	    
-	    <div class="navbar-user">
+	    <div class="navbar-user order-lg-last">
 	    	@if(Auth::id())
 		    	<div class="navbar-user">
 		    		
@@ -164,6 +164,7 @@
 		    	      @endif
 
 		    	      @if(Auth::user()->admin)
+		    	      <a href="/blog/admin" class="dropdown-item">Blog Admin</a> 
 		    	      <a href="/creator-application-overview" class="dropdown-item">View Creator Applications</a>
 		    	      <!-- <a href="/company-application-overview" class="dropdown-item">View Company Applications</a> -->
 		    	      @endif
@@ -183,7 +184,7 @@
 		</div>
 
 	    <!-- Collapse -->
-	    <div class="collapse navbar-collapse mr-auto order-lg-first" id="navbar">
+	    <div class="collapse navbar-collapse mr-auto" id="navbar">
 
 	      <!-- Navigation -->
 	      <ul class="navbar-nav mr-auto">
@@ -199,18 +200,6 @@
 	          	</a>
 	          @endif
 	        </li>
-
-	        <!-- <li class="nav-item">
-	          @if(!empty($parameter) && $parameter == "learn")
-	          	<a class="nav-link active" href="/learn">
-	          		Learn
-	          	</a>
-	          @else
-	          	<a class="nav-link" href="/learn">
-	          		Learn
-	          	</a>
-	          @endif
-	        </li> -->
 	        <li class="nav-item">
 				@if(!empty($parameter) && $parameter == "discover")
 					<a class="nav-link active" href="/discover">
@@ -222,30 +211,7 @@
 					</a>
 				@endif
 	        </li>
-	        <!-- <li class="nav-item">
-	          @if(!empty($parameter) && $parameter == "groom")
-	          	<a class="nav-link active" href="/groom">
-	          		Groom
-	          	</a>
-	          @else
-	          	<a class="nav-link" href="/groom">
-	          		Groom
-	          	</a>
-	          @endif
-	        </li> -->
-	        <!-- <li class="nav-item">
-	          @if(!empty($parameter) && $parameter == "secure")
-	          	<a class="nav-link active" href="/secure">
-	          		Secure
-	          	</a>
-	          @else
-	          	<a class="nav-link" href="/secure">
-	          		Secure
-	          	</a>
-	          @endif
-	        </li> -->
 	      </ul>
-
 	    </div>
 
 	  </div> <!-- / .container -->
@@ -271,6 +237,7 @@
 			                  <!-- <a href="/tutorials" style="font-size: .875rem;">Tutorials</a> -->
 			              </div>
 			              <div class="col-lg-3">
+			                  <a href="/blog" style="font-size: .875rem;">Blog</a><br />
 			                  <a href="/terms-and-conditions" style="font-size: .875rem;">Terms & Conditions</a><br />
 			                  <a href="/privacy-policy" style="font-size: .875rem;">Privacy Policy</a><br />
 			              </div>

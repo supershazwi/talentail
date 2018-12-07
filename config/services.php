@@ -37,4 +37,9 @@ return [
         'secret' => env('BRAINTREE_PRIVATE_KEY'),
     ],
 
+    'stripe' => [
+        'model' => App\User::class,
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+    ],
 ];
