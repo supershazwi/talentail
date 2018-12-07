@@ -29,7 +29,6 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
-  <script src="https://js.braintreegateway.com/web/dropin/1.8.1/js/dropin.min.js"></script>
 
 
   <script>var colorScheme = 'light';</script>
@@ -41,228 +40,17 @@
     <div class="container">
 
       <!-- Toggler -->
-      <button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <!-- Brand -->
-      <a class="navbar-brand mr-auto" href="/">
+      <a class="navbar-brand order-lg-first" href="/">
         <strong style="color: #0984e3; letter-spacing: 0.25rem;">TALENTAIL</strong>
       </a>
 
-      <!-- Form -->
-      <form class="form-inline mr-4 d-none d-lg-flex">
-        <div class="input-group input-group-rounded input-group-merge" data-toggle="lists" data-lists-values='["name"]'>
-
-          <!-- Input -->
-          <!-- <input type="search" class="form-control form-control-prepended  dropdown-toggle search" data-toggle="dropdown" placeholder="Search" aria-label="Search">
-          <div class="input-group-prepend">
-            <div class="input-group-text">
-              <i class="fe fe-search"></i>
-            </div>
-          </div> -->
-
-          <!-- Menu -->
-          <div class="dropdown-menu dropdown-menu-card">
-            <div class="card-body">
-
-              <!-- List group -->
-              <div class="list-group list-group-flush list my--3">
-                <a href="team-overview.html" class="list-group-item px-0">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      
-                      
-                      <div class="avatar">
-                        <img src="/img/avatars/teams/team-logo-1.jpg" alt="..." class="avatar-img rounded">
-                      </div>
-
-                    </div>
-                    <div class="col ml--2">
-
-                      <!-- Title -->
-                      <h4 class="text-body mb-1 name">
-                        Airbnb
-                      </h4>
-
-                      <!-- Time -->
-                      <p class="small text-muted mb-0">
-                        <span class="fe fe-clock"></span> <time datetime="2018-05-24">Updated 2hr ago</time>
-                      </p>
-                      
-                    </div>
-                  </div> 
-                </a>
-                <a href="team-overview.html" class="list-group-item px-0">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      
-                      
-                      <div class="avatar">
-                        <img src="/img/avatars/teams/team-logo-2.jpg" alt="..." class="avatar-img rounded">
-                      </div>
-
-                    </div>
-                    <div class="col ml--2">
-
-                      <!-- Title -->
-                      <h4 class="text-body mb-1 name">
-                        Medium Corporation
-                      </h4>
-
-                      <!-- Time -->
-                      <p class="small text-muted mb-0">
-                        <span class="fe fe-clock"></span> <time datetime="2018-05-24">Updated 2hr ago</time>
-                      </p>
-                      
-                    </div>
-                  </div> 
-                </a>
-                <a href="project-overview.html" class="list-group-item px-0">
-
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      
-                      
-                      <div class="avatar avatar-4by3">
-                        <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
-                      </div>
-
-                    </div>
-                    <div class="col ml--2">
-
-                      <!-- Title -->
-                      <h4 class="text-body mb-1 name">
-                        Homepage Redesign
-                      </h4>
-
-                      <!-- Time -->
-                      <p class="small text-muted mb-0">
-                        <span class="fe fe-clock"></span> <time datetime="2018-05-24">Updated 4hr ago</time>
-                      </p>
-                      
-                    </div>
-                  </div> 
-
-                </a>
-                <a href="project-overview.html" class="list-group-item px-0">
-
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      
-                      
-                      <div class="avatar avatar-4by3">
-                        <img src="/img/avatars/projects/project-2.jpg" alt="..." class="avatar-img rounded">
-                      </div>
-
-                    </div>
-                    <div class="col ml--2">
-
-                      <!-- Title -->
-                      <h4 class="text-body mb-1 name">
-                        Travels & Time
-                      </h4>
-
-                      <!-- Time -->
-                      <p class="small text-muted mb-0">
-                        <span class="fe fe-clock"></span> <time datetime="2018-05-24">Updated 4hr ago</time>
-                      </p>
-                      
-                    </div>
-                  </div> 
-
-                </a>
-                <a href="project-overview.html" class="list-group-item px-0">
-
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      
-                      
-                      <div class="avatar avatar-4by3">
-                        <img src="/img/avatars/projects/project-3.jpg" alt="..." class="avatar-img rounded">
-                      </div>
-
-                    </div>
-                    <div class="col ml--2">
-
-                      <!-- Title -->
-                      <h4 class="text-body mb-1 name">
-                        Safari Exploration
-                      </h4>
-
-                      <!-- Time -->
-                      <p class="small text-muted mb-0">
-                        <span class="fe fe-clock"></span> <time datetime="2018-05-24">Updated 4hr ago</time>
-                      </p>
-                      
-                    </div>
-                  </div> 
-                
-                </a>
-                <a href="profile-posts.html" class="list-group-item px-0">
-                
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      
-                      
-                      <div class="avatar">
-                        <img src="/img/avatars/profiles/avatar-1.jpg" alt="..." class="avatar-img rounded-circle">
-                      </div>
-
-                    </div>
-                    <div class="col ml--2">
-                      
-                      <!-- Title -->
-                      <h4 class="text-body mb-1 name">
-                        Dianna Smiley
-                      </h4>
-
-                      <!-- Status -->
-                      <p class="text-body small mb-0">
-                        <span class="text-success">●</span> Online
-                      </p>
-
-                    </div>
-                  </div> 
-
-                </a>
-                <a href="profile-posts.html" class="list-group-item px-0">
-
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      
-                      
-                      <div class="avatar">
-                        <img src="/img/avatars/profiles/avatar-2.jpg" alt="..." class="avatar-img rounded-circle">
-                      </div>
-
-                    </div>
-                    <div class="col ml--2">
-                      
-                      <!-- Title -->
-                      <h4 class="text-body mb-1 name">
-                        Ab Hadley
-                      </h4>
-
-                      <!-- Status -->
-                      <p class="text-body small mb-0">
-                        <span class="text-danger">●</span> Offline
-                      </p>
-
-                    </div>
-                  </div> 
-                
-                </a>
-              </div>
-            
-            </div>
-          </div> <!-- / .dropdown-menu -->
-
-        </div>
-      </form>
-
       
-      <div class="navbar-user">
+      <div class="navbar-user order-lg-last">
         @if(Auth::id())
           <div class="navbar-user">
             
@@ -288,9 +76,15 @@
           
               <!-- Toggle -->
               <a href="/notifications" class="text-muted" role="button">
-                <span class="icon">
-                  <i class="fe fe-bell"></i>
-                </span>
+                @if($notificationCount > 0)
+                  <span class="icon active">
+                    <i class="fe fe-bell"></i>
+                  </span>
+                @else
+                  <span class="icon">
+                    <i class="fe fe-bell"></i>
+                  </span>
+                @endif
               </a>
 
             </div>
@@ -316,9 +110,9 @@
           
               <!-- Toggle -->
               <a href="/credits" class="text-muted" role="button">
-                <span class="icon">
-                  {{Auth::user()->credits}} Credits
-                </span>
+            <span class="icon">
+              {{Auth::user()->credits}} Credits
+            </span>
               </a>
 
             </div>
@@ -337,45 +131,46 @@
 
               <!-- Menu -->
               <div class="dropdown-menu dropdown-menu-right">
-                              <a href="/" class="dropdown-item">Dashboard</a>
-                              <a href="/profile" class="dropdown-item">Profile</a>
-                              <a href="/settings" class="dropdown-item">Settings</a>
-                              <a href="/work-experience" class="dropdown-item">Work Experience</a>
-                              <a href="/invoices" class="dropdown-item">Invoices</a>
-                              <a href="/referrals" class="dropdown-item">Referrals</a>
-                              
-                              <!-- <a href="/lessons-overview" class="dropdown-item">Lessons</a> -->
-                              <!-- <a href="/projects-overview" class="dropdown-item">Projects</a> -->
-                              @if(!(Auth::user()->company && Auth::user()->creator))
-                              <hr class="dropdown-divider">
-                              @endif
-                              @if(!Auth::user()->admin)
-                          @if(!Auth::user()->creator)
-                            @if(Auth::user()->creator_application != null && Auth::user()->creator_application->status == "pending")
-                              <a href="/creator-application-status" class="dropdown-item">Check Creator Application Status</a>
-                            @else
-                              <a href="/creator-application" class="dropdown-item">Apply to be a Creator</a>
-                            @endif
-                          @endif
+                <a href="/" class="dropdown-item">Dashboard</a>
+                <a href="/profile" class="dropdown-item">Profile</a>
+                <a href="/settings" class="dropdown-item">Settings</a>
+                <a href="/work-experience" class="dropdown-item">Work Experience</a>
+                <a href="/invoices" class="dropdown-item">Invoices</a>
+                <a href="/referrals" class="dropdown-item">Referrals</a>
+                
+                <!-- <a href="/lessons-overview" class="dropdown-item">Lessons</a> -->
+                <!-- <a href="/projects-overview" class="dropdown-item">Projects</a> -->
+                @if(!(Auth::user()->company && Auth::user()->creator))
+                <hr class="dropdown-divider">
+                @endif
+                @if(!Auth::user()->admin)
+            @if(!Auth::user()->creator)
+              @if(Auth::user()->creator_application != null && Auth::user()->creator_application->status == "pending")
+                <a href="/creator-application-status" class="dropdown-item">Check Creator Application Status</a>
+              @else
+                <a href="/creator-application" class="dropdown-item">Apply to be a Creator</a>
+              @endif
+            @endif
 
-                          @if(!Auth::user()->company)
-                            @if(Auth::user()->company_application != null && Auth::user()->company_application->status == "pending")
-                              <!-- <a href="/company-application-status" class="dropdown-item">Check Company Application Status</a> -->
-                            @else
-                              <!-- <a href="/company-application" class="dropdown-item">Apply to be a Company</a> -->
-                            @endif
-                          @endif
-                              
-                              @endif
+            @if(!Auth::user()->company)
+              @if(Auth::user()->company_application != null && Auth::user()->company_application->status == "pending")
+                <!-- <a href="/company-application-status" class="dropdown-item">Check Company Application Status</a> -->
+              @else
+                <!-- <a href="/company-application" class="dropdown-item">Apply to be a Company</a> -->
+              @endif
+            @endif
+                
+                @endif
 
-                              @if(Auth::user()->admin)
-                              <a href="/creator-application-overview" class="dropdown-item">View Creator Applications</a>
-                              <!-- <a href="/company-application-overview" class="dropdown-item">View Company Applications</a> -->
-                              @endif
-                              <!-- <a href="/interviews-overview" class="dropdown-item">Interviews</a> -->
-                              <hr class="dropdown-divider">
-                              <a href="/logout" class="dropdown-item">Logout</a>
-                            </div>
+                @if(Auth::user()->admin)
+                <a href="/blog/admin" class="dropdown-item">Blog Admin</a> 
+                <a href="/creator-application-overview" class="dropdown-item">View Creator Applications</a>
+                <!-- <a href="/company-application-overview" class="dropdown-item">View Company Applications</a> -->
+                @endif
+                <!-- <a href="/interviews-overview" class="dropdown-item">Interviews</a> -->
+                <hr class="dropdown-divider">
+                <a href="/logout" class="dropdown-item">Logout</a>
+              </div>
 
             </div>
 
@@ -388,16 +183,13 @@
     </div>
 
       <!-- Collapse -->
-      <div class="collapse navbar-collapse mr-auto order-lg-first" id="navbar">
+      <div class="collapse navbar-collapse mr-auto" id="navbar">
 
-        <!-- Form -->
-        <form class="mt-4 mb-3 d-md-none">
-          <input type="search" class="form-control form-control-rounded" placeholder="Search" aria-label="Search">
-        </form>
-
+        <!-- Navigation -->
         <ul class="navbar-nav mr-auto">
+
           <li class="nav-item">
-            @if(!empty($parameter) && $parameter == "index")
+            @if(!empty($parameter) && $parameter == "portfolio")
               <a class="nav-link active" href="/explore">
                 Explore Portfolios
               </a>
@@ -407,17 +199,6 @@
               </a>
             @endif
           </li>
-          <!-- <li class="nav-item">
-            @if(!empty($parameter) && $parameter == "learn")
-              <a class="nav-link active" href="/learn">
-                Learn
-              </a>
-            @else
-              <a class="nav-link" href="/learn">
-                Learn
-              </a>
-            @endif
-          </li> -->
           <li class="nav-item">
         @if(!empty($parameter) && $parameter == "discover")
           <a class="nav-link active" href="/discover">
@@ -429,30 +210,7 @@
           </a>
         @endif
           </li>
-          <!-- <li class="nav-item">
-            @if(!empty($parameter) && $parameter == "groom")
-              <a class="nav-link active" href="/groom">
-                Groom
-              </a>
-            @else
-              <a class="nav-link" href="/groom">
-                Groom
-              </a>
-            @endif
-          </li> -->
-          <!-- <li class="nav-item">
-            @if(!empty($parameter) && $parameter == "secure")
-              <a class="nav-link active" href="/secure">
-                Secure
-              </a>
-            @else
-              <a class="nav-link" href="/secure">
-                Secure
-              </a>
-            @endif
-          </li> -->
         </ul>
-
       </div>
 
     </div> <!-- / .container -->
@@ -791,7 +549,6 @@
   </div>
 
   <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
-  <input type="hidden" id="braintreeClientToken" name="braintreeClientToken" value="{{$braintreeClientToken}}" />
 
   <script type="text/javascript">
     $.ajaxSetup({
@@ -805,34 +562,6 @@
     });
 
     var button = document.querySelector('#submit-button');
-
-    braintree.dropin.create({
-      authorization: document.getElementById("braintreeClientToken").value,
-      container: '#dropin-container'
-    }, function (createErr, instance) {
-      button.addEventListener('click', function () {
-        instance.requestPaymentMethod(function (err, payload) {
-          if(err == null) {
-              document.getElementById("dropin-container").style.marginTop = "0rem";
-              document.getElementById("submit-button").style.display = "none";
-              document.getElementById("make-payment").style.display = "block";
-
-              document.getElementById("payload").value = payload.nonce;
-
-              $(".braintree-toggle").click(function() {
-                  document.getElementById("submit-button").style.display = "block";
-                  document.getElementById("make-payment").style.display = "none";
-              });
-
-              $(".braintree-methods").click(function() {
-                  document.getElementById("submit-button").style.display = "none";
-                  document.getElementById("make-payment").style.display = "block";
-              });
-          }
-
-        });
-      });
-    });
 
     function makeCreditPayment() {
       document.getElementById("processCreditPaymentButton").click();
