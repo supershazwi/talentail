@@ -124,7 +124,7 @@
               <!-- Toggle -->
               <a href="#" class="avatar avatar-sm dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 @if(Auth::user()->avatar)
-                   <img src="http://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="..." class="avatar-img rounded-circle">
+                   <img src="https://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="..." class="avatar-img rounded-circle">
                   @else
                   <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
                   @endif
@@ -316,7 +316,7 @@
                             <div class="col-auto">
                                 <a href="/messages/{{$userProjectObject->user->id}}/projects/{{$userProjectObject->project->id}}" class="avatar">
                                     @if($userProjectObject->user->avatar)
-                                    <img alt="{{$userProjectObject->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar-img rounded-circle" />
+                                    <img alt="{{$userProjectObject->user->name}}" src="https://storage.googleapis.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar-img rounded-circle" />
                                     @else
                                     <img alt="Image" src="/img/avatar.png" class="avatar-img rounded-circle" />
                                     @endif
@@ -339,7 +339,7 @@
                             <div class="col-auto">
                                 <a href="/messages/{{$user->id}}" class="avatar">
                                     @if($user->avatar)
-                                    <img alt="{{$user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" class="avatar-img rounded-circle" />
+                                    <img alt="{{$user->name}}" src="https://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" class="avatar-img rounded-circle" />
                                     @else
                                     <img alt="Image" src="/img/avatar.png" class="avatar-img rounded-circle" />
                                     @endif
@@ -362,7 +362,7 @@
                             <div class="col-auto">
                                 <a href="/messages/{{$userProjectObject->user->id}}/projects/{{$userProjectObject->project->id}}" class="avatar">
                                     @if($userProjectObject->user->avatar)
-                                    <img alt="{{$userProjectObject->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar-img rounded-circle" />
+                                    <img alt="{{$userProjectObject->user->name}}" src="https://storage.googleapis.com/talentail-123456789/{{$userProjectObject->user->avatar}}" class="avatar-img rounded-circle" />
                                     @else
                                     <img alt="Image" src="/img/avatar.png" class="avatar-img rounded-circle" />
                                     @endif
@@ -385,7 +385,7 @@
                             <div class="col-auto">
                                 <a href="/messages/{{$user->id}}" class="avatar">
                                     @if($user->avatar)
-                                    <img alt="{{$user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" class="avatar-img rounded-circle" />
+                                    <img alt="{{$user->name}}" src="https://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" class="avatar-img rounded-circle" />
                                     @else
                                     <img alt="Image" src="/img/avatar.png" class="avatar-img rounded-circle" />
                                     @endif

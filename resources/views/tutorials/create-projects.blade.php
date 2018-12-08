@@ -7,7 +7,7 @@
         <section class="py-4 py-lg-5">
             <h1 class="display-4 mb-3">How do I create projects?</h1>
             <a href="#" data-toggle="tooltip" data-placement="top" title="">
-                <img class="avatar" src="http://storage.googleapis.com/talentail-123456789/avatars/bQu8FWiE6cGuc4nY76euFTgRSKnjgrS6snqzmLr0.jpeg">
+                <img class="avatar" src="https://storage.googleapis.com/talentail-123456789/avatars/bQu8FWiE6cGuc4nY76euFTgRSKnjgrS6snqzmLr0.jpeg">
             </a>
             <a href="#">
               <span style="font-size: .875rem; line-height: 1.3125rem;">Shazwi Suwandi</span>

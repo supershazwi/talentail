@@ -13,7 +13,7 @@
           <!-- Avatar -->
           <div class="avatar avatar-xxl header-avatar-top">
               @if($user->avatar)
-               <img src="http://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" alt="..." class="avatar-img rounded-circle border border-4 border-body">
+               <img src="https://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" alt="..." class="avatar-img rounded-circle border border-4 border-body">
               @else
               <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle border border-4 border-body">
               @endif
@@ -121,7 +121,7 @@
           <div class="text-center">
             <a href="team-overview.html" class="card-avatar avatar avatar-lg mx-auto">
               @if($review->sender->avatar)
-                <img src="http://storage.googleapis.com/talentail-123456789/{{$review->sender->avatar}}" alt="{{$review->sender->name}}" class="avatar-img rounded">
+                <img src="https://storage.googleapis.com/talentail-123456789/{{$review->sender->avatar}}" alt="{{$review->sender->name}}" class="avatar-img rounded">
               @else
                 <img src="/img/avatar.png" alt="{{$review->sender->name}}" class="avatar-img rounded">
               @endif 

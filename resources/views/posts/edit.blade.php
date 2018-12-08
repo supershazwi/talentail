@@ -73,7 +73,7 @@
             </div>
             @if($post->thumbnail)
             <div id="projectThumbnail">
-              <a href="http://storage.googleapis.com/talentail-123456789/{{$post->url}}">{{$post->thumbnail}}</a> <span id="delete-thumbnail" class="remove-file" onclick="deleteThumbnail()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle"></i></span>
+              <a href="https://storage.googleapis.com/talentail-123456789/{{$post->url}}">{{$post->thumbnail}}</a> <span id="delete-thumbnail" class="remove-file" onclick="deleteThumbnail()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle"></i></span>
             </div>
             @endif
             <div id="selectedThumbnail"></div>

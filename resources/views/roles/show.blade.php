@@ -19,7 +19,7 @@
                           <p style="margin-top: 0.5rem;">{{$project->description}}</p>
                           <a href="/profile/{{$project->user->id}}" data-toggle="tooltip" data-placement="top" title="">
                             @if($project->user->avatar)
-                            <img class="avatar" src="http://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}">
+                            <img class="avatar" src="https://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}">
                             @else
                             <img class="avatar" src="/img/avatar.png">
                             @endif
@@ -51,7 +51,7 @@
                               <p style="margin-top: 0.5rem;">{{$project->description}}</p>
                               <a href="/profile/{{$project->user->id}}" data-toggle="tooltip" data-placement="top" title="">
                                   @if($project->user->avatar)
-                                  <img class="avatar" src="http://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}">
+                                  <img class="avatar" src="https://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}">
                                   @else
                                   <img class="avatar" src="/img/avatar.png">
                                   @endif

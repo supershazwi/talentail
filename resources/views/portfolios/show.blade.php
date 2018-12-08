@@ -12,7 +12,7 @@
     <div class="col-xl-10 col-lg-11">
       <section class="py-4 py-lg-5" style="text-align: center; padding-bottom: 0rem !important;">
         @if($portfolio->user->avatar)
-         <img src="http://storage.googleapis.com/talentail-123456789/{{$portfolio->user->avatar}}" alt="" class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
+         <img src="https://storage.googleapis.com/talentail-123456789/{{$portfolio->user->avatar}}" alt="" class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
         @else
         <img src="/img/avatar.png" alt="..." class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
         @endif
@@ -88,7 +88,7 @@
                           <img class="thumbnail" src="https://tallyfy.com/wp-content/uploads/2017/10/SIPOC.png" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
                         </div>
                         <div class="col-lg-4" style="margin-bottom: 1rem;">
-                          <img class="thumbnail" src="http://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
+                          <img class="thumbnail" src="https://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
                         </div>
                         <div class="col-lg-4" style="margin-bottom: 1rem;">
                           <img class="thumbnail" src="http://pbsanjacinto.weebly.com/uploads/1/3/4/9/13495198/739345_orig.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
@@ -101,7 +101,7 @@
                       </div>
                       <hr style="margin-top: 0rem;"/>
                       @if($attemptedProject->project->user->avatar)
-                       <img src="http://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded-circle" style="height: 3rem; width: 3rem; float: left;">
+                       <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded-circle" style="height: 3rem; width: 3rem; float: left;">
                       @else
                       <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle" style="height: 3rem; width: 3rem; float: left;">
                       @endif

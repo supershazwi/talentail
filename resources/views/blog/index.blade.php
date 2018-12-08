@@ -26,7 +26,7 @@
       <div class="col-12 col-md-6 col-xl-4">
       	<div class="card">
       	  <a href="/blog/posts/{{$post->slug}}">
-      	    <img src="http://storage.googleapis.com/talentail-123456789/{{$post->url}}" alt="..." class="card-img-top">
+      	    <img src="https://storage.googleapis.com/talentail-123456789/{{$post->url}}" alt="..." class="card-img-top">
       	  </a>
       	  <div class="card-body">
       	    <div class="row align-items-center">
@@ -38,7 +38,7 @@
       	        <p style="overflow: hidden;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;">{{$post->content}}</p>
       	        <div class="avatar-group">
       	        	<a href="/profile" class="avatar avatar-xs">
-      	        	<img src="http://storage.googleapis.com/talentail-123456789/avatars/suIjFfp9XX3ntrojqNt9ySuBfo1F4b7LSGx60YyP.png" alt="..." class="avatar-img rounded-circle">
+      	        	<img src="https://storage.googleapis.com/talentail-123456789/avatars/suIjFfp9XX3ntrojqNt9ySuBfo1F4b7LSGx60YyP.png" alt="..." class="avatar-img rounded-circle">
       	        	</a>
       	        </div>
       	        <a href="/profile" style="margin-left: 0.5rem !important;">Shazwi Suwandi</a>

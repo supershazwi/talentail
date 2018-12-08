@@ -72,7 +72,7 @@
               <img class="thumbnail" src="https://tallyfy.com/wp-content/uploads/2017/10/SIPOC.png" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
               </div>
               <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="http://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
+              <img class="thumbnail" src="https://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
               </div>
               <div class="col-lg-4" style="margin-bottom: 1rem;">
               <img class="thumbnail" src="http://pbsanjacinto.weebly.com/uploads/1/3/4/9/13495198/739345_orig.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
@@ -84,7 +84,7 @@
               </div>
               </div>
               <hr style="margin-top: 0rem;">
-              <img src="http://storage.googleapis.com/talentail-123456789/avatars/pTzOJNAKBA85qGI9B4c9gictjkWTbRYaBZbyU3Zt.jpeg" style="height: 3rem; width: 3rem; float: left;" class="avatar-img rounded-circle">
+              <img src="https://storage.googleapis.com/talentail-123456789/avatars/pTzOJNAKBA85qGI9B4c9gictjkWTbRYaBZbyU3Zt.jpeg" style="height: 3rem; width: 3rem; float: left;" class="avatar-img rounded-circle">
               <div style="margin-left: 4rem !important;">
               <p style="margin-bottom: 0.5rem;"><a href="/profile/16">Steve McIntosh</a> <span class="badge badge-warning" style="font-size: 0.8rem;">Creator</span></p>
               <p style="margin-bottom: 0rem;">He is an engaging, proactive and confident individual who is always ready for more challenges. I was particularly impressed by his ability to analyze the toughest problems for this project. his analytical capabilities and drive is what will make him a success.</p>
@@ -111,7 +111,7 @@
               <img class="thumbnail" src="https://tallyfy.com/wp-content/uploads/2017/10/SIPOC.png" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
               </div>
               <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="http://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
+              <img class="thumbnail" src="https://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
               </div>
               <div class="col-lg-4" style="margin-bottom: 1rem;">
               <img class="thumbnail" src="http://pbsanjacinto.weebly.com/uploads/1/3/4/9/13495198/739345_orig.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
@@ -123,7 +123,7 @@
               </div>
               </div>
               <hr style="margin-top: 0rem;">
-              <img src="http://storage.googleapis.com/talentail-123456789/avatars/JKyKhb7wRRQxgMDwC7waREJ1TKy0pNiqLSczL1Ih.jpeg" style="height: 3rem; width: 3rem; float: left;" class="avatar-img rounded-circle">
+              <img src="https://storage.googleapis.com/talentail-123456789/avatars/JKyKhb7wRRQxgMDwC7waREJ1TKy0pNiqLSczL1Ih.jpeg" style="height: 3rem; width: 3rem; float: left;" class="avatar-img rounded-circle">
               <div style="margin-left: 4rem !important;">
               <p style="margin-bottom: 0.5rem;"><a href="/profile/18">Roshan Satpute</a> <span class="badge badge-warning" style="font-size: 0.8rem;">Creator</span></p>
               <p style="margin-bottom: 0rem;">He is an engaging, proactive and confident individual who is always ready for more challenges. I was particularly impressed by his ability to analyze the toughest problems for this project. his analytical capabilities and drive is what will make him a success.</p>

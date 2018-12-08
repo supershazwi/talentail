@@ -37,7 +37,7 @@
           <div class="row justify-content-center">
             <div class="col-auto">
               @if($notification->user->avatar)
-                <img alt="{{$notification->user->name}}" src="http://storage.googleapis.com/talentail-123456789/{{$notification->user->avatar}}" class="avatar-img rounded-circle" style="width: 40px; height: 40px; float: left; margin-right: 1rem;"> 
+                <img alt="{{$notification->user->name}}" src="https://storage.googleapis.com/talentail-123456789/{{$notification->user->avatar}}" class="avatar-img rounded-circle" style="width: 40px; height: 40px; float: left; margin-right: 1rem;"> 
               @else
                 <img alt="{{$notification->user->name}}" src="/img/avatar.png" class="avatar-img rounded-circle" style="width: 40px; height: 40px; float: left; margin-right: 1rem;"> 
               @endif 

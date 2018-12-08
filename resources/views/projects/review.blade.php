@@ -63,7 +63,7 @@
 
 
             @if($project->user->avatar)
-            <img src="http://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle">
+            <img src="https://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle">
             @else
             <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
             @endif
@@ -89,7 +89,7 @@
             <!-- Avatar -->
             <div class="avatar avatar-lg avatar-4by3">
               @if($project->url)
-              <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+              <img src="https://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
               @else
               <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
               @endif
@@ -267,7 +267,7 @@
                   <strong>Submitted Files:</strong> 
                   <br/>
                     @foreach($answeredTask->answered_task_files as $answered_task_file)
-                      <a href="http://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}">{{$answered_task_file->title}}</a>
+                      <a href="https://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}">{{$answered_task_file->title}}</a>
                       <br/>
                     @endforeach 
                 @endif
@@ -294,7 +294,7 @@
                   <strong>Creator's Submitted Files:</strong> 
                   <br/>
                     @foreach($answeredTask->reviewed_answered_task_files as $reviewed_answered_task_file)
-                      <a href="http://storage.googleapis.com/talentail-123456789/{{$reviewed_answered_task_file->url}}">{{$reviewed_answered_task_file->title}}</a>
+                      <a href="https://storage.googleapis.com/talentail-123456789/{{$reviewed_answered_task_file->url}}">{{$reviewed_answered_task_file->title}}</a>
                       <br/>
                     @endforeach
                 @endif
@@ -362,7 +362,7 @@
                       </p>
                     </div>
                     <div class="col-auto">
-                      <a href="http://storage.googleapis.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" class="btn btn-sm btn-white d-none d-md-inline-block">
+                      <a href="https://storage.googleapis.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" class="btn btn-sm btn-white d-none d-md-inline-block">
                         Download
                       </a>
                     </div>
@@ -558,7 +558,7 @@
             if(data.avatar == "") {
               document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='/img/avatar.png' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
             } else {
-              document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='http://storage.googleapis.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
+              document.getElementById("newMessagesDiv").insertAdjacentHTML("beforeend", "<div class='media chat-item'><img alt='" + data.username + "' src='https://storage.googleapis.com/talentail-123456789/" + data.avatar + "' class='avatar'><div class='media-body' style='padding: 0.7rem 1rem;'><div class='chat-item-title'><span class='chat-item-author SPAN-filter-by-text' data-filter-by='text'>" + data.username + "</span><span data-filter-by='text' class='SPAN-filter-by-text'>Just now</span></div><div class='chat-item-body DIV-filter-by-text' data-filter-by='text'><p>" + data.text + "</p></div></div></div>");
             }
             
             document.getElementById("newMessagesDiv").scrollTop = document.getElementById("newMessagesDiv").scrollHeight;

@@ -5,7 +5,7 @@
       <nav aria-label="breadcrumb">
       </nav>
       <button onclick="downloadTemplate()" class="btn btn-primary">Download</button>
-      <input type="hidden" id="templateUrl" value="http://storage.googleapis.com/talentail-123456789/{{$template->url}}" />
+      <input type="hidden" id="templateUrl" value="https://storage.googleapis.com/talentail-123456789/{{$template->url}}" />
   </div>
     <div class="container">
         <div class="row justify-content-center">
@@ -19,11 +19,11 @@
                     @foreach($template->template_shots as $templateShot)
                       @if($loop->first)
                        <div class="carousel-item active">
-                         <img class="d-block w-100" src="http://storage.googleapis.com/talentail-123456789/{{$templateShot->url}}" alt="">
+                         <img class="d-block w-100" src="https://storage.googleapis.com/talentail-123456789/{{$templateShot->url}}" alt="">
                        </div>
                        @else
                        <div class="carousel-item">
-                         <img class="d-block w-100" src="http://storage.googleapis.com/talentail-123456789/{{$templateShot->url}}" alt="">
+                         <img class="d-block w-100" src="https://storage.googleapis.com/talentail-123456789/{{$templateShot->url}}" alt="">
                        </div>
                        @endif
                     @endforeach

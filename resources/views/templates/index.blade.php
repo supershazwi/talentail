@@ -25,7 +25,7 @@
                                     <p style="margin-top: 0.5rem;">{{$template->description}}</p>
                                     <a href="/profile/{{$template->user_id}}" data-toggle="tooltip" data-placement="top" title="">
                                       @if($template->user->avatar)
-                                      <img class="avatar" src="http://storage.googleapis.com/talentail-123456789/{{$template->user->avatar}}">
+                                      <img class="avatar" src="https://storage.googleapis.com/talentail-123456789/{{$template->user->avatar}}">
                                       @else
                                       <img class="avatar" src="/img/avatar.png">
                                       @endif

@@ -18,7 +18,7 @@
 
 
             @if($project->user->avatar)
-            <img src="http://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle">
+            <img src="https://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle">
             @else
             <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
             @endif
@@ -44,7 +44,7 @@
           <!-- Avatar -->
           <div class="avatar avatar-lg avatar-4by3">
               @if($project->url)
-              <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+              <img src="https://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
               @else
               <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
               @endif

@@ -91,7 +91,7 @@
 					    <!-- Avatar -->
 					    <a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}" class="avatar avatar-4by3">
 					    @if($createdProject->url)
-					    <img src="http://storage.googleapis.com/talentail-123456789/{{$createdProject->url}}" alt="..." class="avatar-img rounded">
+					    <img src="https://storage.googleapis.com/talentail-123456789/{{$createdProject->url}}" alt="..." class="avatar-img rounded">
 					    @else
 					    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
 					    @endif
@@ -150,7 +150,7 @@
 				    <!-- Avatar -->
 				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}" class="avatar avatar-4by3">
 				    @if($actionNeeded->project->url)
-				    <img src="http://storage.googleapis.com/talentail-123456789/{{$actionNeeded->project->url}}" alt="..." class="avatar-img rounded">
+				    <img src="https://storage.googleapis.com/talentail-123456789/{{$actionNeeded->project->url}}" alt="..." class="avatar-img rounded">
 				    @else
 				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
 				    @endif
@@ -212,7 +212,7 @@
 				    <!-- Avatar -->
 				    <a href="/roles/{{$actionNeeded->project->role->slug}}/projects/{{$actionNeeded->project->slug}}" class="avatar avatar-4by3">
 				    @if($actionNeeded->project->url)
-				    <img src="http://storage.googleapis.com/talentail-123456789/{{$actionNeeded->project->url}}" alt="..." class="avatar-img rounded">
+				    <img src="https://storage.googleapis.com/talentail-123456789/{{$actionNeeded->project->url}}" alt="..." class="avatar-img rounded">
 				    @else
 				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
 				    @endif
@@ -277,7 +277,7 @@
 				    <!-- Avatar -->
 				    <a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}" class="avatar avatar-4by3">
 				    @if($attemptedProject->project->url)
-				    <img src="http://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->url}}" alt="..." class="avatar-img rounded">
+				    <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->url}}" alt="..." class="avatar-img rounded">
 				    @else
 				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
 				    @endif
@@ -339,7 +339,7 @@
 				    <!-- Avatar -->
 				    <a href="/roles/{{$submittedProject->project->role->slug}}/projects/{{$submittedProject->project->slug}}" class="avatar avatar-4by3">
 				    @if($submittedProject->project->url)
-				    <img src="http://storage.googleapis.com/talentail-123456789/{{$submittedProject->project->url}}" alt="..." class="avatar-img rounded">
+				    <img src="https://storage.googleapis.com/talentail-123456789/{{$submittedProject->project->url}}" alt="..." class="avatar-img rounded">
 				    @else
 				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
 				    @endif
@@ -403,7 +403,7 @@
 				    <!-- Avatar -->
 				    <a href="/roles/{{$reviewedProject->project->role->slug}}/projects/{{$reviewedProject->project->slug}}" class="avatar avatar-4by3">
 				    @if($reviewedProject->project->url)
-				    <img src="http://storage.googleapis.com/talentail-123456789/{{$reviewedProject->project->url}}" alt="..." class="avatar-img rounded">
+				    <img src="https://storage.googleapis.com/talentail-123456789/{{$reviewedProject->project->url}}" alt="..." class="avatar-img rounded">
 				    @else
 				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
 				    @endif

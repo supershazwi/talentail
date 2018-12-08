@@ -29,9 +29,9 @@
           <strong>Submitted Files:</strong> 
           @foreach($creatorApplication->creator_application_files as $file) 
             @if($loop->last)
-            <p style="margin-bottom: 0;"><a href="http://storage.googleapis.com/talentail-123456789/{{$file->url}}" download="{{$file->title}}">{{$file->title}}</a></p>
+            <p style="margin-bottom: 0;"><a href="https://storage.googleapis.com/talentail-123456789/{{$file->url}}" download="{{$file->title}}">{{$file->title}}</a></p>
             @else
-            <p><a href="http://storage.googleapis.com/talentail-123456789/{{$file->url}}" download="{{$file->title}}">{{$file->title}}</a></p>
+            <p><a href="https://storage.googleapis.com/talentail-123456789/{{$file->url}}" download="{{$file->title}}">{{$file->title}}</a></p>
             @endif
           @endforeach
         </div>

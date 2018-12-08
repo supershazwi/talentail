@@ -36,7 +36,7 @@
 
 
               @if($project->user->avatar)
-              <img src="http://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle">
+              <img src="https://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle">
               @else
               <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
               @endif
@@ -62,7 +62,7 @@
             <!-- Avatar -->
             <div class="avatar avatar-lg avatar-4by3">
               @if($project->url)
-              <img src="http://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
+              <img src="https://storage.googleapis.com/talentail-123456789/{{$project->url}}" alt="..." class="avatar-img rounded">
               @else
               <img src="/img/avatars/projects/project-1.jpg" alt="..." class="avatar-img rounded">
               @endif
@@ -175,7 +175,7 @@
                   <strong>Your Files:</strong> 
                   <br/>
                     @foreach($answeredTask->answered_task_files as $answered_task_file)
-                      <a href="http://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}">{{$answered_task_file->title}}</a>
+                      <a href="https://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}">{{$answered_task_file->title}}</a>
                       <br/>
                     @endforeach 
                 @endif
@@ -241,7 +241,7 @@
                       </p>
                     </div>
                     <div class="col-auto">
-                      <a href="http://storage.googleapis.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" class="btn btn-sm btn-white d-none d-md-inline-block">
+                      <a href="https://storage.googleapis.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" class="btn btn-sm btn-white d-none d-md-inline-block">
                         Download
                       </a>
                     </div>

@@ -90,10 +90,10 @@
 		          <p class="card-text small text-muted" style="margin-bottom: 0;">Endorsed by</p>
 		          <div class="avatar-group">
 		            <a href="/profile/16" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="Steve McIntosh">
-		            	<img src="http://storage.googleapis.com/talentail-123456789/avatars/pTzOJNAKBA85qGI9B4c9gictjkWTbRYaBZbyU3Zt.jpeg" alt="..." class="avatar-img rounded-circle"/>
+		            	<img src="https://storage.googleapis.com/talentail-123456789/avatars/pTzOJNAKBA85qGI9B4c9gictjkWTbRYaBZbyU3Zt.jpeg" alt="..." class="avatar-img rounded-circle"/>
 		            </a>
 		            <a href="/profile/18" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="Roshan Satpute">
-		            	<img src="http://storage.googleapis.com/talentail-123456789/avatars/JKyKhb7wRRQxgMDwC7waREJ1TKy0pNiqLSczL1Ih.jpeg" alt="..." class="avatar-img rounded-circle"/>
+		            	<img src="https://storage.googleapis.com/talentail-123456789/avatars/JKyKhb7wRRQxgMDwC7waREJ1TKy0pNiqLSczL1Ih.jpeg" alt="..." class="avatar-img rounded-circle"/>
 		            </a>
 		          </div>
 
@@ -109,7 +109,7 @@
 		      <div class="text-center">
 		        <a href="/portfolios/{{$portfolio->id}}" class="card-avatar avatar avatar-lg mx-auto">
 					@if($portfolio->user->avatar)
-					 <img src="http://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="" class="avatar-img rounded">
+					 <img src="https://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="" class="avatar-img rounded">
 					@else
 					<img src="/img/avatar.png" alt="..." class="avatar-img rounded">
 					@endif
@@ -156,7 +156,7 @@
 		          	@foreach($portfolio->projects as $project)
 		            <a href="/profile/{{$project->user_id}}" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="{{$project->user->name}}">
 		            	@if($project->user->avatar)
-		            	 <img src="http://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle"/>
+		            	 <img src="https://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle"/>
 		            	@else
 		            	<img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle"/>
 		            	@endif

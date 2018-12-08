@@ -136,7 +136,7 @@
                               <img class="thumbnail" src="https://tallyfy.com/wp-content/uploads/2017/10/SIPOC.png" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
                             </div>
                             <div class="col-lg-4" style="margin-bottom: 1rem;">
-                              <img class="thumbnail" src="http://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
+                              <img class="thumbnail" src="https://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
                             </div>
                             <div class="col-lg-4" style="margin-bottom: 1rem;">
                               <img class="thumbnail" src="http://pbsanjacinto.weebly.com/uploads/1/3/4/9/13495198/739345_orig.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
@@ -180,7 +180,7 @@
                               <img class="thumbnail" src="https://tallyfy.com/wp-content/uploads/2017/10/SIPOC.png" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
                             </div>
                             <div class="col-lg-4" style="margin-bottom: 1rem;">
-                              <img class="thumbnail" src="http://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
+                              <img class="thumbnail" src="https://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
                             </div>
                             <div class="col-lg-4" style="margin-bottom: 1rem;">
                               <img class="thumbnail" src="http://pbsanjacinto.weebly.com/uploads/1/3/4/9/13495198/739345_orig.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
@@ -192,7 +192,7 @@
                             </div>
                           </div>
                           <hr style="margin-top: 0rem;"/>
-                          <img class="avatar" src="http://storage.googleapis.com/talentail-123456789/avatars/JKyKhb7wRRQxgMDwC7waREJ1TKy0pNiqLSczL1Ih.jpeg" style="height: 3rem; width: 3rem; float: left;">
+                          <img class="avatar" src="https://storage.googleapis.com/talentail-123456789/avatars/JKyKhb7wRRQxgMDwC7waREJ1TKy0pNiqLSczL1Ih.jpeg" style="height: 3rem; width: 3rem; float: left;">
                           <div style="margin-left: 4rem !important;">
                             <p style="margin-bottom: 0.5rem;"><a href="#">Roshan Satpute</a> <span class="badge badge-warning" style="font-size: 0.8rem;">Creator</span></p>
                             <p style="margin-bottom: 0rem;">Shazwi managed to complete the project in a short amount of time and achieve a high quality of work. He was able to ask the right questions to solicit the necessary requirements. He is also open to feedback and input, allowing him to achieve the right outcome for each document.</p>

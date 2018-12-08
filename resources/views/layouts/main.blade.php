@@ -153,7 +153,7 @@
 		    	    <!-- Toggle -->
 		    	    <a href="#" class="avatar avatar-sm dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	    	    		@if(Auth::user()->avatar)
-	    	    	     <img src="http://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="..." class="avatar-img rounded-circle">
+	    	    	     <img src="https://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="..." class="avatar-img rounded-circle">
 	    	    	    @else
 	    	    	    <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
 	    	    	    @endif

@@ -53,7 +53,7 @@
       <div class="card">
         <a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}">
           @if($attemptedProject->project->url)
-          <img src="http://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->url}}" alt="..." class="card-img-top">
+          <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->url}}" alt="..." class="card-img-top">
           @else
           <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="card-img-top">
           @endif
@@ -75,7 +75,7 @@
 
 
                 @if($attemptedProject->project->user->avatar)
-                <img src="http://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded-circle">
+                <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded-circle">
                 @else
                 <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
                 @endif
