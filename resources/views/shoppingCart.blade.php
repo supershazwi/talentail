@@ -342,7 +342,7 @@
                 @endforeach
               </ul>
               <br/>
-              <a href="#" style="color: white !important; text-decoration: underline;"><h4 class="alert-heading" style="margin-bottom: 0;">View the project(s)</h4></a>
+              <a href="/" style="color: white !important; text-decoration: underline;"><h4 class="alert-heading" style="margin-bottom: 0;">View the project(s)</h4></a>
             </div>
             @endif
 

@@ -36,6 +36,7 @@
 				        <tr>
 				          <th scope="col">#</th>
 				          <th scope="col">Project</th>
+				          <th scope="col">Credits Earned</th>
 				          <th scope="col">User</th>
 				          <th scope="col">Status</th>
 				        </tr>
@@ -45,6 +46,7 @@
 				          <tr>
 				            <th scope="row">{{$key+1}}</th>
 				            <td><a href="/roles/{{$creatorProject->project->role->slug}}/projects/{{$creatorProject->project->slug}}/{{$creatorProject->user_id}}">{{$creatorProject->project->title}}</a></td>
+				            <td>{{$creatorProject->project->amount}} * 0.8 = <strong style="text-decoration: underline;">{{number_format((0.8*$creatorProject->project->amount), 2, '.', '')}}</strong></td>
 				            <td>{{$creatorProject->user->name}}</td>
 				            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
 				          </tr>
@@ -287,9 +289,9 @@
 				  <div class="col ml--2">
 
 				    <!-- Title -->
-				    <h4 class="card-title mb-1">
-				      <a href="project-overview.html">Homepage Redesign</a>
-				    </h4>
+				    
+				      <a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}"><h4 class="card-title mb-1">{{$attemptedProject->project->title}}</h4></a>
+				    
 				    
 				  </div>
 				</div> <!-- / .row -->

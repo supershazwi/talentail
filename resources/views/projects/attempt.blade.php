@@ -1,7 +1,9 @@
 @extends ('layouts.main')
 
 @section ('content')
+@if($parameter == 'task') 
   <input type="hidden" name="tasksArray" value={{$tasksArray}} id="tasksArray" />
+@endif
   <div class="header">
     <div class="container">
       <div class="alert alert-primary" style="margin-top: 1.5rem;">

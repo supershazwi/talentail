@@ -623,21 +623,22 @@ Route::post('/process-credit-payment', function(Request $request) {
                 $attemptedProject->project_id = $projectId;
                 $attemptedProject->user_id = Auth::id();
                 $attemptedProject->status = "Attempting";
+                $attemptedProject->creator_id = $project->user_id;
 
                 // calculate the deadline of the project by adding project hours to current date
                 $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
 
                 $attemptedProject->save();
 
-                $projectAndCompetencyReview = new ProjectAndCompetencyReview;
-
-                $projectAndCompetencyReview->attempted_project_id = $attemptedProject->id;
-                $projectAndCompetencyReview->tasks_reviewed = 0;
-                $projectAndCompetencyReview->competencies_reviewed = 0;
-                
-                $projectAndCompetencyReview->save();
-
                 $user->credits -= $project->amount;
+
+                $user->save();
+
+                $projectCreator = User::find($project->user_id);
+
+                $projectCreator->credits += ($project->amount * 0.8);
+
+                $projectCreator->save();
 
                 // notify creator
                 $notification = new Notification;
@@ -662,8 +663,6 @@ Route::post('/process-credit-payment', function(Request $request) {
             }
         }
     }
-
-    $user->save();
 
     $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', '1')->first();
 
