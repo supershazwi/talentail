@@ -21,11 +21,11 @@
 				<img src="http://storage.googleapis.com/talentail-123456789/{{$post->url}}" style="width: 100%; margin-bottom: 1.5rem; border-radius: 5px;"/>
 				<h1>{{$post->title}}</h1>
 				<div class="avatar-group">
-					<a href="/profile" class="avatar avatar-xs">
+					<a href="{{$post->user->twitter}}" class="avatar avatar-xs">
 					<img src="http://storage.googleapis.com/talentail-123456789/avatars/suIjFfp9XX3ntrojqNt9ySuBfo1F4b7LSGx60YyP.png" alt="..." class="avatar-img rounded-circle">
 					</a>
 				</div>
-				<a href="/profile" style="margin-left: 0.5rem !important;">Shazwi Suwandi</a> on {{date_format($post->created_at, 'd F Y')}}
+				<a href="{{$post->user->twitter}}" style="margin-left: 0.5rem !important;">Shazwi Suwandi</a> on {{date_format($post->created_at, 'd F Y')}}
 				<div style="margin-top: 1.5rem;">
 					@parsedown($post->content)
 				</div>
