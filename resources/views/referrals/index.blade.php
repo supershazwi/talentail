@@ -130,7 +130,7 @@
                   
                   <!-- Heading -->
                   <span class="h2 mb-0">
-                    You and Your Friend Receive 5 Credits 
+                    You and Your Friend Receive $5 
                   </span>
                   <span class="icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="Your friend has to purchase a project for both of you to receive this reward.">
                     <i class="fe fe-help-circle"></i>

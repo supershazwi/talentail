@@ -126,7 +126,7 @@
 		        <div class="col">
 		          
 		          <!-- Time -->
-		          <p class="card-text" style="margin-bottom: 0;">{{$project->amount}} Credits</p>
+		          <p class="card-text" style="margin-bottom: 0;">${{$project->amount}}</p>
 		        </div>
 		        <!-- <div class="col-auto">
 		          

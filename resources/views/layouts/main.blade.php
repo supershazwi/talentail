@@ -136,16 +136,7 @@
 
 		    	  </div>
 
-		    	  <div class="dropdown mr-4 d-none d-lg-flex">
-		    	
-		    	    <!-- Toggle -->
-		    	    <a href="/credits" class="text-muted" role="button">
-						<span class="icon">
-							{{Auth::user()->credits}} Credits
-						</span>
-		    	    </a>
 
-		    	  </div>
 
 		    	  <!-- Dropdown -->
 		    	  <div class="dropdown">
@@ -170,7 +161,7 @@
 		    	      
 		    	      <!-- <a href="/lessons-overview" class="dropdown-item">Lessons</a> -->
 		    	      <!-- <a href="/projects-overview" class="dropdown-item">Projects</a> -->
-		    	      @if(!(Auth::user()->company && Auth::user()->creator))
+		    	      @if(!(Auth::user()->creator))
 		    	      <hr class="dropdown-divider">
 		    	      @endif
 		    	      @if(!Auth::user()->admin)

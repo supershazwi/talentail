@@ -49,6 +49,29 @@ use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
+Route::get('/stripe-add-account', function() {
+    \Stripe\Stripe::setApiKey("sk_test_M3fWET2nMbe5RHdA65AqhlE5");
+
+    // $acct = \Stripe\Account::create([
+    //     "country" => "US",
+    //     "type" => "standard",
+    //     "email" => "hellomoto5@motomoto.com"
+    // ]);
+
+    $customer = \Stripe\Customer::create([
+        'source' => 'tok_mastercard',
+        'email' => 'tomododododo@example.com',
+    ]);
+
+    dd($customer);
+
+    $user = User::find(Auth::id());
+
+    $user->stripe_customer_id = $acct->id;
+
+    $user->save();
+});
+
 Route::post('/blog/posts/{postId}/update', function(Request $request) {
     $routeParameters = Route::getCurrentRoute()->parameters();
 
@@ -180,11 +203,11 @@ Route::get('/stripe', function() {
     \Stripe\Stripe::setApiKey("sk_test_M3fWET2nMbe5RHdA65AqhlE5");
 
     $charge = \Stripe\Charge::create([
-        'amount' => 99999999,
-        'currency' => 'usd',
-        'source' => 'tok_visa',
-        'receipt_email' => 'jenny.rosen@example.com',
-    ]);
+      "amount" => 1000,
+      "currency" => "usd",
+      "source" => "tok_visa",
+      "application_fee" => 123,
+    ], ["stripe_account" => "acct_1DfKKTBEnOu189lD"]);
 
     dd($charge);
 });
@@ -499,7 +522,7 @@ Route::get('/invoices/{invoiceId}', function() {
 
 
 Route::get('/invoices', function() {
-    $invoices = ShoppingCart::where('user_id', Auth::id())->where('status', 'paid')->get();
+    $invoices = ShoppingCart::where('user_id', Auth::id())->where('status', 'paid')->orderBy('created_at', 'desc')->get();
 
     return view('invoices.index', [
         
@@ -511,100 +534,31 @@ Route::get('/invoices', function() {
 });
 
 Route::get('/shopping-cart', function() {
-    $creditShoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
-    $dollarShoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', false)->first();
+    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
 
     $projectsArray = array();
-    $lessonsArray = array();
-    $interviewsArray = array();
-    $creditsArray = array();
 
-
-    $updatedCreditTotal = Auth::user()->credits;
-
-    if($dollarShoppingCart) {
-        foreach($dollarShoppingCart->shopping_cart_line_items as $shoppingCartLineItem) {
-            if($shoppingCartLineItem->credit_id) {
-                array_push($creditsArray, $shoppingCartLineItem->credit_id);
-            }
-        }
-    }
-
-    if($creditShoppingCart) {
-        foreach($creditShoppingCart->shopping_cart_line_items as $shoppingCartLineItem) {
+    if($shoppingCart) {
+        foreach($shoppingCart->shopping_cart_line_items as $shoppingCartLineItem) {
             if($shoppingCartLineItem->project_id) {
                 array_push($projectsArray, $shoppingCartLineItem->project_id);
             }
         }
-
-        $updatedCreditTotal = Auth::user()->credits - $creditShoppingCart->total;
     }
 
     return view('shoppingCart', [
-        'creditShoppingCart' => $creditShoppingCart,
-        'updatedCreditTotal' => $updatedCreditTotal,
-        'dollarShoppingCart' => $dollarShoppingCart,
+        'shoppingCart' => $shoppingCart,
         'projectsArray' => implode(",", $projectsArray),
-        'lessonsArray' => implode(",", $lessonsArray),
-        'creditsArray' => implode(",", $creditsArray),
-        'interviewsArray' => implode(",", $interviewsArray),
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
 })->middleware('auth');;
 
-Route::post('/process-dollar-payment', function(Request $request) {
-    // dd($request);
-    $user = User::find(Auth::id());
-
-    $creditsArray = $request->input('creditsArray');
-
-    if($creditsArray != null) {
-        $creditsArray = explode(",", $creditsArray);
-        $totalCreditsToBeAddedToUserTotal = 0;
-
-        if(sizeof($creditsArray) > 0) {
-            foreach($creditsArray as $creditId) {
-                $credit = Credit::find($creditId);
-
-                $totalCreditsToBeAddedToUserTotal += $credit->credits;
-            }
-        }
-
-        $user->credits += $totalCreditsToBeAddedToUserTotal;
-    }
-
+Route::post('/process-payment', function(Request $request) {
     \Stripe\Stripe::setApiKey("sk_test_M3fWET2nMbe5RHdA65AqhlE5");
 
-    $charge = \Stripe\Charge::create([
-        'amount' => $request->input('dollarAmount'),
-        "metadata" => ["customer_id" => Auth::id()],
-        'description' => Auth::user()->name . " purchased " . $totalCreditsToBeAddedToUserTotal . " credits.",
-        'currency' => 'usd',
-        'source' => 'tok_visa',
-        'receipt_email' => Auth::user()->email,
-    ]);
-
-    if($charge == "succeeded") {
-        $user->save();
-
-        $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', '0')->first();
-
-        $shoppingCart->status = "paid";
-
-        $shoppingCart->save();
-
-        return redirect('/shopping-cart');
-    } else {
-        return redirect('/shopping-cart')->with('error', 'Error in processing payment.');
-    }
-});
-
-Route::post('/process-credit-payment', function(Request $request) {
     $pusher = App::make('pusher');
-
-    $user = User::find(Auth::id());
 
     $projectsArray = $request->input('projectsArray');
 
@@ -613,58 +567,88 @@ Route::post('/process-credit-payment', function(Request $request) {
     if($projectsArray != null) {
         $projectsArray = explode(",", $projectsArray);
         if(sizeof($projectsArray) > 0) {
-            foreach($projectsArray as $projectId) {
+            foreach($projectsArray as $key=>$projectId) {
                 $project = Project::find($projectId);
 
-                array_push($projectsNameArray, $project->title);
+                $token;
 
-                $attemptedProject = new AttemptedProject;
+                if(Auth::user()->stripe_customer_id) {
+                    $token = \Stripe\Token::create(
+                          ["customer" => Auth::user()->stripe_customer_id], 
+                          ["stripe_account" => $project->user->stripe_account_id]);
+                } else {
+                    $token = $request->input('stripeToken');
 
-                $attemptedProject->project_id = $projectId;
-                $attemptedProject->user_id = Auth::id();
-                $attemptedProject->status = "Attempting";
-                $attemptedProject->creator_id = $project->user_id;
+                    $customer = \Stripe\Customer::create([
+                        'source' => $token,
+                        'email' => Auth::user()->email,
+                    ]);
 
-                // calculate the deadline of the project by adding project hours to current date
-                $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
+                    $token = \Stripe\Token::create(
+                      ["customer" => $customer->id], 
+                      ["stripe_account" => $project->user->stripe_account_id]);
 
-                $attemptedProject->save();
+                    $userToUpdate = User::find(Auth::id());
 
-                $user->credits -= $project->amount;
+                    $userToUpdate->stripe_customer_id = $customer->id;
 
-                $user->save();
+                    $userToUpdate->save();
+                }
 
-                $projectCreator = User::find($project->user_id);
+                $charge = \Stripe\Charge::create([
+                    'amount' => $project->amount * 100,
+                    "metadata" => [
+                        "candidate_id" => Auth::id(),
+                        "creator_id" => $project->user_id
+                    ],
+                    'description' => Auth::user()->name . " purchased " . $project->title . ".",
+                    'currency' => 'usd',
+                    "application_fee" => $project->amount * 100 * 0.2,
+                    'source' => $token->id,
+                    'receipt_email' => Auth::user()->email,
+                ], ["stripe_account" => $project->user->stripe_account_id]);
 
-                $projectCreator->credits += ($project->amount * 0.8);
+                if($charge->status == "succeeded") {
+                    array_push($projectsNameArray, $project->title);
 
-                $projectCreator->save();
+                    $attemptedProject = new AttemptedProject;
 
-                // notify creator
-                $notification = new Notification;
+                    $attemptedProject->project_id = $projectId;
+                    $attemptedProject->user_id = Auth::id();
+                    $attemptedProject->status = "Attempting";
+                    $attemptedProject->creator_id = $project->user_id;
 
-                $notification->message = "purchased project: " . $project->title;
-                $notification->recipient_id = $project->user_id;
-                $notification->user_id = Auth::id();
-                $notification->url = "/roles/" . $project->role->slug . "/projects/" . $project->slug;
+                    // calculate the deadline of the project by adding project hours to current date
+                    $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
 
-                $notification->save();
+                    $attemptedProject->save();
 
-                $message = [
-                    'text' => e("purchased project: " . $project->title),
-                    'username' => Auth::user()->name,
-                    'avatar' => Auth::user()->avatar,
-                    'timestamp' => (time()*1000),
-                    'projectId' => $project->id,
-                    'url' => '/notifications'
-                ];
+                    // notify creator
+                    $notification = new Notification;
 
-                $pusher->trigger('notifications_' . $project->user_id, 'new-notification', $message);
+                    $notification->message = "purchased project: " . $project->title;
+                    $notification->recipient_id = $project->user_id;
+                    $notification->user_id = Auth::id();
+                    $notification->url = "/roles/" . $project->role->slug . "/projects/" . $project->slug;
+
+                    $notification->save();
+
+                    $message = [
+                        'text' => e("purchased project: " . $project->title),
+                        'username' => Auth::user()->name,
+                        'avatar' => Auth::user()->avatar,
+                        'timestamp' => (time()*1000),
+                        'projectId' => $project->id,
+                        'url' => '/notifications'
+                    ];
+
+                    $pusher->trigger('notifications_' . $project->user_id, 'new-notification', $message);
+                }
             }
         }
     }
 
-    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', '1')->first();
+    $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
 
     $shoppingCart->status = "paid";
 
@@ -1027,6 +1011,16 @@ Route::post("/creator-applications/update-status", function(Request $request) {
         $user = User::find($creatorApplication->user_id);
 
         $user->creator = true;
+
+        \Stripe\Stripe::setApiKey("sk_test_M3fWET2nMbe5RHdA65AqhlE5");
+
+        $acct = \Stripe\Account::create([
+            "country" => "US",
+            "type" => "standard",
+            "email" => $user->email
+        ]);
+
+        $user->stripe_account_id = $acct->id;
 
         $user->save();
     }

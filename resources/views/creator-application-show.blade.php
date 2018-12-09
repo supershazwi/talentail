@@ -43,13 +43,14 @@
         </div>
       </div>
 
+      @if(!$creatorApplication->status=="approved")
       <button class="btn btn-light" role="button" onclick="rejectApplication()">
           Reject Application
       </button>
       <button class="btn btn-primary" role="button" onclick="approveApplication()">
           Approve Application
       </button>
-
+      @endif
     </div>
   </div> <!-- / .row -->
 </div>

@@ -304,7 +304,7 @@
                 </button>
                 @else
                 <button class="btn btn-block btn-primary" onclick="addProjectToCart()">
-                  Add to Cart<br/>{{$project->amount}} Credits
+                  Add to Cart<br/>${{$project->amount}}
                 </button>
                 @endif
               @else

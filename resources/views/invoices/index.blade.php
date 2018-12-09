@@ -27,6 +27,7 @@
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Invoice</th>
+                      <th scope="col">Value</th>
                       <th scope="col">Date</th>
                       <th scope="col">Status</th>
                     </tr>
@@ -36,6 +37,7 @@
                       <tr>
                         <th scope="row">{{$key+1}}</th>
                         <td><a href="/invoices/{{$invoice->id}}">{{$invoice->id}}</a></td>
+                        <td>${{$invoice->total}}</td>
                         <td>{{$invoice->created_at}}</td>
                         <td><span class="badge badge-primary">{{$invoice->status}}</span></td>
                       </tr>

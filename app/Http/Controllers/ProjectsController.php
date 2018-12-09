@@ -15,7 +15,6 @@ use App\AttemptedProject;
 use App\AnsweredTask;
 use App\AnsweredTaskFile;
 use App\Task;
-use App\Credit;
 use App\Answer;
 use App\ProjectFile;
 use App\Role;
@@ -879,7 +878,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
                 if($shoppingCart) {
                     $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
                 } else {
@@ -1082,7 +1081,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
                 if($shoppingCart) {
                     $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
                 } else {
@@ -1285,7 +1284,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
                 if($shoppingCart) {
                     $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
                 } else {
@@ -1488,7 +1487,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
+                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
                 if($shoppingCart) {
                     $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
                 } else {
@@ -1625,7 +1624,7 @@ class ProjectsController extends Controller
         $project = Project::find($request->input('project_id'));
 
         // find whether or not there is an existing shopping cart
-        $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->where('credit', true)->first();
+        $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
 
         if($shoppingCart) {
             // already has a shopping cart
@@ -1637,7 +1636,6 @@ class ProjectsController extends Controller
             $shoppingCart->status = "pending";
             $shoppingCart->total = 0;
             $shoppingCart->no_of_items = 0;
-            $shoppingCart->credit = 1;
             $shoppingCart->user_id = Auth::id();
         }
 
@@ -1660,7 +1658,6 @@ class ProjectsController extends Controller
         $projectsArray = $request->input('projectsArray');
         $interviewsArray = $request->input('interviewsArray');
         $lessonsArray = $request->input('lessonsArray');
-        $creditsArray = $request->input('creditsArray');
 
         if($projectsArray != null) {
             $projectsArray = explode(",", $projectsArray);
@@ -1705,25 +1702,6 @@ class ProjectsController extends Controller
         }
         $interviewsArray = explode(",", $interviewsArray);
         $lessonsArray = explode(",", $lessonsArray);
-
-        if($creditsArray != null) {
-            $creditsArray = explode(",", $creditsArray);
-            $totalCreditsToBeAddedToUserTotal = 0;
-
-            if(sizeof($creditsArray) > 0) {
-                foreach($creditsArray as $creditId) {
-                    $credit = Credit::find($creditId);
-
-                    $user = User::find(Auth::id());
-
-                    $totalCreditsToBeAddedToUserTotal += $credit->credits;
-                }
-            }
-
-            $user->credits += $totalCreditsToBeAddedToUserTotal;
-        }
-
-        $user->save();
 
         $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
 
