@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      @if(!$creatorApplication->status=="approved")
+      @if($creatorApplication->status!="approved1")
       <button class="btn btn-light" role="button" onclick="rejectApplication()">
           Reject Application
       </button>
@@ -62,7 +62,7 @@
   }
 
   function approveApplication() {
-    document.getElementById("status").value = "approved";
+    document.getElementById("status").value = "approved1";
     document.getElementById("updateCreatorApplicationStatus").click();
   }
 </script>

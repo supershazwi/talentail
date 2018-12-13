@@ -34,6 +34,16 @@
 
   <script>var colorScheme = 'light';</script>
   <title>Talentail</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122657233-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-122657233-1');
+  </script>
 </head>
 
 <body style="height: 100% !important;">
@@ -107,7 +117,7 @@
 
             </div>
 
-            
+
 
             <!-- Dropdown -->
             <div class="dropdown">
@@ -127,6 +137,9 @@
                 <a href="/profile" class="dropdown-item">Profile</a>
                 <a href="/settings" class="dropdown-item">Settings</a>
                 <a href="/work-experience" class="dropdown-item">Work Experience</a>
+                @if(Auth::user()->creator)
+                <a href="/ordered-projects" class="dropdown-item">Ordered Projects</a>
+                @endif
                 <a href="/invoices" class="dropdown-item">Invoices</a>
                 <a href="/referrals" class="dropdown-item">Referrals</a>
                 
@@ -152,6 +165,11 @@
               @endif
             @endif
                 
+                @endif
+
+                @if(Auth::user()->creator)
+                <hr class="dropdown-divider">
+                  <a href="/creator-application" class="dropdown-item">Check Creator Application</a>
                 @endif
 
                 @if(Auth::user()->admin)

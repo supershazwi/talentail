@@ -49,27 +49,64 @@ use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
+Route::post('/connect-paypal', function(Request $request) {
+    $user = User::find(Auth::id());
+
+    $user->paypal_email = $request->input('paypal_email');
+
+    $user->creator = true;
+
+    $user->save();
+
+    $creatorApplication = CreatorApplication::where('user_id', Auth::id())->first();
+
+    $creatorApplication->status = "connected";
+
+    $creatorApplication->save();
+
+    return redirect('/creator-stripe-account')->with('paypal-success', "You have successfully connected " . $request->input('paypal_email') . " with PayPal.");
+});
+
+Route::get('/payment-information', function() {
+    return view('payment-information', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
+Route::get('/ordered-projects', function() {
+    $orderedProjects = AttemptedProject::where('creator_id', Auth::id())->get();
+
+    return view('ordered-projects', [
+        'orderedProjects' => $orderedProjects,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
 Route::get('/stripe-add-account', function() {
     \Stripe\Stripe::setApiKey("sk_test_M3fWET2nMbe5RHdA65AqhlE5");
 
     // $acct = \Stripe\Account::create([
-    //     "country" => "US",
+    //     "country" => "SG",
     //     "type" => "standard",
-    //     "email" => "hellomoto5@motomoto.com"
+    //     "email" => "thetalentail@db.com"
     // ]);
 
     $customer = \Stripe\Customer::create([
         'source' => 'tok_mastercard',
-        'email' => 'tomododododo@example.com',
+        'email' => 'aiya@gmail.com',
     ]);
 
     dd($customer);
 
-    $user = User::find(Auth::id());
+    // $user = User::find(36);
 
-    $user->stripe_customer_id = $acct->id;
+    // $user->stripe_account_id = $acct->id;
 
-    $user->save();
+    // $user->save();
 });
 
 Route::post('/blog/posts/{postId}/update', function(Request $request) {
@@ -602,8 +639,8 @@ Route::post('/process-payment', function(Request $request) {
                         "creator_id" => $project->user_id
                     ],
                     'description' => Auth::user()->name . " purchased " . $project->title . ".",
-                    'currency' => 'usd',
-                    "application_fee" => $project->amount * 100 * 0.2,
+                    'currency' => 'sgd',
+                    "application_fee" => round(($project->amount * 100 * 0.2) - ($project->amount * 100 * 0.029 + 30)),
                     'source' => $token->id,
                     'receipt_email' => Auth::user()->email,
                 ], ["stripe_account" => $project->user->stripe_account_id]);
@@ -643,6 +680,8 @@ Route::post('/process-payment', function(Request $request) {
                     ];
 
                     $pusher->trigger('notifications_' . $project->user_id, 'new-notification', $message);
+                } else {
+                    return redirect('/shopping-cart')->with('error', 'There may have been an error. If it persists, contact support.');
                 }
             }
         }
@@ -1073,7 +1112,6 @@ Route::get('/creator-applications/{userId}', function() {
 
     return view('creator-application-show', [
         'creatorApplication' => $creatorApplication,
-        
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -1117,8 +1155,23 @@ Route::get('/company-application', function() {
 })->middleware('auth');
 
 Route::get('/creator-application', function() {
+    $creatorApplication = CreatorApplication::where('user_id', Auth::id())->first();
+
     return view('apply-creator', [
-        
+        'creatorApplication' => $creatorApplication,
+        'parameter' => 'general',
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+})->middleware('auth');
+
+Route::get('/creator-stripe-account', function() {
+    $creatorApplication = CreatorApplication::where('user_id', Auth::id())->first();
+
+    return view('apply-creator', [
+        'creatorApplication' => $creatorApplication,
+        'parameter' => 'stripe',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',

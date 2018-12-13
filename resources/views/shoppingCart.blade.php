@@ -33,6 +33,16 @@
 
   <script>var colorScheme = 'light';</script>
   <title>Talentail</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122657233-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-122657233-1');
+  </script>
 </head>
 
 <body>
@@ -106,7 +116,7 @@
 
             </div>
 
-            
+
 
             <!-- Dropdown -->
             <div class="dropdown">
@@ -126,6 +136,9 @@
                 <a href="/profile" class="dropdown-item">Profile</a>
                 <a href="/settings" class="dropdown-item">Settings</a>
                 <a href="/work-experience" class="dropdown-item">Work Experience</a>
+                @if(Auth::user()->creator)
+                <a href="/ordered-projects" class="dropdown-item">Ordered Projects</a>
+                @endif
                 <a href="/invoices" class="dropdown-item">Invoices</a>
                 <a href="/referrals" class="dropdown-item">Referrals</a>
                 
@@ -151,6 +164,11 @@
               @endif
             @endif
                 
+                @endif
+
+                @if(Auth::user()->creator)
+                <hr class="dropdown-divider">
+                  <a href="/creator-application" class="dropdown-item">Check Creator Application</a>
                 @endif
 
                 @if(Auth::user()->admin)
@@ -282,6 +300,11 @@
               <a href="/" style="color: white !important; text-decoration: underline;"><h4 class="alert-heading" style="margin-bottom: 0;">View the project(s)</h4></a>
             </div>
             @endif
+            @if(session('error'))
+            <div class="alert alert-danger" role="alert" id="dangerAlert">
+              <h4 class="alert-heading" style="margin-bottom: 0;">There may have been an error. If it persists, contact support and we will be happy to help.</h4>
+            </div>
+            @endif
 
 
             <div class="header-body">
@@ -348,7 +371,7 @@
                   </li>
               </ol>
           </div>
-          <form action="/process-payment" method="POST">
+          <!-- <form action="/process-payment" method="POST">
               @csrf
               <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                   data-key="pk_test_VHw0hMNwVFyRKIczzvPpISet"
@@ -368,7 +391,87 @@
               </script>
               <input type="hidden" id="projectsArray" name="projectsArray" value="{{$projectsArray}}"/>
               <button type="submit" class="btn btn-primary" style="margin-bottom: 0.5rem;" onclick="click()">Purchase with Card</button>
-          </form>
+          </form> -->
+          <div id="paypal-button-container"></div>
+          <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+          <script>
+            // Render the PayPal button
+            paypal.Button.render({
+            // Set your environment
+            env: 'sandbox', // sandbox | production
+
+            // Specify the style of the button
+            style: {
+              layout: 'vertical',  // horizontal | vertical
+              size:   'medium',    // medium | large | responsive
+              shape:  'rect',      // pill | rect
+              color:  'gold'       // gold | blue | silver | white | black
+            },
+
+            // Specify allowed and disallowed funding sources
+            //
+            // Options:
+            // - paypal.FUNDING.CARD
+            // - paypal.FUNDING.CREDIT
+            // - paypal.FUNDING.ELV
+            funding: {
+              allowed: [
+                paypal.FUNDING.CARD,
+                paypal.FUNDING.CREDIT
+              ],
+              disallowed: []
+            },
+
+            // Enable Pay Now checkout flow (optional)
+            commit: true,
+
+            // PayPal Client IDs - replace with your own
+            // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+            client: {
+              sandbox: 'ASIeP0scICh8StFhNOnQdkfBccc0GDbwpwrsV8D2ZtFyfuHYh1yjy4DaouDT7pTt_EYTHDiEKdcg0L66',
+              production: '<insert production client id>'
+            },
+
+            payment: function (data, actions) {
+              return actions.payment.create({
+                payment: {
+                  transactions: [
+                    {
+                      amount: {
+                        total: '85',
+                        currency: 'USD'
+                      },
+                      description: 'You are purchasing project(s): blah blah blah.',
+                      payment_options: {
+                        allowed_payment_method: 'INSTANT_FUNDING_SOURCE'
+                      },
+                      item_list: {
+                        items: [
+                          {
+                            name: 'Digital Transformation Project for a Food & Beverages Co - Puffy Puff Pte. Ltd.',
+                            description: 'Project by Shazwi Suwandi',
+                            quantity: '1',
+                            price: '85',
+                            tax: '0',
+                            sku: '1',
+                            currency: 'USD'
+                          }
+                        ],
+                      }
+                    }
+                  ],
+                }
+              });
+            },
+
+            onAuthorize: function (data, actions) {
+              return actions.payment.execute()
+                .then(function () {
+                  window.alert('Payment Complete!');
+                });
+            }
+            }, '#paypal-button-container');
+          </script>
         </div>
         @endif
 

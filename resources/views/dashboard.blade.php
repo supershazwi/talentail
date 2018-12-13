@@ -36,7 +36,7 @@
 				        <tr>
 				          <th scope="col">#</th>
 				          <th scope="col">Project</th>
-				          <th scope="col">Credits Earned</th>
+				          <th scope="col">Profits Earned</th>
 				          <th scope="col">User</th>
 				          <th scope="col">Status</th>
 				        </tr>
@@ -46,9 +46,17 @@
 				          <tr>
 				            <th scope="row">{{$key+1}}</th>
 				            <td><a href="/roles/{{$creatorProject->project->role->slug}}/projects/{{$creatorProject->project->slug}}/{{$creatorProject->user_id}}">{{$creatorProject->project->title}}</a></td>
-				            <td>{{$creatorProject->project->amount}} * 0.8 = <strong style="text-decoration: underline;">{{number_format((0.8*$creatorProject->project->amount), 2, '.', '')}}</strong></td>
+				            <td>${{$creatorProject->project->amount}} * 0.8 = <strong style="text-decoration: underline;">${{number_format((0.8*$creatorProject->project->amount), 2, '.', '')}}</strong></td>
 				            <td>{{$creatorProject->user->name}}</td>
+				            @if($creatorProject->status == "Attempting")
+				            <td><span class="badge badge-light">{{$creatorProject->status}}</span></td>
+				            @elseif($creatorProject->status == "Completed")
+				            <td><span class="badge badge-info">{{$creatorProject->status}}</span></td>
+				            @elseif($creatorProject->status == "Assessed")
 				            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
+				            @elseif($creatorProject->status == "Reviewed")
+				            <td><span class="badge badge-success">{{$creatorProject->status}}</span></td>
+				            @endif
 				          </tr>
 				          @endforeach
 				      </tbody>
@@ -351,10 +359,7 @@
 				  </div>
 				  <div class="col ml--2">
 
-				    <!-- Title -->
-				    <a href="project-overview.html"><h4 class="card-title mb-1">
-				      Homepage Redesign
-				    </h4></a>
+				    <a href="/roles/{{$submittedProject->project->role->slug}}/projects/{{$submittedProject->project->slug}}"><h4 class="card-title mb-1">{{$submittedProject->project->title}}</h4></a>
 
 				  </div>
 				</div> <!-- / .row -->

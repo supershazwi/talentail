@@ -491,6 +491,9 @@ class ProjectsController extends Controller
 
             $clickedUserId = $project->user_id;
 
+            // check whether user has submitted answers
+            $projectHasBeenCompleted = AttemptedProject::where('user_id', $clickedUserId)->where('project_id', $project->id)->where('status', 'Completed')->first();
+
             $subscribeString;
 
             if($loggedInUserId < $clickedUserId) {
@@ -505,60 +508,76 @@ class ProjectsController extends Controller
 
             $messages3 = $messages3->sortBy('created_at');
 
-            $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
-
-            $answeredTasksArray = $answeredTasks->toArray();
-
             $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
 
-            $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
+            if($projectHasBeenCompleted) {
 
-            foreach($answeredTasksArray as $key=>$answeredTask) {
-                $answeredTasksArray[$key] = $answeredTask['id'];
-            }
+                $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->orderBy('task_id', 'asc')->get();
 
-            $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+                $answeredTasksArray = $answeredTasks->toArray();
 
-            $competencyAndTaskMessages = array();
+                $competencyScores = CompetencyScore::where('role_gained_id', $role->id)->where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->get();
 
-            $tasksReviewed = false;
-            $competenciesReviewed = false;
+                foreach($answeredTasksArray as $key=>$answeredTask) {
+                    $answeredTasksArray[$key] = $answeredTask['id'];
+                }
 
-            if(!$competencyAndTaskReview->competencies_reviewed) {
-                array_push($competencyAndTaskMessages, 'Competencies');
+                $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+
+                $competencyAndTaskMessages = array();
+
+                $tasksReviewed = false;
+                $competenciesReviewed = false;
+
+                if(!$competencyAndTaskReview->competencies_reviewed) {
+                    array_push($competencyAndTaskMessages, 'Competencies');
+                } else {
+                    $competenciesReviewed = true;
+                }
+
+                if(!$competencyAndTaskReview->tasks_reviewed) {
+                    array_push($competencyAndTaskMessages, 'Tasks');
+                } else {
+                    $tasksReviewed = true;
+                }
+
+                $reviewLeftByCreator = Review::where('project_id', $project->id)->where('sender_id', $project->user_id)->first();
+
+                return view('projects.review', [
+                    
+                    'project' => $project,
+                    'role' => $role,
+                    'reviewLeftByCreator' => $reviewLeftByCreator,
+                    'competenciesReviewed' => $competenciesReviewed,
+                    'tasksReviewed' => $tasksReviewed,
+                    'competencyAndTaskMessages' => $competencyAndTaskMessages,
+                    'messages' => $messages3,
+                    'parameter' => 'overview',
+                    'attemptedProject' => $attemptedProject,
+                    'answeredTasks' => $answeredTasks,
+                    'answeredTasksArray' => $answeredTasksArray,
+                    'competencyScores' => $competencyScores,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'reviewedUserId' => $routeParameters['userId'],
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]);
             } else {
-                $competenciesReviewed = true;
+                return view('projects.inProgress', [
+                    'project' => $project,
+                    'attemptedProject' => $attemptedProject,
+                    'role' => $role,
+                    'parameter' => 'overview',
+                    'messages' => $messages3,
+                    'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
+                    'clickedUserId' => $clickedUserId,
+                    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+                    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+                ]); 
             }
-
-            if(!$competencyAndTaskReview->tasks_reviewed) {
-                array_push($competencyAndTaskMessages, 'Tasks');
-            } else {
-                $tasksReviewed = true;
-            }
-
-            $reviewLeftByCreator = Review::where('project_id', $project->id)->where('sender_id', $project->user_id)->first();
-
-            return view('projects.review', [
-                
-                'project' => $project,
-                'role' => $role,
-                'reviewLeftByCreator' => $reviewLeftByCreator,
-                'competenciesReviewed' => $competenciesReviewed,
-                'tasksReviewed' => $tasksReviewed,
-                'competencyAndTaskMessages' => $competencyAndTaskMessages,
-                'messages' => $messages3,
-                'parameter' => 'overview',
-                'attemptedProject' => $attemptedProject,
-                'answeredTasks' => $answeredTasks,
-                'answeredTasksArray' => $answeredTasksArray,
-                'competencyScores' => $competencyScores,
-                'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
-                'clickedUserId' => $clickedUserId,
-                'reviewedUserId' => $routeParameters['userId'],
-                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-            ]);
         }
     }
 
@@ -634,6 +653,14 @@ class ProjectsController extends Controller
         ];
 
         $this->pusher->trigger('notifications_' . $attemptedProject->project->user_id, 'new-notification', $message);
+
+        $competencyAndTaskReview = new CompetencyAndTaskReview;
+
+        $competencyAndTaskReview->attempted_project_id = $attemptedProject->id;
+        $competencyAndTaskReview->tasks_reviewed = 0;
+        $competencyAndTaskReview->competencies_reviewed = 0;
+
+        $competencyAndTaskReview->save();
 
         return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug'));
     }
