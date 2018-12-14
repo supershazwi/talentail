@@ -1,57 +1,29 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Braintree-Demo</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+@extends ('layouts.main')
 
-  <script src="https://js.braintreegateway.com/web/dropin/1.8.1/js/dropin.min.js"></script>
+@section ('content')
+<div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <?php if(!empty($response['code'])) { ?>
+                <div class="alert alert-<?php echo $response['code']; ?>">
+                    <?php echo $response['message']; ?>
+                </div>
+                <?php } ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Laravel PayPal Demo</div>
+                    <div class="panel-body">
+                        <ul>
+                            <li><a href="{{url('paypal/ec-checkout')}}">Express Checkout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 
-  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-</head>
-<body>
-  <div class="container">
-     <div class="row">
-       <div class="col-md-8 col-md-offset-2">
-         <div id="dropin-container"></div>
-         <button id="submit-button">Make Payment</button>
-       </div>
-     </div>
-  </div>
-  <script type="text/javascript">
-    $.ajaxSetup({
+@section ('footer')
+    
+    
 
-        headers: {
-
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
-        }
-
-    });
-
-    var button = document.querySelector('#submit-button');
-
-    braintree.dropin.create({
-      authorization: "{{ Braintree_ClientToken::generate() }}",
-      container: '#dropin-container'
-    }, function (createErr, instance) {
-      button.addEventListener('click', function () {
-        instance.requestPaymentMethod(function (err, payload) {
-
-          $.get('{{ route('payment.process') }}', {payload}, function (response) {
-            if (response.success) {
-              alert('Payment successfull!');
-            } else {
-              alert('Payment failed');
-            }
-          }, 'json');
-
-        });
-      });
-    });
-  </script>
-</body>
-</html>
+@endsection

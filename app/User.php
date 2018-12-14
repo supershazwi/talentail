@@ -105,6 +105,10 @@ class User extends Authenticatable
         return $this->hasMany(Review::class, 'receiver_id');
     }
 
+    public function invoices() {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function sent_reviews() {
         return $this->hasMany(Review::class, 'sender_id');
     }

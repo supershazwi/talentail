@@ -18,7 +18,7 @@
 
               <!-- Title -->
               <h1 class="header-title">
-                Invoice {{$invoice->id}}
+                Shopping Cart {{$shoppingCart->id}}
               </h1>
 
             </div>
@@ -33,7 +33,7 @@
 
             <!-- Badge -->
             <div class="badge badge-primary">
-              {{$invoice->status}}
+              {{$shoppingCart->status}}
             </div>
 
           </div>
@@ -57,45 +57,25 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach($invoice->invoice_line_items as $lineItem)
-                    @if($lineItem->project_id)
+                  @foreach($shoppingCart->shopping_cart_line_items as $shoppingCartLineItem)
+                    @if($shoppingCartLineItem->project_id)
                     <tr>
                       <td class="px-0">
-                        <a href="/roles/{{$lineItem->project->role->slug}}/projects/{{$lineItem->project->slug}}">{{$lineItem->project->title}}</a>
+                        <a href="/roles/{{$shoppingCartLineItem->project->role->slug}}/projects/{{$shoppingCartLineItem->project->slug}}">{{$shoppingCartLineItem->project->title}}</a>
                       </td>
                       <td class="px-0 text-right">
-                        ${{$lineItem->project->amount}}
+                        ${{$shoppingCartLineItem->project->amount}}
                       </td>
                     </tr>
                     @endif
                   @endforeach
                   <tr>
                     <td style="border-top: 0px;" class="px-0">
-                     <p style="margin-bottom: 0;">Total amount paid by customer</p>
-                    </td>
-                    <td colspan="2" class="px-0 text-right" style="border-top: 0px;">
-                      <p style="margin-bottom: 0;">
-                        ${{$invoice->total}}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="border-top: 0px;" class="px-0">
-                     
-                    </td>
-                    <td colspan="2" class="px-0 text-right" style="border-top: 0px;">
-                      <p style="margin-bottom: 0;">
-                        x 80%
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="border-top: 0px;" class="px-0">
-                     <strong>Total amount to be received by you</strong>
+                     <strong>Total amount paid</strong>
                     </td>
                     <td colspan="2" class="px-0 text-right" style="border-top: 0px;">
                       <span class="h3">
-                        ${{number_format($invoice->total * 0.8, 2)}}
+                        ${{$shoppingCart->total}}
                       </span>
                     </td>
                   </tr>
@@ -112,7 +92,7 @@
 
             <!-- Text -->
             <p class="text-muted mb-0">
-              We perform payouts everyday. Lookout for your payment and if it takes more than 1 day, please don't hestitate to contact us.
+              Thank you for taking a shot at the projects on Talentail. We are here to help you get to your destination quicker without compromising on quality. We would be glad to help you at every step of this journey.
             </p>
 
           </div>

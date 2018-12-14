@@ -29,6 +29,7 @@ use App\Company;
 use App\Notification;
 use App\Role;
 use App\Project;
+use App\Invoice;
 use App\Review;
 use App\RoleGained;
 use App\ShoppingCart;
@@ -48,6 +49,9 @@ use Pusher\Laravel\Facades\Pusher;
 use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
+
+Route::get('/checkout/{shoppingCartId}', 'PayPalController@getExpressCheckout');
+Route::get('/checkout/{shoppingCartId}/success', 'PayPalController@getExpressCheckoutSuccess');
 
 Route::post('/connect-paypal', function(Request $request) {
     $user = User::find(Auth::id());
@@ -547,7 +551,7 @@ Route::post('/shopping-cart/remove-line-item', function(Request $request) {
 Route::get('/invoices/{invoiceId}', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();
 
-    $invoice = ShoppingCart::find($routeParameters['invoiceId']);
+    $invoice = Invoice::find($routeParameters['invoiceId']);
 
     return view('invoices.show', [
         'invoice' => $invoice,
@@ -555,11 +559,13 @@ Route::get('/invoices/{invoiceId}', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending'
     ]);
-});
+})->middleware('auth');
 
 
 Route::get('/invoices', function() {
-    $invoices = ShoppingCart::where('user_id', Auth::id())->where('status', 'paid')->orderBy('created_at', 'desc')->get();
+    // $invoices = ShoppingCart::where('user_id', Auth::id())->where('status', 'paid')->orderBy('created_at', 'desc')->get();
+
+    $invoices = Invoice::where('user_id', Auth::id())->get();
 
     return view('invoices.index', [
         
@@ -568,7 +574,31 @@ Route::get('/invoices', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending'
     ]);
-});
+})->middleware('auth');
+
+Route::get('/shopping-cart/history', function() {
+    $shoppingCarts = ShoppingCart::where('user_id', Auth::id())->where('status', 'Paid')->get();
+
+    return view('shoppingCartHistory', [
+        'shoppingCarts' => $shoppingCarts,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+})->middleware('auth');
+
+Route::get('/shopping-cart/{shoppingCartId}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $shoppingCart = ShoppingCart::find($routeParameters['shoppingCartId']);
+
+    return view('shoppingCartShow', [
+        'shoppingCart' => $shoppingCart,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+})->middleware('auth');
 
 Route::get('/shopping-cart', function() {
     $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
@@ -590,7 +620,7 @@ Route::get('/shopping-cart', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-})->middleware('auth');;
+})->middleware('auth');
 
 Route::post('/process-payment', function(Request $request) {
     \Stripe\Stripe::setApiKey("sk_test_M3fWET2nMbe5RHdA65AqhlE5");
@@ -689,7 +719,7 @@ Route::post('/process-payment', function(Request $request) {
 
     $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
 
-    $shoppingCart->status = "paid";
+    $shoppingCart->status = "Paid";
 
     $shoppingCart->save();
 

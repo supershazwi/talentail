@@ -14,7 +14,7 @@
                 </h6>
                 <!-- Title -->
                 <h1 class="header-title">
-                  Ordered Projects
+                  Projects Purchased by Customers
                 </h1>
 
               </div>
@@ -27,7 +27,7 @@
                 <div class="row justify-content-center" style="margin-top:1rem;">
                   <div class="col-12 col-md-5 col-xl-4 my-5">
                     <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
-                    <h2 class="text-center mb-3" style="margin-bottom: 2.25rem !important;"> This section is currently empty. Don't worry! We are working on it.
+                    <h2 class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Once customers purchase your projects, the records will appear here.
                     </h2>
                   </div>
                 </div>

@@ -82,11 +82,11 @@
             <li class="nav-item">
                 @if(Auth::id() == $user->id)
                 <a href="/profile/projects" class="nav-link">
-                Projects
+                Created Projects
                 </a>
                 @else
                 <a href="/profile/{{$user->id}}/projects" class="nav-link">
-                Projects
+                Created Projects
                 </a>
                 @endif
             </li>

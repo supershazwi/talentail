@@ -23,6 +23,10 @@ class Project extends Model
         return $this->hasMany(ShoppingCartLineItem::class);
     }
 
+    public function invoice_line_items() {
+        return $this->hasMany(InvoiceLineItem::class);
+    }
+
     public function messages() {
         return $this->hasMany(Message::class);
     }

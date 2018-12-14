@@ -27,7 +27,7 @@
                 <div class="row justify-content-center" style="margin-top:1rem;">
                   <div class="col-12 col-md-5 col-xl-4 my-5">
                     <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
-                    <h2 class="text-center mb-3" style="margin-bottom: 2.25rem !important;"> You have not purchased any projects.
+                    <h2 class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Once customers purchase your projects, your invoices will appear here.
                     </h2>
                   </div>
                 </div>
@@ -40,7 +40,8 @@
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Invoice</th>
-                      <th scope="col">Value</th>
+                      <th scope="col">Total Value</th>
+                      <th scope="col">Payout</th>
                       <th scope="col">Date</th>
                       <th scope="col">Status</th>
                     </tr>
@@ -51,6 +52,7 @@
                         <th scope="row">{{$key+1}}</th>
                         <td><a href="/invoices/{{$invoice->id}}">{{$invoice->id}}</a></td>
                         <td>${{$invoice->total}}</td>
+                        <td>${{number_format($invoice->total * 0.8, 2)}}</td>
                         <td>{{$invoice->created_at}}</td>
                         <td><span class="badge badge-primary">{{$invoice->status}}</span></td>
                       </tr>

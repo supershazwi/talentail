@@ -331,12 +331,12 @@
                   <!-- Nav -->
                   <ul class="nav nav-tabs nav-overflow header-tabs">
                     <li class="nav-item">
-                      <a href="/shopping-cart" class="nav-link active">
+                      <a href="/shopping-cart" class="nav-link">
                         Current
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="/shopping-cart/history" class="nav-link">
+                      <a href="/shopping-cart/history" class="nav-link active">
                         History
                       </a>
                     </li>
@@ -354,66 +354,42 @@
         </div>
       </div> <!-- / .row -->
       <div class="row justify-content-center">
-        @if(!empty($shoppingCart) && $shoppingCart->no_of_items != 0)
         <div class="col-12 col-lg-10 col-xl-8">
-          <div class="card">
-              <ol class="list-group list-group-activity filter-list-1541347497074"><li class="list-group-item" style="padding: 1.0rem 1.25rem;">
-                      <div class="media align-items-center">
-                          <div class="media-body">
-                              @foreach($shoppingCart->shopping_cart_line_items as $shoppingCartLineItem)
-                              @if($shoppingCartLineItem->project_id)
-                              <div class="row">
-                                  <div class="col-lg-9">
-                                      <a href="/roles/{{$shoppingCartLineItem->project->role->slug}}/projects/{{$shoppingCartLineItem->project->slug}}">{{$shoppingCartLineItem->project->title}}</a>
-                                      <p class="text-small SPAN-filter-by-text" data-filter-by="text" style="margin-bottom: 0;">{{$shoppingCartLineItem->project->user->name}}</p>
-                                  </div>
-                                  <div class="col-lg-1">
-                                      <a href="#" style="float: right;" onclick="removeLineItem(this.id)" id="{{$shoppingCartLineItem->id}}">Remove</a>
-                                  </div>
-                                  <div class="col-lg-2">
-                                      <p style="float: right; color: #16a085 !important;">${{$shoppingCartLineItem->project->amount}}</p>
-                                  </div>
-                              </div>
-                              @endif
-                              @if(!$loop->last)
-                                  <hr style="margin-top: 1rem; margin-bottom: 1rem;" />
-                              @endif
-                              @endforeach
-                              <hr style="margin-top: 1rem; margin-bottom: 1rem;" />
-                              <div class="row">
-                                  <div class="col-lg-9">
-                                      <a href="#" style="float: right;" onclick="emptyCart()">Empty Cart</a>
-                                  </div>
-                                  <!-- <div class="col-lg-2">
-                                      <p style="float: right;"><strong>Total</strong></p>
-                                      <h5 style="float: right; color: #16a085;">$198.00</h5>
-
-
-                                  </div> -->
-                                  <div class="col-lg-1">
-                                      <p style="float: right;">Total</p>
-                                  </div>
-                                  <div class="col-lg-2">
-                                      <p style="float: right; color: #16a085 !important;">${{$shoppingCart->total}}</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </li>
-              </ol>
-          </div>
-          <a href="/checkout/{{$shoppingCart->id}}" class="btn btn-primary" id="paypalLink">Express Checkout with <img src="/img/paypal.png" style="width: 5rem;" onclick="load()"></a>
+        @if(!empty($shoppingCarts))
+        <div class="card">
+            <table class="table table-nowrap" style="margin-bottom: 0;">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Shopping Cart</th>
+                  <th scope="col">Total Value</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($shoppingCarts as $key=>$shoppingCart)
+                  <tr>
+                    <th scope="row">{{$key+1}}</th>
+                    <td><a href="/shopping-cart/{{$shoppingCart->id}}">{{$shoppingCart->id}}</a></td>
+                    <td>${{$shoppingCart->total}}</td>
+                    <td>{{$shoppingCart->created_at}}</td>
+                    <td><span class="badge badge-primary">{{$shoppingCart->status}}</span></td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
         </div>
         @endif
 
-        @if(empty($shoppingCart)) 
+        @if(empty($shoppingCarts)) 
         <div class="col-12 col-lg-10 col-xl-8">
           <div class="card">
             <div class="card-body">
               <div class="row justify-content-center" style="margin-top:1rem;">
                 <div class="col-12 col-md-5 col-xl-4 my-5">
                   <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">🛒</p>
-                  <h2 class="text-center mb-3" style="margin-bottom: 2.25rem !important;"> Shopping cart currently empty.
+                  <h2 class="text-center mb-3" style="margin-bottom: 2.25rem !important;"> No history records at the moment.
                   </h2>
                 </div>
               </div>
@@ -421,7 +397,7 @@
           </div>
         </div>
         @endif
-
+      </div>
       </div>
     </div>
     <div class="container">

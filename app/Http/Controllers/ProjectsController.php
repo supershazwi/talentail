@@ -1732,7 +1732,7 @@ class ProjectsController extends Controller
 
         $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
 
-        $shoppingCart->status = "paid";
+        $shoppingCart->status = "Paid";
 
         $shoppingCart->save();
     }
@@ -1755,7 +1755,7 @@ class ProjectsController extends Controller
 
             // create invoice and change shopping cart to done
             $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
-            $shoppingCart->status = "paid";
+            $shoppingCart->status = "Paid";
 
             $shoppingCart->save();
 

@@ -138,9 +138,9 @@
                 <a href="/settings" class="dropdown-item">Settings</a>
                 <a href="/work-experience" class="dropdown-item">Work Experience</a>
                 @if(Auth::user()->creator)
-                <a href="/ordered-projects" class="dropdown-item">Ordered Projects</a>
-                @endif
+                <a href="/ordered-projects" class="dropdown-item">Projects Purchased by Customers</a>
                 <a href="/invoices" class="dropdown-item">Invoices</a>
+                @endif
                 <a href="/referrals" class="dropdown-item">Referrals</a>
                 
                 <!-- <a href="/lessons-overview" class="dropdown-item">Lessons</a> -->
