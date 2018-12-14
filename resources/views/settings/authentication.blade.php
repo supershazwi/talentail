@@ -104,7 +104,7 @@
 
               <!-- Input -->
               @if($errors->has('password-current') && strlen($errors->first('password-current')) > 0)
-              <input type="password" placeholder="Enter your current password" name="password-current" class="form-control is-invalid" />
+            <input type="password" placeholder="Enter your current password" name="password-current" class="form-control is-invalid" />
               <div class="invalid-feedback">
                 {{$errors->first('password-current')}}
               </div>

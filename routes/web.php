@@ -1294,9 +1294,9 @@ Route::post('/profile/save', function(Request $request) {
         if (Input::has('linkedin')) { $user->linkedin = Input::get('linkedin'); }
         if (Input::has('twitter')) { $user->twitter = Input::get('twitter'); }
         if (Input::has('description')) { $user->description = Input::get('description'); }
-        if (Input::has('avatar-file')) {
-            // $user->avatar = $request->file('avatar-file')->store('/assets', 'gcs');
-            $user->avatar = Storage::disk('gcs')->put('/avatars', $request->file('avatar-file'), 'public');
+
+        if(Input::has('avatar')) {
+            $user->avatar = Storage::disk('gcs')->put('/avatars', $request->file('avatar'), 'public');
         }
 
         $user->save();
