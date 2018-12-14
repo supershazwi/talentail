@@ -252,36 +252,6 @@
       </div>
     </div>  
 
-    @if(!empty($shoppingCart))
-    <form method="POST" action="/shopping-cart/remove-line-item" id="removeLineItem">
-    @csrf
-    <input type="hidden" name="shopping_cart_id" value="{{$shoppingCart->id}}" />
-    <input type="hidden" name="shopping_cart_line_item_id" id="shopping_cart_line_item_id" value="" />
-    <button type="submit" style="display: none;" id="removeLineItemButton">Submit</button>
-    </form>
-
-    <form method="POST" action="/shopping-cart/empty-cart" id="emptyCart">
-    @csrf
-    <input type="hidden" name="shopping_cart_id" value="{{$shoppingCart->id}}" />
-    <button type="submit" style="display: none;" id="emptyCartButton">Submit</button>
-    </form>
-    @endif
-
-    @if(!empty($dollarShoppingCart))
-    <form method="POST" action="/shopping-cart/remove-line-item" id="removeLineItem">
-    @csrf
-    <input type="hidden" name="shopping_cart_id" value="{{$dollarShoppingCart->id}}" />
-    <input type="hidden" name="shopping_cart_line_item_id" id="shopping_cart_line_item_id" value="" />
-    <button type="submit" style="display: none;" id="removeLineItemButton">Submit</button>
-    </form>
-
-    <form method="POST" action="/shopping-cart/empty-cart" id="emptyCart">
-    @csrf
-    <input type="hidden" name="shopping_cart_id" value="{{$dollarShoppingCart->id}}" />
-    <button type="submit" style="display: none;" id="emptyCartButton">Submit</button>
-    </form>
-    @endif
-
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-10 col-xl-8">
@@ -355,7 +325,7 @@
       </div> <!-- / .row -->
       <div class="row justify-content-center">
         <div class="col-12 col-lg-10 col-xl-8">
-        @if(!empty($shoppingCarts))
+        @if(!empty($shoppingCarts) && sizeof($shoppingCarts) > 0)
         <div class="card">
             <table class="table table-nowrap" style="margin-bottom: 0;">
               <thead>
@@ -379,6 +349,18 @@
                 @endforeach
               </tbody>
             </table>
+        </div>
+        @else
+        <div class="card">
+          <div class="card-body">
+            <div class="row justify-content-center" style="margin-top:1rem;">
+              <div class="col-12 col-md-5 col-xl-4 my-5">
+                <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">🛒</p>
+                <h2 class="text-center mb-3" style="margin-bottom: 2.25rem !important;"> Shopping cart history currently empty.
+                </h2>
+              </div>
+            </div>
+          </div>
         </div>
         @endif
 
