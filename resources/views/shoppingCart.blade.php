@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+  <meta name="description" content="A platform for career newcomers or switchers to gain the necessary work experience by attempting real world projects.">
 
   <!-- Libs CSS -->
   <!-- build:css /fonts/feather/feather.min.css -->
