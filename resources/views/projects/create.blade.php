@@ -50,6 +50,18 @@
           </div>
 
           <div class="form-group">
+              <label class="mb-1">
+                Select industry
+              </label>
+              <select class="form-control" data-toggle="select" name="industry">
+                <option value="Nil">Select industry</option>
+                @foreach($industries as $industry)
+                  <option value="{{$industry->id}}">{{$industry->title}}</option>
+                @endforeach
+              </select>
+            </div>
+
+          <div class="form-group">
             <label class="mb-1">
               Project full description & role brief
             </label>

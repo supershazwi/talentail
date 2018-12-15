@@ -18,6 +18,7 @@ use App\Task;
 use App\Answer;
 use App\ProjectFile;
 use App\Role;
+use App\Industry;
 use App\RoleGained;
 use App\ShoppingCart;
 use App\ShoppingCartLineItem;
@@ -1579,7 +1580,7 @@ class ProjectsController extends Controller
             $customCompetencies = Competency::where('role_id', $selectedRole->id)->where('user_id', Auth::id());
 
             return view('projects.create', [
-                
+                'industries' => Industry::all(),
                 'selectedRole' => $selectedRole,
                 'customCount' => $customCompetencies->count()+1,
                 'customCompetencies' => $customCompetencies->get(),
@@ -1829,6 +1830,7 @@ class ProjectsController extends Controller
         $project->slug = str_slug($request->input('title'), '-');
         $project->role_id = session('selectedRole');
         $project->user_id = Auth::id();
+        $project->industry_id = $request->input('industry');
         $project->hours = $request->input('hours');
         $project->amount = $request->input('price');
         $project->published = true;
@@ -1928,6 +1930,7 @@ class ProjectsController extends Controller
         $project->user_id = Auth::id();
         $project->hours = $request->input('hours');
         $project->amount = $request->input('price');
+        $project->industry_id = $request->input('industry');
         $project->published = false;
 
         if($request->file('thumbnail')) {
@@ -2053,6 +2056,7 @@ class ProjectsController extends Controller
             $newProject->user_id = Auth::id();
             $newProject->hours = $request->input('hours');
             $newProject->amount = $request->input('price');
+            $newProject->industry_id = $request->input('industry');
             $newProject->published = false;
 
             $newProject->save();

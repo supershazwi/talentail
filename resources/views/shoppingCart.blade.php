@@ -402,7 +402,7 @@
                   </li>
               </ol>
           </div>
-          <a href="/checkout/{{$shoppingCart->id}}" class="btn btn-primary" id="paypalLink">Express Checkout with <img src="/img/paypal.png" style="width: 5rem;" onclick="load()"></a>
+          <!-- <a href="/checkout/{{$shoppingCart->id}}" class="btn btn-primary" id="paypalLink">Express Checkout with <img src="/img/paypal.png" style="width: 5rem;" onclick="load()"></a> -->
         </div>
         @endif
 

@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Industry extends Model
 {
     //
-    public function project() {
-    	return $this->belongsTo(Project::class);
+    public function projects() {
+    	return $this->hasMany(Project::class);
     }
 
     public function portfolios()

@@ -109,6 +109,7 @@
 		          @endif
 
 		          <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}"><h2 class="card-title mb-2 name"  style="margin-top: 0.75rem !important;">{{$project->title}}</h2></a>
+		          <span class="badge badge-warning">{{$project->industry->title}}</span>
 
 
 		          <!-- Subtitle -->

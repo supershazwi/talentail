@@ -70,18 +70,13 @@
 
           </div>
           <div class="col ml--3 ml-md--2">
-            
-            <!-- Pretitle -->
-            <h6 class="header-pretitle">
-              Projects
-            </h6>
-
             <!-- Title -->
             <h1 class="header-title">
               {{$project->title}}
             </h1>
 
-            <p>{{$project->description}}</p>
+            <p style="margin-bottom: 0.5rem;">{{$project->description}}</p>
+            <span class="badge badge-warning">{{$project->industry->title}}</span>
 
           </div>
         </div> <!-- / .row -->
