@@ -30,6 +30,10 @@ use App\CompetencyAndTaskReview;
 use App\Notification;
 use App\ReviewedAnsweredTaskFile;
 
+use App\Mail\SendProjectSubmittedMail;
+use App\Mail\SendProjectReviewedMail;
+use Illuminate\Support\Facades\Mail;
+
 use Validator;
 
 class ProjectsController extends Controller
@@ -137,6 +141,8 @@ class ProjectsController extends Controller
             ];
 
             $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
+
+            Mail::to($attemptedProject->user->email)->send(new SendProjectReviewedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug));
         }
 
         return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
@@ -223,6 +229,8 @@ class ProjectsController extends Controller
             ];
 
             $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
+
+            Mail::to($attemptedProject->user->email)->send(new SendProjectReviewedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug));
         }
 
         return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
@@ -493,7 +501,7 @@ class ProjectsController extends Controller
             $clickedUserId = $project->user_id;
 
             // check whether user has submitted answers
-            $projectHasBeenCompleted = AttemptedProject::where('user_id', $clickedUserId)->where('project_id', $project->id)->where('status', 'Completed')->first();
+            $projectHasBeenCompleted = AttemptedProject::where('user_id', $routeParameters['userId'])->where('project_id', $project->id)->where('status', '!=', 'Attempting')->first();
 
             $subscribeString;
 
@@ -654,6 +662,8 @@ class ProjectsController extends Controller
         ];
 
         $this->pusher->trigger('notifications_' . $attemptedProject->project->user_id, 'new-notification', $message);
+
+        Mail::to($attemptedProject->project->user->email)->send(new SendProjectSubmittedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . Auth::id()));
 
         $competencyAndTaskReview = new CompetencyAndTaskReview;
 

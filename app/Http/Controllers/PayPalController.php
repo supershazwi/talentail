@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendProjectPurchasedMail;
 
 use App\ShoppingCartLineItem;
 
@@ -15,6 +17,7 @@ use App\IPNStatus;
 use App\Notification;
 use App\Message;
 use App\Invoice;
+use App\User;
 use App\InvoiceLineItem;
 use App\AttemptedProject;
 use App\ShoppingCart;
@@ -177,7 +180,7 @@ class PayPalController extends Controller
 
         $data['return_url'] = url('/checkout/'.$shoppingCart->id.'/success');
 
-        $data['invoice_id'] = config('paypal.invoice_prefix').'_'.$order_id;
+        $data['invoice_id'] = $order_id;
         $data['invoice_description'] = "Order #$order_id Invoice. You have purchased a total of " . sizeof($shoppingCart->shopping_cart_line_items) . " project(s).";
         $data['cancel_url'] = url('/shopping-cart');
 
@@ -226,6 +229,7 @@ class PayPalController extends Controller
         }
 
         $creatorIdAndInvoiceId;
+        $creatorProjectsToEmail;
 
         foreach($creatorIds as $creatorId) {
             $invoice = new Invoice;
@@ -238,7 +242,10 @@ class PayPalController extends Controller
             $invoice->save();
 
             $creatorIdAndInvoiceId[$creatorId] = $invoice->id;
+            $creatorProjectsToEmail[$creatorId] = array();
         }
+
+        
 
         foreach($shoppingCart->shopping_cart_line_items as $shoppingCartLineItem) {
             $attemptedProject = new AttemptedProject;
@@ -253,12 +260,19 @@ class PayPalController extends Controller
 
             $attemptedProject->save();
 
+            array_push($creatorProjectsToEmail[$attemptedProject->creator_id], $attemptedProject->project->title);
+
             $invoiceLineItem = new InvoiceLineItem;
 
             $invoiceLineItem->project_id = $attemptedProject->project_id;
             $invoiceLineItem->invoice_id = $creatorIdAndInvoiceId[$attemptedProject->project->user_id];
 
             $invoiceLineItem->save();
+        }
+
+        foreach($creatorIds as $creatorId) {
+            $userToEmail = User::find($creatorId);
+            Mail::to($userToEmail->email)->send(new SendProjectPurchasedMail($userToEmail, $creatorProjectsToEmail[$creatorId]));
         }
     }
 }

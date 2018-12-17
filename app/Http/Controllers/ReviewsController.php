@@ -26,6 +26,9 @@ use App\Notification;
 use App\ShoppingCart;
 use App\ReviewedAnsweredTaskFile;
 
+use App\Mail\SendProfileReviewedMail;
+use Illuminate\Support\Facades\Mail;
+
 use Validator;
 
 use Illuminate\Support\Facades\Storage;
@@ -127,6 +130,10 @@ class ReviewsController extends Controller
             $notification->url = "/profile/reviews";
 
             $notification->save();
+
+            $userToEmail = User::find($review->receiver_id);
+
+            Mail::to($userToEmail->email)->send(new SendProfileReviewedMail(Auth::user()->name, $userToEmail->name, 'https://talentail.com/profile/reviews'));
 
             if(array_key_exists('userId', $routeParameters)) {
                 $attemptedProject = AttemptedProject::where('user_id', $routeParameters['userId'])->where('project_id', $project->id)->first();
