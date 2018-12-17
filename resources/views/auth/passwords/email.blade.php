@@ -33,6 +33,18 @@
             <h4 class="alert-heading" style="margin-bottom: 0;">{{session('status')}}</h4>
           </div>
           @endif
+
+          @if (session('sent'))
+          <div class="alert alert-primary" role="alert">
+            <h4 class="alert-heading" style="margin-bottom: 0;">{{session('sent')}}</h4>
+          </div>
+          @endif
+
+          @if (session('error'))
+          <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading" style="margin-bottom: 0;">{{session('error')}}</h4>
+          </div>
+          @endif
           <!-- Subheading -->
           <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important;">
             😬
@@ -45,7 +57,7 @@
           
           
           <!-- Form -->
-          <form method="POST" action="{{ route('password.email') }}" aria-label="{{ __('Reset Password') }}">
+          <form method="POST" action="/password/send-email" aria-label="{{ __('Reset Password') }}">
             @csrf
 
             <!-- Email address -->

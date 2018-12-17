@@ -29,6 +29,13 @@ class UserRegistered extends Mailable
      */
     public function build()
     {
-        return $this->subject('Welcome onboard!')->view('emails.user-registered');
+        $this->view('emails.user-registered');
+
+        $this->subject('Welcome onboard.');
+
+        $this->withSwiftMessage(function ($message) {
+            $message->getHeaders()
+                    ->addTextHeader('x-mailgun-native-send', 'true');
+        });
     }
 }

@@ -10,7 +10,6 @@ use App\Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Srmklive\PayPal\Services\AdaptivePayments;
 use Srmklive\PayPal\Services\ExpressCheckout;
 use App\IPNStatus;
 use App\Notification;
@@ -71,7 +70,7 @@ class PayPalController extends Controller
 
             return redirect($response['paypal_link']);
         } catch (\Exception $e) {
-            $invoice = $this->updateShoppingCart($cart, 'Invalid');
+            // $invoice = $this->updateShoppingCart($cart, 'Invalid');
 
             session()->put(['code' => 'danger', 'message' => "Error processing PayPal payment for Order $invoice->id!"]);
         }
@@ -118,31 +117,6 @@ class PayPalController extends Controller
                 return redirect('/shopping-cart')->with('error', "Error processing PayPal payment for Order $shoppingCart->id!");
             }
         }
-    }
-
-    public function getAdaptivePay()
-    {
-        $this->provider = new AdaptivePayments();
-
-        $data = [
-            'receivers'  => [
-                [
-                    'email'   => 'johndoe@example.com',
-                    'amount'  => 10,
-                    'primary' => true,
-                ],
-                [
-                    'email'   => 'janedoe@example.com',
-                    'amount'  => 5,
-                    'primary' => false,
-                ],
-            ],
-            'payer'      => 'EACHRECEIVER', // (Optional) Describes who pays PayPal fees. Allowed values are: 'SENDER', 'PRIMARYRECEIVER', 'EACHRECEIVER' (Default), 'SECONDARYONLY'
-            'return_url' => url('payment/success'),
-            'cancel_url' => url('payment/cancel'),
-        ];
-
-        $response = $this->provider->createPayRequest($data);
     }
 
     /**
@@ -204,7 +178,7 @@ class PayPalController extends Controller
         $data['return_url'] = url('/checkout/'.$shoppingCart->id.'/success');
 
         $data['invoice_id'] = config('paypal.invoice_prefix').'_'.$order_id;
-        $data['invoice_description'] = "Order #$order_id Invoice";
+        $data['invoice_description'] = "Order #$order_id Invoice. You have purchased a total of " . sizeof($shoppingCart->shopping_cart_line_items) . " project(s).";
         $data['cancel_url'] = url('/shopping-cart');
 
         $total = 0;

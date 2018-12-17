@@ -43,12 +43,36 @@ use App\CreatorApplication;
 use App\CompanyApplication;
 use App\CreatorApplicationFile;
 use App\AttemptedProject;
+use App\Mail\SendResetPasswordLink;
 
 use Pusher\Laravel\Facades\Pusher;
+use Illuminate\Support\Facades\Password;
 
 use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
+
+Route::post('/password/send-email', function(Request $request) {
+    // find email
+
+    $emailArray['email'] = $request->input('email');
+
+    $token = Password::broker()->customToken($emailArray);
+
+    $user = User::where('email', $request->input('email'))->first();
+
+    if(!$user) {
+        return redirect('/password/reset')->with('error', 'User not found.');
+    }
+
+    $url = url(config('app.url').route('password.reset', $token, false));
+
+    Mail::to($request->input('email'))->send(new SendResetPasswordLink($user, $url));
+
+    return redirect('password/reset')->with('sent', 'We have e-mailed your password reset link!');
+
+    //https://talentail.com/password/reset/a464542384b9c1d164f2dc60471851abd01e1eb3776a6e0a0061b58ca5d524f0
+});
 
 Route::get('/checkout/{shoppingCartId}', 'PayPalController@getExpressCheckout');
 Route::get('/checkout/{shoppingCartId}/success', 'PayPalController@getExpressCheckoutSuccess');
@@ -1301,7 +1325,7 @@ Route::post('/profile/save', function(Request $request) {
 
         $user->save();
 
-        return redirect('/settings')->with('success', 'Password updated.');;
+        return redirect('/settings')->with('success', 'Password updated.');
     }
 })->middleware('auth');
 
