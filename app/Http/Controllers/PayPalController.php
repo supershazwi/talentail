@@ -66,6 +66,7 @@ class PayPalController extends Controller
         $cart = $this->getCheckoutData($recurring);
 
         try {
+            dd($this->provider);
             $response = $this->provider->setExpressCheckout($cart, $recurring);
 
             return redirect($response['paypal_link']);
