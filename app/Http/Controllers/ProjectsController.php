@@ -1566,7 +1566,7 @@ class ProjectsController extends Controller
         $customCompetencies = Competency::where('role_id', $role->id)->where('user_id', Auth::id());
 
         return view('projects.edit', [
-            
+            'industries' => Industry::all(),
             'project' => $project,
             'role' => $role,
             'customCount' => $customCompetencies->count()+1,
@@ -2177,6 +2177,7 @@ class ProjectsController extends Controller
             $project->title = $request->input('title');
             $project->description = $request->input('description');
             $project->brief = $request->input('brief');
+            $project->industry_id = $request->input('industry');
             $project->slug = str_slug($request->input('title'), '-');
             if(!Auth::user()->admin) {
                 $project->user_id = Auth::id();

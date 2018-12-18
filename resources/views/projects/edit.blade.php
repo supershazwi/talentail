@@ -50,6 +50,22 @@
             <p class="text-small" style="float: right; color: #8F9194 !important;" id="charactersLeft">{{280 - strlen($project->description)}} characters left</p>
           </div>
 
+           <div class="form-group">
+              <label class="mb-1">
+                Select industry
+              </label>
+              <select class="form-control" data-toggle="select" name="industry">
+                <option value="Nil">Select industry</option>
+                @foreach($industries as $industry)
+                  @if($project->industry_id == $industry->id)
+                  <option value="{{$industry->id}}" selected>{{$industry->title}}</option>
+                  @else
+                  <option value="{{$industry->id}}">{{$industry->title}}</option>
+                  @endif
+                @endforeach
+              </select>
+            </div>
+
           <div class="form-group">
             <label class="mb-1">
               Project full description & role brief
