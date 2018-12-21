@@ -18,7 +18,6 @@
               <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle border border-4 border-body">
               @endif
           </div>
-
         </div>
         <div class="col mb-3 ml--3 ml-md--2">
           
@@ -50,7 +49,6 @@
           @if($user->twitter)
           <a target="_blank" href="{{$user->twitter}}"><i class="fab fa-twitter-square"></i></a>
           @endif
-
         </div>
         @if($showMessage)
         <div class="col-12 col-md-auto mt-2 mt-md-0 mb-md-3" style="margin-bottom: 0rem !important;">

@@ -1179,6 +1179,25 @@ class ProjectsController extends Controller
                 $answeredTasksArray[$key] = $answeredTask['id'];
             }
 
+            $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+
+            $competencyAndTaskMessages = array();
+
+            $tasksReviewed = false;
+            $competenciesReviewed = false;
+
+            if(!$competencyAndTaskReview->competencies_reviewed) {
+                array_push($competencyAndTaskMessages, 'Competencies');
+            } else {
+                $competenciesReviewed = true;
+            }
+
+            if(!$competencyAndTaskReview->tasks_reviewed) {
+                array_push($competencyAndTaskMessages, 'Tasks');
+            } else {
+                $tasksReviewed = true;
+            }
+
             if($attemptedProject->status == "Completed") {
 
                 $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
@@ -1187,6 +1206,8 @@ class ProjectsController extends Controller
                     
                     'project' => $project,
                     'role' => $role,
+                    'tasksReviewed' => $tasksReviewed,
+                    'competenciesReviewed' => $competenciesReviewed,
                     'parameter' => 'competency',
                     'messages' => $messages3,
                     'answeredTasks' => $answeredTasks,
@@ -1209,6 +1230,8 @@ class ProjectsController extends Controller
                         'project' => $project,
                         'role' => $role,
                         'parameter' => 'competency',
+                        'tasksReviewed' => $tasksReviewed,
+                        'competenciesReviewed' => $competenciesReviewed,
                         'reviewLeftByApplicant' => $reviewLeftByApplicant,
                         'messages' => $messages3,
                         'attemptedProject' => $attemptedProject,
@@ -1254,6 +1277,8 @@ class ProjectsController extends Controller
                         'project' => $project,
                         'role' => $role,
                         'parameter' => 'competency',
+                        'tasksReviewed' => $tasksReviewed,
+                        'competenciesReviewed' => $competenciesReviewed,
                         'reviewLeftByApplicant' => $reviewLeftByApplicant,
                         'messages' => $messages3,
                         'attemptedProject' => $attemptedProject,
@@ -1292,6 +1317,8 @@ class ProjectsController extends Controller
                     'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first(),
                     'project' => $project,
                     'role' => $role,
+                    'tasksReviewed' => $tasksReviewed,
+                    'competenciesReviewed' => $competenciesReviewed,
                     'parameter' => 'competency',
                     'messages' => $messages3,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
@@ -1370,7 +1397,6 @@ class ProjectsController extends Controller
         $messages3 = $messages3->sortBy('created_at');
 
         $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first();
-
 
         if($attemptedProject) {
             //here
@@ -1491,7 +1517,6 @@ class ProjectsController extends Controller
                 }
             } else {
                 return view('projects.attempt', [
-                    
                     'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first(),
                     'project' => $project,
                     'role' => $role,

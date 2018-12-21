@@ -134,7 +134,7 @@
         <div class="col-lg-3">
           <div class="card mb-3" style="margin-bottom: 0rem !important;">
             <div class="card-body">
-              <h3 style="margin-bottom: 0;">Competencies</h3>
+              <h3 style="margin-bottom: 0;">Overall Competencies</h3>
               <p style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Business Analysis Planning & Monitoring</p>
               <div class="row align-items-center no-gutters">
                 <div class="col">

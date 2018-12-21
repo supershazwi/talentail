@@ -52,7 +52,7 @@
                   <a href="/creator-application" class="nav-link">
                   @endif
                     Part 1: General Information
-                    @if($creatorApplication->status == "pending")
+                    @if($creatorApplication == null || $creatorApplication->status == "pending")
                       <sup>Pending Review</sup>
                     @elseif($creatorApplication->status == "approved1")
                       <sup>Approved</sup>
@@ -68,7 +68,7 @@
                   <a href="/creator-stripe-account" class="nav-link">
                   @endif
                     Part 2: Connect Paypal Account
-                    @if($creatorApplication->status == "approved1")
+                    @if($creatorApplication == null || $creatorApplication->status == "approved1")
                       <sup>Pending Connection</sup>
                     @elseif($creatorApplication->status == "connected")
                       <sup>Connected</sup>
@@ -133,7 +133,7 @@
           </div>
         @endif
       @else
-        @if($creatorApplication->status == "pending")
+        @if($creatorApplication == null || $creatorApplication->status == "pending")
         <div class="card">
           <div class="card-body">
             <div class="row justify-content-center" style="margin-top:1rem;">

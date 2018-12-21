@@ -752,7 +752,7 @@ Route::post('/process-payment', function(Request $request) {
 
 Route::get('/payment/process', 'PaymentsController@process')->name('payment.process');
 
-Route::get('tutorials/create-projects', function() {
+Route::get('/tutorials/creators/how-to-create-a-project', function() {
     return view('tutorials.create-projects',[
         
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -763,6 +763,15 @@ Route::get('tutorials/create-projects', function() {
 
 Route::get('tutorials/attempt-projects', function() {
     return view('tutorials.attempt-projects',[
+        
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::get('tutorials/creators', function() {
+    return view('tutorials.creators',[
         
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),

@@ -114,7 +114,6 @@ class MessagesController extends Controller
         $projectUsers = User::find($allProjectsUsersIdArray);
 
 
-
         return view('messages.index', [
             
             'users' => $users,

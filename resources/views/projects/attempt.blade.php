@@ -11,10 +11,8 @@
       </div>
       <!-- Body -->
       <div class="header-body">
-        <div class="row align-items-center">
+        <div class="row align-items-top">
           <div class="col-auto">
-            
-            <!-- Avatar group -->
             <div class="avatar-group">
               @if(Auth::id() == $project->user->id)
               <a href="/profile" class="avatar">
@@ -30,8 +28,6 @@
               @endif
               </a>
             </div>
-
-            <!-- Button -->
             @if(Auth::id() == $project->user->id)
             <a href="/profile" style="margin-left: 0.5rem !important;">
               {{$project->user->name}}
@@ -41,7 +37,13 @@
               {{$project->user->name}}
             </a>
             @endif
-
+          </div>
+          <div class="col">
+          </div>  
+          <div class="col-auto">
+            <a href="/messages/{{$attemptedProject->project->user_id}}/projects/{{$attemptedProject->project_id}}" class="btn btn-primary d-block d-md-inline-block">
+              Message
+            </a>
           </div>
         </div>
         <div class="row align-items-top" style="margin-top: 1.5rem;">
@@ -308,7 +310,9 @@
         </div>
       </div>
     @endif
+    @if($parameter == "task")
     <button class="btn btn-primary" onclick="submitProjectAttempt()">Submit Project</button>
+    @endif
   </div>
 
   <script type="text/javascript">
