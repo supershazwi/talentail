@@ -232,9 +232,6 @@
                             <h4 class="card-title mb-1 name">
                               {{$projectFile->title}}
                             </h4>
-                            <p class="card-text small text-muted mb-1">
-                              {{round($projectFile->size/1048576, 2)}} MB, {{$projectFile->mime_type}}
-                            </p>
                           </div>
                           <div class="col-auto">
                             <a href="#!" class="btn btn-sm btn-white d-none d-md-inline-block">

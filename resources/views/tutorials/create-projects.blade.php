@@ -77,25 +77,26 @@
             </ul>
             <br />
             <h3>Step 5: Add a project thumbnail</h3>
-            <figure>
-              <img src="/img/project-thumbnail.png" style="width: 100%; border-radius: 5px;" />
-              <figcaption style="text-align: center; color: #6c757d !important;" class="text-small">Sample project thumbnail</figcaption>
+            <figure style="width: 49%; float: left;">
+              <img src="/img/select-thumbnail.png" style="width: 100%; border-radius: 5px;" />
+              <figcaption style="text-align: center; color: #6c757d !important;" class="text-small">Select an eye-catching thumbnail</figcaption>
             </figure>
+            <figure style="width: 49%; float: right;">
+              <img src="/img/thumbnail.png" style="width: 100%; border-radius: 5px;" />
+              <figcaption style="text-align: center; color: #6c757d !important;" class="text-small">Sample Project Thumbnail</figcaption>
+            </figure>
+            <br style="clear:both;"/>
             <br />
             <p>Provide a catchy image as the project thumbnail as it increases the chances of grabbing the attention of users and result in them finding out further on the project details.</p>
-            <figure>
-              <img src="/img/create-project-2.png" style="width: 100%; border-radius: 5px;" />
-              <figcaption style="text-align: center; color: #6c757d !important;" class="text-small">Browse Projects Page</figcaption>
-            </figure>
             <br />
             <h3>Step 6: Add Supporting Files</h3>
             <p>In case you want to add supplementary files for users to attempt the tasks, add the necessary files in this section. It is advisable that you store all the files in a single folder for easier upload. In case you want to select multiple files, you can select a whole row of files by selecting the first file and pressing the "Shift" button or by selecting individual files by pressing either the "Ctrl" button on Windows or the "Command" button on Mac.</p>
             <figure style="width: 47.5%; float: left;">
-              <img src="/img/create-project-4.gif" style="width: 100%; border-radius: 5px;" />
+              <img src="/img/create-project-4.png" style="width: 100%; border-radius: 5px;" />
               <figcaption style="text-align: center; color: #6c757d !important;" class="text-small">Selecting a Row of Files using Shift Key</figcaption>
             </figure>
             <figure style="width: 47.5%; float: right;">
-              <img src="/img/create-project-5.gif" style="width: 100%; border-radius: 5px;" />
+              <img src="/img/create-project-5.png" style="width: 100%; border-radius: 5px;" />
               <figcaption style="text-align: center; color: #6c757d !important;" class="text-small">Selecting Individual Files using Ctrl/Option Key</figcaption>
             </figure>
             <br style="clear:both;"/>

@@ -21,29 +21,27 @@
 
         </div>
       </div> <!-- / .row -->
-      <div class="row align-items-center">
-        <div class="col">
-          
-          <!-- Nav -->
-          <ul class="nav nav-tabs nav-overflow header-tabs">
-            <li class="nav-item">
-              <a href="/tutorials" class="nav-link active">
-                Candidates
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/tutorials/creators" class="nav-link">
-                Creators
-              </a>
-            </li>
-          </ul>
-
-        </div>
-      </div>
     </div>
 
   </div>
 </div> <!-- / .header -->
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-6 col-xl-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+
+              <p style="margin-bottom: 0rem !important;"><a href="/tutorials/how-to-create-a-project">How do I create a project?</a></p>
+              <span class="badge badge-warning">Creators</span>
+            </div>
+          </div> 
+        </div> <!-- / .card-body -->
+      </div>
+    </div>
+  </div>
+</div>
 
   <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
 

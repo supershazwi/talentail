@@ -752,7 +752,7 @@ Route::post('/process-payment', function(Request $request) {
 
 Route::get('/payment/process', 'PaymentsController@process')->name('payment.process');
 
-Route::get('/tutorials/creators/how-to-create-a-project', function() {
+Route::get('/tutorials/how-to-create-a-project', function() {
     return view('tutorials.create-projects',[
         
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),

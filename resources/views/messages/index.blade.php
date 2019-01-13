@@ -460,6 +460,7 @@
                         <!-- <a href="/tutorials" style="font-size: .875rem;">Tutorials</a> -->
                     </div>
                     <div class="col-lg-2">
+                        <a href="/tutorials" style="font-size: .875rem;">Tutorials</a><br />
                         <a href="/blog" style="font-size: .875rem;">Blog</a><br />
                         <a href="/terms-and-conditions" style="font-size: .875rem;">Terms & Conditions</a><br />
                         <a href="/privacy-policy" style="font-size: .875rem;">Privacy Policy</a><br />
