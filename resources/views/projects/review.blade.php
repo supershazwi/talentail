@@ -353,9 +353,6 @@
                       <h4 class="card-title mb-1 name">
                         <a href="#!">{{$projectFile->title}}</a>
                       </h4>
-                      <p class="card-text small text-muted mb-1">
-                        {{round($projectFile->size/1048576, 2)}} MB, {{$projectFile->mime_type}}
-                      </p>
                     </div>
                     <div class="col-auto">
                       <a href="https://storage.googleapis.com/talentail-123456789/{{$projectFile->url}}" download="{{$projectFile->title}}" class="btn btn-sm btn-white d-none d-md-inline-block">
