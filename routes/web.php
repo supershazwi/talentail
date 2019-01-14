@@ -254,7 +254,7 @@ Route::get('/blog/admin', function() {
 });
 
 Route::get('/blog', function() {
-    $posts = Post::all()->where('published', 1);
+    $posts = Post::where('published', 1)->orderBy('created_at', 'desc')->get();
 
     return view('blog.index', [
         'posts' => $posts,
@@ -460,6 +460,54 @@ Route::post('/portfolios/{id}/add-portfolio-to-cart', function(Request $request)
 
     return redirect('/portfolios/'.$routeParameters['id']);
 });
+
+Route::get('/portfolios/add', function() {
+    
+
+    return view('portfolios.add', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+})->middleware('auth');
+
+Route::get('/portfolios/select-role', function() {
+    if(request('role') != null) {
+        $roleId = request('role');
+        session(['selectedRole' => $roleId]);
+
+        return redirect()->action('ProjectsController@create');
+    }
+    $roles = Role::select('id', 'title')->orderBy('title', 'asc')->get();
+
+    return view('portfolios.selectRole', [
+        
+        'roles' => $roles,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+})->middleware('auth');
+
+Route::post('/portfolios/select-role', function() {
+    if(request('role') != null) {
+        $roleId = request('role');
+        $role = Role::find($roleId);
+
+        // check whether user already has a portfolio with selected role
+
+        return redirect('/portfolios/add')->with('selectedRole', $role);
+    }
+    $roles = Role::select('id', 'title')->orderBy('title', 'asc')->get();
+
+    return view('portfolios.selectRole', [
+        
+        'roles' => $roles,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+})->middleware('auth');
 
 Route::get('/portfolios/{id}', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();

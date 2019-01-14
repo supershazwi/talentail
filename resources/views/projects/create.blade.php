@@ -284,13 +284,14 @@
     
     function init() {
       document.querySelector('#file-1').addEventListener('change', handleFileSelect, false);
-      selDiv = document.querySelector("#selectedFiles");
+      // selDiv = document.querySelector("#selectedFiles");
 
       document.querySelector('#thumbnail').addEventListener('change', handleThumbnailSelect, false);
       selThumbnailDiv = document.querySelector("#selectedThumbnail");
     }
     
     function handleFileSelect(e) {
+      console.log(e);
       if(!e.target.files) return;
       selDiv.innerHTML = "";
       
@@ -643,7 +644,7 @@
 
           let a = document.getElementById("custom-competency-label_" + (i + 1));
           a.id = "custom-competency-label_" + i;
-          a.for = "custom-competency-checkbox_" + i;
+          a.htmlFor = "custom-competency-checkbox_" + i;
 
           let y = document.getElementById("custom-competency-input_" + (i + 1));
           y.id = "custom-competency-input_" + i;
