@@ -76,6 +76,17 @@
               </a>
               @endif
             </li>
+            <li class="nav-item">
+              @if(Auth::id() == $user->id)
+              <a href="/profile/portfolios" class="nav-link">
+              Portfolios
+              </a>
+              @else
+              <a href="/profile/{{$user->id}}/portfolios" class="nav-link">
+              Portfolios
+              </a>
+              @endif
+            </li>
             @if($user->creator)
             <li class="nav-item">
                 @if(Auth::id() == $user->id)

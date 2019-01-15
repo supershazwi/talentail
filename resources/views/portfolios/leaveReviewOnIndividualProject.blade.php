@@ -11,6 +11,11 @@
   <div class="row justify-content-center">
     <div class="col-xl-10 col-lg-11">
       <section class="py-4 py-lg-5" style="text-align: center; padding-bottom: 0rem !important;">
+        @if (session('notAuthorised'))
+          <div class="alert alert-danger" id="notAuthorisedAlert">
+            <h4 class="alert-heading" style="margin-bottom: 0;">{{session('notAuthorised')}}</h4>
+          </div>
+        @endif
         @if($portfolio->user->avatar)
          <img src="https://storage.googleapis.com/talentail-123456789/{{$portfolio->user->avatar}}" alt="" class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
         @else
@@ -48,9 +53,7 @@
 
                 </div>
                 <div class="col-auto">
-                  @if(Auth::id() != null && $portfolio->user_id == Auth::id())
-                  <a href="/portfolios/{{$portfolio->id}}/manage-portfolio" class="btn btn-primary" style="margin-bottom: 0.1875rem !important;" onclick="addTask()">Manage Portfolio</a>
-                  @endif
+                  
                 </div>
               </div>
         </div>
@@ -58,17 +61,11 @@
 
       <div class="content-list-body row">
           <div class="col-lg-12">
-            @foreach($portfolio->attempted_projects as $attemptedProject)
               <div class="card mb-3" style="margin-bottom: 0rem !important;">
                   <div class="card-body">
-                      @if(!$attemptedProject->project->internal && count($attemptedProject->reviews) == 0)
-                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        This project can only be published once it has been reviewed by at least 1 reviewer.
-                      </div>
-                      @endif
                       <a href="#"><span style="letter-spacing: -.02em; font-weight: 500; font-size: 1.0625rem; line-height: 1.1;">{{$attemptedProject->project->title}}</span> 
                         @if(!$attemptedProject->project->internal)
-                        <span class="badge badge-soft-secondary" style="margin-left: 0.5rem; margin-top: -0.5rem;">External Project</span>
+                        <span class="badge badge-soft-secondary" style="margin-left: 0.5rem; margin-top: -0.5rem;">External</span>
                         @endif
                       </a>
                       <p style="margin-top: 0.5rem;">{{$attemptedProject->project->description}}</p>
@@ -84,31 +81,65 @@
                         </div>
                       </div>
                       @endif
-                      @if(count($attemptedProject->reviews) > 0)
-                        <hr style="margin-top: 1.375rem;"/>
-                        @foreach($attemptedProject->reviews as $review)
-                          @if($attemptedProject->project->user->avatar)
-                           <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded" style="height: 3rem; width: 3rem; float: left;">
-                          @else
-                          <img src="/img/avatar.png" alt="..." class="avatar-img rounded" style="height: 3rem; width: 3rem; float: left;">
+                      <hr />
+                      @if (($errors->has('review') && strlen($errors->first('review')) > 0) || ($errors->has('rating') && strlen($errors->first('rating')) > 0))
+                      <div class="alert alert-danger" style="padding-bottom: 0.1875rem;">
+                          @if ($errors->has('rating') && strlen($errors->first('rating')) > 0)
+                              <h4 class="alert-heading">{{ $errors->first('rating') }}</h4>
                           @endif
-                          <div style="margin-left: 4rem !important;">
-                            <p style="margin-bottom: 0.25rem;"><a href="/profile/{{$attemptedProject->project->user->id}}">{{$attemptedProject->project->user->name}}</a> 
-                              @if($attemptedProject->project->internal)
-                              <span class="badge badge-soft-secondary" style="font-size: 0.8rem; margin-top: -0.5rem;">Creator</span></p>
-                              @else
-                              <span class="badge badge-soft-secondary" style="font-size: 0.8rem; margin-top: -0.5rem;">Endorser</span></p>
-                              @endif
-                            <p style="margin-bottom: 0rem;">{{$review->description}}</p>
-                          @endforeach
-                        </div>
+                          @if ($errors->has('review') && strlen($errors->first('review')) > 0)
+                              <h4 class="alert-heading">{{ $errors->first('review') }}</h4>
+                          @endif
+                      </div>
                       @endif
+                      <form id="reviewForm" method="POST" action="/{{Request::path()}}">
+                      @csrf
+                        <h2>Leave a Review</h2>
+                        <h4>Rating</h4>
+                        <div class="form-group" style="margin-bottom: 0;">
+                          <div class="btn-group-toggle" data-toggle="buttons">
+                            @if(old('rating') == "Negative")
+                            <label class="btn btn-white focus active" id="label_negative">
+                              <input type="radio" name="rating" value="Negative" id="radio-na_1"> 
+                              <i class="far fa-tired"></i> Negative
+                            </label>
+                            @else
+                            <label class="btn btn-white" id="label_negative">
+                              <input type="radio" name="rating" value="Negative" id="radio-na_1"> 
+                              <i class="far fa-tired"></i> Negative
+                            </label>
+                            @endif
+                            @if(old('rating') == "Neutral")
+                            <label class="btn btn-white focus active" id="label_neutral">
+                              <input type="radio" name="rating" value="Neutral" id="radio-open-ended_1"> 
+                              <i class="far fa-meh"></i> Neutral
+                            </label>
+                            @else
+                            <label class="btn btn-white" id="label_neutral">
+                              <input type="radio" name="rating" value="Neutral" id="radio-open-ended_1"> 
+                              <i class="far fa-meh"></i> Neutral
+                            </label>
+                            @endif
+                            @if(old('rating') == "Positive")
+                            <label class="btn btn-white focus active" id="label_positive">
+                              <input type="radio" name="rating" value="Positive" id="positive"> 
+                              <i class="far fa-grin-stars"></i> Positive
+                            </label>
+                            @else
+                            <label class="btn btn-white" id="label_positive">
+                              <input type="radio" name="rating" value="Positive" id="positive"> 
+                              <i class="far fa-grin-stars"></i> Positive
+                            </label>
+                            @endif
+                          </div>
+                          <br/>
+                          <h4>Review</h4>
+                          <textarea class="form-control" name="review" id="review" rows="5" placeholder="Enter review">{{ old('review') }}</textarea>
+                          <button class="btn btn-primary" type="submit" style="margin-top: 1.5rem; margin-bottom: 0 !important;">Submit Review</button>
+                        </div>
+                      </form>
                   </div>
               </div>
-              @if(!$loop->last) 
-                <hr style="margin-top: 2.5rem; margin-bottom: 2.5rem;"/>
-              @endif
-            @endforeach
           </div>
       </div>
     </div>
@@ -116,10 +147,7 @@
 </div>
 
 <script type="text/javascript">
-
-  function addPortfolioToCart() {
-    document.getElementById("addPortfolioToCartButton").click();
-  }
+  setTimeout(function(){ document.getElementById("notAuthorisedAlert").style.display = "none" }, 3000);
 </script>
 @endsection
 

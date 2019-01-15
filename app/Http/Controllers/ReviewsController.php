@@ -120,6 +120,10 @@ class ReviewsController extends Controller
 
             $review->project_id = $project->id;
 
+            $attemptedProject = AttemptedProject::where('user_id', $routeParameters['userId'])->where('project_id', $project->id)->first();
+
+            $review->attempted_project_id = $attemptedProject->id;
+
             $review->save();
 
             $notification = new Notification;

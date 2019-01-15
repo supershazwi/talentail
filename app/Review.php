@@ -15,6 +15,10 @@ class Review extends Model
 	    return $this->belongsTo('App\User', 'sender_id');
 	}
 
+	public function attempted_project() {
+	    return $this->belongsTo('App\AttemptedProject');
+	}
+
 	public function project() {
 	    return $this->belongsTo('App\Project');
 	}

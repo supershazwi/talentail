@@ -164,24 +164,6 @@
             toastr.success(data.username + ' ' + data.message); 
         });
     })
-
-    function positive() {
-        document.getElementById("label_positive").className = "btn btn-white btn-highlight-positive";
-        document.getElementById("label_neutral").className = "btn btn-white";
-        document.getElementById("label_negative").className = "btn btn-white";
-    }
-
-    function neutral() {
-        document.getElementById("label_positive").className = "btn btn-white";
-        document.getElementById("label_neutral").className = "btn btn-white btn-highlight-neutral";
-        document.getElementById("label_negative").className = "btn btn-white";
-    }
-
-    function negative() {
-        document.getElementById("label_positive").className = "btn btn-white";
-        document.getElementById("label_neutral").className = "btn btn-white";
-        document.getElementById("label_negative").className = "btn btn-white btn-highlight-negative";
-    }
 </script>
 @endsection
 

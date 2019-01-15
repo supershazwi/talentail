@@ -614,6 +614,8 @@ class ProjectsController extends Controller
 
             $answeredTask->save();
 
+            $attemptedProject = AttemptedProject::where('project_id', $request->input('project_id'))->where('user_id', Auth::id())->first();
+
             // check if file upload is enabled
             if($request->input('file-upload_' . $taskCounter) == "true") {
                 if($request->file('file_' . $request->input('task_' . $taskCounter))) {
@@ -627,6 +629,7 @@ class ProjectsController extends Controller
                         $answeredTaskFile->mime_type = $request->file('file_' . $request->input('task_' . $taskCounter))[$fileCounter]->getMimeType();
                         $answeredTaskFile->answered_task_id = $answeredTask->id;
                         $answeredTaskFile->project_id = $request->input('project_id');
+                        $answeredTaskFile->attempted_project_id = $attemptedProject->id;
                         $answeredTaskFile->user_id = Auth::id();
 
                         $answeredTaskFile->save();
@@ -636,8 +639,6 @@ class ProjectsController extends Controller
 
             $taskCounter++;
         }
-
-        $attemptedProject = AttemptedProject::where('project_id', $request->input('project_id'))->where('user_id', Auth::id())->first();
 
         $attemptedProject->status = "Completed";
 

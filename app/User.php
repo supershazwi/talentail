@@ -57,6 +57,10 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
+    public function pending_notifications() {
+        return $this->hasMany(PendingNotification::class);
+    }
+
     public function roles_gained() {
         return $this->hasMany(RoleGained::class);
     }
@@ -90,8 +94,8 @@ class User extends Authenticatable
         return $this->hasOne(CreatorApplication::class);
     }
 
-    public function portfolio() {
-        return $this->hasOne(Portfolio::class);
+    public function portfolios() {
+        return $this->hasMany(Portfolio::class);
     }
 
     public function created_attempted_projects() {

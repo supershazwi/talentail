@@ -8,10 +8,21 @@
       <!-- Header -->
       <div class="header mt-md-5">
         <div class="header-body">
-          <!-- Title -->
-          <h1 class="header-title">
-            Select Role
-          </h1>
+          <div class="row align-items-center">
+            <div class="col">
+              
+              <!-- Pretitle -->
+              <h6 class="header-pretitle">
+                Portfolio Management
+              </h6>
+
+              <!-- Title -->
+              <h1 class="header-title">
+                Select a role to build your portfolio
+              </h1>
+
+            </div>
+          </div> <!-- / .row -->
         </div>
       </div>
 
@@ -19,15 +30,6 @@
 
     </div>
   </div> <!-- / .row -->
-  <div class="row">
-    <div class="col-12 col-lg-12 col-xl-12">
-      <div class="row align-items-center">
-        <div class="col">
-          <p>Select the role that you are creating this portfolio for.</p>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="row">
     <div class="col-12 col-lg-4 col-xl-4">
       <div class="row align-items-center">

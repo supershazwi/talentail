@@ -76,13 +76,8 @@
 
 		      <div class="row align-items-right">
 		        <div class="col">
-		          
-		          <!-- Time -->
-		          <p class="card-text small text-muted" style="margin-bottom: 0;">Overall rating</p>
-		          <p class="card-text small text-muted">
-		            ⭐️ 4.5
-		          </p>
-
+		        	<p class="card-text small text-muted" style="margin-bottom: 0;">Completed projects</p>
+		        	<p style="margin-bottom: 0;">6</p>
 		        </div>
 		        <div class="col-auto">
 		          
@@ -124,9 +119,7 @@
 		      <p class="text-center" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">{{$portfolio->user->description}}</p>
 
 		      <div class="text-center" style="margin-bottom: 0.75rem;">
-			      @foreach($portfolio->roles as $role)
-			      <span class="badge badge-primary">{{$role->title}}</span>
-			     @endforeach
+			    <span class="badge badge-primary">{{$portfolio->role->title}}</span>
 			  </div>
 
 		      <div class="text-center" style="margin-bottom: 1.2rem;">
@@ -140,23 +133,18 @@
 
 		      <div class="row align-items-right">
 		        <div class="col">
-		          
-		          <!-- Time -->
-		          <p class="card-text small text-muted" style="margin-bottom: 0;">Overall rating</p>
-		          <p class="card-text small text-muted">
-		            ⭐️ {{$portfolio->rating}}
-		          </p>
-
+		        	<p class="card-text small text-muted" style="margin-bottom: 0;">Completed projects</p>
+		        	<p style="margin-bottom: 0;">{{count($portfolio->attempted_projects)}}</p>
 		        </div>
 		        <div class="col-auto">
 		          
 		          <!-- Avatar group -->
 		          <p class="card-text small text-muted" style="margin-bottom: 0;">Endorsed by</p>
 		          <div class="avatar-group">
-		          	@foreach($portfolio->projects as $project)
-		            <a href="/profile/{{$project->user_id}}" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="{{$project->user->name}}">
-		            	@if($project->user->avatar)
-		            	 <img src="https://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle"/>
+		          	@foreach($portfolio->attempted_projects as $attemptedProject)
+		            <a href="/profile/{{$attemptedProject->project->user_id}}" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="{{$attemptedProject->project->user->name}}">
+		            	@if($attemptedProject->project->user->avatar)
+		            	 <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded-circle"/>
 		            	@else
 		            	<img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle"/>
 		            	@endif
@@ -170,16 +158,20 @@
 		  </div>
 		</div>
 		@endforeach
-		<!-- <div class="col-12 col-md-6 col-xl-4">
-		  <div class="card" style="height: 404.11px !important; line-height: 404.11px !important;">
+		<div class="col-12 col-md-6 col-xl-4">
+		  <div class="card" style="height: 404.11px !important;">
 		    <div class="card-body text-center" style="margin-top: 150px;">
-		    	<h1>➕</h1>
-		    	<a href="/portfolios/select-role"><h2 class="card-title text-center mb-3" style="margin-bottom: 0 !important;">
-		        Add Portfolio
-		      </h2></a>
+		    	<h1><i class="far fa-plus-square"></i></h1>
+		    	<a href="/portfolios/select-role">
+		    		<h2 class="card-title text-center mb-3" style="">
+		        		Add Portfolio
+		      		</h2>
+		      	</a>
+		      	<p style="margin-top: 80px !important; margin-bottom: 0;">No material to build a portfolio?</p>
+		      	<a href="/discover">Discover projects</a>
 		    </div> 
 		  </div>
-		</div> -->
+		</div>
 	</div>
 
 	<!-- <div class="row justify-content-center">

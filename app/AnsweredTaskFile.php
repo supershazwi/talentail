@@ -16,4 +16,12 @@ class AnsweredTaskFile extends Model
     public function answered_task() {
         return $this->belongsTo(AnsweredTask::class);
     }
+
+    public function project() {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function attempted_project() {
+        return $this->belongsTo(AttemptedProject::class);
+    }
 }

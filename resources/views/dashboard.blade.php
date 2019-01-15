@@ -27,297 +27,194 @@
 	</div> <!-- / .header -->
 	<div class="container">
 		@if(Auth::user()->creator)
-		@if(sizeof($creatorProjects) > 0)
-		<div class="row">
-			<div class="col-12 col-xl-12">
-				<div class="card">	
-				    <table class="table table-nowrap" style="margin-bottom: 0;">
-				      <thead>
-				        <tr>
-				          <th scope="col">#</th>
-				          <th scope="col">Project</th>
-				          <th scope="col">Profits Earned</th>
-				          <th scope="col">User</th>
-				          <th scope="col">Status</th>
-				        </tr>
-				      </thead>
-				      <tbody>
-				      		@foreach($creatorProjects as $key=>$creatorProject)
-				          <tr>
-				            <th scope="row">{{$key+1}}</th>
-				            <td><a href="/roles/{{$creatorProject->project->role->slug}}/projects/{{$creatorProject->project->slug}}/{{$creatorProject->user_id}}">{{$creatorProject->project->title}}</a></td>
-				            <td>${{$creatorProject->project->amount}} * 0.8 = <strong style="text-decoration: underline;">${{number_format((0.8*$creatorProject->project->amount), 2, '.', '')}}</strong></td>
-				            <td>{{$creatorProject->user->name}}</td>
-				            @if($creatorProject->status == "Attempting")
-				            <td><span class="badge badge-light">{{$creatorProject->status}}</span></td>
-				            @elseif($creatorProject->status == "Completed")
-				            <td><span class="badge badge-info">{{$creatorProject->status}}</span></td>
-				            @elseif($creatorProject->status == "Assessed")
-				            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
-				            @elseif($creatorProject->status == "Reviewed")
-				            <td><span class="badge badge-success">{{$creatorProject->status}}</span></td>
-				            @endif
-				          </tr>
-				          @endforeach
-				      </tbody>
-				    </table>
+			<div class="row align-items-center">
+			  <div class="col-auto">
+			    <h2>
+			      Created Projects
+			    </h2>
+			  </div>
+			  <div class="col">
+
+			  </div>
+			</div>
+			@if(count($createdProjects) > 0)
+			<div class="row">
+				<div class="col-12 col-xl-12">
+					<div class="card">	
+					    <table class="table table-nowrap" style="margin-bottom: 0;">
+					      <thead>
+					        <tr>
+					          <th scope="col">#</th>
+					          <th scope="col">Project</th>
+					          <th scope="col">Industry</th>
+					          <th scope="col">Price</th>
+					          <th scope="col">Status</th>
+					        </tr>
+					      </thead>
+					      <tbody>
+					      		@foreach($createdProjects as $key=>$createdProject)
+					          <tr>
+					            <th scope="row">{{$key+1}}</th>
+					            <td><a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}/{{$createdProject->user_id}}">{{$createdProject->title}}</a></td>
+					            <td>{{$createdProject->industry->title}}</td>
+					            <td>${{$createdProject->amount}}</td>
+					            @if($createdProject->published)
+					            	<td><span class="badge badge-primary">Public</span></td>
+					            @else
+					            	<td><span class="badge badge-warning">Private</span></td>
+					            @endif
+					          </tr>
+					          @endforeach
+					      </tbody>
+					    </table>
+					</div>
 				</div>
 			</div>
-		</div>
-		<hr style="margin-bottom: 2.5rem;"/>
-		@else
-		@endif
-		@endif
-		<div class="row">
-			@if(Auth::user()->creator)
-			<div class="col-12 col-xl-12">
-				<div class="card">
-					<div class="card-header">
-						<div class="row align-items-top">
-						  <div class="col">
-						    
-						    <!-- Title -->
-						    <h4 class="card-header-title">
-						      Created Projects
-						    </h4>
-
-						  </div>
-						  <div class="col-auto">
-
-						    <!-- Link -->
-						    <a href="/profile/projects">View All</a>
-						    |
-						    <a href="/projects/select-role">Add Project</a>
-						    
-						  </div>
-						</div> <!-- / .row -->
-					</div>
-					<div class="card-body">
-					@if(sizeof($createdProjects) > 0)
-					@foreach($createdProjects as $createdProject)
-					<div class="row align-items-top">
-					  <div class="col-auto">
-					    
-					    <!-- Avatar -->
-					    <a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}" class="avatar avatar-4by3">
-					    @if($createdProject->url)
-					    <img src="https://storage.googleapis.com/talentail-123456789/{{$createdProject->url}}" alt="..." class="avatar-img rounded">
-					    @else
-					    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
-					    @endif
-					    </a>
-
-					  </div>
-					  <div class="col ml--2">
-
-					    <!-- Title -->
-					    <a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}"><h4 class="card-title mb-1">
-					      {{$createdProject->title}}
-					    </h4></a>
-					  </div>
-					</div> <!-- / .row -->
-
-					<!-- Divider -->
-					@if(!$loop->last)
-					<hr>
-					@endif
-					@endforeach
-					@else
-					<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
-					<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. Don't worry. We will notify you once you are required to take action.</p>
-					@endif
-					</div> <!-- / .card-body -->
-				</div>
+			@else
+			<div class="row align-items-center" id="talentailBox">
+			  <div class="col-lg-12">
+			    <div class="card">
+			      <div class="card-body">
+			        <div class="row justify-content-center" style="margin-top:1rem;">
+			          <div class="col-12 col-md-5 col-xl-4 my-5">
+			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Projects help users gain the hands-on experience they need to get a step up in their careers. Boost the community by creating a project based on your own experiences. <a href="/projects/select-role">Create a project</a>.
+			            </p>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
 			</div>
 			@endif
+		@endif
+		@if(Auth::user()->creator)
+			<div class="row align-items-center">
+			  <div class="col-auto">
+			    <h2>
+			      Your Projects Attempted By Users
+			    </h2>
+			  </div>
+			  <div class="col">
+
+			  </div>
+			</div>
+			@if(sizeof($creatorProjects) > 0)
+			<div class="row">
+				<div class="col-12 col-xl-12">
+					<div class="card">	
+					    <table class="table table-nowrap" style="margin-bottom: 0;">
+					      <thead>
+					        <tr>
+					          <th scope="col">#</th>
+					          <th scope="col">Project</th>
+					          <th scope="col">Profits Earned</th>
+					          <th scope="col">User</th>
+					          <th scope="col">Status</th>
+					        </tr>
+					      </thead>
+					      <tbody>
+					      		@foreach($creatorProjects as $key=>$creatorProject)
+					          <tr>
+					            <th scope="row">{{$key+1}}</th>
+					            <td><a href="/roles/{{$creatorProject->project->role->slug}}/projects/{{$creatorProject->project->slug}}/{{$creatorProject->user_id}}">{{$creatorProject->project->title}}</a></td>
+					            <td>${{$creatorProject->project->amount}} * 0.8 = <strong style="text-decoration: underline;">${{number_format((0.8*$creatorProject->project->amount), 2, '.', '')}}</strong></td>
+					            <td>{{$creatorProject->user->name}}</td>
+					            @if($creatorProject->status == "Attempting")
+					            <td><span class="badge badge-light">{{$creatorProject->status}}</span></td>
+					            @elseif($creatorProject->status == "Completed")
+					            <td><span class="badge badge-info">{{$creatorProject->status}}</span></td>
+					            @elseif($creatorProject->status == "Assessed")
+					            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
+					            @elseif($creatorProject->status == "Reviewed")
+					            <td><span class="badge badge-success">{{$creatorProject->status}}</span></td>
+					            @endif
+					          </tr>
+					          @endforeach
+					      </tbody>
+					    </table>
+					</div>
+				</div>
+			</div>
+			@else
+			<div class="row align-items-center" id="talentailBox">
+			  <div class="col-lg-12">
+			    <div class="card">
+			      <div class="card-body">
+			        <div class="row justify-content-center" style="margin-top:1rem;">
+			          <div class="col-12 col-md-5 col-xl-4 my-5">
+			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Users who have purchased your project will appear here.
+			            </p>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			@endif
+		@endif
+		<div class="row align-items-center">
+		  <div class="col-auto">
+		    <h2>
+		      Projects in Progress
+		    </h2>
+		  </div>
 		</div>
+		@if(count($attemptedProjects) > 0)
 		<div class="row">
-			<div class="col-12 col-xl-4">
-
-				<!-- Projects -->
-				<div class="card">
-				<div class="card-header">
-				<div class="row align-items-top">
-				  <div class="col">
-				    
-				    <!-- Title -->
-				    <h4 class="card-header-title">
-				      Projects in Progress
-				    </h4>
-
-				  </div>
-				  <div class="col-auto">
-
-				    <!-- Link -->
-				    <!-- <a href="/lessons-overview" class="small">View all</a> -->
-				    
-				  </div>
-				</div> <!-- / .row -->
-				</div>
-				<div class="card-body">
-
-				@if(sizeof($attemptedProjects) > 0)
-				@foreach($attemptedProjects as $attemptedProject)
-				<div class="row align-items-top">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}" class="avatar avatar-4by3">
-				    @if($attemptedProject->project->url)
-				    <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->url}}" alt="..." class="avatar-img rounded">
-				    @else
-				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
-				    @endif
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    
-				      <a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}"><h4 class="card-title mb-1">{{$attemptedProject->project->title}}</h4></a>
-				    
-				    
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				@if(!$loop->last)
-				<hr>
-				@endif
-				@endforeach
-				@else
-				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
-				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. <a href="/discover">Discover projects</a> created by our project creators.</p>
-				@endif
-				</div> <!-- / .card-body -->
-				</div> <!-- / .card -->           
-
-			</div>
-			<div class="col-12 col-xl-4">
-
-				<!-- Projects -->
-				<div class="card">
-				<div class="card-header">
-				<div class="row align-items-top">
-				  <div class="col">
-				    
-				    <!-- Title -->
-				    <h4 class="card-header-title">
-				      Submitted Projects
-				    </h4>
-
-				  </div>
-				  <div class="col-auto">
-
-				    <!-- Link -->
-				    <!-- <a href="/projects-overview" class="small">View all</a> -->
-				    
-				  </div>
-				</div> <!-- / .row -->
-				</div>
-				<div class="card-body">
-
-				@if(sizeof($submittedProjects) > 0)
-				@foreach($submittedProjects as $submittedProject)
-				<div class="row align-items-top">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="/roles/{{$submittedProject->project->role->slug}}/projects/{{$submittedProject->project->slug}}" class="avatar avatar-4by3">
-				    @if($submittedProject->project->url)
-				    <img src="https://storage.googleapis.com/talentail-123456789/{{$submittedProject->project->url}}" alt="..." class="avatar-img rounded">
-				    @else
-				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
-				    @endif
-				    </a>
-				    
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <a href="/roles/{{$submittedProject->project->role->slug}}/projects/{{$submittedProject->project->slug}}"><h4 class="card-title mb-1">{{$submittedProject->project->title}}</h4></a>
-
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				@if(!$loop->last)
-				<hr>
-				@endif
-				@endforeach
-				@else
-				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
-				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. It's okay because perfection takes time.</p>
-				@endif
-				</div> <!-- / .card-body -->
-				</div> <!-- / .card -->           
-
-			</div>
-
-			<div class="col-12 col-xl-4">
-
-				<!-- Projects -->
-				<div class="card">
-				<div class="card-header">
-				<div class="row align-items-top">
-				  <div class="col">
-				    
-				    <!-- Title -->
-				    <h4 class="card-header-title">
-				      Reviewed Projects
-				    </h4>
-
-				  </div>
-				  <div class="col-auto">
-
-				    <!-- Link -->
-				    <!-- <a href="/interviews-overview" class="small">View all</a> -->
-				    
-				  </div>
-				</div> <!-- / .row -->
-				</div>
-				<div class="card-body">
-
-				@if(sizeof($reviewedProjects) > 0)
-				@foreach($reviewedProjects as $reviewedProject)
-				<div class="row align-items-top">
-				  <div class="col-auto">
-				    
-				    <!-- Avatar -->
-				    <a href="/roles/{{$reviewedProject->project->role->slug}}/projects/{{$reviewedProject->project->slug}}" class="avatar avatar-4by3">
-				    @if($reviewedProject->project->url)
-				    <img src="https://storage.googleapis.com/talentail-123456789/{{$reviewedProject->project->url}}" alt="..." class="avatar-img rounded">
-				    @else
-				    <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="avatar-img rounded">
-				    @endif
-				    </a>
-
-				  </div>
-				  <div class="col ml--2">
-
-				    <!-- Title -->
-				    <a href="/roles/{{$reviewedProject->project->role->slug}}/projects/{{$reviewedProject->project->slug}}"><h4 class="card-title mb-1">
-				      {{$reviewedProject->project->title}}
-				    </h4></a>
-				    
-				  </div>
-				</div> <!-- / .row -->
-
-				<!-- Divider -->
-				@if(!$loop->last)
-				<hr>
-				@endif
-				@endforeach
-				@else
-				<p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😐</p>
-				<p class="text-center" style="margin-bottom: 0 !important;">This section seems empty. A cup of coffee would be great right about now.</p>
-				@endif
-				</div> <!-- / .card-body -->
-				</div> <!-- / .card -->           
-
-			</div>
+		  <div class="col-12 col-xl-12">
+		    <div class="card">  
+		        <table class="table table-nowrap" style="margin-bottom: 0;">
+		          <thead>
+		            <tr>
+		              <th scope="col">#</th>
+		              <th scope="col">Project In Progress</th>
+		              <th scope="col">Deadline</th>
+		              <th scope="col">Status</th>
+		            </tr>
+		          </thead>
+		          <tbody>
+		              @foreach($attemptedProjects as $key=>$attemptedProject)
+		              <tr>
+		                <th scope="row">{{$key+1}}</th>
+		                <td><a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}">{{$attemptedProject->project->title}}</a></td>
+		                <td>
+		                  {{date('d M Y, h:i a', strtotime($attemptedProject->deadline))}}
+		                </td>
+		                @if($attemptedProject->status == "Attempting")
+		                  <td><span class="badge badge-light">{{$attemptedProject->status}}</span></td>
+		                  @elseif($attemptedProject->status == "Completed")
+		                  <td><span class="badge badge-info">{{$attemptedProject->status}}</span></td>
+		                  @elseif($attemptedProject->status == "Assessed")
+		                  <td><span class="badge badge-primary">{{$attemptedProject->status}}</span></td>
+		                  @elseif($attemptedProject->status == "Reviewed")
+		                  <td><span class="badge badge-success">{{$attemptedProject->status}}</span></td>
+	                  	@endif
+		              </tr>
+		              @endforeach
+		          </tbody>
+		        </table>
+		    </div>
+		  </div>
 		</div>
+		@else
+		<div class="row align-items-center" id="talentailBox">
+		  <div class="col-lg-12">
+		    <div class="card">
+		      <div class="card-body">
+		        <div class="row justify-content-center" style="margin-top:1rem;">
+		          <div class="col-12 col-md-5 col-xl-4 my-5">
+		            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
+		            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Talentail projects are created by experienced professionals and have been designed according to their own work experiences. Reviewed projects will appear here. <a href="/discover">Discover projects</a>.
+		            </p>
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		@endif
 	</div>
 @endsection
 

@@ -11,9 +11,8 @@ class Portfolio extends Model
     	return $this->belongsTo(User::class);
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
+    public function role() {
+        return $this->belongsTo(Role::class);
     }
 
     public function industries()
@@ -21,9 +20,9 @@ class Portfolio extends Model
         return $this->belongsToMany(Industry::class);
     }
 
-    public function projects()
+    public function attempted_projects()
     {
-        return $this->belongsToMany(Project::class);
+        return $this->belongsToMany(AttemptedProject::class);
     }
 
     public function shopping_cart_line_items() {

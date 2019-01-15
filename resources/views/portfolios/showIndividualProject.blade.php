@@ -11,6 +11,11 @@
   <div class="row justify-content-center">
     <div class="col-xl-10 col-lg-11">
       <section class="py-4 py-lg-5" style="text-align: center; padding-bottom: 0rem !important;">
+        @if (session('notAuthorised'))
+          <div class="alert alert-danger" id="notAuthorisedAlert">
+            <h4 class="alert-heading" style="margin-bottom: 0;">{{session('notAuthorised')}}</h4>
+          </div>
+        @endif
         @if($portfolio->user->avatar)
          <img src="https://storage.googleapis.com/talentail-123456789/{{$portfolio->user->avatar}}" alt="" class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
         @else
@@ -48,9 +53,7 @@
 
                 </div>
                 <div class="col-auto">
-                  @if(Auth::id() != null && $portfolio->user_id == Auth::id())
-                  <a href="/portfolios/{{$portfolio->id}}/manage-portfolio" class="btn btn-primary" style="margin-bottom: 0.1875rem !important;" onclick="addTask()">Manage Portfolio</a>
-                  @endif
+                  <a href="/portfolios/{{$portfolio->id}}/projects/{{$attemptedProject->id}}/leave-review" class="btn btn-primary" style="margin-bottom: 0.1875rem !important;" onclick="addTask()">Leave Review</a>
                 </div>
               </div>
         </div>
@@ -58,17 +61,11 @@
 
       <div class="content-list-body row">
           <div class="col-lg-12">
-            @foreach($portfolio->attempted_projects as $attemptedProject)
               <div class="card mb-3" style="margin-bottom: 0rem !important;">
                   <div class="card-body">
-                      @if(!$attemptedProject->project->internal && count($attemptedProject->reviews) == 0)
-                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        This project can only be published once it has been reviewed by at least 1 reviewer.
-                      </div>
-                      @endif
                       <a href="#"><span style="letter-spacing: -.02em; font-weight: 500; font-size: 1.0625rem; line-height: 1.1;">{{$attemptedProject->project->title}}</span> 
                         @if(!$attemptedProject->project->internal)
-                        <span class="badge badge-soft-secondary" style="margin-left: 0.5rem; margin-top: -0.5rem;">External Project</span>
+                        <span class="badge badge-soft-secondary" style="margin-left: 0.5rem; margin-top: -0.5rem;">External</span>
                         @endif
                       </a>
                       <p style="margin-top: 0.5rem;">{{$attemptedProject->project->description}}</p>
@@ -84,31 +81,20 @@
                         </div>
                       </div>
                       @endif
-                      @if(count($attemptedProject->reviews) > 0)
+                      @if($attemptedProject->project->internal)
                         <hr style="margin-top: 1.375rem;"/>
-                        @foreach($attemptedProject->reviews as $review)
-                          @if($attemptedProject->project->user->avatar)
-                           <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded" style="height: 3rem; width: 3rem; float: left;">
-                          @else
-                          <img src="/img/avatar.png" alt="..." class="avatar-img rounded" style="height: 3rem; width: 3rem; float: left;">
-                          @endif
-                          <div style="margin-left: 4rem !important;">
-                            <p style="margin-bottom: 0.25rem;"><a href="/profile/{{$attemptedProject->project->user->id}}">{{$attemptedProject->project->user->name}}</a> 
-                              @if($attemptedProject->project->internal)
-                              <span class="badge badge-soft-secondary" style="font-size: 0.8rem; margin-top: -0.5rem;">Creator</span></p>
-                              @else
-                              <span class="badge badge-soft-secondary" style="font-size: 0.8rem; margin-top: -0.5rem;">Endorser</span></p>
-                              @endif
-                            <p style="margin-bottom: 0rem;">{{$review->description}}</p>
-                          @endforeach
+                        @if($attemptedProject->project->user->avatar)
+                         <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded" style="height: 3rem; width: 3rem; float: left;">
+                        @else
+                        <img src="/img/avatar.png" alt="..." class="avatar-img rounded" style="height: 3rem; width: 3rem; float: left;">
+                        @endif
+                        <div style="margin-left: 4rem !important;">
+                          <p style="margin-bottom: 0.25rem;"><a href="/profile/{{$attemptedProject->project->user->id}}">{{$attemptedProject->project->user->name}}</a> <span class="badge badge-warning" style="font-size: 0.8rem;">Creator</span></p>
+                          <p style="margin-bottom: 0rem;">{{$attemptedProject->review->description}}</p>
                         </div>
                       @endif
                   </div>
               </div>
-              @if(!$loop->last) 
-                <hr style="margin-top: 2.5rem; margin-bottom: 2.5rem;"/>
-              @endif
-            @endforeach
           </div>
       </div>
     </div>
@@ -116,10 +102,7 @@
 </div>
 
 <script type="text/javascript">
-
-  function addPortfolioToCart() {
-    document.getElementById("addPortfolioToCartButton").click();
-  }
+  setTimeout(function(){ document.getElementById("notAuthorisedAlert").style.display = "none" }, 3000);
 </script>
 @endsection
 
