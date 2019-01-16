@@ -283,7 +283,7 @@ class PayPalController extends Controller
                 $competencyScore->score = 0;
                 $competencyScore->user_id = Auth::id();
                 $competencyScore->project_id = $shoppingCartLineItem->project->id;
-                $competencyScore->user_id = $attemptedProject->id;
+                $competencyScore->attempted_project_id = $attemptedProject->id;
 
                 $competencyScore->save();
             }
