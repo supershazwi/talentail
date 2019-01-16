@@ -15,12 +15,12 @@
       <!-- Header -->
       <div class="header mt-md-5">
         @if (session('paypal-success'))
-        <div class="alert alert-success" role="alert" id="successAlert">
+        <div class="alert alert-success" role="alert" id="successAlert" style="text-align: center;">
           <h4 class="alert-heading" style="margin-bottom: 0;">{{session('paypal-success')}}</h4>
         </div>
         @endif
         @if (session('success'))
-        <div class="alert alert-success" role="alert" id="successAlert">
+        <div class="alert alert-success" role="alert" id="successAlert" style="text-align: center;">
           <h4 class="alert-heading" style="margin-bottom: 0;">Your application has been submitted. We will get back to you shortly.</h4>
         </div>
         @endif

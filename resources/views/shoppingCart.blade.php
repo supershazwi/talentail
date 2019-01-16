@@ -289,7 +289,7 @@
           <!-- Header -->
           <div class="header mt-md-5">
             @if(session('projectsNameArray'))
-            <div class="alert alert-primary" role="alert" id="successAlert">
+            <div class="alert alert-primary" role="alert" id="successAlert" style="text-align: center;">
               <h4 class="alert-heading" style="margin-bottom: 0;">You have successfully purchased the project(s): </h4>
               <ul style="margin-bottom: 0;">
                 @foreach(session('projectsNameArray') as $name)
@@ -301,7 +301,7 @@
             </div>
             @endif
             @if(session('error'))
-            <div class="alert alert-danger" role="alert" id="dangerAlert">
+            <div class="alert alert-danger" role="alert" id="dangerAlert" style="text-align: center;">
               <h4 class="alert-heading" style="margin-bottom: 0;">{{session('error')}}</h4>
             </div>
             @endif

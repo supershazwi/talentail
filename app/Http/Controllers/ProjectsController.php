@@ -103,52 +103,67 @@ class ProjectsController extends Controller
                 }
             }
 
+            // check if any files deleted
+            $removedFilesIdArray = $request->input('files-deleted_'.$answeredTask['id']);
+
+            if($removedFilesIdArray != null) {
+                $removedFilesIdArray = explode(",",$removedFilesIdArray);
+                foreach($removedFilesIdArray as $removedFileId) {
+                    ReviewedAnsweredTaskFile::destroy($removedFileId);
+                }
+            }
+
             $answeredTasksArray[$key] = $answeredTask['id'];
         }
 
         // check if both tasks and competencies are reviewed
         $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
 
-        $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+        if($request->input('submissionType') == "Submit") {
+            $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+            $competencyAndTaskReview->tasks_reviewed = 1;
+            $competencyAndTaskReview->save();
 
-        $competencyAndTaskReview->tasks_reviewed = 1;
-        $competencyAndTaskReview->save();
+            if($competencyAndTaskReview->tasks_reviewed && $competencyAndTaskReview->competencies_reviewed) {
+                // update attempted project
 
+                $attemptedProject->status = "Assessed";
 
-        if($competencyAndTaskReview->tasks_reviewed && $competencyAndTaskReview->competencies_reviewed) {
-            // update attempted project
+                $attemptedProject->save();
 
-            $attemptedProject->status = "Assessed";
+                $notification = new Notification;
 
-            $attemptedProject->save();
+                $notification->message = "submitted reviews to your answers for project: " . $attemptedProject->project->title;
+                $notification->recipient_id = $attemptedProject->user_id;
+                $notification->user_id = Auth::id();
+                $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug;
 
-            $notification = new Notification;
+                $notification->save();
 
-            $notification->message = "submitted reviews to your answers for project: " . $attemptedProject->project->title;
-            $notification->recipient_id = $attemptedProject->user_id;
-            $notification->user_id = Auth::id();
-            $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug;
+                $message = [
+                    'text' => e("submitted reviews to your answers for project: " . $attemptedProject->project->title),
+                    'username' => Auth::user()->name,
+                    'avatar' => Auth::user()->avatar,
+                    'timestamp' => (time()*1000),
+                    'projectId' => $attemptedProject->project->id,
+                    'url' => '/notifications'
+                ];
 
-            $notification->save();
+                $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
 
-            $message = [
-                'text' => e("submitted reviews to your answers for project: " . $attemptedProject->project->title),
-                'username' => Auth::user()->name,
-                'avatar' => Auth::user()->avatar,
-                'timestamp' => (time()*1000),
-                'projectId' => $attemptedProject->project->id,
-                'url' => '/notifications'
-            ];
+                Mail::to($attemptedProject->user->email)->send(new SendProjectReviewedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug));
 
-            $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
-
-            Mail::to($attemptedProject->user->email)->send(new SendProjectReviewedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug));
+                return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
+            } else {
+                return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId'].'/tasks')->with('saved', "Review saved!");
+            }
+        } else {
+            return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId'].'/tasks')->with('saved', "Review saved!");
         }
-
-        return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
     }
 
     public function submitCompetenciesReview(Request $request) {
+
         $loggedInUserId = Auth::id();
 
         $routeParameters = Route::getCurrentRoute()->parameters();
@@ -168,72 +183,67 @@ class ProjectsController extends Controller
             $roleGained->save();
         }
 
-        // competency scores
-        $competencies = Competency::where('role_id', $role->id)->get()->toArray();
+        $attemptedProject = AttemptedProject::find($request->input('attemptedProjectId'));
 
-        foreach($competencies as $competency) {
-            if($request->input('rating_' . $competency['id']) != null) {
-                $competencyScore = new CompetencyScore;
-
-                $competencyScore->competency_id = $competency['id'];
-                $competencyScore->role_gained_id = $project->role->id;
-
-                if($request->input('rating_' . $competency['id']) == "Poor") {
+        foreach($attemptedProject->competency_scores as $competencyScore) {
+            if($request->input('rating_' . $competencyScore->id) != null) {
+                if($request->input('rating_' . $competencyScore->id) == "Poor") {
                     $competencyScore->score = 1;
-                } elseif($request->input('rating_' . $competency['id']) == "Fair") {
+                } elseif($request->input('rating_' . $competencyScore->id) == "Fair") {
                     $competencyScore->score = 2;
-                } elseif($request->input('rating_' . $competency['id']) == "Average") {
+                } elseif($request->input('rating_' . $competencyScore->id) == "Average") {
                     $competencyScore->score = 3;
-                } elseif($request->input('rating_' . $competency['id']) == "Good") {
+                } elseif($request->input('rating_' . $competencyScore->id) == "Good") {
                     $competencyScore->score = 4;
                 } else {
                     $competencyScore->score = 5;
                 }
-
-                $competencyScore->project_id = $project->id;
-                $competencyScore->user_id = $routeParameters['userId'];
-
                 $competencyScore->save();
             }
         }
-        $attemptedProject = AttemptedProject::where('project_id', $project->id)->where('user_id', $routeParameters['userId'])->first();
 
-        $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
+        if($request->input('submissionType') == "Submit") {
+            $competencyAndTaskReview = CompetencyAndTaskReview::where('attempted_project_id', $attemptedProject->id)->first();
 
-        $competencyAndTaskReview->competencies_reviewed = 1;
-        $competencyAndTaskReview->save();
+            $competencyAndTaskReview->competencies_reviewed = 1;
+            $competencyAndTaskReview->save();
 
-        if($competencyAndTaskReview->tasks_reviewed && $competencyAndTaskReview->competencies_reviewed) {
-            // update attempted project
+            if($competencyAndTaskReview->tasks_reviewed && $competencyAndTaskReview->competencies_reviewed) {
+                // update attempted project
 
-            $attemptedProject->status = "Assessed";
+                $attemptedProject->status = "Assessed";
 
-            $attemptedProject->save();
+                $attemptedProject->save();
 
-            $notification = new Notification;
+                $notification = new Notification;
 
-            $notification->message = "submitted reviews to your answers for project: " . $attemptedProject->project->title;
-            $notification->recipient_id = $attemptedProject->user_id;
-            $notification->user_id = Auth::id();
-            $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug;
+                $notification->message = "submitted reviews to your answers for project: " . $attemptedProject->project->title;
+                $notification->recipient_id = $attemptedProject->user_id;
+                $notification->user_id = Auth::id();
+                $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug;
 
-            $notification->save();
+                $notification->save();
 
-            $message = [
-                'text' => e("submitted reviews to your answers for project: " . $attemptedProject->project->title),
-                'username' => Auth::user()->name,
-                'avatar' => Auth::user()->avatar,
-                'timestamp' => (time()*1000),
-                'projectId' => $attemptedProject->project->id,
-                'url' => '/notifications'
-            ];
+                $message = [
+                    'text' => e("submitted reviews to your answers for project: " . $attemptedProject->project->title),
+                    'username' => Auth::user()->name,
+                    'avatar' => Auth::user()->avatar,
+                    'timestamp' => (time()*1000),
+                    'projectId' => $attemptedProject->project->id,
+                    'url' => '/notifications'
+                ];
 
-            $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
+                $this->pusher->trigger('notifications_' . $attemptedProject->user_id, 'new-notification', $message);
 
-            Mail::to($attemptedProject->user->email)->send(new SendProjectReviewedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug));
+                Mail::to($attemptedProject->user->email)->send(new SendProjectReviewedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug));
+
+                return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
+            } else {
+                return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId'].'/competencies')->with('saved', "Review saved!");
+            }
+        } else {
+            return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId'].'/competencies')->with('saved', "Review saved!");
         }
-
-        return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$routeParameters['userId']);
     }
 
     public function reviewFiles() {
@@ -677,13 +687,13 @@ class ProjectsController extends Controller
 
             Mail::to($attemptedProject->project->user->email)->send(new SendProjectSubmittedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . Auth::id()));
 
-            // $competencyAndTaskReview = new CompetencyAndTaskReview;
+            $competencyAndTaskReview = new CompetencyAndTaskReview;
 
-            // $competencyAndTaskReview->attempted_project_id = $attemptedProject->id;
-            // $competencyAndTaskReview->tasks_reviewed = 0;
-            // $competencyAndTaskReview->competencies_reviewed = 0;
+            $competencyAndTaskReview->attempted_project_id = $attemptedProject->id;
+            $competencyAndTaskReview->tasks_reviewed = 0;
+            $competencyAndTaskReview->competencies_reviewed = 0;
 
-            // $competencyAndTaskReview->save();
+            $competencyAndTaskReview->save();
 
             return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug').'/tasks');
         } else {

@@ -18,7 +18,7 @@
                       <div class="tab-pane fade show active" role="tabpanel" id="profile" aria-labelledby="profile-tab">
                           <!--end of avatar-->
                           @if (session('contactStatus'))
-                              <div class="alert alert-success">
+                              <div class="alert alert-success" style="text-align: center;">
                                   {{ session('contactStatus') }}
                               </div>
                           @endif

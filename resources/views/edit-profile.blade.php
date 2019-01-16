@@ -13,7 +13,7 @@
         @csrf
         <div class="content-list-body">
             @if ($errors->has('slug') && strlen($errors->first('slug')) > 0)
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" style="text-align: center;">
                 <p style="color: #721c24 !important;">The custom url has already been taken.</p>
             </div>
             @endif

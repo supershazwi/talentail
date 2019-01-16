@@ -18,7 +18,7 @@
 
   <div class="header">
     <div class="container">
-      <div class="alert alert-primary" style="margin-top: 1.5rem;">
+      <div class="alert alert-primary" style="margin-top: 1.5rem; text-align: center;">
         <h4 style="margin-bottom: 0;">This project has been completed. <a href="/profile/{{$project->user->id}}">{{$project->user->name}}</a> has been notified to review your submission.</h4>
       </div>
       <!-- Body -->

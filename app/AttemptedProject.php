@@ -27,12 +27,16 @@ class AttemptedProject extends Model
         return $this->belongsTo('App\User', 'creator_id');
     }
 
-    public function competency_and_task_reviews() {
-        return $this->hasMany(CompetencyAndTaskReview::class);
+    public function competency_and_task_review() {
+        return $this->hasOne(CompetencyAndTaskReview::class);
     }
 
     public function reviews() {
         return $this->hasMany(Review::class);
+    }
+
+    public function competency_scores() {
+        return $this->hasMany(CompetencyScore::class);
     }
 
     public function answered_task_files() {

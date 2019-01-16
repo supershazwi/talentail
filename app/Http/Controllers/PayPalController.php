@@ -18,6 +18,7 @@ use App\Notification;
 use App\Message;
 use App\AnsweredTask;
 use App\Invoice;
+use App\CompetencyScore;
 use App\User;
 use App\InvoiceLineItem;
 use App\AttemptedProject;
@@ -270,6 +271,21 @@ class PayPalController extends Controller
                 $answeredTask->project_id = $shoppingCartLineItem->project->id;
 
                 $answeredTask->save();
+            }
+
+            foreach($shoppingCartLineItem->project->competencies as $competency) {
+                // create new competencyscore for each
+
+                $competencyScore = new CompetencyScore;
+
+                $competencyScore->competency_id = $competency->id;
+                $competencyScore->role_gained_id = $shoppingCartLineItem->project->role_id;
+                $competencyScore->score = 0;
+                $competencyScore->user_id = Auth::id();
+                $competencyScore->project_id = $shoppingCartLineItem->project->id;
+                $competencyScore->user_id = $attemptedProject->id;
+
+                $competencyScore->save();
             }
 
             array_push($creatorProjectsToEmail[$attemptedProject->creator_id], $attemptedProject->project->title);

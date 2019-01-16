@@ -8,13 +8,13 @@
       <!-- Header -->
       <div class="header mt-md-5">
         @if (session('success'))
-        <div class="alert alert-success" role="alert" id="successAlert">
+        <div class="alert alert-success" role="alert" id="successAlert" style="text-align: center;">
           <h4 class="alert-heading" style="margin-bottom: 0;">Your application has been submitted. We will get back to you shortly.</h4>
         </div>
         @endif
 
         @if (session('error'))
-        <div class="alert alert-danger" role="alert" id="errorAlert">
+        <div class="alert alert-danger" role="alert" id="errorAlert" style="text-align: center;">
           @foreach(session('error') as $error)
           @if($loop->last)
           <h4 class="alert-heading" style="margin-bottom: 0;">{{$error}}</h4>

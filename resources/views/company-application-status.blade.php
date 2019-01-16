@@ -8,7 +8,7 @@
       <!-- Header -->
       <div class="header mt-md-5">
         @if (session('success'))
-        <div class="alert alert-success" role="alert" id="successAlert">
+        <div class="alert alert-success" role="alert" id="successAlert" style="text-align: center;">
           <h4 class="alert-heading" style="margin-bottom: 0;">{{session('success')}}</h4>
         </div>
         @endif

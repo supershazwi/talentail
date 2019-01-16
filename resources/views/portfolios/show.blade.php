@@ -62,7 +62,7 @@
               <div class="card mb-3" style="margin-bottom: 0rem !important;">
                   <div class="card-body">
                       @if(!$attemptedProject->project->internal && count($attemptedProject->reviews) == 0)
-                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                      <div class="alert alert-warning alert-dismissible fade show" role="alert" style="text-align: center;">
                         This project can only be published once it has been reviewed by at least 1 reviewer.
                       </div>
                       @endif

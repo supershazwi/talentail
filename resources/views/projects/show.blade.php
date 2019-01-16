@@ -37,7 +37,7 @@
       <!-- Body -->
       <div class="header-body" style="margin-top: 1.5rem; border-bottom: 0px;">
         @if(!$project->published)
-          <div class="alert alert-warning">
+          <div class="alert alert-warning" style="text-align: center;">
             <h4 class="alert-heading" style="margin-bottom: 0;">This project is private. Publish it to make it public.</h4>
           </div>
         @endif

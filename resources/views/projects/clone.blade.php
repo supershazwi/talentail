@@ -2,7 +2,7 @@
 
 @section ('content')
   @if($selectedRole != null)
-  <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem;">
+  <div class="alert alert-warning" style="border-radius: 0px; padding: 0.75rem 1.5rem; text-align: center;">
     You are currently creating a project for <strong>{{$selectedRole->title}}</strong>.<a href="/projects/select-role" style="float: right;">Select different role</a>
   </div>
   @endif

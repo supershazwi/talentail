@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <?php if(!empty($response['code'])) { ?>
-                <div class="alert alert-<?php echo $response['code']; ?>">
+                <div class="alert alert-<?php echo $response['code']; ?>" style="text-align: center;">
                     <?php echo $response['message']; ?>
                 </div>
                 <?php } ?>

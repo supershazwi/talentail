@@ -3,10 +3,15 @@
 @section ('content')
 <div class="header">
   <div class="container">
+    @if(session('saved'))
+      <div class="alert alert-success" style="margin-top: 1.5rem; text-align: center;" id="reviewSaved">
+        <h4 style="margin-bottom: 0;">{{session('saved')}}</h4>
+      </div>
+      @endif
     @if($attemptedProject->status == "Completed")
-    <div class="alert alert-primary" style="margin-top: 1.5rem;">
-      <h4>This project has been completed by {{$answeredTasks[0]->user->name}}. Please review the following:</h4>
-      <ul style="margin-bottom: 0;">
+    <div class="alert alert-primary" style="margin-top: 1.5rem; text-align: center;">
+      <h4>This project has been completed by <a href="/profile/{{$answeredTasks[0]->user_id}}">{{$answeredTasks[0]->user->name}}</a>. Please review the following:</h4>
+      <ul style="margin-bottom: 0; list-style: none;">
         @foreach($competencyAndTaskMessages as $competencyAndTaskMessage)
           <li style="color: white !important;">{{$competencyAndTaskMessage}}</li>
         @endforeach
@@ -15,20 +20,20 @@
     @else
       @if($attemptedProject->user_id != Auth::id())
         @if($attemptedProject->status == "Assessed")
-        <div class="alert alert-primary" style="margin-top: 1.5rem;">
+        <div class="alert alert-primary" style="margin-top: 1.5rem; text-align: center;">
           <h4 style="margin-bottom: 0;">This project has been reviewed. {{$attemptedProject->user->name}} has been notified. 
             @if(!$reviewLeftByCreator)
             <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/{{$reviewedUserId}}/review" class="pull-right">Leave an overall review</a></h4>
             @endif
         </div>
         @else
-        <div class="alert alert-primary" style="margin-top: 1.5rem;">
+        <div class="alert alert-primary" style="margin-top: 1.5rem; text-align: center;">
           <h4 style="margin-bottom: 0;">This project has been reviewed. {{$attemptedProject->user->name}} has been notified.</h4>
         </div>
         @endif
       @else
         @if($attemptedProject->status == "Assessed")
-        <div class="alert alert-primary" style="margin-top: 1.5rem;">
+        <div class="alert alert-primary" style="margin-top: 1.5rem; text-align: center;">
           <h4 style="margin-bottom: 0;">This project has been reviewed by {{$project->user->name}}. 
             @if(!$reviewLeftByApplicant)
               <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/review" class="pull-right">Leave an overall review</a>
@@ -36,7 +41,7 @@
           </h4>
         </div>
         @else
-        <div class="alert alert-primary" style="margin-top: 1.5rem;">
+        <div class="alert alert-primary" style="margin-top: 1.5rem; text-align: center;">
           <h4 style="margin-bottom: 0;">This project has been reviewed by {{$project->user->name}}.
             @if(!$reviewLeftByApplicant)
               <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/review" class="pull-right">Leave an overall review</a>
@@ -260,46 +265,66 @@
                 <p>{{$answeredTask->answer}}</p>
 
                 @if($answeredTask->task->file_upload)
+                  @if(count($answeredTask->answered_task_files) > 0)
                   <strong>Submitted Files:</strong> 
                   <br/>
+                  @endif
                     @foreach($answeredTask->answered_task_files as $answered_task_file)
-                      <a href="https://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}">{{$answered_task_file->title}}</a>
-                      <br/>
+                      @if($loop->last)
+                      <p><a href="https://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}">{{$answered_task_file->title}}</a></p>
+                      @else
+                      <p style="margin-bottom: 0rem;"><a href="https://storage.googleapis.com/talentail-123456789/{{$answered_task_file->url}}">{{$answered_task_file->title}}</a></p>
+                      @endif
                     @endforeach 
                 @endif
-                <br/>
                 @if($attemptedProject->status=="Completed")
                   @if($tasksReviewed)
                   <strong>Your Response:</strong>
-                  <p style="margin-bottom: 0;">{{$answeredTask->response}}</p>
+                  @if(count($answeredTask->reviewed_answered_task_files) > 0)
+                    <p>{{$answeredTask->response}}</p>
+                  @else
+                    <p style="margin-bottom: 0rem;">{{$answeredTask->response}}</p>
+                  @endif
                   @else
                   <strong>Your Response:</strong>
-                  <textarea name="response_{{$answeredTask->id}}" class="form-control" placeholder="Type your response" rows="8"></textarea>
+                  <textarea name="response_{{$answeredTask->id}}" class="form-control" placeholder="Type your response" rows="8">{{$answeredTask->response}}</textarea>
                   <div class="box" style="margin-top: 1.5rem;">
                     <input type="file" name="file_{{$answeredTask->id}}[]" id="file_{{$answeredTask->id}}" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; background-color: #076BFF;"/>
                     <label for="file_{{$answeredTask->id}}" style="position: absolute; left: 0; margin-left: 1.5rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
                   </div>
-                  <div id="selectedFiles_{{$answeredTask->id}}" style="margin-top: 1.5rem;"></div>
+                  <div id="selectedFiles_{{$answeredTask->id}}" style="margin-top: 1.5rem; margin-bottom: 0rem;"></div>
                   @endif
                 @else
                 <strong>Creator's Response:</strong>
+                @if(count($answeredTask->reviewed_answered_task_files) > 0)
+                <p>{{$answeredTask->response}}</p>
+                @else
                 <p style="margin-bottom: 0;">{{$answeredTask->response}}</p>
+                @endif
                 @endif
 
                 @if(count($answeredTask->reviewed_answered_task_files) > 0)
-                  <strong>Creator's Submitted Files:</strong> 
+                  <strong style="margin-top: 0.5rem;">Creator's Submitted Files:</strong> 
                   <br/>
                     @foreach($answeredTask->reviewed_answered_task_files as $reviewed_answered_task_file)
-                      <a href="https://storage.googleapis.com/talentail-123456789/{{$reviewed_answered_task_file->url}}">{{$reviewed_answered_task_file->title}}</a>
+                    <div id="file-group_{{$reviewed_answered_task_file->id}}">
+                      <a href="https://storage.cloud.google.com/talentail-123456789/{{$reviewed_answered_task_file->url}}">{{$reviewed_answered_task_file->title}}</a> 
+
+                      @if(!$attemptedProject->competency_and_task_review->tasks_reviewed)
+                      <span id="delete-file_{{$answeredTask->id}}_{{$reviewed_answered_task_file->id}}" class="remove-file" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle" id="span_{{$answeredTask->id}}_{{$reviewed_answered_task_file->id}}"></i></span>
+                      @endif
                       <br/>
+                    </div>
                     @endforeach
                 @endif
               </div> <!-- / .card-body -->
             </div>
           </div>
         </div>
+        <input type="hidden" name="files-deleted_{{$answeredTask->id}}" id="files-deleted_{{$answeredTask->id}}" />
       @endforeach
       <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
+      <input type="hidden" name="submissionType" id="submissionType" />
       <input type="submit" style="display: none;" id="submitProjectReview" />
       </form>
     @elseif($parameter == 'file')
@@ -386,7 +411,7 @@
               <div class="card-body" style="padding-bottom: 0.5rem;">
                 @if(count($project->competencies))
                   @if($competenciesReviewed)
-                    @foreach($competencyScores as $competencyScore)
+                    @foreach($attemptedProject->competency_scores as $competencyScore)
                     <div class="form-group">
                       <span style="float: left;">🌟</span>
                       <p style="margin-left: 2rem;">
@@ -452,31 +477,51 @@
                     </div>
                     @endforeach
                   @else
-                    @foreach($project->competencies as $competency)
+                    @foreach($attemptedProject->competency_scores as $competencyScore)
                     <div class="form-group">
                       <span style="float: left;">🌟</span>
                       <p style="margin-left: 2rem;">
-                        {{$competency->title}}
+                        {{$competencyScore->competency->title}}
                       </p>
                       <div class="btn-group-toggle" data-toggle="buttons" style="margin-bottom: 1rem;">
+                        @if($competencyScore->score == 1)
+                        <label class="btn btn-white active" id="label_poor" onclick="poor()">
+                        @else
                         <label class="btn btn-white" id="label_poor" onclick="poor()">
-                          <input type="radio" name="rating_{{$competency->id}}" value="Poor" id="poor" onclick="poor()"> 
+                        @endif
+                          <input type="radio" name="rating_{{$competencyScore->id}}" value="Poor" id="poor" onclick="poor()"> 
                           <i class="far fa-tired"></i> Poor - 1
                         </label>
+                        @if($competencyScore->score == 2)
+                        <label class="btn btn-white active" id="label_fair" onclick="fair()">
+                        @else
                         <label class="btn btn-white" id="label_fair" onclick="fair()">
-                          <input type="radio" name="rating_{{$competency->id}}" value="Fair" id="fair" onclick="fair()"> 
+                        @endif
+                          <input type="radio" name="rating_{{$competencyScore->id}}" value="Fair" id="fair" onclick="fair()"> 
                           <i class="far fa-frown"></i> Fair - 2
                         </label>
+                        @if($competencyScore->score == 3)
+                        <label class="btn btn-white active" id="label_average" onclick="average()">
+                        @else
                         <label class="btn btn-white" id="label_average" onclick="average()">
-                          <input type="radio" name="rating_{{$competency->id}}" value="Average" id="average" onclick="average()"> 
+                        @endif
+                          <input type="radio" name="rating_{{$competencyScore->id}}" value="Average" id="average" onclick="average()"> 
                           <i class="far fa-meh"></i> Average - 3
                         </label>
+                        @if($competencyScore->score == 4)
+                        <label class="btn btn-white active" id="label_good" onclick="good()">
+                        @else
                         <label class="btn btn-white" id="label_good" onclick="good()">
-                          <input type="radio" name="rating_{{$competency->id}}" value="Good" id="good" onclick="good()"> 
+                        @endif
+                          <input type="radio" name="rating_{{$competencyScore->id}}" value="Good" id="good" onclick="good()"> 
                           <i class="far fa-smile"></i> Good - 4
                         </label>
+                        @if($competencyScore->score == 5)
+                        <label class="btn btn-white active" id="label_excellent" onclick="excellent()">
+                        @else
                         <label class="btn btn-white" id="label_excellent" onclick="excellent()">
-                          <input type="radio" name="rating_{{$competency->id}}" value="Excellent" id="excellent" onclick="excellent()"> 
+                        @endif
+                          <input type="radio" name="rating_{{$competencyScore->id}}" value="Excellent" id="excellent" onclick="excellent()"> 
                           <i class="far fa-grin-stars"></i> Excellent - 5
                         </label>
                       </div>
@@ -491,15 +536,19 @@
           </div>
         </div>
       <input type="hidden" id="loggedInUserId" value="{{Auth::id()}}" />
+      <input type="hidden" name="attemptedProjectId" value="{{$attemptedProject->id}}" />
+      <input type="hidden" name="submissionType" id="submissionType" />
       <input type="submit" style="display: none;" id="submitCompetencyReview" />
       </form>
     @endif
     @if($attemptedProject->status == "Completed")
       @if($parameter == 'task' && !$tasksReviewed)
-      <button class="btn btn-primary" onclick="submitProjectReview()">Submit Review</button>
+      <button class="btn btn-light" onclick="saveProjectReview()">Save Review</button>
+      <button class="btn btn-primary" onclick="submitProjectReview()" style="margin-left: 0.5rem;">Submit Review</button>
       @endif
       @if($parameter == 'competency' && !$competenciesReviewed)
-      <button class="btn btn-primary" onclick="submitCompetencyReview()">Submit Review</button>
+      <button class="btn btn-light" onclick="saveCompetencyReview()">Save Review</button>
+      <button class="btn btn-primary" onclick="submitCompetencyReview()" style="margin-left: 0.5rem;">Submit Review</button>
       @endif
     @endif
   </div>
@@ -589,10 +638,22 @@
     }
 
     function submitProjectReview() {
+      document.getElementById("submissionType").value = "Submit";
+      document.getElementById("submitProjectReview").click();
+    }
+
+    function saveProjectReview() {
+      document.getElementById("submissionType").value = "Save";
       document.getElementById("submitProjectReview").click();
     }
 
     function submitCompetencyReview() {
+      document.getElementById("submissionType").value = "Submit";
+      document.getElementById("submitCompetencyReview").click();
+    }
+
+    function saveCompetencyReview() {
+      document.getElementById("submissionType").value = "Save";
       document.getElementById("submitCompetencyReview").click();
     }
 
@@ -609,6 +670,23 @@
       document.getElementById("rectangleChat").style.background = "#076bff";
       document.getElementById("rectangleChat").style.borderColor = "#076bff";
     }
+
+    function deleteFile() {
+      let fileIdString = event.target.id.split("_");
+      let answeredTaskId = fileIdString[1];
+      let answeredTaskFileId = fileIdString[2];
+
+      if(document.getElementById("files-deleted_"+answeredTaskId).value == "") {
+        document.getElementById("files-deleted_"+answeredTaskId).value += answeredTaskFileId;
+      } else {
+        document.getElementById("files-deleted_"+answeredTaskId).value += ", " + answeredTaskFileId;
+      }
+
+      let elem = document.getElementById("file-group_"+answeredTaskFileId);
+      elem.parentNode.removeChild(elem);
+    }
+
+    setTimeout(function(){ document.getElementById("reviewSaved").style.display = "none" }, 3000);
 
   </script>
 

@@ -12,6 +12,10 @@ class CompetencyScore extends Model
     	return $this->belongsTo(RoleGained::class);
     }
 
+    public function attempted_project() {
+        return $this->belongsTo(AttemptedProject::class);
+    }
+
     public function competency() {
     	return $this->belongsTo(Competency::class);
     }

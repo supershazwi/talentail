@@ -29,22 +29,22 @@
         <div class="col-12 col-md-5 col-xl-4 my-5">
           
           @if (session('message'))
-          <div class="alert alert-primary" role="alert">
+          <div class="alert alert-primary" role="alert" style="text-align: center;">
             <h4 class="alert-heading" style="margin-bottom: 0;">{{session('message')}}</h4>
           </div>
           @endif
           @if (session('passwordResetSuccess'))
-          <div class="alert alert-primary" role="alert">
+          <div class="alert alert-primary" role="alert" style="text-align: center;">
             <h4 class="alert-heading" style="margin-bottom: 0;">Your password has been successfully updated.</h4>
           </div>
           @endif
           @if (session('status'))
-              <div class="alert alert-primary">
+              <div class="alert alert-primary" style="text-align: center;">
                   {{ session('status') }}
               </div>
           @endif
           @if (session('warning'))
-              <div class="alert alert-warning">
+              <div class="alert alert-warning" style="text-align: center;">
                   {{ session('warning') }}
               </div>
           @endif

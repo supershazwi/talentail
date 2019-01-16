@@ -12,7 +12,7 @@
     <div class="col-xl-10 col-lg-11">
       <section class="py-4 py-lg-5" style="text-align: center; padding-bottom: 0rem !important;">
         @if (session('notAuthorised'))
-          <div class="alert alert-danger" id="notAuthorisedAlert">
+          <div class="alert alert-danger" id="notAuthorisedAlert" style="text-align: center;">
             <h4 class="alert-heading" style="margin-bottom: 0;">{{session('notAuthorised')}}</h4>
           </div>
         @endif
@@ -83,7 +83,7 @@
                       @endif
                       <hr />
                       @if (($errors->has('review') && strlen($errors->first('review')) > 0) || ($errors->has('rating') && strlen($errors->first('rating')) > 0))
-                      <div class="alert alert-danger" style="padding-bottom: 0.1875rem;">
+                      <div class="alert alert-danger" style="padding-bottom: 0.1875rem; text-align: center;">
                           @if ($errors->has('rating') && strlen($errors->first('rating')) > 0)
                               <h4 class="alert-heading">{{ $errors->first('rating') }}</h4>
                           @endif

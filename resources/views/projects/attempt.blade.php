@@ -409,12 +409,8 @@
 
     function deleteFile() {
       let fileIdString = event.target.id.split("_");
-      console.log(fileIdString);
       let answeredTaskId = fileIdString[1];
       let answeredTaskFileId = fileIdString[2];
-
-      console.log(answeredTaskId);
-      console.log(answeredTaskFileId);
 
       if(document.getElementById("files-deleted_"+answeredTaskId).value == "") {
         document.getElementById("files-deleted_"+answeredTaskId).value += answeredTaskFileId;

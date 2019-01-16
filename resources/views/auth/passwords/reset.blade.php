@@ -28,12 +28,12 @@
       <div class="row justify-content-center">
         <div class="col-12 col-md-5 col-xl-4 my-5">
           @if (session('status'))
-              <div class="alert alert-success">
+              <div class="alert alert-success" style="text-align: center;">
                   {{ session('status') }}
               </div>
           @endif
           @if (session('warning'))
-              <div class="alert alert-warning">
+              <div class="alert alert-warning" style="text-align: center;">
                   {{ session('warning') }}
               </div>
           @endif

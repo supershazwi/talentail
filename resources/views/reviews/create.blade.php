@@ -86,7 +86,7 @@
                 @endif
             </section>
             @if (($errors->has('review') && strlen($errors->first('review')) > 0) || ($errors->has('rating') && strlen($errors->first('rating')) > 0))
-            <div class="alert alert-danger" style="padding-bottom: 0.1875rem;">
+            <div class="alert alert-danger" style="padding-bottom: 0.1875rem; text-align: center;">
                 @if ($errors->has('rating') && strlen($errors->first('rating')) > 0)
                     <h4 class="alert-heading">{{ $errors->first('rating') }}</h4>
                 @endif

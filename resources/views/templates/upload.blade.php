@@ -8,7 +8,7 @@
                     <h1 class="display-4 mb-3">Upload Template</h1>
                 </section>
                 @if (($errors->has('title') && strlen($errors->first('title')) > 0) || $errors->has('description') && strlen($errors->first('description')) > 0 || $errors->has('file') && strlen($errors->first('file')) > 0 || $errors->has('shot') && strlen($errors->first('shot')) > 0)
-                <div class="alert alert-danger">
+                <div class="alert alert-danger" style="text-align: center;">
                   @if ($errors->has('title') && strlen($errors->first('title')) > 0)
                     <p style="color: #721c24 !important;">{{ $errors->first('title') }}</p>
                   @endif
