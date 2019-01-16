@@ -16,6 +16,7 @@ use Srmklive\PayPal\Services\ExpressCheckout;
 use App\IPNStatus;
 use App\Notification;
 use App\Message;
+use App\AnsweredTask;
 use App\Invoice;
 use App\User;
 use App\InvoiceLineItem;
@@ -260,6 +261,17 @@ class PayPalController extends Controller
 
             $attemptedProject->save();
 
+            foreach($shoppingCartLineItem->project->tasks as $task) {
+                $answeredTask = new AnsweredTask;
+                $answeredTask->answer = "";
+                $answeredTask->response = "";
+                $answeredTask->user_id = Auth::id();
+                $answeredTask->task_id = $task->id;
+                $answeredTask->project_id = $shoppingCartLineItem->project->id;
+
+                $answeredTask->save();
+            }
+
             array_push($creatorProjectsToEmail[$attemptedProject->creator_id], $attemptedProject->project->title);
 
             $invoiceLineItem = new InvoiceLineItem;
@@ -268,11 +280,15 @@ class PayPalController extends Controller
             $invoiceLineItem->invoice_id = $creatorIdAndInvoiceId[$attemptedProject->project->user_id];
 
             $invoiceLineItem->save();
+        
+            $userToEmail = User::find($attemptedProject->project->user_id);
+
+            Mail::to($userToEmail->email)->send(new SendProjectPurchasedMail($userToEmail, $creatorProjectsToEmail[$creatorId], "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . Auth::id()));   
         }
 
-        foreach($creatorIds as $creatorId) {
-            $userToEmail = User::find($creatorId);
-            Mail::to($userToEmail->email)->send(new SendProjectPurchasedMail($userToEmail, $creatorProjectsToEmail[$creatorId]));
-        }
+        // foreach($creatorIds as $creatorId) {
+        //     $userToEmail = User::find($creatorId);
+        //     Mail::to($userToEmail->email)->send(new SendProjectPurchasedMail($userToEmail, $creatorProjectsToEmail[$creatorId], "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . Auth::id()));
+        // }
     }
 }

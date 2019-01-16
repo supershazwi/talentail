@@ -6,7 +6,12 @@
 @endif
   <div class="header">
     <div class="container">
-      <div class="alert alert-primary" style="margin-top: 1.5rem;">
+      @if(session('saved'))
+      <div class="alert alert-success" style="margin-top: 1.5rem; text-align: center;" id="projectSaved">
+        <h4 style="margin-bottom: 0;">{{session('saved')}}</h4>
+      </div>
+      @endif
+      <div class="alert alert-light" style="margin-top: 1.5rem; text-align: center;">
         <h4 style="margin-bottom: 0;">Project Deadline: {{date('d M Y, h:i a', strtotime($attemptedProject->deadline))}}.</h4>
       </div>
       <!-- Body -->
@@ -145,21 +150,21 @@
         <input type="hidden" name="project_id" value="{{$project->id}}" />
         <input type="hidden" name="role_slug" value="{{$project->role->slug}}" />
         <input type="hidden" name="project_slug" value="{{$project->slug}}" />
-      @foreach($project->tasks as $key=>$task)
-        @if($task->mcq)
+      @foreach($answeredTasks as $key=>$answeredTask)
+        @if($answeredTask->task->mcq)
           <input type="hidden" name="task-type_{{$key+1}}" value="mcq" />
-          @if($task->multiple_select)
+          @if($answeredTask->task->multiple_select)
             <input type="hidden" name="multiple-select_{{$key+1}}" value="true" />
           @else
             <input type="hidden" name="multiple-select_{{$key+1}}" value="false" />
           @endif
-        @elseif($task->open_ended)
+        @elseif($answeredTask->task->open_ended)
           <input type="hidden" name="task-type_{{$key+1}}" value="open_ended" />
-        @elseif($task->na)
+        @elseif($answeredTask->task->na)
           <input type="hidden" name="task-type_{{$key+1}}" value="na" />
         @endif
 
-        @if($task->file_upload)
+        @if($answeredTask->task->file_upload)
           <input type="hidden" name="file-upload_{{$key+1}}" value="true" />
         @else
           <input type="hidden" name="file-upload_{{$key+1}}" value="false" />
@@ -169,45 +174,89 @@
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body" style="padding-bottom: 0.5rem;">
-                <p>{{$key+1}}. {{$task->title}}</p>
-                <input type="hidden" name="task_{{$key+1}}" value="{{$task->id}}" />
-                <p>{{$task->description}}</p>
-                @if($task->mcq) 
-                  @if($task->multiple_select)
-                    @foreach($task->answers as $answer) 
-                      <div class="form-check">
-                        <input class="form-check-input" name="answer_{{$key+1}}[]" type="checkbox" value="{{$answer->title}}" id="answer_{{$task->id}}_{{$answer->id}}">
-                        <label class="form-check-label" for="defaultCheck1">
-                          <p>{{$answer->title}}</p>
-                        </label>
-                      </div>
+                <p>{{$key+1}}. {{$answeredTask->task->title}}</p>
+                <input type="hidden" name="task_{{$key+1}}" value="{{$answeredTask->task->id}}" />
+                <p>{{$answeredTask->task->description}}</p>
+                @if($answeredTask->task->mcq) 
+                  @if($answeredTask->task->multiple_select)
+                    @foreach($answeredTask->task->answers as $answer) 
+                      @if(!$loop->last)
+                            <div class="row align-items-center" style="margin-bottom: 0.5rem;">
+                        @else
+                            <div class="row align-items-center" style="margin-bottom: 1rem;">
+                        @endif
+                          <div class="col-auto">
+                            <div class="custom-control custom-checkbox-toggle">
+                              @if(in_array($answer->title, $answeredTask->answer))
+                              <input type="checkbox" class="custom-control-input" name="answer_{{$key+1}}[]" value="{{$answer->title}}" id="answer_{{$answeredTask->task->id}}_{{$answer->id}}" checked>
+                              @else
+                              <input type="checkbox" class="custom-control-input" name="answer_{{$key+1}}[]" value="{{$answer->title}}" id="answer_{{$answeredTask->task->id}}_{{$answer->id}}">
+                              @endif
+                              <label class="custom-control-label" for="answer_{{$answeredTask->task->id}}_{{$answer->id}}" id="answer_{{$answeredTask->task->id}}_{{$answer->id}}"></label>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <span>{{$answer->title}}</span>
+                          </div>
+                        </div>
                     @endforeach
                   @else
-                    @foreach($task->answers as $answer) 
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="answer_{{$task->id}}" id="answer_{{$task->id}}_{{$answer->id}}" value="{{$answer->title}}">
-                        <label class="form-check-label" for="exampleRadios1">
-                          <p>{{$answer->title}}</p>
+                    <div class="btn-group-toggle" data-toggle="buttons" style="display: inline-grid; margin-bottom: 1rem;">
+                    @foreach($answeredTask->task->answers as $key=>$answer) 
+                      @if($loop->last)
+                        @if($answeredTask->answer == $answer->title)
+                        <label class="btn btn-white active" style="text-align: left;">
+                          <input type="radio" name="answer_{{$answeredTask->task->id}}" id="answer_{{$answeredTask->task->id}}_{{$answer->id}}" value="{{$answer->title}}" id="option{{$key}}"> <i class="fe fe-check-circle"></i> {{$answer->title}}
                         </label>
-                      </div>
+                        @else
+                        <label class="btn btn-white" style="text-align: left;">
+                          <input type="radio" name="answer_{{$answeredTask->task->id}}" id="answer_{{$answeredTask->task->id}}_{{$answer->id}}" value="{{$answer->title}}" id="option{{$key}}"> <i class="fe fe-check-circle"></i> {{$answer->title}}
+                        </label>
+                        @endif
+                      @else
+                        @if($answeredTask->answer == $answer->title)
+                        <label class="btn btn-white active" style="text-align: left; margin-bottom: 0.5rem;">
+                          <input type="radio" name="answer_{{$answeredTask->task->id}}" id="answer_{{$answeredTask->task->id}}_{{$answer->id}}" value="{{$answer->title}}" id="option{{$key}}"> <i class="fe fe-check-circle"></i> {{$answer->title}}
+                        </label>
+                        @else
+                        <label class="btn btn-white" style="text-align: left; margin-bottom: 0.5rem;">
+                          <input type="radio" name="answer_{{$answeredTask->task->id}}" id="answer_{{$answeredTask->task->id}}_{{$answer->id}}" value="{{$answer->title}}" id="option{{$key}}"> <i class="fe fe-check-circle"></i> {{$answer->title}}
+                        </label>
+                        @endif
+                      @endif
+
+
                     @endforeach
+                    </div>
                   @endif
-                @elseif($task->open_ended)
-                  <textarea class="form-control" name="answer_{{$task->id}}" id="answer_{{$task->id}}" rows="5" placeholder="Enter your answer here" style="margin-bottom: 1rem;"></textarea>
+                @elseif($answeredTask->task->open_ended)
+                  <textarea class="form-control" name="answer_{{$answeredTask->task->id}}" id="answer_{{$answeredTask->task->id}}" rows="5" placeholder="Enter your answer here" style="margin-bottom: 1rem;">{{$answeredTask->answer}}</textarea>
                 @endif
 
-                @if($task->file_upload) 
+                @if($answeredTask->task->file_upload) 
                   <div class="box">
-                    <input type="file" name="file_{{$task->id}}[]" id="file_{{$task->id}}" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; background-color: #076BFF;"/>
-                    <label for="file_{{$task->id}}" style="position: absolute; left: 0; margin-left: 1.5rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
+                    <input type="file" name="file_{{$answeredTask->task->id}}[]" id="file_{{$answeredTask->task->id}}" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; background-color: #076BFF;"/>
+                    <label for="file_{{$answeredTask->task->id}}" style="position: absolute; left: 0; margin-left: 1.5rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span style="font-size: 1rem;">Choose Files</span></label>
                   </div>
-                  <div id="selectedFiles_{{$task->id}}" style="margin-top: 1.5rem; margin-bottom: 0.5rem;"></div>
+                  <div id="selectedFiles_{{$answeredTask->task->id}}" style="margin-top: 1.5rem; margin-bottom: 0.5rem;"></div>
+                  @if(count($answeredTask->answered_task_files) > 0)
+                  <div style="margin-bottom: 0.5rem;">
+                    @foreach($answeredTask->answered_task_files as $answeredTaskFile)
+                    <div id="file-group_{{$answeredTaskFile->id}}">
+                      <a href="https://storage.cloud.google.com/talentail-123456789/{{$answeredTaskFile->url}}">{{$answeredTaskFile->title}}</a> <span id="delete-file_{{$answeredTask->id}}_{{$answeredTaskFile->id}}" class="remove-file" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle" id="span_{{$answeredTask->id}}_{{$answeredTaskFile->id}}"></i></span><br/>
+                    </div>
+                    @endforeach
+                  </div>
+                  @endif
                 @endif
               </div> <!-- / .card-body -->
             </div>
           </div>
         </div>
+
+        <input type="hidden" name="files-deleted_{{$answeredTask->id}}" id="files-deleted_{{$answeredTask->id}}" />
       @endforeach
+        <input type="hidden" name="submissionType" id="submissionType" />
         <button type="submit" style="display: none;" id="submitProjectAttempt">Submit</button>
       </form>
     @elseif($parameter == 'file')
@@ -308,7 +357,8 @@
       </div>
     @endif
     @if($parameter == "task")
-    <button class="btn btn-primary" onclick="submitProjectAttempt()">Submit Project</button>
+    <button class="btn btn-light" onclick="saveProjectAttempt()">Save Project</button>
+    <button class="btn btn-primary" onclick="submitProjectAttempt()" style="margin-left: 0.5rem;">Submit Project</button>
     @endif
   </div>
 
@@ -348,8 +398,36 @@
     }
 
     function submitProjectAttempt() {
+      document.getElementById("submissionType").value = "Submit";
       document.getElementById("submitProjectAttempt").click();
     }
+
+    function saveProjectAttempt() {
+      document.getElementById("submissionType").value = "Save";
+      document.getElementById("submitProjectAttempt").click();
+    }
+
+    function deleteFile() {
+      let fileIdString = event.target.id.split("_");
+      console.log(fileIdString);
+      let answeredTaskId = fileIdString[1];
+      let answeredTaskFileId = fileIdString[2];
+
+      console.log(answeredTaskId);
+      console.log(answeredTaskFileId);
+
+      if(document.getElementById("files-deleted_"+answeredTaskId).value == "") {
+        document.getElementById("files-deleted_"+answeredTaskId).value += answeredTaskFileId;
+      } else {
+        document.getElementById("files-deleted_"+answeredTaskId).value += ", " + answeredTaskFileId;
+      }
+
+      let elem = document.getElementById("file-group_"+answeredTaskFileId);
+      elem.parentNode.removeChild(elem);
+    }
+
+    setTimeout(function(){ document.getElementById("projectSaved").style.display = "none" }, 3000);
+
   </script>
 @endsection
 

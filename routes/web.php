@@ -1356,6 +1356,18 @@ Route::post('/process-payment', function(Request $request) {
 
                     $attemptedProject->save();
 
+                    // add all the answeredtasks so that it can be loaded on the attempt page
+                    foreach($project->tasks as $task) {
+                        $answeredTask = new AnsweredTask;
+                        $answeredTask->answer = "";
+                        $answeredTask->response = "";
+                        $answeredTask->user_id = Auth::id();
+                        $answeredTask->task_id = $task->id;
+                        $answeredTask->project_id = $project->id;
+
+                        $answeredTask->save();
+                    }
+
                     // notify creator
                     $notification = new Notification;
 

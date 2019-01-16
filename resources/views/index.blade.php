@@ -51,7 +51,7 @@
       </ul>
     </div>
   </div>
-  <hr style="margin-top: 5rem;"/>
+  <!-- <hr style="margin-top: 5rem;"/>
   <div class="row" style="margin-top: 5rem;">
     <div class="col-12 col-lg-4">
       <div class="row no-gutters align-items-center justify-content-center">
@@ -83,7 +83,7 @@
         <h1 style="color: #777d7f; margin-bottom: 0;">Companies</h1>
       </div>
     </div>
-  </div>
+  </div> -->
   @if(!Auth::id())
   <hr style="margin-top: 5rem;"/>
   <div class="row justify-content-center" style="margin-top: 5rem; display: block; text-align: center;">

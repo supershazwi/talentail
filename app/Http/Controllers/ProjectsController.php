@@ -596,9 +596,9 @@ class ProjectsController extends Controller
 
         while($request->input('task_' . $taskCounter) != null) {
 
-            $answeredTask = new AnsweredTask;
+            $answeredTask = AnsweredTask::where('task_id', $request->input('task_'.$taskCounter))->where('user_id', Auth::id())->where('project_id', $request->input('project_id'))->first();
 
-            if($request->input('multiple-select_' . $taskCounter) == "true") {
+            if($request->input('multiple-select_' . $taskCounter) == "true" && $request->input('answer_' . $taskCounter) != null) {
                 $answeredTask->answer = implode(', ', $request->input('answer_' . $taskCounter));
             } else {
                 if($request->input('answer_' . $request->input('task_' . $taskCounter))) {
@@ -637,44 +637,59 @@ class ProjectsController extends Controller
                 }
             }
 
+            // check if any files deleted
+            $removedFilesIdArray = $request->input('files-deleted_'.$answeredTask->id);
+
+            if($removedFilesIdArray != null) {
+                $removedFilesIdArray = explode(",",$removedFilesIdArray);
+                foreach($removedFilesIdArray as $removedFileId) {
+                    AnsweredTaskFile::destroy($removedFileId);
+                }
+            }
+
             $taskCounter++;
         }
 
-        $attemptedProject->status = "Completed";
+        if($request->input('submissionType') == "Submit") {
+            $attemptedProject->status = "Completed";
 
-        $attemptedProject->save();
+            $attemptedProject->save();
 
-        $notification = new Notification;
+            $notification = new Notification;
 
-        $notification->message = "submitted answers for project: " . $attemptedProject->project->title;
-        $notification->recipient_id = $attemptedProject->project->user_id;
-        $notification->user_id = Auth::id();
-        $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . Auth::id();
+            $notification->message = "submitted answers for project: " . $attemptedProject->project->title;
+            $notification->recipient_id = $attemptedProject->project->user_id;
+            $notification->user_id = Auth::id();
+            $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . Auth::id();
 
-        $notification->save();
+            $notification->save();
 
-        $message = [
-            'text' => e("submitted answers for project: " . $attemptedProject->project->title),
-            'username' => Auth::user()->name,
-            'avatar' => Auth::user()->avatar,
-            'timestamp' => (time()*1000),
-            'projectId' => $attemptedProject->project->id,
-            'url' => '/notifications'
-        ];
+            $message = [
+                'text' => e("submitted answers for project: " . $attemptedProject->project->title),
+                'username' => Auth::user()->name,
+                'avatar' => Auth::user()->avatar,
+                'timestamp' => (time()*1000),
+                'projectId' => $attemptedProject->project->id,
+                'url' => '/notifications'
+            ];
 
-        $this->pusher->trigger('notifications_' . $attemptedProject->project->user_id, 'new-notification', $message);
+            $this->pusher->trigger('notifications_' . $attemptedProject->project->user_id, 'new-notification', $message);
 
-        Mail::to($attemptedProject->project->user->email)->send(new SendProjectSubmittedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . Auth::id()));
+            Mail::to($attemptedProject->project->user->email)->send(new SendProjectSubmittedMail(Auth::user()->name, $attemptedProject->project->user->name, $attemptedProject->project->title, "https://talentail.com/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . Auth::id()));
 
-        $competencyAndTaskReview = new CompetencyAndTaskReview;
+            // $competencyAndTaskReview = new CompetencyAndTaskReview;
 
-        $competencyAndTaskReview->attempted_project_id = $attemptedProject->id;
-        $competencyAndTaskReview->tasks_reviewed = 0;
-        $competencyAndTaskReview->competencies_reviewed = 0;
+            // $competencyAndTaskReview->attempted_project_id = $attemptedProject->id;
+            // $competencyAndTaskReview->tasks_reviewed = 0;
+            // $competencyAndTaskReview->competencies_reviewed = 0;
 
-        $competencyAndTaskReview->save();
+            // $competencyAndTaskReview->save();
 
-        return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug'));
+            return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug').'/tasks');
+        } else {
+            return redirect('/roles/'.$request->input('role_slug').'/projects/'.$request->input('project_slug').'/tasks')->with('saved', 'Project saved!');
+        }
+        
     }
 
     public function toggleVisibilityProject(Request $request) {
@@ -756,7 +771,7 @@ class ProjectsController extends Controller
 
 
         if($attemptedProject) {
-            
+
             //here
             $answeredTasks = AnsweredTask::where('project_id', $project->id)->where('user_id', Auth::id())->orderBy('task_id', 'asc')->get();
 
@@ -874,11 +889,26 @@ class ProjectsController extends Controller
                     ]);
                 }
             } else {
+                // candidate saved all come here
 
                 $tasksArray = array();
 
                 foreach($attemptedProject->project->tasks as $task) {
                     array_push($tasksArray, $task->id);
+                }
+
+                foreach($answeredTasks as $answeredTask) {
+                    if($answeredTask->task->multiple_select) {
+                        $answeredTask->answer = explode(",", $answeredTask->answer);
+
+                        $trimmedArray = array();
+
+                        foreach($answeredTask->answer as $answer) {
+                            array_push($trimmedArray, trim($answer));
+                        }
+
+                        $answeredTask->answer = $trimmedArray;
+                    }
                 }
 
                 return view('projects.attempt', [
@@ -887,6 +917,7 @@ class ProjectsController extends Controller
                     'project' => $project,
                     'tasksArray' => implode(",", $tasksArray),
                     'role' => $role,
+                    'answeredTasks' => $answeredTasks,
                     'parameter' => 'task',
                     'messages' => $messages3,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
@@ -1741,6 +1772,17 @@ class ProjectsController extends Controller
 
                     $attemptedProject->save();
 
+                    foreach($project->tasks as $task) {
+                        $answeredTask = new AnsweredTask;
+                        $answeredTask->answer = "";
+                        $answeredTask->response = "";
+                        $answeredTask->user_id = Auth::id();
+                        $answeredTask->task_id = $task->id;
+                        $answeredTask->project_id = $project->id;
+
+                        $answeredTask->save();
+                    }
+
                     // notify creator
                     $notification = new Notification;
 
@@ -1789,6 +1831,17 @@ class ProjectsController extends Controller
             $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
 
             $attemptedProject->save();
+
+            foreach($project->tasks as $task) {
+                $answeredTask = new AnsweredTask;
+                $answeredTask->answer = "";
+                $answeredTask->response = "";
+                $answeredTask->user_id = Auth::id();
+                $answeredTask->task_id = $task->id;
+                $answeredTask->project_id = $project->id;
+
+                $answeredTask->save();
+            }
 
             // create invoice and change shopping cart to done
             $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
