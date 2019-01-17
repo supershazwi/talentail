@@ -1169,16 +1169,7 @@ Route::get('dashboard', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-});
-
-Route::get('/portfolio', function() {
-    return view('portfolio', [
-        
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-    ]);
-});
+})->middelware('auth');
 
 Route::post('/shopping-cart/empty-cart', function(Request $request) {
     $shoppingCartId = Input::get('shopping_cart_id');
@@ -1488,39 +1479,9 @@ Route::get('/send-message', function() {
     Mail::to('supershazwi@gmail.com')->send(new UserRegistered());
 });
 
-
 Route::post('/messages/{userId}', 'MessagesController@sendMessage');
 
-Route::get('/bridge', function() {
-    $pusher = App::make('pusher');
-
-    $pusher->trigger('my-channel', 'my-event', array('message' => 'hello world'));
-
-    return view('welcome', [
-        
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-    ]);
-});
-
 Route::post('/purchase-projects', 'ProjectsController@purchaseProjects');
-
-Route::get('/creators', function() {
-    $creators = User::where('creator', 1)->get();
-
-    return view('creators.index', [
-        
-        'creators' => $creators,
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-    ]);
-});
-
-Route::get('/bridge-2', function() {
-    return view('welcome-2');
-})->middleware('verified');
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
