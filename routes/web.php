@@ -1169,7 +1169,7 @@ Route::get('dashboard', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
-})->middelware('auth');
+})->middleware('auth');
 
 Route::post('/shopping-cart/empty-cart', function(Request $request) {
     $shoppingCartId = Input::get('shopping_cart_id');
