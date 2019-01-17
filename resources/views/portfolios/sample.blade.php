@@ -12,11 +12,6 @@
           <span class="badge badge-secondary">Sample Portfolio</span>
         </div>
         <p>Shazwi has been working as a tech consultant since graduating from National University of Singapore and has gained significant experience in digital transformation projects. He likes to overthink in his everyday life and sometimes land himself onto problems that he wants to solve. When push comes to shove, he will roll up his sleeves, his pants, tie up his hair and sit tight till a solution is found. He still can't afford his own bat signal yet, so he can only be contactable on the other channels below.</p>
-        <div class="text-center" style="margin-bottom: 0.75rem;">
-          <h2>
-            ⭐️ 4.5
-          </h2>
-        </div>
 
         <div class="text-center" style="margin-bottom: 0.75rem;">
             <span class="badge badge-primary">Business Analyst</span>
@@ -53,40 +48,54 @@
       </div>
 
       <div class="content-list-body row">
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             <div class="card mb-3" style="margin-bottom: 0rem !important;">
               <div class="card-body">
               <a href="/roles/business-analyst/projects/digital-transformation-project-for-a-food-beverages-co-puffy-puff-pte-ltd"><h3 data-filter-by="text">Digital Transformation Project for a Food &amp; Beverages Co - Puffy Puff Pte. Ltd.</h3></a>
               <p style="margin-top: 0.5rem;">Puffy Puff Pte. Ltd. was founded by Mr Lee in Singapore on September 2000 with the sole reason of making Singaporeans happy with the curry puffs he created. Over the course of 10 years, demand for curry puffs has increased but the processes and systems used by Mr Lee remain the same.</p>
-              <div class="row">
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="/img/frs-sample.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)">
+              <div class='row'>
+                <div class='col-12 col-md-12'>
+                  <div class='form-group' style="margin-bottom: 0rem;">
+                    <h4><label class='mb-1'>Competencies fulfilled</label></h4>
+                    <span style="float: left;">🌟</span>
+                    <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                      Business Analysis Planning & Monitoring
+                    </p>
+                    <span style="float: left;">🌟</span>
+                    <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                      Elicitation & Collaboration
+                    </p>
+                    <span style="float: left;">🌟</span>
+                    <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                      Requirements Life Cycle Management
+                    </p>
+                    <span style="float: left;">🌟</span>
+                    <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                      Strategy Analysis
+                    </p>
+                    <span style="float: left;">🌟</span>
+                    <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                      Requirements Analysis & Design Definition
+                    </p>
+                    <span style="float: left;">🌟</span>
+                    <p style="margin-left: 2rem;">
+                      Solution Evaluation
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="/img/sipoc-sample.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)">
+              <div class='row'>
+                <div class='col-12 col-md-12'>
+                  <div class='form-group' style="margin-bottom: 0rem;">
+                    <h4><label class='mb-1'>Supporting files</label></h4>
+                    <a href="#">Business Requirements Document.docx</a><br/>
+                  </div>
+                </div>
               </div>
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="/img/prioritisation-sample.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)">
-              </div>
-              <!-- <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="https://tallyfy.com/wp-content/uploads/2017/10/SIPOC.png" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
-              </div>
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="https://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
-              </div>
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="http://pbsanjacinto.weebly.com/uploads/1/3/4/9/13495198/739345_orig.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
-              </div> -->
-              </div>
-              <div class="row">
-              <div class="col-lg-12" style="margin-bottom: 1rem;">
-              <button class="btn btn-link" onclick="alertSample()" style="padding-left: 0rem;">See full repository of documents</button>
-              </div>
-              </div>
-              <hr style="margin-top: 0rem;">
+              <hr style="margin-top: 1.375rem;">
               <img src="https://storage.googleapis.com/talentail-123456789/avatars/pTzOJNAKBA85qGI9B4c9gictjkWTbRYaBZbyU3Zt.jpeg" style="height: 3rem; width: 3rem; float: left;" class="avatar-img rounded-circle">
               <div style="margin-left: 4rem !important;">
-              <p style="margin-bottom: 0.5rem;"><a href="/profile/16">Steve McIntosh</a> <span class="badge badge-warning" style="font-size: 0.8rem;">Creator</span></p>
+                <p style="margin-bottom: 0.25rem;"><a href="/profile/16">Steve McIntosh <span class="badge badge-soft-secondary" style="font-size: 0.8rem; margin-top: -0.5rem;">Creator</span></a></p>
               <p style="margin-bottom: 0rem;">He is an engaging, proactive and confident individual who is always ready for more challenges. I was particularly impressed by his ability to analyze the toughest problems for this project. his analytical capabilities and drive is what will make him a success.</p>
               </div>
               </div>
@@ -97,126 +106,41 @@
               <div class="card-body">
               <a href="/roles/business-analyst/projects/ecommerce-virtual-fair-system"><h3 data-filter-by="text">Ecommerce Virtual Fair System</h3></a>
               <p style="margin-top: 0.5rem;">Founder of Marvel Technology Mr. Thomson has come up with an introduction of Virtual Fair System with the sole reason of providing wide range of products by collaborating with merchants all around the globe.</p>
-              <div class="row">
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="/img/frs-sample.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)">
+              <div class='row'>
+                <div class='col-12 col-md-12'>
+                  <div class='form-group' style="margin-bottom: 0rem;">
+                    <h4><label class='mb-1'>Competencies fulfilled</label></h4>
+                    <span style="float: left;">🌟</span>
+                    <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                      Business Analysis Planning & Monitoring
+                    </p>
+                    <span style="float: left;">🌟</span>
+                    <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                      Elicitation & Collaboration
+                    </p>
+                    <span style="float: left;">🌟</span>
+                    <p style="margin-left: 2rem;">
+                      Requirements Life Cycle Management
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="/img/sipoc-sample.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)">
+              <div class='row'>
+                <div class='col-12 col-md-12'>
+                  <div class='form-group' style="margin-bottom: 0rem;">
+                    <h4><label class='mb-1'>Supporting files</label></h4>
+                    <a href="#">Business Requirements Document.docx</a><br/>
+                  </div>
+                </div>
               </div>
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="/img/prioritisation-sample.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)">
-              </div>
-              <!-- <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="https://tallyfy.com/wp-content/uploads/2017/10/SIPOC.png" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
-              </div>
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="https://storage.googleapis.com/talentail-123456789/assets/9Pgh5YOy6MuV4pHfjWa13li4dwh2LfFvZLsZmQWH.jpeg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
-              </div>
-              <div class="col-lg-4" style="margin-bottom: 1rem;">
-              <img class="thumbnail" src="http://pbsanjacinto.weebly.com/uploads/1/3/4/9/13495198/739345_orig.jpg" style="width: 100%; border: 1px solid #E9EEF2; border-radius: 0.5rem; height: 200px;" onclick="showModal(this.src)"/>
-              </div> -->
-              </div>
-              <div class="row">
-              <div class="col-lg-12" style="margin-bottom: 1rem;">
-              <button class="btn btn-link" onclick="alertSample()" style="padding-left: 0rem;">See full repository of documents</button>
-              </div>
-              </div>
-              <hr style="margin-top: 0rem;">
+              <hr style="margin-top: 1.375rem;" />
               <img src="https://storage.googleapis.com/talentail-123456789/avatars/JKyKhb7wRRQxgMDwC7waREJ1TKy0pNiqLSczL1Ih.jpeg" style="height: 3rem; width: 3rem; float: left;" class="avatar-img rounded-circle">
               <div style="margin-left: 4rem !important;">
-              <p style="margin-bottom: 0.5rem;"><a href="/profile/18">Roshan Satpute</a> <span class="badge badge-warning" style="font-size: 0.8rem;">Creator</span></p>
+              <p style="margin-bottom: 0.25rem;"><a href="/profile/18">Roshan Satpute <span class="badge badge-soft-secondary" style="font-size: 0.8rem; margin-top: -0.5rem;">Creator</span></a></p>
               <p style="margin-bottom: 0rem;">He is an engaging, proactive and confident individual who is always ready for more challenges. I was particularly impressed by his ability to analyze the toughest problems for this project. his analytical capabilities and drive is what will make him a success.</p>
               </div>
               </div>
             </div>
-        </div>
-        <div class="col-lg-3">
-          <div class="card mb-3" style="margin-bottom: 0rem !important;">
-            <div class="card-body">
-              <h3 style="margin-bottom: 0;">Overall Competencies</h3>
-              <p style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Business Analysis Planning & Monitoring</p>
-              <div class="row align-items-center no-gutters">
-                <div class="col">
-                  
-                  <!-- Progress -->
-                  <div class="progress progress-sm">
-                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-
-                </div>
-                <div class="col-auto">
-
-                  <div class="small" style="margin-left: 0.5rem !important;">4/5</div>
-                  
-                </div>
-              </div>
-              <p style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Elicitation & Collaboration</p>
-              <div class="row align-items-center no-gutters">
-                <div class="col">
-                  
-                  <!-- Progress -->
-                  <div class="progress progress-sm">
-                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-
-                </div>
-                <div class="col-auto">
-
-                  <div class="small" style="margin-left: 0.5rem !important;">4/5</div>
-                  
-                </div>
-              </div>
-              <p style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Requirements Life Cycle Management</p>
-              <div class="row align-items-center no-gutters">
-                <div class="col">
-                  
-                  <!-- Progress -->
-                  <div class="progress progress-sm">
-                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-
-                </div>
-                <div class="col-auto">
-
-                  <div class="small" style="margin-left: 0.5rem !important;">4/5</div>
-                  
-                </div>
-              </div>
-              <p style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Solution Evaluation</p>
-              <div class="row align-items-center no-gutters">
-                <div class="col">
-                  
-                  <!-- Progress -->
-                  <div class="progress progress-sm">
-                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-
-                </div>
-                <div class="col-auto">
-
-                  <div class="small" style="margin-left: 0.5rem !important;">4/5</div>
-                  
-                </div>
-              </div>
-              <p style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Strategy Analysis</p>
-              <div class="row align-items-center no-gutters">
-                <div class="col">
-                  
-                  <!-- Progress -->
-                  <div class="progress progress-sm">
-                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-
-                </div>
-                <div class="col-auto">
-
-                  <div class="small" style="margin-left: 0.5rem !important;">4/5</div>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

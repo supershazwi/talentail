@@ -72,6 +72,26 @@
                         @endif
                       </a>
                       <p style="margin-top: 0.5rem;">{{$attemptedProject->project->description}}</p>
+                      <div class='row'>
+                        <div class='col-12 col-md-12'>
+                          <div class='form-group' style="margin-bottom: 0rem;">
+                            <h4><label class='mb-1'>Competencies fulfilled</label></h4>
+                            @foreach($attemptedProject->competency_scores as $competencyScore)
+                              @if($loop->last) 
+                                <span style="float: left;">🌟</span>
+                                <p style="margin-left: 2rem;">
+                                  {{$competencyScore->competency->title}}
+                                </p>
+                              @else
+                                <span style="float: left;">🌟</span>
+                                <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                                  {{$competencyScore->competency->title}}
+                                </p>
+                              @endif
+                            @endforeach
+                          </div>
+                        </div>
+                      </div>
                       @if(count($attemptedProject->answered_task_files) > 0)
                       <div class='row'>
                         <div class='col-12 col-md-12'>

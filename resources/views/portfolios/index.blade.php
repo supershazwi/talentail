@@ -77,7 +77,7 @@
 		      <div class="row align-items-right">
 		        <div class="col">
 		        	<p class="card-text small text-muted" style="margin-bottom: 0;">Completed projects</p>
-		        	<p style="margin-bottom: 0;">6</p>
+		        	<p style="margin-bottom: 0;">2</p>
 		        </div>
 		        <div class="col-auto">
 		          
