@@ -275,7 +275,7 @@
             </div>
             @foreach($project->project_files as $projectFile)
             <div id="file-group_{{$projectFile->id}}">
-              <a href="https://storage.cloud.google.com/talentail-123456789/{{$projectFile->url}}">{{$projectFile->title}}</a> <span id="delete-file_{{$projectFile->id}}" class="remove-file" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle" id="span_{{$projectFile->id}}"></i></span><br/>
+              <a href="https://storage.googleapis.com/talentail-123456789/{{$projectFile->url}}">{{$projectFile->title}}</a> <span id="delete-file_{{$projectFile->id}}" class="remove-file" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle" id="span_{{$projectFile->id}}"></i></span><br/>
             </div>
             @endforeach
             <div id="selectedFiles">
@@ -351,10 +351,11 @@
                 </label>
 
                 <div class="input-group mb-3">
-                  <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1" name="price" value="{{$project->amount}}">
-                  <div class="input-group-append">
-                    <span class="input-group-text" id="basic-addon1">credits</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">$</span>
                   </div>
+                  <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1" name="price" value="{{$project->amount}}">
+                  
                 </div>
               </div>
             </div>
