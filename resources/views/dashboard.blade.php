@@ -34,7 +34,7 @@
 			    </h2>
 			  </div>
 			  <div class="col">
-
+			  	<a href="/projects/select-role" class="btn btn-primary" style=" margin-top: -1.25rem; float: right;">Add Project</a>
 			  </div>
 			</div>
 			@if(count($createdProjects) > 0)
@@ -55,7 +55,7 @@
 					      		@foreach($createdProjects as $key=>$createdProject)
 					          <tr>
 					            <th scope="row">{{$key+1}}</th>
-					            <td><a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}/{{$createdProject->user_id}}">{{$createdProject->title}}</a></td>
+					            <td><a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}">{{$createdProject->title}}</a></td>
 					            <td>{{$createdProject->industry->title}}</td>
 					            <td>${{$createdProject->amount}}</td>
 					            @if($createdProject->published)

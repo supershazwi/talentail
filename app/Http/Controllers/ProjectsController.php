@@ -1888,6 +1888,9 @@ class ProjectsController extends Controller
         // dd()
         if(request('role') != null) {
             $roleId = request('role');
+            if($roleId == "Nil") {
+                return redirect('/projects/select-role')->with('selectRoleSelected', 'Please select a role.');
+            }
             session(['selectedRole' => $roleId]);
 
             return redirect()->action('ProjectsController@create');

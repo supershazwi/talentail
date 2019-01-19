@@ -1054,6 +1054,9 @@ Route::post('/portfolios/save', function(Request $request) {
 Route::post('/portfolios/select-role', function() {
     if(request('role') != null) {
         $roleId = request('role');
+        if($roleId == "Nil") {
+            return redirect('/portfolios/select-role')->with('selectRoleSelected', 'Please select a role.');
+        }
         $role = Role::find($roleId);
 
         session(['roleId' => $roleId]);

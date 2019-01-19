@@ -7,6 +7,11 @@
       
       <!-- Header -->
       <div class="header mt-md-5">
+        @if (session('selectRoleSelected'))
+        <div class="alert alert-warning" role="alert" style="text-align: center;">
+          <h4 class="alert-heading" style="margin-bottom: 0;">{{session('selectRoleSelected')}}</h4>
+        </div>
+        @endif
         <div class="header-body">
           <div class="row align-items-center">
             <div class="col">
