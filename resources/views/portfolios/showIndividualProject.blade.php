@@ -75,7 +75,7 @@
                           <div class='form-group' style="margin-bottom: 0rem;">
                             <h4><label class='mb-1'>Supporting files</label></h4>
                             @foreach($attemptedProject->answered_task_files as $answeredTaskFile)
-                              <a href="https://storage.cloud.google.com/talentail-123456789/{{$answeredTaskFile->url}}">{{$answeredTaskFile->title}}</a><br/>
+                              <a href="https://storage.googleapis.com/talentail-123456789/{{$answeredTaskFile->url}}">{{$answeredTaskFile->title}}</a><br/>
                             @endforeach
                           </div>
                         </div>

@@ -308,7 +308,7 @@
                   <br/>
                     @foreach($answeredTask->reviewed_answered_task_files as $reviewed_answered_task_file)
                     <div id="file-group_{{$reviewed_answered_task_file->id}}">
-                      <a href="https://storage.cloud.google.com/talentail-123456789/{{$reviewed_answered_task_file->url}}">{{$reviewed_answered_task_file->title}}</a> 
+                      <a href="https://storage.googleapis.com/talentail-123456789/{{$reviewed_answered_task_file->url}}">{{$reviewed_answered_task_file->title}}</a> 
 
                       @if(!$attemptedProject->competency_and_task_review->tasks_reviewed)
                       <span id="delete-file_{{$answeredTask->id}}_{{$reviewed_answered_task_file->id}}" class="remove-file" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle" id="span_{{$answeredTask->id}}_{{$reviewed_answered_task_file->id}}"></i></span>

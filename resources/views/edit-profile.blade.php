@@ -20,7 +20,7 @@
             <h5 style="margin-top: 1.5rem;">Profile Image</h5>
             <div class="media mb-4">
                 @if($user->avatar)
-                <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" style="margin-top: 0px !important;"/>
+                <img alt="Image" src="https://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" style="margin-top: 0px !important;"/>
                 @else
                 <img alt="Image" src="/img/avatar.png" class="avatar avatar-lg mt-1" style="margin-top: 0px !important;"/>
                 @endif

@@ -18,7 +18,7 @@
         <div class="col-lg-11 col-xl-10">
                     <div class="page-header mb-4">
                         <div class="media">
-                            <img alt="Image" src="https://storage.cloud.google.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" />
+                            <img alt="Image" src="https://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" class="avatar avatar-lg mt-1" />
                             <div class="media-body ml-3">
                                 <h1 class="mb-0">{{$user->name}} 
                                     @if($user->creator)

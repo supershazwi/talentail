@@ -218,7 +218,7 @@
                               </div>
                               @foreach($externalAttemptedProject->answered_task_files as $answeredTaskFile)
                               <div id="file-group_{{$answeredTaskFile->id}}">
-                                <a href="https://storage.cloud.google.com/talentail-123456789/{{$answeredTaskFile->url}}">{{$answeredTaskFile->title}}</a> <span id="delete-file_{{$answeredTaskFile->id}}" class="remove-file" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle" id="span_{{$answeredTaskFile->id}}"></i></span><br/>
+                                <a href="https://storage.googleapis.com/talentail-123456789/{{$answeredTaskFile->url}}">{{$answeredTaskFile->title}}</a> <span id="delete-file_{{$answeredTaskFile->id}}" class="remove-file" onclick="deleteFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle" id="span_{{$answeredTaskFile->id}}"></i></span><br/>
                               </div>
                               @endforeach
                               <div id="selectedFiles_{{$key + 1}}"></div>
