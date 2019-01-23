@@ -18,6 +18,7 @@
               <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle border border-4 border-body">
               @endif
           </div>
+
         </div>
         <div class="col mb-3 ml--3 ml-md--2">
           
@@ -49,6 +50,7 @@
           @if($user->twitter)
           <a target="_blank" href="{{$user->twitter}}"><i class="fab fa-twitter-square"></i></a>
           @endif
+
         </div>
         @if($showMessage)
         <div class="col-12 col-md-auto mt-2 mt-md-0 mb-md-3" style="margin-bottom: 0rem !important;">
@@ -67,34 +69,34 @@
           <ul class="nav nav-tabs nav-overflow header-tabs">
             <li class="nav-item">
               @if(Auth::id() == $user->id)
-              <a href="/profile/portfolios" class="nav-link active">
+              <a href="/profile" class="nav-link">
               Portfolios
               </a>
               @else
-              <a href="/profile/{{$user->id}}/portfolios" class="nav-link active">
+              <a href="/profile/{{$user->id}}" class="nav-link">
               Portfolios
               </a>
               @endif
             </li>
             <li class="nav-item">
               @if(Auth::id() == $user->id)
-              <a href="/profile" class="nav-link">
-              Work Experience
+              <a href="/profile/resume" class="nav-link active">
+              Resume
               </a>
               @else
-              <a href="/profile/{{$user->id}}" class="nav-link">
-              Work Experience
+              <a href="/profile/{{$user->id}}/resume" class="nav-link active">
+              Resume
               </a>
               @endif
             </li>
             @if($user->creator)
             <li class="nav-item">
                 @if(Auth::id() == $user->id)
-                <a href="/profile/projects" class="nav-link">
+                <a href="/profile/projects" class="nav-link active">
                 Created Projects
                 </a>
                 @else
-                <a href="/profile/{{$user->id}}/projects" class="nav-link">
+                <a href="/profile/{{$user->id}}/projects" class="nav-link active">
                 Created Projects
                 </a>
                 @endif
@@ -121,59 +123,8 @@
 </div>
 <div class="container">
   <div class="row">
-    @foreach($user->portfolios as $portfolio)
-    <div class="col-12 col-md-6 col-xl-4">
-      <div class="card">
-        <div class="card-body">
-
-          <!-- Title -->
-          <a href="/portfolios/{{$portfolio->id}}"><h2 class="card-title text-center mb-3">
-            {{$portfolio->role->title}}
-          </h2></a>
-
-          <!-- Text -->
-          <div class="text-center" style="margin-bottom: 1.2rem;">
-            @foreach($portfolio->industries as $industry)
-              <span class="badge badge-warning">{{$industry->title}}</span>
-            @endforeach
-          </div>
-
-          <p class="card-text text-center text-muted mb-4">
-
-          </p>
-
-          <!-- Divider -->
-          <hr>
-
-          <div class="row align-items-right">
-            <div class="col">
-              <p class="card-text small text-muted" style="margin-bottom: 0;">Completed projects</p>
-              <p style="margin-bottom: 0;">{{count($portfolio->attempted_projects)}}</p>
-            </div>
-            <div class="col-auto">
-              
-              <!-- Avatar group -->
-              <p class="card-text small text-muted" style="margin-bottom: 0;">Endorsed by</p>
-              <div class="avatar-group">
-                @foreach($portfolio->attempted_projects as $attemptedProject)
-                <a href="/profile/{{$attemptedProject->project->user_id}}" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="{{$attemptedProject->project->user->name}}">
-                  @if($attemptedProject->project->user->avatar)
-                   <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded-circle"/>
-                  @else
-                  <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle"/>
-                  @endif
-                </a>
-                @endforeach
-              </div>
-
-            </div>
-          </div> <!-- / .row -->
-
-        </div> <!-- / .card-body -->
-      </div>
-    </div>
-    @endforeach
-  </div> <!-- / .row -->
+    
+  </div> 
 </div>
 @endsection
 

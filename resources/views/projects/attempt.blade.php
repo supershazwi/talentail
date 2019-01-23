@@ -11,12 +11,12 @@
         <h4 style="margin-bottom: 0;">{{session('saved')}}</h4>
       </div>
       @endif
-      <div class="alert alert-light" style="margin-top: 1.5rem; text-align: center;">
+      <!-- <div class="alert alert-light" style="margin-top: 1.5rem; text-align: center;">
         <h4 style="margin-bottom: 0;">Project Deadline: {{date('d M Y, h:i a', strtotime($attemptedProject->deadline))}}.</h4>
-      </div>
+      </div> -->
       <!-- Body -->
-      <div class="header-body">
-        <div class="row align-items-top">
+      <div class="header-body" style="margin-top: 1.5rem;">
+        <!-- <div class="row align-items-top">
           <div class="col-auto">
             <div class="avatar-group">
               @if(Auth::id() == $project->user->id)
@@ -50,8 +50,8 @@
               Message
             </a>
           </div>
-        </div>
-        <div class="row align-items-top" style="margin-top: 1.5rem;">
+        </div> -->
+        <div class="row align-items-top">
           <div class="col-auto">
 
             <!-- Avatar -->
@@ -357,8 +357,8 @@
       </div>
     @endif
     @if($parameter == "task")
-    <button class="btn btn-light" onclick="saveProjectAttempt()">Save Project</button>
-    <button class="btn btn-primary" onclick="submitProjectAttempt()" style="margin-left: 0.5rem;">Submit Project</button>
+    <button class="btn btn-primary" onclick="saveProjectAttempt()">Save Project</button>
+    <!-- <button class="btn btn-primary" onclick="submitProjectAttempt()" style="margin-left: 0.5rem;">Submit Project</button> -->
     @endif
   </div>
 
@@ -374,12 +374,12 @@
 
       for(var l=0; l<tasksArray.length; l++) {
         var taskId = tasksArray[l];
-
         document.querySelector('#file_' + taskId).addEventListener('change', handleFileSelect, false);
       }
     }
     
     function handleFileSelect(e) {
+      console.log("handleFileSelect");
       if(!e.target.files) return;
 
       var idString = e.target.id.split("_");
@@ -422,7 +422,9 @@
       elem.parentNode.removeChild(elem);
     }
 
-    setTimeout(function(){ document.getElementById("projectSaved").style.display = "none" }, 3000);
+    if(document.getElementById("projectSaved") != null) {
+      setTimeout(function(){ document.getElementById("projectSaved").style.display = "none" }, 3000);
+    }
 
   </script>
 @endsection

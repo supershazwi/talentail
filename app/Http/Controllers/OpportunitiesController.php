@@ -25,7 +25,7 @@ class OpportunitiesController extends Controller
         $opportunities = Opportunity::all();
 
         return view('opportunities.index', [
-            
+            'parameter' => 'opportunity',
             'opportunities' => $opportunities,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -33,14 +33,11 @@ class OpportunitiesController extends Controller
         ]);
     }
 
-    public function create() {
-        $roles = Role::select('id', 'title')->orderBy('title', 'asc')->get();
-        $companies = Company::select('id', 'title')->orderBy('title', 'asc')->get();
+    public function create($companySlug) {
+        $company = Company::where('slug', $companySlug)->first();
 
         return view('opportunities.create', [
-            
-            'roles' => $roles,
-            'companies' => $companies,
+            'company' => $company,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',

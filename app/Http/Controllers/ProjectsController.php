@@ -56,6 +56,19 @@ class ProjectsController extends Controller
         $this->messageChannel = self::DEFAULT_message_CHANNEL;
     }
 
+    public function index() {
+        $role = Role::where('slug', 'business-analyst')->first();
+
+        return view('attempt.index', [
+            
+            'parameter' => 'discover',
+            'role' => $role,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]);
+    }
+
     public function submitTasksReview(Request $request) {
         $loggedInUserId = Auth::id();
 
@@ -904,7 +917,9 @@ class ProjectsController extends Controller
                 $tasksArray = array();
 
                 foreach($attemptedProject->project->tasks as $task) {
-                    array_push($tasksArray, $task->id);
+                    if($task->file_upload) {
+                        array_push($tasksArray, $task->id);
+                    }
                 }
 
                 foreach($answeredTasks as $answeredTask) {
@@ -956,14 +971,9 @@ class ProjectsController extends Controller
                     return redirect('/roles/' . $routeParameters['roleSlug']);
                 }
             } else {
-                // check whether added to cart
+                // check whether added to inventory
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
-                if($shoppingCart) {
-                    $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
-                } else {
-                    $addedToCart = null;
-                }
+                $addedToInventory = AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first();
 
                 return view('projects.show', [
                     
@@ -971,7 +981,7 @@ class ProjectsController extends Controller
                     'role' => $role,
                     'parameter' => 'task',
                     'messages' => $messages3,
-                    'addedToCart' => $addedToCart,
+                    'addedToInventory' => $addedToInventory,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                     'clickedUserId' => $clickedUserId,
                     'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -1161,12 +1171,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
-                if($shoppingCart) {
-                    $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
-                } else {
-                    $addedToCart = null;
-                }
+                $addedToInventory = AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first();
 
                 return view('projects.show', [
                     
@@ -1174,7 +1179,7 @@ class ProjectsController extends Controller
                     'role' => $role,
                     'parameter' => 'file',
                     'messages' => $messages3,
-                    'addedToCart' => $addedToCart,
+                    'addedToInventory' => $addedToInventory,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                     'clickedUserId' => $clickedUserId,
                     'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -1355,7 +1360,6 @@ class ProjectsController extends Controller
                 }
             } else {
                 return view('projects.attempt', [
-                    
                     'attemptedProject' => AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first(),
                     'project' => $project,
                     'role' => $role,
@@ -1391,12 +1395,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
-                if($shoppingCart) {
-                    $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
-                } else {
-                    $addedToCart = null;
-                }
+                $addedToInventory = AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first();
 
                 return view('projects.show', [
                     
@@ -1404,7 +1403,7 @@ class ProjectsController extends Controller
                     'role' => $role,
                     'parameter' => 'competency',
                     'messages' => $messages3,
-                    'addedToCart' => $addedToCart,
+                    'addedToInventory' => $addedToInventory,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                     'clickedUserId' => $clickedUserId,
                     'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -1592,12 +1591,7 @@ class ProjectsController extends Controller
             } else {
                 // check whether added to cart
 
-                $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
-                if($shoppingCart) {
-                    $addedToCart = ShoppingCartLineItem::where('project_id', $project->id)->where('shopping_cart_id', $shoppingCart->id)->first();
-                } else {
-                    $addedToCart = null;
-                }
+                $addedToInventory = AttemptedProject::where('project_id', $project->id)->where('user_id', Auth::id())->first();
 
                 return view('projects.show', [
                     
@@ -1605,7 +1599,7 @@ class ProjectsController extends Controller
                     'role' => $role,
                     'parameter' => 'overview',
                     'messages' => $messages3,
-                    'addedToCart' => $addedToCart,
+                    'addedToInventory' => $addedToInventory,
                     'messageChannel' => 'messages_'.$subscribeString.'_projects_'.$project->id,
                     'clickedUserId' => $clickedUserId,
                     'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -1725,38 +1719,86 @@ class ProjectsController extends Controller
         }
     }
 
-    public function addProjectToCart(Request $request) {
+    public function addProjectToInventory(Request $request) {
         $project = Project::find($request->input('project_id'));
 
-        // find whether or not there is an existing shopping cart
-        $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+        $attemptedProject = new AttemptedProject;
 
-        if($shoppingCart) {
-            // already has a shopping cart
-        } else {
-            // no shopping cart, create new one
+        $attemptedProject->project_id = $project->id;
+        $attemptedProject->user_id = Auth::id();
+        $attemptedProject->status = "Attempting";
+        $attemptedProject->deadline = date("Y-m-d H:i:s", time() + ($project->hours * 60 * 60));
+        $attemptedProject->creator_id = $project->user_id;
 
-            $shoppingCart = new ShoppingCart;
+        $attemptedProject->save();
 
-            $shoppingCart->status = "pending";
-            $shoppingCart->total = 0;
-            $shoppingCart->no_of_items = 0;
-            $shoppingCart->user_id = Auth::id();
+        foreach($project->tasks as $task) {
+            $answeredTask = new AnsweredTask;
+            $answeredTask->answer = "";
+            $answeredTask->response = "";
+            $answeredTask->user_id = Auth::id();
+            $answeredTask->task_id = $task->id;
+            $answeredTask->project_id = $project->id;
+
+            $answeredTask->save();
         }
 
-        $shoppingCart->no_of_items = $shoppingCart->no_of_items + 1;
-        $shoppingCart->total = $shoppingCart->total + $project->amount;
+        foreach($project->competencies as $competency) {
+            // create new competencyscore for each
 
-        $shoppingCart->save();
+            $competencyScore = new CompetencyScore;
 
-        $shoppingCartLineItem = new ShoppingCartLineItem;
+            $competencyScore->competency_id = $competency->id;
+            $competencyScore->role_gained_id = $project->role_id;
+            $competencyScore->score = 0;
+            $competencyScore->user_id = Auth::id();
+            $competencyScore->project_id = $project->id;
+            $competencyScore->attempted_project_id = $attemptedProject->id;
 
-        $shoppingCartLineItem->project_id = $project->id;
-        $shoppingCartLineItem->shopping_cart_id = $shoppingCart->id;
+            $competencyScore->save();
+        }
 
-        $shoppingCartLineItem->save();
+        $competencyAndTaskReview = new CompetencyAndTaskReview;
+
+        $competencyAndTaskReview->attempted_project_id = $attemptedProject->id;
+        $competencyAndTaskReview->tasks_reviewed = 0;
+        $competencyAndTaskReview->competencies_reviewed = 0;
+
+        $competencyAndTaskReview->save();
 
         return redirect('/roles/' . $project->role->slug . "/projects/" . $project->slug);
+
+        // $project = Project::find($request->input('project_id'));
+
+        // // find whether or not there is an existing shopping cart
+        // $shoppingCart = ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first();
+
+        // if($shoppingCart) {
+        //     // already has a shopping cart
+        // } else {
+        //     // no shopping cart, create new one
+
+        //     $shoppingCart = new ShoppingCart;
+
+        //     $shoppingCart->status = "pending";
+        //     $shoppingCart->total = 0;
+        //     $shoppingCart->no_of_items = 0;
+        //     $shoppingCart->user_id = Auth::id();
+        // }
+
+        // $shoppingCart->no_of_items = $shoppingCart->no_of_items + 1;
+        // $shoppingCart->total = $shoppingCart->total + $project->amount;
+
+        // $shoppingCart->save();
+
+        // $shoppingCartLineItem = new ShoppingCartLineItem;
+
+        // $shoppingCartLineItem->project_id = $project->id;
+        // $shoppingCartLineItem->shopping_cart_id = $shoppingCart->id;
+
+        // $shoppingCartLineItem->save();
+
+        // return redirect('/roles/' . $project->role->slug . "/projects/" . $project->slug);
     }
 
     public function purchaseProjects(Request $request) {

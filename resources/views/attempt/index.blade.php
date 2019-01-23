@@ -10,12 +10,12 @@
 	  </div>
 	  <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
 	    <h1 class="display-4 mb-3">
-	      <a href="/discover" style="border-bottom: 5px solid #0984e3;">Discover</a> Projects
+	      <a href="/discover" style="border-bottom: 5px solid #0984e3;">Browse</a> Projects
 	    </h1>
-	    <h1 style="color: #777d7f;">In today's day and age, learning is never enough. Attempt projects to apply your knowledge and show the world what you're made of.</h1>
+	    <h1 style="color: #777d7f;">What better way to secure an interview and job offer than to prove your mettle by attempting projects.</h1>
 	  </div>
 	</div>
-	<hr style="margin-top: 5rem;"/>
+	<!-- <hr style="margin-top: 5rem;"/> -->
 	<div class="row justify-content-center">
 	  <div class="col-12 col-lg-12">
 	    
@@ -81,7 +81,7 @@
 		      
 		          <!-- Title -->
 		          
-		          <div class="avatar-group">
+		          <!-- <div class="avatar-group">
 		            @if(Auth::id() == $project->user->id)
 		            <a href="/profile" class="avatar avatar-xs">
 		            @else
@@ -95,10 +95,10 @@
 		            <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
 		            @endif
 		            </a>
-		          </div>
+		          </div> -->
 
 		          <!-- Button -->
-		          @if(Auth::id() == $project->user->id)
+		          <!-- @if(Auth::id() == $project->user->id)
 		          <a href="/profile" style="margin-left: 0.5rem !important;">
 		            {{$project->user->name}}
 		          </a>
@@ -106,9 +106,9 @@
 		          <a href="/profile/{{$project->user->id}}" style="margin-left: 0.5rem !important;">
 		            {{$project->user->name}}
 		          </a>
-		          @endif
+		          @endif -->
 
-		          <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}"><h2 class="card-title mb-2 name"  style="margin-top: 0.75rem !important;">{{$project->title}}</h2></a>
+		          <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}"><h2 class="card-title mb-2 name">{{$project->title}}</h2></a>
 		          <span class="badge badge-warning">{{$project->industry->title}}</span>
 
 
@@ -121,15 +121,14 @@
 		      </div> <!-- / .row -->
 
 		      <!-- Divider -->
-		      <hr>
+		      <!-- <hr>
 
 		      <div class="row align-items-center">
 		        <div class="col">
 		          
-		          <!-- Time -->
 		          <p class="card-text" style="margin-bottom: 0;">${{$project->amount}}</p>
 		        </div>
-		        <!-- <div class="col-auto">
+		        <div class="col-auto">
 		          
 		          <p class="card-text small text-muted" style="margin-bottom: 0;">Attempted by</p>
 		          <div class="avatar-group">
@@ -144,8 +143,8 @@
 		            </a>
 		          </div>
 
-		        </div> -->
-		      </div>
+		        </div>
+		      </div> -->
 		    </div> <!-- / .card-body -->
 		  </div>
 		</div>

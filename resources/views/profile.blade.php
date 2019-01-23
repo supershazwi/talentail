@@ -34,6 +34,7 @@
           <h1 class="header-title">
             {{$user->name}}
           </h1>
+          <p>{{$user->email}}</p>
 
           <p>{{$user->description}}</p>
 
@@ -68,25 +69,25 @@
             <li class="nav-item">
               @if(Auth::id() == $user->id)
               <a href="/profile" class="nav-link active">
-              Work Experience
+              Portfolios
               </a>
               @else
               <a href="/profile/{{$user->id}}" class="nav-link active">
-              Work Experience
+              Portfolios
               </a>
               @endif
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               @if(Auth::id() == $user->id)
-              <a href="/profile/portfolios" class="nav-link">
-              Portfolios
+              <a href="/profile/resume" class="nav-link">
+              Resume
               </a>
               @else
-              <a href="/profile/{{$user->id}}/portfolios" class="nav-link">
-              Portfolios
+              <a href="/profile/{{$user->id}}/resume" class="nav-link">
+              Resume
               </a>
               @endif
-            </li>
+            </li> -->
             @if($user->creator)
             <li class="nav-item">
                 @if(Auth::id() == $user->id)
@@ -100,7 +101,7 @@
                 @endif
             </li>
             @endif
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               @if(Auth::id() == $user->id)
               <a href="/profile/reviews" class="nav-link">
               Reviews
@@ -110,7 +111,7 @@
               Reviews
               </a>
               @endif
-            </li>
+            </li> -->
           </ul>
 
         </div>
@@ -121,54 +122,72 @@
 </div>
 <div class="container">
   <div class="row">
-    @foreach($user->experiences as $experience)
-    <div class="col-12 col-lg-6">
+    @foreach($user->portfolios as $portfolio)
+    <div class="col-12 col-md-6 col-xl-4">
       <div class="card">
         <div class="card-body">
-          
-          <!-- Avatar -->
-          <!-- <div class="text-center">
-            <a href="team-overview.html" class="card-avatar avatar avatar-lg mx-auto">
-              <img src="/img/avatars/teams/team-logo-1.jpg" alt="" class="avatar-img rounded">
-            </a>
-          </div> -->
 
           <!-- Title -->
-          <h2 class="card-title text-center mb-3">
-            <a href="team-overview.html">{{$experience->company}}</a>
-          </h2>
+          <a href="/portfolios/{{$portfolio->id}}"><h2 class="card-title text-center mb-3">
+            {{$portfolio->role->title}}
+          </h2></a>
 
           <!-- Text -->
-          <p class="card-text text-center text-muted mb-4">
-            {{$experience->role}}
-          </p>
+          <div class="text-center" style="margin-bottom: 1.2rem;">
+            @foreach($portfolio->industries as $industry)
+              <span class="badge badge-warning">{{$industry->title}}</span>
+            @endforeach
+          </div>
 
           <p class="card-text text-center text-muted mb-4">
-            @parsedown($experience->description)
+
           </p>
 
           <!-- Divider -->
           <hr>
 
-          <div class="row align-items-center">
+          <div class="row align-items-right">
             <div class="col">
-              
-              <!-- Time -->
-              <p class="card-text small text-muted">
-                @if($experience->end_date == "0000-00-00")
-                    {{date("M Y", strtotime($experience->start_date))}} - Present
-                @else
-                    {{date("M Y", strtotime($experience->start_date))}} - {{date("M Y", strtotime($experience->end_date))}}
-                @endif
-              </p>
-
+              <p class="card-text small text-muted" style="margin-bottom: 0;">Completed projects</p>
+              <p style="margin-bottom: 0;">{{count($portfolio->attempted_projects)}}</p>
             </div>
+            <!-- <div class="col-auto">
+              <p class="card-text small text-muted" style="margin-bottom: 0;">Endorsed by</p>
+              <div class="avatar-group">
+                @foreach($portfolio->attempted_projects as $attemptedProject)
+                <a href="/profile/{{$attemptedProject->project->user_id}}" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="{{$attemptedProject->project->user->name}}">
+                  @if($attemptedProject->project->user->avatar)
+                   <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded-circle"/>
+                  @else
+                  <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle"/>
+                  @endif
+                </a>
+                @endforeach
+              </div>
+
+            </div> -->
           </div> <!-- / .row -->
 
         </div> <!-- / .card-body -->
       </div>
     </div>
     @endforeach
+    @if($user->id == Auth::id())
+    <div class="col-12 col-md-6 col-xl-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <h1><i class="far fa-plus-square"></i></h1>
+          <a href="/portfolios/select-role">
+            <h2 class="card-title text-center mb-3" style="">
+                Add Portfolio
+              </h2>
+            </a>
+            <p style="margin-top: 1.5rem !important; margin-bottom: 0;">No material to build a portfolio?</p>
+            <a href="/projects">Discover projects</a>
+        </div> 
+      </div>
+    </div>
+    @endif
   </div> <!-- / .row -->
 </div>
 @endsection

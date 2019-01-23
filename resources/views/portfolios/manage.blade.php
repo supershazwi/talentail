@@ -35,7 +35,7 @@
             <div class="row align-items-center" style="margin-bottom: 0.5rem;">
               <div class="col-auto" style="padding-left: 0px;">
                 <h2>
-                  Talentail Projects
+                  Internal Projects
                 </h2>
               </div>
               <div class="col">
@@ -100,7 +100,7 @@
                       <div class="row justify-content-center" style="margin-top:1rem;">
                         <div class="col-12 col-md-5 col-xl-4 my-5">
                           <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
-                          <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Talentail projects are created by experienced professionals and have been designed according to their own work experiences. Reviewed projects will appear here. <a href="/discover">Discover projects</a>.
+                          <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Internal projects are created by experienced professionals on Talentail and have been designed according to their own work experiences. Attempted projects will appear here. <a href="/discover">Discover projects</a>.
                           </p>
                         </div>
                       </div>
@@ -136,7 +136,7 @@
                     <div class="row justify-content-center" style="margin-top:1rem;">
                       <div class="col-12 col-md-5 col-xl-4 my-5">
                         <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😃</p>
-                        <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">External projects refer to projects that you have done in the past. Grab a manager that you have worked with and request a review before publishing.
+                        <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">External projects refer to projects that you have done outside of Talentail in the past. Grab a manager that you have worked with and request a review before publishing.
                         </p>
                       </div>
                     </div>
@@ -152,7 +152,7 @@
                     <div class="row justify-content-center" style="margin-top:1rem;">
                       <div class="col-12 col-md-5 col-xl-4 my-5">
                         <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😃</p>
-                        <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">External projects refer to projects that you have done in the past. Grab a manager that you have worked with and request a review before publishing.
+                        <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">External projects refer to projects that you have done outside of Talentail in the past. Grab a manager that you have worked with and request a review before publishing.
                         </p>
                       </div>
                     </div>

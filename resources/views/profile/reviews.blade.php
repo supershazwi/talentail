@@ -78,7 +78,7 @@
               </a>
               @endif
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               @if(Auth::id() == $user->id)
               <a href="/profile/portfolios" class="nav-link">
               Portfolios
@@ -88,7 +88,7 @@
               Portfolios
               </a>
               @endif
-            </li>
+            </li> -->
             @if($user->creator)
             <li class="nav-item">
                 @if(Auth::id() == $user->id)

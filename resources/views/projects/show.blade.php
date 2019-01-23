@@ -9,12 +9,12 @@
     <button type="submit" style="display: none;" id="purchaseProjectButton">Submit</button>
   </form>
 
-  <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/add-project-to-cart" id="addProjectToCart">
+  <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/add-project-to-inventory" id="addProjectToInventory">
     @csrf
     <input type="hidden" name="project_id" value="{{$project->id}}" />
     <input type="hidden" name="role_slug" value="{{$project->role->slug}}" />
     <input type="hidden" name="project_slug" value="{{$project->slug}}" />
-    <button type="submit" style="display: none;" id="addProjectToCartButton">Submit</button>
+    <button type="submit" style="display: none;" id="addProjectToInventoryButton">Submit</button>
   </form>
 
   <form method="POST" action="/roles/{{$role->slug}}/projects/{{$project->slug}}/toggle-visibility-project" id="toggleVisibilityProject">
@@ -35,16 +35,15 @@
     <div class="container">
 
       <!-- Body -->
-      <div class="header-body" style="margin-top: 1.5rem; border-bottom: 0px;">
+      <div class="header-body" style="border-bottom: 0px;">
         @if(!$project->published)
           <div class="alert alert-warning" style="text-align: center;">
             <h4 class="alert-heading" style="margin-bottom: 0;">This project is private. Publish it to make it public.</h4>
           </div>
         @endif
-        <div class="row align-items-center">
+        <!-- <div class="row align-items-center">
           <div class="col-auto">
-            
-            <!-- Avatar group -->
+
             <div class="avatar-group">
               @if(Auth::id() == $project->user->id)
               <a href="/profile" class="avatar">
@@ -61,7 +60,6 @@
               </a>
             </div>
 
-            <!-- Button -->
             @if(Auth::id() == $project->user->id)
             <a href="/profile" style="margin-left: 0.5rem !important;">
               {{$project->user->name}}
@@ -76,7 +74,7 @@
           <div class="col">
 
           </div>
-        </div>
+        </div> -->
         <div class="row align-items-top" style="margin-top: 1.5rem;">
           <div class="col-auto">
 
@@ -235,7 +233,7 @@
                           </div>
                           <div class="col-auto">
                             <a href="#!" class="btn btn-sm btn-white d-none d-md-inline-block">
-                              Purchase Project to Download
+                              Attempt Project to Download
                             </a>
                           </div>
                         </div>
@@ -283,20 +281,19 @@
           <div class="card">
             <div class="card-body">
               @if($project->user_id != Auth::id())
-                <p>What you'll be getting from your purchase:</p>
+                <p>What you'll be getting from this project:</p>
                 <ul style="margin-left: -1.4rem;">
                   <li>Practical work experience</li>
-                  <li>Assessment by a senior business analyst</li>
-                  <li>An endorsed work portfolio after completion of project (<a href="/portfolios/0">See example</a>)</li>
-                  <li>A better shot at landing that interview</li>
+                  <li>A well constructed business case</li>
+                  <li>A better shot at landing that interview and job offer</li>
                 </ul>
-                @if($addedToCart) 
+                @if($addedToInventory) 
                 <button class="btn btn-block btn-primary" disabled>
-                  Added to Cart
+                  Project in Progress
                 </button>
                 @else
-                <button class="btn btn-block btn-primary" onclick="addProjectToCart()">
-                  Add to Cart<br/>${{$project->amount}}
+                <button class="btn btn-block btn-primary" onclick="addProjectToInventory()">
+                  Attempt Project
                 </button>
                 @endif
               @else
@@ -319,8 +316,8 @@
       document.getElementById("purchaseProjectButton").click();
     }
 
-    function addProjectToCart() {
-      document.getElementById("addProjectToCartButton").click();
+    function addProjectToInventory() {
+      document.getElementById("addProjectToInventoryButton").click();
     }
 
     function toggleVisibilityProject() {

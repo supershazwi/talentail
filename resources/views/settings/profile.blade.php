@@ -133,7 +133,7 @@
               </label>
 
               <!-- Input -->
-              <input type="text" name="website" class="form-control" id="website" placeholder="Enter your website link (e.g. johnieorange.com)" value="{{$user->website}}">
+              <input type="text" name="website" class="form-control" id="website" placeholder="Enter your website link (e.g. https://johnieorange.com)" value="{{$user->website}}">
 
             </div>
           </div>

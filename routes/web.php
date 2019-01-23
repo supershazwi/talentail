@@ -110,112 +110,112 @@ Route::get('/payment-information', function() {
     ]); 
 });
 
-Route::get('/portfolios/{portfolioId}/projects/{attemptedProjectId}/leave-review', function() {
-    $routeParameters = Route::getCurrentRoute()->parameters();
+// Route::get('/portfolios/{portfolioId}/projects/{attemptedProjectId}/leave-review', function() {
+//     $routeParameters = Route::getCurrentRoute()->parameters();
 
-    $portfolioId = $routeParameters['portfolioId'];
-    $attemptedProjectId = $routeParameters['attemptedProjectId'];
+//     $portfolioId = $routeParameters['portfolioId'];
+//     $attemptedProjectId = $routeParameters['attemptedProjectId'];
 
-    // check whether user is authorised
-    $userIsEndorser = Endorser::where('attempted_project_id', $attemptedProjectId)->where('portfolio_id', $portfolioId)->where('email', Auth::user()->email)->first();
+//     // check whether user is authorised
+//     $userIsEndorser = Endorser::where('attempted_project_id', $attemptedProjectId)->where('portfolio_id', $portfolioId)->where('email', Auth::user()->email)->first();
 
-    if($userIsEndorser) {
-        $portfolio = Portfolio::find($routeParameters['portfolioId']);
-        $attemptedProject = AttemptedProject::find($routeParameters['attemptedProjectId']);
+//     if($userIsEndorser) {
+//         $portfolio = Portfolio::find($routeParameters['portfolioId']);
+//         $attemptedProject = AttemptedProject::find($routeParameters['attemptedProjectId']);
 
-        return view('portfolios.leaveReviewOnIndividualProject', [
-            'portfolio' => $portfolio,
-            'attemptedProject' => $attemptedProject,
-            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-        ]);
-    } else {
-        return redirect('/portfolios/'.$portfolioId.'/projects/'.$attemptedProjectId)->with('notAuthorised', 'You are not authorised to leave a review.');
-    }
-})->middleware('auth');
+//         return view('portfolios.leaveReviewOnIndividualProject', [
+//             'portfolio' => $portfolio,
+//             'attemptedProject' => $attemptedProject,
+//             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+//             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+//             'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+//         ]);
+//     } else {
+//         return redirect('/portfolios/'.$portfolioId.'/projects/'.$attemptedProjectId)->with('notAuthorised', 'You are not authorised to leave a review.');
+//     }
+// })->middleware('auth');
 
-Route::post('/portfolios/{portfolioId}/projects/{attemptedProjectId}/leave-review', function(Request $request) {
-    $routeParameters = Route::getCurrentRoute()->parameters();
+// Route::post('/portfolios/{portfolioId}/projects/{attemptedProjectId}/leave-review', function(Request $request) {
+//     $routeParameters = Route::getCurrentRoute()->parameters();
 
-    $attemptedProject = AttemptedProject::find($routeParameters['attemptedProjectId']);
+//     $attemptedProject = AttemptedProject::find($routeParameters['attemptedProjectId']);
 
-    $role = $attemptedProject->project->role;
-    $project = $attemptedProject->project;
+//     $role = $attemptedProject->project->role;
+//     $project = $attemptedProject->project;
 
-    $validator = Validator::make($request->all(), [
-        'rating' => 'required',
-        'review' => 'required',
-    ]);
+//     $validator = Validator::make($request->all(), [
+//         'rating' => 'required',
+//         'review' => 'required',
+//     ]);
 
-    if($validator->fails()) {
-        if(array_key_exists('userId', $routeParameters)) {
-            return redirect('/portfolios/'.$routeParameters['portfolioId'].'/projects/'.$routeParameters['attemptedProjectId'].'/leave-review')
-                ->withErrors($validator)
-                ->withInput();
-        } else {
-            return redirect('/portfolios/'.$routeParameters['portfolioId'].'/projects/'.$routeParameters['attemptedProjectId'].'/leave-review')
-            ->withErrors($validator)
-            ->withInput(); 
-        }
-    } else {
-        // create a new review
+//     if($validator->fails()) {
+//         if(array_key_exists('userId', $routeParameters)) {
+//             return redirect('/portfolios/'.$routeParameters['portfolioId'].'/projects/'.$routeParameters['attemptedProjectId'].'/leave-review')
+//                 ->withErrors($validator)
+//                 ->withInput();
+//         } else {
+//             return redirect('/portfolios/'.$routeParameters['portfolioId'].'/projects/'.$routeParameters['attemptedProjectId'].'/leave-review')
+//             ->withErrors($validator)
+//             ->withInput(); 
+//         }
+//     } else {
+//         // create a new review
 
-        $review = new Review;
+//         $review = new Review;
 
-        $review->rating = $request->input('rating');
-        $review->description = $request->input('review');
+//         $review->rating = $request->input('rating');
+//         $review->description = $request->input('review');
 
-        if(array_key_exists('userId', $routeParameters)) {
-            $review->sender_id = Auth::id();
-            $review->receiver_id = $routeParameters['userId'];
-        } else {
-            $review->sender_id = Auth::id();
-            $review->receiver_id = $attemptedProject->user_id;
-        }
+//         if(array_key_exists('userId', $routeParameters)) {
+//             $review->sender_id = Auth::id();
+//             $review->receiver_id = $routeParameters['userId'];
+//         } else {
+//             $review->sender_id = Auth::id();
+//             $review->receiver_id = $attemptedProject->user_id;
+//         }
 
-        $review->project_id = $project->id;
-        $review->attempted_project_id = $attemptedProject->id;
+//         $review->project_id = $project->id;
+//         $review->attempted_project_id = $attemptedProject->id;
 
-        $review->save();
+//         $review->save();
 
-        $endorser = Endorser::where('attempted_project_id', $attemptedProject->id)->where('portfolio_id', $routeParameters['portfolioId'])->where('email', Auth::user()->email)->first();
+//         $endorser = Endorser::where('attempted_project_id', $attemptedProject->id)->where('portfolio_id', $routeParameters['portfolioId'])->where('email', Auth::user()->email)->first();
 
-        $endorser->left_review = true;
+//         $endorser->left_review = true;
 
-        $endorser->save();
+//         $endorser->save();
 
-        $notification = new Notification;
+//         $notification = new Notification;
 
-        $notification->message = "has left a review on a project on your portfolio";
-        $notification->recipient_id = $attemptedProject->user_id;
-        $notification->user_id = $review->sender_id;
-        $notification->url = "/portfolios/".$routeParameters['portfolioId']."/projects/".$routeParameters['attemptedProjectId'];
+//         $notification->message = "has left a review on a project on your portfolio";
+//         $notification->recipient_id = $attemptedProject->user_id;
+//         $notification->user_id = $review->sender_id;
+//         $notification->url = "/portfolios/".$routeParameters['portfolioId']."/projects/".$routeParameters['attemptedProjectId'];
 
-        $notification->save();
+//         $notification->save();
 
-        $userToEmail = User::find($review->receiver_id);
+//         $userToEmail = User::find($review->receiver_id);
 
-        Mail::to($userToEmail->email)->send(new SendAttemptedProjectReviewedMail(Auth::user()->name, $userToEmail->name, 'https://talentail.com/portfolios/'.$routeParameters['portfolioId'].'/projects/'.$routeParameters['attemptedProjectId']));
+//         Mail::to($userToEmail->email)->send(new SendAttemptedProjectReviewedMail(Auth::user()->name, $userToEmail->name, 'https://talentail.com/portfolios/'.$routeParameters['portfolioId'].'/projects/'.$routeParameters['attemptedProjectId']));
 
-        return redirect('/portfolios/'.$routeParameters['portfolioId'].'/projects/'.$routeParameters['attemptedProjectId'].'/leave-review');
-    }
-});
+//         return redirect('/portfolios/'.$routeParameters['portfolioId'].'/projects/'.$routeParameters['attemptedProjectId'].'/leave-review');
+//     }
+// });
 
-Route::get('/portfolios/{portfolioId}/projects/{attemptedProjectId}', function() {
-    $routeParameters = Route::getCurrentRoute()->parameters();
+// Route::get('/portfolios/{portfolioId}/projects/{attemptedProjectId}', function() {
+//     $routeParameters = Route::getCurrentRoute()->parameters();
 
-    $portfolio = Portfolio::find($routeParameters['portfolioId']);
-    $attemptedProject = AttemptedProject::find($routeParameters['attemptedProjectId']);
+//     $portfolio = Portfolio::find($routeParameters['portfolioId']);
+//     $attemptedProject = AttemptedProject::find($routeParameters['attemptedProjectId']);
 
-    return view('portfolios.showIndividualProject', [
-        'portfolio' => $portfolio,
-        'attemptedProject' => $attemptedProject,
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-    ]);
-});
+//     return view('portfolios.showIndividualProject', [
+//         'portfolio' => $portfolio,
+//         'attemptedProject' => $attemptedProject,
+//         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+//         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+//         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+//     ]);
+// });
 
 Route::get('/ordered-projects', function() {
     $orderedProjects = AttemptedProject::where('creator_id', Auth::id())->get();
@@ -356,6 +356,17 @@ Route::get('/blog/add', function() {
     ]); 
 });
 
+Route::get('/admin/companies', function() {
+    $companies = Company::all();
+    
+    return view('admin.companies.index', [
+        'companies' => $companies,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
 Route::get('/blog/admin', function() {
     $posts = Post::all();
 
@@ -391,13 +402,13 @@ Route::get('/stripe', function() {
     dd($charge);
 });
 
-Route::get('/portfolios/0', function() {
-    return view('portfolios.sample', [
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-    ]);
-});
+// Route::get('/portfolios/0', function() {
+//     return view('portfolios.sample', [
+//         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+//         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+//         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+//     ]);
+// });
 
 Route::get('/referrals', function() {
     $referred = Referral::where('referrer_id', Auth::id())->get();
@@ -587,16 +598,8 @@ Route::get('/portfolios/add', function() {
 
     $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
 
-    $talentailProjects = array();
-
-    foreach($attemptedProjects as $attemptedProject) {
-        if($attemptedProject->project->internal == 1 && $attemptedProject->project->role_id == $roleId && $attemptedProject->status == "Reviewed") {
-            array_push($talentailProjects, $attemptedProject);
-        }
-    }
-
     return view('portfolios.add', [
-        'talentailProjects' => $talentailProjects,
+        'attemptedProjects' => $attemptedProjects,
         'industries' => Industry::all(),
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -622,6 +625,8 @@ Route::post('/portfolios/save', function(Request $request) {
     // check if there is a current portfolio
     $portfolio = Portfolio::where('role_id', $roleId)->first();
 
+    $addedProjects = $request->input('attemptedProject');
+
     if(!$portfolio) {
         $portfolio = new Portfolio;
 
@@ -635,7 +640,7 @@ Route::post('/portfolios/save', function(Request $request) {
 
         // $portfolio->attempted_projects()->detach();
 
-        $addedProjects = $request->input('talentailProject');
+        // $addedProjects = $request->input('attemptedProject');
 
         // dd($addedProjects);
 
@@ -1087,7 +1092,7 @@ Route::get('/portfolios/{id}/manage-portfolio', function() {
     $internalAttemptedProjects = array();
 
     foreach($attemptedProjects as $attemptedProject) {
-        if($attemptedProject->project->internal == 1 && $attemptedProject->project->role_id == $portfolio->role_id && $attemptedProject->status == "Reviewed") {
+        if($attemptedProject->project->internal == 1 && $attemptedProject->project->role_id == $portfolio->role_id) {
             array_push($internalAttemptedProjects, $attemptedProject);
         } else {
             array_push($externalAttemptedProjects, $attemptedProject);
@@ -1121,18 +1126,6 @@ Route::get('/portfolios/{id}', function() {
     return view('portfolios.show', [
         'addedToCart' => $addedToCart,
         'portfolio' => $portfolio,
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-    ]);
-});
-
-Route::get('/explore', function() {
-    $portfolios = Portfolio::all();
-
-    return view('portfolios.index', [
-        'portfolios' => $portfolios,
-        'parameter' => 'portfolio',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -1526,12 +1519,12 @@ Route::get('/profile/{userId}/reviews', function() {
     ]);
 });
 
-Route::get('/profile/{userId}/portfolios', function() {
+Route::get('/profile/{userId}/resume', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();
 
     $user = User::find($routeParameters['userId']);
 
-    return view('profile.portfolios', [
+    return view('profile.resume', [
         'showMessage' => true,
         'user' => $user,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -1593,10 +1586,10 @@ Route::get('/profile/lessons', function() {
     ]);
 })->middleware('auth');
 
-Route::get('/profile/portfolios', function() {
+Route::get('/profile/resume', function() {
     $user = Auth::user();
 
-    return view('profile.portfolios', [
+    return view('profile.resume', [
         'showMessage' => false,
         'user' => $user,
         'parameter' => 'portfolio',
@@ -1623,17 +1616,22 @@ Route::get('/profile/projects', function() {
     ]);
 })->middleware('auth');
 
-// Route::get('/profile/{userId}', function() {
-//     $routeParameters = Route::getCurrentRoute()->parameters();
+Route::get('/profile/{userId}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
 
-//     $user = User::find($routeParameters['userId']);
+    $user = User::find($routeParameters['userId']);
 
-//     return view('profile', [
-//         'user' => $user,
-//         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        // 'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-//     ]);
-// })->middleware('auth');
+    if($user->id == Auth::id()) {
+        return redirect('/profile');
+    } else {
+        return view('profile', [
+            'showMessage' => true,
+            'user' => $user,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        ]);
+    }
+})->middleware('auth');
 
 Route::get('/profile/{profileId}', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();
@@ -1925,19 +1923,6 @@ Route::get('/attempt/others', function() {
     ]);
 });
 
-Route::get('/discover', function() {
-    $role = Role::where('slug', 'business-analyst')->first();
-
-    return view('attempt.index', [
-        
-        'parameter' => 'discover',
-        'role' => $role,
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-    ]);
-});
-
 Route::get('/learn', function() {
     // $role = Role::where('slug', 'business-analyst')->first();
 
@@ -2146,7 +2131,7 @@ Route::post('/roles/{roleSlug}/projects/{projectSlug}/clone', 'ProjectsControlle
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/toggle-visibility-project', 'ProjectsController@toggleVisibilityProject');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/submit-project-attempt', 'ProjectsController@submitProjectAttempt');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/purchase-project', 'ProjectsController@purchaseProject');
-Route::post('/roles/{roleSlug}/projects/{projectSlug}/add-project-to-cart', 'ProjectsController@addProjectToCart')->middleware('auth');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/add-project-to-inventory', 'ProjectsController@addProjectToInventory')->middleware('auth');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/save-project', 'ProjectsController@saveChanges');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/edit', 'ProjectsController@edit')->middleware('auth');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/attempt', 'ProjectsController@attempt')->middleware('auth');
@@ -2164,6 +2149,9 @@ Route::get('/roles/{roleSlug}/projects/{projectSlug}', 'ProjectsController@show'
 
     
 Route::post('/notifications/notify', 'NotificationController@postNotify');
+
+Route::get('/companies/{companySlug}/add-opportunity', 'OpportunitiesController@create');
+
 Route::resources([
     'companies' => 'CompaniesController',
     'opportunities' => 'OpportunitiesController',
@@ -2178,6 +2166,18 @@ Route::get('/templates/{templateId}', 'TemplatesController@show');
 Route::post('/templates/upload', 'TemplatesController@uploadFile');
 Route::get('/templates', 'TemplatesController@index');
 
+Route::post('/', function(Request $request) {
+    if($request->input('attemptedProjectId')) {
+        $attemptedProject = AttemptedProject::find($request->input('attemptedProjectId'));
+
+        $attemptedProject->added = !$attemptedProject->added;
+
+        $attemptedProject->save();
+
+        return redirect('/');
+    }
+});
+
 Route::get('/', function(Request $request) {
         if($request->input('r')) {
             //referred
@@ -2186,22 +2186,34 @@ Route::get('/', function(Request $request) {
         if(Auth::id()) {
             $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
 
-            $attemptedProjects2 = array();
-
-            foreach($attemptedProjects as $attemptedProject) {
-                if($attemptedProject->project->internal) {
-                    array_push($attemptedProjects2, $attemptedProject);
-                }
-            }
-
             $creatorProjects = AttemptedProject::where('creator_id', Auth::id())->get();
 
             $createdProjects = Project::where('user_id', Auth::id())->limit(3)->get();
 
+            $portfolios = Portfolio::where('user_id', Auth::id())->get();
+
+            foreach($portfolios as $portfolio) {
+
+                $noOfInternalProjects = 0;
+                $noOfExternalProjects = 0;
+
+                foreach($portfolio->attempted_projects as $attemptedProject) {
+                    if($attemptedProject->project->internal) {
+                        $noOfInternalProjects++;
+                    } else {
+                        $noOfExternalProjects++;
+                    }
+
+                    $portfolio->noOfInternalProjects = $noOfInternalProjects;
+                    $portfolio->noOfExternalProjects = $noOfExternalProjects;
+                }
+            }
+
             return view('dashboard', [
                 'createdProjects' => $createdProjects,
                 'creatorProjects' => $creatorProjects,
-                'attemptedProjects' => $attemptedProjects2,
+                'attemptedProjects' => $attemptedProjects,
+                'portfolios' => $portfolios,
                 'parameter' => 'index',
                 'parameter' => 'none',
                 'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',

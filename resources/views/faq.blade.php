@@ -16,7 +16,7 @@
             <div class="row justify-content-center">
               <div class="col">
                 <h3>1. What is the difference between Talentail and other sites such as Coursera, Udacity, etc.?</h3>
-                <p style="margin-bottom: 0rem;">What better way to use the knowledge you've gained from these sites than to apply it onto real world use cases? There will be others who have taken the same course but what sets you apart is the work that you create.</p>
+                <p style="margin-bottom: 0rem;">We focus more on the application of knowledge on real world adapted projects. We seek to complement all the education sites out there by providing the appropriate environment for users to showcase their competence.</p>
               </div>
             </div> <!-- / .row -->
           </div>
@@ -25,8 +25,8 @@
           <div class="card-body">
             <div class="row justify-content-center">
               <div class="col">
-                <h3>2. Why would companies trust the creators on this platform?</h3>
-                <p style="margin-bottom: 0rem;">We have vetted each creator on the platform by looking at not only their experiences but also their tangible work to determine that they are fit to create projects and assess the competencies of each seeker.</p>
+                <h3>2. Why would companies trust the projects on this platform?</h3>
+                <p style="margin-bottom: 0rem;">We thoroughly vet each contributor on the platform by looking at not only their experiences but also their tangible work to determine that they are fit to advise on the creation of projects and its accompanying tasks.</p>
               </div>
             </div> <!-- / .row -->
           </div>
@@ -36,7 +36,7 @@
             <div class="row justify-content-center">
               <div class="col">
                 <h3>3. Why come up with this idea?</h3>
-                <p style="margin-bottom: 0rem;">There are a lot of people getting into a new career or wanting to switch careers. The similar problem they face is the lack of experience. Other professions such as creative designers can create beautiful art pieces and use that as a portfolio to show their capabilities. Why not other not so direct roles such as business analysts? They simply need a project/use case to apply their knowledge on and those projects/use cases are what Talentail is consolidating.</p>
+                <p style="margin-bottom: 0rem;">There are a lot of people getting into a new career or wanting to switch careers. One similar problem they face is the lack of experience. Other professions such as creative designers can create beautiful art pieces and use that as a portfolio to show their capabilities. Why not other not so direct roles such as business analysts? They simply need a project/use case to apply their knowledge on and those projects/use cases are what Talentail is consolidating.</p>
               </div>
             </div> <!-- / .row -->
           </div>

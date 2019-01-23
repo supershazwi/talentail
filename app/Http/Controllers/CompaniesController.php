@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 use App\Company;
@@ -24,6 +25,7 @@ class CompaniesController extends Controller
     	return view('companies.index', [
             
             'companies' => $companies,
+            'parameter' => 'company',
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -32,7 +34,6 @@ class CompaniesController extends Controller
 
     public function create() {
     	return view('companies.create', [
-            
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -51,6 +52,11 @@ class CompaniesController extends Controller
         $company->email = request('email');
         $company->avatar = request('avatar');
         $company->slug = str_slug(request('title'), '-');
+
+        if(request('avatar')) {
+            $company->avatar = request('avatar')->getClientOriginalName();
+            $company->url = Storage::disk('gcs')->put('/avatars', request('avatar'), 'public');
+        }
 
     	$company->save();
 

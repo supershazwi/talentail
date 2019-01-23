@@ -90,6 +90,11 @@ class User extends Authenticatable
         return $this->hasOne('App\VerifyUser');
     }
 
+    public function resume()
+    {
+        return $this->hasOne(Resume::class);
+    }
+
     public function creator_application() {
         return $this->hasOne(CreatorApplication::class);
     }

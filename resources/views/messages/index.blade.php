@@ -100,9 +100,8 @@
 
             </div>
 
-            <div class="dropdown mr-4 d-none d-lg-flex">
-          
-              <!-- Toggle -->
+            <!-- <div class="dropdown mr-4 d-none d-lg-flex">
+
               <a href="/shopping-cart" class="text-muted" role="button">
             @if($shoppingCartActive)
               <span class="icon active">
@@ -115,7 +114,7 @@
             @endif
               </a>
 
-            </div>
+            </div> -->
 
 
 
@@ -135,12 +134,11 @@
               <div class="dropdown-menu dropdown-menu-right">
                 <a href="/" class="dropdown-item">Dashboard</a>
                 <a href="/profile" class="dropdown-item">Profile</a>
-                <a href="/settings" class="dropdown-item">Settings</a>
-                <a href="/work-experience" class="dropdown-item">Work Experience</a>
-                @if(Auth::user()->creator)
+                <!-- <a href="/work-experience" class="dropdown-item">Work Experience</a> -->
+                <!-- @if(Auth::user()->admin)
                 <a href="/invoices" class="dropdown-item">Invoices</a>
-                @endif
-                <a href="/referrals" class="dropdown-item">Referrals</a>
+                @endif -->
+                <!-- <a href="/referrals" class="dropdown-item">Referrals</a> -->
                 
                 <!-- <a href="/lessons-overview" class="dropdown-item">Lessons</a> -->
                 <!-- <a href="/projects-overview" class="dropdown-item">Projects</a> -->
@@ -148,36 +146,38 @@
                 <hr class="dropdown-divider">
                 @endif
                 @if(!Auth::user()->admin)
-            @if(!Auth::user()->creator)
+            <!-- @if(!Auth::user()->creator)
               @if(Auth::user()->creator_application != null && Auth::user()->creator_application->status == "pending")
                 <a href="/creator-application-status" class="dropdown-item">Check Creator Application Status</a>
               @else
                 <a href="/creator-application" class="dropdown-item">Apply to be a Creator</a>
               @endif
-            @endif
+            @endif -->
 
             @if(!Auth::user()->company)
               @if(Auth::user()->company_application != null && Auth::user()->company_application->status == "pending")
-                <!-- <a href="/company-application-status" class="dropdown-item">Check Company Application Status</a> -->
+                <a href="/company-application-status" class="dropdown-item">Check Company Application Status</a>
               @else
-                <!-- <a href="/company-application" class="dropdown-item">Apply to be a Company</a> -->
+                <a href="/company-application" class="dropdown-item">Apply to be a Company</a>
               @endif
             @endif
                 
                 @endif
 
-                @if(Auth::user()->creator)
+                <!-- @if(Auth::user()->creator)
                 <hr class="dropdown-divider">
                   <a href="/creator-application" class="dropdown-item">Check Creator Application</a>
-                @endif
+                @endif -->
 
                 @if(Auth::user()->admin)
+                <!-- <a href="/creator-application-overview" class="dropdown-item">View Creator Applications</a> -->
                 <a href="/blog/admin" class="dropdown-item">Blog Admin</a> 
-                <a href="/creator-application-overview" class="dropdown-item">View Creator Applications</a>
+                <a href="/admin/companies" class="dropdown-item">Company Admin</a> 
                 <!-- <a href="/company-application-overview" class="dropdown-item">View Company Applications</a> -->
                 @endif
                 <!-- <a href="/interviews-overview" class="dropdown-item">Interviews</a> -->
                 <hr class="dropdown-divider">
+                <a href="/settings" class="dropdown-item">Settings</a>
                 <a href="/logout" class="dropdown-item">Logout</a>
               </div>
 
@@ -196,29 +196,39 @@
 
         <!-- Navigation -->
         <ul class="navbar-nav mr-auto">
-
-          <li class="nav-item">
-            @if(!empty($parameter) && $parameter == "portfolio")
-              <a class="nav-link active" href="/explore">
-                Explore Portfolios
+           <!-- <li class="nav-item">
+            @if(!empty($parameter) && $parameter == "opportunity")
+              <a class="nav-link active" href="/opportunities">
+                Opportunities
               </a>
             @else
-              <a class="nav-link" href="/explore">
-                Explore Portfolios
+              <a class="nav-link" href="/opportunities">
+                Opportunities
               </a>
             @endif
-          </li>
+          </li> -->
           <li class="nav-item">
         @if(!empty($parameter) && $parameter == "discover")
-          <a class="nav-link active" href="/discover">
-            Discover Projects
+          <a class="nav-link active" href="/projects">
+            Projects
           </a>
         @else
-          <a class="nav-link" href="/discover">
-            Discover Projects
+          <a class="nav-link" href="/projects">
+            Projects
           </a>
         @endif
           </li>
+          <!-- <li class="nav-item">
+              @if(!empty($parameter) && $parameter == "company")
+                <a class="nav-link active" href="/companies">
+                  Companies
+                </a>
+              @else
+                <a class="nav-link" href="/companies">
+                  Companies
+                </a>
+              @endif
+            </li> -->
         </ul>
       </div>
 
@@ -297,19 +307,19 @@
                     <div class="col">
                         <ul class="nav nav-pills">
                           @if(Request::route('projectId'))
-                            <li class="nav-item" style="width: 50%; text-align: center;" id="user" onclick="toggleButton(this.id)">
+                            <li class="nav-item" style="width: 100%; text-align: center;" id="user" onclick="toggleButton(this.id)">
                               <a class="nav-link" href="#" id="a_user">By User</a>
                             </li>
-                            <li class="nav-item" style="width: 50%; text-align: center;" id="project" onclick="toggleButton(this.id)">
+                            <!-- <li class="nav-item" style="width: 50%; text-align: center;" id="project" onclick="toggleButton(this.id)">
                               <a class="nav-link active" href="#" id="a_project">By Project</a>
-                            </li>
+                            </li> -->
                           @else
-                            <li class="nav-item" style="width: 50%; text-align: center;" id="user" onclick="toggleButton(this.id)">
+                            <li class="nav-item" style="width: 100%; text-align: center;" id="user" onclick="toggleButton(this.id)">
                               <a class="nav-link active" href="#" id="a_user">By User</a>
                             </li>
-                            <li class="nav-item" style="width: 50%; text-align: center;" id="project" onclick="toggleButton(this.id)">
+                            <!-- <li class="nav-item" style="width: 50%; text-align: center;" id="project" onclick="toggleButton(this.id)">
                               <a class="nav-link" href="#" id="a_project">By Project</a>
-                            </li>
+                            </li> -->
                           @endif
                           </ul>
                     </div>

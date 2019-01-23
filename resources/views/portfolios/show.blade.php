@@ -16,7 +16,8 @@
         @else
         <img src="/img/avatar.png" alt="..." class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
         @endif
-        <a href="/profile/{{$portfolio->user_id}}"><h1 style="margin-top: 1.5rem;">{{$portfolio->user->name}}</h1></a>
+        <a href="/profile/{{$portfolio->user_id}}"><h1 style="margin-top: 1.5rem; margin-bottom: 0rem;">{{$portfolio->user->name}}</h1></a>
+        <p>{{$portfolio->user->email}}</p>
         <p>{{$portfolio->user->description}}</p>
 
         <div class="text-center" style="margin-bottom: 0.75rem;">
@@ -61,11 +62,11 @@
             @foreach($portfolio->attempted_projects as $attemptedProject)
               <div class="card mb-3" style="margin-bottom: 0rem !important;">
                   <div class="card-body">
-                      @if(!$attemptedProject->project->internal && count($attemptedProject->reviews) == 0)
+                      <!-- @if(!$attemptedProject->project->internal && count($attemptedProject->reviews) == 0)
                       <div class="alert alert-warning alert-dismissible fade show" role="alert" style="text-align: center;">
                         This project can only be published once it has been reviewed by at least 1 reviewer.
                       </div>
-                      @endif
+                      @endif -->
                       <a href="#"><span style="letter-spacing: -.02em; font-weight: 500; font-size: 1.0625rem; line-height: 1.1;">{{$attemptedProject->project->title}}</span> 
                         @if(!$attemptedProject->project->internal)
                         <span class="badge badge-soft-secondary" style="margin-left: 0.5rem; margin-top: -0.5rem;">External Project</span>
@@ -76,16 +77,16 @@
                         <div class='col-12 col-md-12'>
                           <div class='form-group' style="margin-bottom: 0rem;">
                             <h4><label class='mb-1'>Competencies fulfilled</label></h4>
-                            @foreach($attemptedProject->competency_scores as $competencyScore)
+                            @foreach($attemptedProject->project->competencies as $competency)
                               @if($loop->last) 
                                 <span style="float: left;">🌟</span>
                                 <p style="margin-left: 2rem;">
-                                  {{$competencyScore->competency->title}}
+                                  {{$competency->title}}
                                 </p>
                               @else
                                 <span style="float: left;">🌟</span>
                                 <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
-                                  {{$competencyScore->competency->title}}
+                                  {{$competency->title}}
                                 </p>
                               @endif
                             @endforeach

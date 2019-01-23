@@ -77,182 +77,174 @@
 
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light" id="topnav">
-	  <div class="container">
+    <div class="container">
 
-	    <!-- Toggler -->
-	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-	      <span class="navbar-toggler-icon"></span>
-	    </button>
+      <!-- Toggler -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-	    <!-- Brand -->
-	    <a class="navbar-brand order-lg-first" href="/">
-	      <strong style="color: #0984e3; letter-spacing: 0.25rem;">TALENTAIL</strong>
-	    </a>
+      <!-- Brand -->
+      <a class="navbar-brand order-lg-first" href="/">
+        <strong style="color: #0984e3; letter-spacing: 0.25rem;">TALENTAIL</strong>
+      </a>
 
-	    
-	    <div class="navbar-user order-lg-last">
-	    	@if(Auth::id())
-		    	<div class="navbar-user">
-		    		
-		    		<div class="dropdown mr-4 d-none d-lg-flex">
-		    	
-		    	    <!-- Toggle -->
-		    	    <a href="/messages" class="text-muted" role="button">
-						@if($messageCount > 0)
-							<span class="icon active">
-								<i class="fe fe-message-square"></i>
-							</span>
-						@else
-							<span class="icon">
-								<i class="fe fe-message-square"></i>
-							</span>
-						@endif
-		    	    </a>
+      
+      <div class="navbar-user order-lg-last">
+        @if(Auth::id())
+          <div class="navbar-user">
+            
+            <!-- <div class="dropdown mr-4 d-none d-lg-flex">
+          
 
-		    	  </div>
+              <a href="/messages" class="text-muted" role="button">
+            @if($messageCount > 0)
+              <span class="icon active">
+                <i class="fe fe-message-square"></i>
+              </span>
+            @else
+              <span class="icon">
+                <i class="fe fe-message-square"></i>
+              </span>
+            @endif
+              </a>
 
-		    	  <!-- Dropdown -->
-		    	  <div class="dropdown mr-4 d-none d-lg-flex">
-		    	
-		    	    <!-- Toggle -->
-		    	    <a href="/notifications" class="text-muted" role="button">
-		    	      @if($notificationCount > 0)
-		    	      	<span class="icon active">
-		    	      		<i class="fe fe-bell"></i>
-		    	      	</span>
-		    	      @else
-		    	      	<span class="icon">
-		    	      		<i class="fe fe-bell"></i>
-		    	      	</span>
-		    	      @endif
-		    	    </a>
+            </div> -->
 
-		    	  </div>
+            <!-- Dropdown -->
+            <div class="dropdown mr-4 d-none d-lg-flex">
+          
+              <!-- Toggle -->
+              <a href="/notifications" class="text-muted" role="button">
+                @if($notificationCount > 0)
+                  <span class="icon active">
+                    <i class="fe fe-bell"></i>
+                  </span>
+                @else
+                  <span class="icon">
+                    <i class="fe fe-bell"></i>
+                  </span>
+                @endif
+              </a>
 
-		    	  <div class="dropdown mr-4 d-none d-lg-flex">
-		    	
-		    	    <!-- Toggle -->
-		    	    <a href="/shopping-cart" class="text-muted" role="button">
-						@if($shoppingCartActive)
-							<span class="icon active">
-								<i class="fe fe-shopping-cart"></i>
-							</span>
-						@else
-							<span class="icon">
-								<i class="fe fe-shopping-cart"></i>
-							</span>
-						@endif
-		    	    </a>
+            </div>
 
-		    	  </div>
+            <!-- Dropdown -->
+            <div class="dropdown">
+          
+              <!-- Toggle -->
+              <a href="#" class="avatar avatar-sm dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @if(Auth::user()->avatar)
+                   <img src="https://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="..." class="avatar-img rounded-circle">
+                  @else
+                  <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
+                  @endif
+              </a>
 
+              <!-- Menu -->
+              <div class="dropdown-menu dropdown-menu-right">
+                <a href="/" class="dropdown-item">Dashboard</a>
+                <a href="/profile" class="dropdown-item">Profile</a>
+                <!-- <a href="/work-experience" class="dropdown-item">Work Experience</a> -->
+                <!-- @if(Auth::user()->admin)
+                <a href="/invoices" class="dropdown-item">Invoices</a>
+                @endif -->
+                <!-- <a href="/referrals" class="dropdown-item">Referrals</a> -->
+                
+                <!-- <a href="/lessons-overview" class="dropdown-item">Lessons</a> -->
+                <!-- <a href="/projects-overview" class="dropdown-item">Projects</a> -->
+                @if(!(Auth::user()->creator))
+                <hr class="dropdown-divider">
+                @endif
+                @if(!Auth::user()->admin)
+            <!-- @if(!Auth::user()->creator)
+              @if(Auth::user()->creator_application != null && Auth::user()->creator_application->status == "pending")
+                <a href="/creator-application-status" class="dropdown-item">Check Creator Application Status</a>
+              @else
+                <a href="/creator-application" class="dropdown-item">Apply to be a Creator</a>
+              @endif
+            @endif -->
 
+            @if(!Auth::user()->company)
+              @if(Auth::user()->company_application != null && Auth::user()->company_application->status == "pending")
+                <a href="/company-application-status" class="dropdown-item">Check Company Application Status</a>
+              @else
+                <a href="/company-application" class="dropdown-item">Apply to be a Company</a>
+              @endif
+            @endif
+                
+                @endif
 
-		    	  <!-- Dropdown -->
-		    	  <div class="dropdown">
-		    	
-		    	    <!-- Toggle -->
-		    	    <a href="#" class="avatar avatar-sm dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	    	    		@if(Auth::user()->avatar)
-	    	    	     <img src="https://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="..." class="avatar-img rounded-circle">
-	    	    	    @else
-	    	    	    <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
-	    	    	    @endif
-		    	    </a>
+                <!-- @if(Auth::user()->creator)
+                <hr class="dropdown-divider">
+                  <a href="/creator-application" class="dropdown-item">Check Creator Application</a>
+                @endif -->
 
-		    	    <!-- Menu -->
-		    	    <div class="dropdown-menu dropdown-menu-right">
-		    	      <a href="/" class="dropdown-item">Dashboard</a>
-		    	      <a href="/profile" class="dropdown-item">Profile</a>
-		    	      <a href="/settings" class="dropdown-item">Settings</a>
-		    	      <a href="/work-experience" class="dropdown-item">Work Experience</a>
-		    	      @if(Auth::user()->creator)
-		    	      <a href="/invoices" class="dropdown-item">Invoices</a>
-		    	      @endif
-		    	      <a href="/referrals" class="dropdown-item">Referrals</a>
-		    	      
-		    	      <!-- <a href="/lessons-overview" class="dropdown-item">Lessons</a> -->
-		    	      <!-- <a href="/projects-overview" class="dropdown-item">Projects</a> -->
-		    	      @if(!(Auth::user()->creator))
-		    	      <hr class="dropdown-divider">
-		    	      @endif
-		    	      @if(!Auth::user()->admin)
-						@if(!Auth::user()->creator)
-							@if(Auth::user()->creator_application != null && Auth::user()->creator_application->status == "pending")
-								<a href="/creator-application-status" class="dropdown-item">Check Creator Application Status</a>
-							@else
-								<a href="/creator-application" class="dropdown-item">Apply to be a Creator</a>
-							@endif
-						@endif
+                @if(Auth::user()->admin)
+                <!-- <a href="/creator-application-overview" class="dropdown-item">View Creator Applications</a> -->
+                <a href="/blog/admin" class="dropdown-item">Blog Admin</a> 
+                <a href="/admin/companies" class="dropdown-item">Company Admin</a> 
+                <!-- <a href="/company-application-overview" class="dropdown-item">View Company Applications</a> -->
+                @endif
+                <!-- <a href="/interviews-overview" class="dropdown-item">Interviews</a> -->
+                <hr class="dropdown-divider">
+                <a href="/settings" class="dropdown-item">Settings</a>
+                <a href="/logout" class="dropdown-item">Logout</a>
+              </div>
 
-						@if(!Auth::user()->company)
-							@if(Auth::user()->company_application != null && Auth::user()->company_application->status == "pending")
-								<!-- <a href="/company-application-status" class="dropdown-item">Check Company Application Status</a> -->
-							@else
-								<!-- <a href="/company-application" class="dropdown-item">Apply to be a Company</a> -->
-							@endif
-						@endif
-		    	      
-		    	      @endif
+            </div>
 
-		    	      @if(Auth::user()->creator)
-		    	      <hr class="dropdown-divider">
-		    	      	<a href="/creator-application" class="dropdown-item">Check Creator Application</a>
-		    	      @endif
+          </div>
+      @else
+        <a class="btn btn-primary mr-auto" href="/login">
+            Login
+        </a>
+      @endif
+    </div>
 
-		    	      @if(Auth::user()->admin)
-		    	      <a href="/blog/admin" class="dropdown-item">Blog Admin</a> 
-		    	      <a href="/creator-application-overview" class="dropdown-item">View Creator Applications</a>
-		    	      <!-- <a href="/company-application-overview" class="dropdown-item">View Company Applications</a> -->
-		    	      @endif
-		    	      <!-- <a href="/interviews-overview" class="dropdown-item">Interviews</a> -->
-		    	      <hr class="dropdown-divider">
-		    	      <a href="/logout" class="dropdown-item">Logout</a>
-		    	    </div>
+      <!-- Collapse -->
+      <div class="collapse navbar-collapse mr-auto" id="navbar">
 
-		    	  </div>
+        <!-- Navigation -->
+        <ul class="navbar-nav mr-auto">
+           <!-- <li class="nav-item">
+            @if(!empty($parameter) && $parameter == "opportunity")
+              <a class="nav-link active" href="/opportunities">
+                Opportunities
+              </a>
+            @else
+              <a class="nav-link" href="/opportunities">
+                Opportunities
+              </a>
+            @endif
+          </li> -->
+          <li class="nav-item">
+        @if(!empty($parameter) && $parameter == "discover")
+          <a class="nav-link active" href="/projects">
+            Projects
+          </a>
+        @else
+          <a class="nav-link" href="/projects">
+            Projects
+          </a>
+        @endif
+          </li>
+          <!-- <li class="nav-item">
+              @if(!empty($parameter) && $parameter == "company")
+                <a class="nav-link active" href="/companies">
+                  Companies
+                </a>
+              @else
+                <a class="nav-link" href="/companies">
+                  Companies
+                </a>
+              @endif
+            </li> -->
+        </ul>
+      </div>
 
-		    	</div>
-			@else
-				<a class="btn btn-primary mr-auto" href="/login">
-				    Login
-				</a>
-			@endif
-		</div>
-
-	    <!-- Collapse -->
-	    <div class="collapse navbar-collapse mr-auto" id="navbar">
-
-	      <!-- Navigation -->
-	      <ul class="navbar-nav mr-auto">
-
-	      	<li class="nav-item">
-	          @if(!empty($parameter) && $parameter == "portfolio")
-	          	<a class="nav-link active" href="/explore">
-	          		Explore Portfolios
-	          	</a>
-	          @else
-	          	<a class="nav-link" href="/explore">
-	          		Explore Portfolios
-	          	</a>
-	          @endif
-	        </li>
-	        <li class="nav-item">
-				@if(!empty($parameter) && $parameter == "discover")
-					<a class="nav-link active" href="/discover">
-						Discover Projects
-					</a>
-				@else
-					<a class="nav-link" href="/discover">
-						Discover Projects
-					</a>
-				@endif
-	        </li>
-	      </ul>
-	    </div>
-
-	  </div> <!-- / .container -->
-	</nav>
+    </div> <!-- / .container -->
+  </nav>
 	<div class="main-content">
 		@yield('content')
 		<div class="container">
@@ -282,7 +274,7 @@
 			                  <!-- <a href="/tutorials" style="font-size: .875rem;">Tutorials</a> -->
 			              </div>
 			              <div class="col-lg-2">
-			                  <a href="/tutorials" style="font-size: .875rem;">Tutorials</a><br />
+			                  <!-- <a href="/tutorials" style="font-size: .875rem;">Tutorials</a><br /> -->
 			                  <a href="/blog" style="font-size: .875rem;">Blog</a><br />
 			                  <a href="/terms-and-conditions" style="font-size: .875rem;">Terms & Conditions</a><br />
 			                  <a href="/privacy-policy" style="font-size: .875rem;">Privacy Policy</a><br />

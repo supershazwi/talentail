@@ -10,7 +10,7 @@
     </div>
     <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
       <h1 class="display-4 mb-3">
-      <span style="color: #0984e3;">Break into</span> a new career with an endorsed portfolio.
+      <span style="color: #0984e3;">Break into</span> a new career with a portfolio of pre-interview projects.
       </h1>
       <h1 style="color: #777d7f;">In today's day and age, learning is never enough. Attempt projects to apply your knowledge and show the world what you're made of.</h1>
     </div>
@@ -46,7 +46,7 @@
       </h1>
       <ul style="list-style: none;margin-left: 0;padding-left: 2.2em;text-indent: -2.2em;">
         <li><h1 style="color: #777d7f;">😁 Showcase your competencies through tangible work</h1></li>
-        <li><h1 style="color: #777d7f;">😁 Get endorsed by experts within the role that you're interested in</h1></li>
+        <li><h1 style="color: #777d7f;">😁 Get first hand experience on what it takes to perform on a role</h1></li>
         <li><h1 style="color: #777d7f;">😁 Set yourself apart from other job seekers</h1></li>
       </ul>
     </div>
