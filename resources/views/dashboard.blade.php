@@ -36,7 +36,6 @@
 			  </div>
 			  <div class="col">
 			  	<a href="/projects/select-role" class="btn btn-primary" style=" margin-top: -1.25rem; float: right;">Add Project</a>
-			  	<a href="/profile/projects" class="btn btn-light" style="margin-right: 0.5rem; margin-top: -1.25rem; float: right;">View All</a>
 			  </div>
 			</div>
 			@if(count($createdProjects) > 0)
