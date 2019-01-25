@@ -48,7 +48,6 @@
 					          <th scope="col">#</th>
 					          <th scope="col">Project</th>
 					          <th scope="col">Industry</th>
-					          <th scope="col">Price</th>
 					          <th scope="col">Status</th>
 					        </tr>
 					      </thead>
@@ -58,7 +57,6 @@
 					            <th scope="row">{{$key+1}}</th>
 					            <td><a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}">{{$createdProject->title}}</a></td>
 					            <td>{{$createdProject->industry->title}}</td>
-					            <td>${{$createdProject->amount}}</td>
 					            @if($createdProject->published)
 					            	<td><span class="badge badge-primary">Public</span></td>
 					            @else
