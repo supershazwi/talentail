@@ -172,7 +172,7 @@
                 <div class="col-lg-12">
                   <div class="card">
                     <div class="card-body" style="padding-bottom: 0.5rem;">
-                      <p>{{$key+1}}. {{$task->title}}</p>
+                      <p style="font-weight: bold;">{{$key+1}}. {{$task->title}}</p>
                       <p>{{$task->description}}</p>
                     </div> <!-- / .card-body -->
                   </div>

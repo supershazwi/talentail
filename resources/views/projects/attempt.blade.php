@@ -174,7 +174,7 @@
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body" style="padding-bottom: 0.5rem;">
-                <p>{{$key+1}}. {{$answeredTask->task->title}}</p>
+                <p style="font-weight: bold;">{{$key+1}}. {{$answeredTask->task->title}}</p>
                 <input type="hidden" name="task_{{$key+1}}" value="{{$answeredTask->task->id}}" />
                 <p>{{$answeredTask->task->description}}</p>
                 @if($answeredTask->task->mcq) 
