@@ -23,6 +23,10 @@ class AttemptedProject extends Model
         return $this->hasMany(Endorser::class);
     }
 
+    public function workspace_post() {
+        return $this->hasOne(WorkspacePost::class);
+    }
+
     public function creator() {
         return $this->belongsTo('App\User', 'creator_id');
     }
@@ -41,5 +45,13 @@ class AttemptedProject extends Model
 
     public function answered_task_files() {
         return $this->hasMany(AnsweredTaskFile::class);
+    }
+
+    public function comment_files() {
+        return $this->hasMany(CommentFile::class);
+    }
+
+    public function workspace_post_files() {
+        return $this->hasMany(WorkspacePostFile::class);
     }
 }

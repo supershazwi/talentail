@@ -16,6 +16,10 @@ use App\AnsweredTask;
 use App\AnsweredTaskFile;
 use App\Task;
 use App\Answer;
+use App\WorkspacePost;
+use App\WorkspacePostFile;
+use App\CommentFile;
+use App\Comment;
 use App\ProjectFile;
 use App\Role;
 use App\Industry;
@@ -67,6 +71,113 @@ class ProjectsController extends Controller
             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
         ]);
+    }
+
+    public function showWorkspace() {
+        $loggedInUserId = Auth::id();
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $attemptedProject = AttemptedProject::where('user_id', Auth::id())->where('project_id', $project->id)->first();
+
+        $workspacePosts = WorkspacePost::where('attempted_project_id', $attemptedProject->id)->orderBy('created_at', 'desc')->get();
+
+        $workspacePostArray = array();
+
+        foreach($workspacePosts as $workspacePost) {
+            array_push($workspacePostArray, $workspacePost->id);
+        }
+
+        return view('projects.workspace', [
+            'workspacePostArray' => implode(",", $workspacePostArray),
+            'project' => $project,
+            'role' => $role,
+            'workspacePosts' => $workspacePosts,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]);
+    }
+
+    public function submitWorkspacePost(Request $request) {
+        $loggedInUserId = Auth::id();
+
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $attemptedProject = AttemptedProject::where('user_id', Auth::id())->where('project_id', $project->id)->first();
+
+        if($request->input('type') == "comment") {
+            $commentLatestId = Comment::where('workspace_post_id', $request->input('workspacePostId'))->orderBy('id', 'desc')->first();
+        
+            $comment = new Comment;
+
+            $comment->content = $request->input('content');
+            $comment->user_id = Auth::id();
+            $comment->workspace_post_id = $request->input('workspacePostId');
+
+            $comment->save();
+
+            $workspacePosts = WorkspacePost::where('attempted_project_id', $attemptedProject->id)->get();
+
+            foreach($workspacePosts as $workspacePost) {
+                if($request->file('workspacePost_'.$workspacePost->id)) {
+                    for($fileCounter = 0; $fileCounter < count($request->file('workspacePost_'.$workspacePost->id)); $fileCounter++) {
+
+                        $commentFile = new CommentFile;
+
+                        $commentFile->title = $request->file('workspacePost_'.$workspacePost->id)[$fileCounter]->getClientOriginalName();
+                        $commentFile->size = $request->file('workspacePost_'.$workspacePost->id)[$fileCounter]->getSize();
+                        $commentFile->url = Storage::disk('gcs')->put('/assets', $request->file('workspacePost_'.$workspacePost->id)[$fileCounter], 'public');
+                        $commentFile->mime_type = $request->file('workspacePost_'.$workspacePost->id)[$fileCounter]->getMimeType();
+                        $commentFile->workspace_post_id = $request->input('workspacePostId');
+                        $commentFile->comment_id = $comment->id;
+                        $commentFile->attempted_project_id = $attemptedProject->id;
+                        $commentFile->user_id = Auth::id();
+
+                        $commentFile->save();
+                    }
+                }
+            }
+        } else {
+            $workspacePostLatestId = WorkspacePost::where('attempted_project_id', $attemptedProject->id)->orderBy('id', 'desc')->first();
+
+            $workspacePost = new WorkspacePost;
+
+            $workspacePost->content = $request->input('content');
+            $workspacePost->user_id = Auth::id();
+            $workspacePost->attempted_project_id = $attemptedProject->id;
+
+            if($workspacePostLatestId == null) {
+                $workspacePost->url = '/roles/'.$project->role->slug.'/projects/'.$project->slug.'/workspace/1';
+            } else {
+                $workspacePost->url = '/roles/'.$project->role->slug.'/projects/'.$project->slug.'/workspace/'.($workspacePostLatestId->id+1);
+            }
+
+            $workspacePost->save();
+
+            if($request->file('file-1')) {
+                for($fileCounter = 0; $fileCounter < count($request->file('file-1')); $fileCounter++) {
+
+                    $workspacePostFile = new WorkspacePostFile;
+
+                    $workspacePostFile->title = $request->file('file-1')[$fileCounter]->getClientOriginalName();
+                    $workspacePostFile->size = $request->file('file-1')[$fileCounter]->getSize();
+                    $workspacePostFile->url = Storage::disk('gcs')->put('/assets', $request->file('file-1')[$fileCounter], 'public');
+                    $workspacePostFile->mime_type = $request->file('file-1')[$fileCounter]->getMimeType();
+                    $workspacePostFile->workspace_post_id = $workspacePost->id;
+                    $workspacePostFile->attempted_project_id = $attemptedProject->id;
+                    $workspacePostFile->user_id = Auth::id();
+
+                    $workspacePostFile->save();
+                }
+            }
+        }
+
+        return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/workspace');
     }
 
     public function submitTasksReview(Request $request) {

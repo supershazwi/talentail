@@ -33,6 +33,14 @@ class User extends Authenticatable
         return $this->hasMany(Experience::class);
     }
 
+    public function comment_files() {
+        return $this->hasMany(CommentFile::class);
+    }
+
+    public function workspace_post_files() {
+        return $this->hasMany(WorkspacePostFile::class);
+    }
+
     public function referrals() {
         return $this->hasMany(Referral::class, 'referrer_id', 'id');
     }
@@ -47,6 +55,14 @@ class User extends Authenticatable
 
     public function projects() {
         return $this->hasMany(Project::class);
+    }
+
+    public function workspace_posts() {
+        return $this->hasMany(WorkspacePost::class);
+    }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
     }
 
     public function messages() {
