@@ -62,7 +62,7 @@
 	</div> <!-- / .row -->
 
 	<div class="row">
-		@foreach($role->projects as $project)
+		@foreach($projects as $project)
 		@if($project->published)
 		<div class="col-12 col-md-6 col-xl-4">
 		  <div class="card">
@@ -78,41 +78,10 @@
 		    <div class="card-body">
 		      <div class="row align-items-center">
 		        <div class="col">
-		      
-		          <!-- Title -->
-		          
-		          <!-- <div class="avatar-group">
-		            @if(Auth::id() == $project->user->id)
-		            <a href="/profile" class="avatar avatar-xs">
-		            @else
-		            <a href="/profile/{{$project->user->id}}" class="avatar avatar-xs">
-		            @endif
-
-
-		            @if($project->user->avatar)
-		            <img src="https://storage.googleapis.com/talentail-123456789/{{$project->user->avatar}}" alt="..." class="avatar-img rounded-circle">
-		            @else
-		            <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
-		            @endif
-		            </a>
-		          </div> -->
-
-		          <!-- Button -->
-		          <!-- @if(Auth::id() == $project->user->id)
-		          <a href="/profile" style="margin-left: 0.5rem !important;">
-		            {{$project->user->name}}
-		          </a>
-		          @else
-		          <a href="/profile/{{$project->user->id}}" style="margin-left: 0.5rem !important;">
-		            {{$project->user->name}}
-		          </a>
-		          @endif -->
 
 		          <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}"><h2 class="card-title mb-2 name">{{$project->title}}</h2></a>
 		          <span class="badge badge-warning">{{$project->industry->title}}</span>
 
-
-		          <!-- Subtitle -->
 		          <p style="margin-top: 0.75rem; margin-bottom: 0;">
 		            {{$project->description}}
 		          </p>
@@ -120,31 +89,6 @@
 		        </div>
 		      </div> <!-- / .row -->
 
-		      <!-- Divider -->
-		      <!-- <hr>
-
-		      <div class="row align-items-center">
-		        <div class="col">
-		          
-		          <p class="card-text" style="margin-bottom: 0;">${{$project->amount}}</p>
-		        </div>
-		        <div class="col-auto">
-		          
-		          <p class="card-text small text-muted" style="margin-bottom: 0;">Attempted by</p>
-		          <div class="avatar-group">
-		            <a href="profile-posts.html" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="">
-		              <img alt="Image" src="/img/avatars/profiles/avatar-female-2.jpg" class="avatar-img rounded-circle"/>
-		            </a>
-		            <a href="profile-posts.html" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="">
-		              <img alt="Image" src="/img/avatars/profiles/avatar-female-2.jpg" class="avatar-img rounded-circle"/>
-		            </a>
-		            <a href="profile-posts.html" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="">
-		              <img alt="Image" src="/img/avatars/profiles/avatar-female-1.jpg" class="avatar-img rounded-circle"/>
-		            </a>
-		          </div>
-
-		        </div>
-		      </div> -->
 		    </div> <!-- / .card-body -->
 		  </div>
 		</div>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 use App\Project;
 use App\Review;
@@ -62,10 +63,12 @@ class ProjectsController extends Controller
 
     public function index() {
         $role = Role::where('slug', 'business-analyst')->first();
+        $projects = Project::orderBy('updated_at', 'desc')->get();
 
         return view('attempt.index', [
             
             'parameter' => 'discover',
+            'projects' => $projects,
             'role' => $role,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
