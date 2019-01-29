@@ -104,6 +104,33 @@ class ProjectsController extends Controller
         ]);
     }
 
+    public function showIndividualWorkspace() {
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $attemptedProject = AttemptedProject::where('user_id', $routeParameters['userId'])->where('project_id', $project->id)->first();
+
+        $workspacePosts = WorkspacePost::where('attempted_project_id', $attemptedProject->id)->orderBy('created_at', 'desc')->get();
+
+        $workspacePostArray = array();
+
+        foreach($workspacePosts as $workspacePost) {
+            array_push($workspacePostArray, $workspacePost->id);
+        }
+
+        return view('projects.showIndividualWorkspace', [
+            'attemptedProject' => $attemptedProject,
+            'workspacePostArray' => implode(",", $workspacePostArray),
+            'project' => $project,
+            'role' => $role,
+            'workspacePosts' => $workspacePosts,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]);
+    }
+
     public function submitWorkspacePost(Request $request) {
         $loggedInUserId = Auth::id();
 
@@ -111,7 +138,11 @@ class ProjectsController extends Controller
         $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
         $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
 
-        $attemptedProject = AttemptedProject::where('user_id', Auth::id())->where('project_id', $project->id)->first();
+        if($routeParameters['userId']) {
+            $attemptedProject = AttemptedProject::where('user_id', $routeParameters['userId'])->where('project_id', $project->id)->first();
+        } else {
+            $attemptedProject = AttemptedProject::where('user_id', Auth::id())->where('project_id', $project->id)->first();
+        }
 
         if($request->input('type') == "comment") {
             $commentLatestId = Comment::where('workspace_post_id', $request->input('workspacePostId'))->orderBy('id', 'desc')->first();
@@ -180,7 +211,11 @@ class ProjectsController extends Controller
             }
         }
 
-        return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/workspace');
+        if($routeParameters['userId']) {
+            return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$attemptedProject->user_id.'/workspace');
+        } else {
+            return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/workspace');
+        }
     }
 
     public function submitTasksReview(Request $request) {

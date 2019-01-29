@@ -280,6 +280,8 @@
                 @else
                   <button onclick="toggleVisibilityProject()" class="btn btn-block btn-light">Publish Project</button>
                 @endif
+                <hr/>
+                <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/{{$attemptedProject->user_id}}/workspace" class="btn btn-block btn-light">Project Workspace</a>
               @endif
             </div>
           </div>
