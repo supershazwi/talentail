@@ -107,7 +107,6 @@
 					        <tr>
 					          <th scope="col">#</th>
 					          <th scope="col">Project</th>
-					          <th scope="col">Profits Earned</th>
 					          <th scope="col">User</th>
 					          <th scope="col">Status</th>
 					        </tr>
@@ -117,7 +116,6 @@
 					          <tr>
 					            <th scope="row">{{$key+1}}</th>
 					            <td><a href="/roles/{{$creatorProject->project->role->slug}}/projects/{{$creatorProject->project->slug}}/{{$creatorProject->user_id}}">{{$creatorProject->project->title}}</a></td>
-					            <td>${{$creatorProject->project->amount}} * 0.8 = <strong style="text-decoration: underline;">${{number_format((0.8*$creatorProject->project->amount), 2, '.', '')}}</strong></td>
 					            <td>{{$creatorProject->user->name}}</td>
 					            @if($creatorProject->status == "Attempting")
 					            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
