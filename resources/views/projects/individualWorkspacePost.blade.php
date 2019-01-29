@@ -1,7 +1,7 @@
 @extends ('layouts.main')
 
 @section ('content')
-<input type="hidden" name="workspacePostArray" value="{{$workspacePostArray}}" id="workspacePostArray" />
+<input type="hidden" name="workspacePostId" value="{{$workspacePost->id}}" id="workspacePostId" />
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-12 col-lg-10 col-xl-10">
@@ -18,46 +18,15 @@
               </h6>
 
               <!-- Title -->
-              <h1 class="header-title">
+              <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/{{$attemptedProject->user_id}}/workspace"><h1 class="header-title">
                 Project Workspace
-              </h1>
+              </h1></a>
 
             </div>
           </div> <!-- / .row -->
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-body">
-          
-          <!-- Form -->
-          <form method="POST" action="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/workspace" enctype="multipart/form-data">
-            @csrf
-            <div class="input-group input-group-lg input-group-flush input-group-merge">
-              <input type="text" class="form-control form-control-appended" placeholder="Post to project workspace..." name="content">
-              <div class="input-group-append" style="margin-right: 0.5rem;">
-                <!-- <button class="btn btn-block btn-light" style="border-radius: 5px;">
-                  Attach
-                </button> -->
-
-                <!-- <input type="file" class="btn btn-light"/> -->
-                  <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple style="visibility: hidden; width: 165px;"/>
-                  <label for="file-1" style="position: absolute; margin-left: 1.5rem; border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #edf2f9; border-color: #edf2f9; color: #283e59 !important; height: 43.5px !important"> <span style="font-size: 1.15rem; margin-top: 0.5rem !important;">Attach file(s)</span></label>
-              </div>
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-block btn-primary" style="border-radius: 5px;">
-                  Submit post
-                </button>
-              </div>
-            </div>
-            <div id="selectedFiles">
-            </div>
-          </form>
-
-        </div>
-      </div>
-
-      @foreach($workspacePosts as $workspacePost)
       <div class="card">
         <div class="card-body">
           
@@ -188,7 +157,7 @@
             <div class="col ml--2">
 
               <!-- Input -->
-              <form method="POST" action="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/workspace" enctype="multipart/form-data">
+              <form method="POST" action="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/{{$attemptedProject->user_id}}/workspace/{{$workspacePost->id}}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="type" value="comment" />
                 <input type="hidden" name="workspacePostId" value="{{$workspacePost->id}}" />
@@ -212,14 +181,12 @@
 
         </div>
       </div>
-      @endforeach
-
     </div>
   </div>
 </div>
 
 <script type="text/javascript">
-  var workspacePostArray = document.getElementById("workspacePostArray").value.split(",");
+  var workspacePostId = document.getElementById("workspacePostId").value;
 
   $.ajaxSetup({
     headers: {
@@ -233,30 +200,10 @@
   document.addEventListener("DOMContentLoaded", init, false);
 
   function init() {
-    document.querySelector('#file-1').addEventListener('change', handleFileSelect, false);
-    selDiv = document.querySelector("#selectedFiles");
-
-    for(var l=0; l<workspacePostArray.length; l++) {
-      var workspacePostId = workspacePostArray[l];
-      document.querySelector('#workspacePost_' + workspacePostId).addEventListener('change', handleWorkspacePostFileSelect, false);
-    }
-  }
-
-  function handleFileSelect(e) {
-    if(!e.target.files) return;
-    selDiv.innerHTML = "";
-    
-    var files = e.target.files;
-    for(var i=0; i<files.length; i++) {
-      var f = files[i];
-      
-      selDiv.innerHTML += f.name + "<br/>";
-    }
+    document.querySelector('#workspacePost_' + workspacePostId).addEventListener('change', handleWorkspacePostFileSelect, false);
   }
 
   function handleWorkspacePostFileSelect(e) {
-
-    console.log('handleWorkspacePostFileSelect');
     if(!e.target.files) return;
 
     var idString = e.target.id.split("_");

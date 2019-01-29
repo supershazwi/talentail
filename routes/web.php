@@ -2122,10 +2122,14 @@ Route::post('/roles/{roleSlug}/projects/{projectSlug}/{userId}/review', 'Reviews
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/review', 'ReviewsController@submitReview');
 
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/tasks', 'ProjectsController@showTasks');
+Route::get('/roles/{roleSlug}/projects/{projectSlug}/workspace/{workspacePostId}', 'ProjectsController@showWorkspacePost');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/workspace', 'ProjectsController@showWorkspace');
+Route::get('/roles/{roleSlug}/projects/{projectSlug}/{userId}/workspace/{workspacePostId}', 'ProjectsController@showIndividualWorkspacePost');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/{userId}/workspace', 'ProjectsController@showIndividualWorkspace');
-Route::post('/roles/{roleSlug}/projects/{projectSlug}/workspace', 'ProjectsController@submitWorkspacePost');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/{userId}/workspace/{workspacePostId}', 'ProjectsController@submitWorkspacePost');
 Route::post('/roles/{roleSlug}/projects/{projectSlug}/{userId}/workspace', 'ProjectsController@submitWorkspacePost');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/workspace/{workspacePostId}', 'ProjectsController@submitWorkspacePost');
+Route::post('/roles/{roleSlug}/projects/{projectSlug}/workspace', 'ProjectsController@submitWorkspacePost');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/files', 'ProjectsController@showFiles');
 Route::get('/roles/{roleSlug}/projects/{projectSlug}/competencies', 'ProjectsController@showCompetencies');
 

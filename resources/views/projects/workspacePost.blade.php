@@ -1,7 +1,7 @@
 @extends ('layouts.main')
 
 @section ('content')
-<input type="hidden" name="workspacePostArray" value="{{$workspacePostArray}}" id="workspacePostArray" />
+<input type="hidden" name="workspacePostId" value="{{$workspacePost->id}}" id="workspacePostId" />
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-12 col-lg-10 col-xl-10">
@@ -57,7 +57,6 @@
         </div>
       </div>
 
-      @foreach($workspacePosts as $workspacePost)
       <div class="card">
         <div class="card-body">
           
@@ -188,7 +187,7 @@
             <div class="col ml--2">
 
               <!-- Input -->
-              <form method="POST" action="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/workspace" enctype="multipart/form-data">
+              <form method="POST" action="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/workspace/{{$workspacePost->id}}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="type" value="comment" />
                 <input type="hidden" name="workspacePostId" value="{{$workspacePost->id}}" />
@@ -212,14 +211,14 @@
 
         </div>
       </div>
-      @endforeach
 
     </div>
   </div>
 </div>
 
 <script type="text/javascript">
-  var workspacePostArray = document.getElementById("workspacePostArray").value.split(",");
+
+  var workspacePostId = document.getElementById("workspacePostId").value;
 
   $.ajaxSetup({
     headers: {
@@ -233,30 +232,10 @@
   document.addEventListener("DOMContentLoaded", init, false);
 
   function init() {
-    document.querySelector('#file-1').addEventListener('change', handleFileSelect, false);
-    selDiv = document.querySelector("#selectedFiles");
-
-    for(var l=0; l<workspacePostArray.length; l++) {
-      var workspacePostId = workspacePostArray[l];
-      document.querySelector('#workspacePost_' + workspacePostId).addEventListener('change', handleWorkspacePostFileSelect, false);
-    }
-  }
-
-  function handleFileSelect(e) {
-    if(!e.target.files) return;
-    selDiv.innerHTML = "";
-    
-    var files = e.target.files;
-    for(var i=0; i<files.length; i++) {
-      var f = files[i];
-      
-      selDiv.innerHTML += f.name + "<br/>";
-    }
+    document.querySelector('#workspacePost_' + workspacePostId).addEventListener('change', handleWorkspacePostFileSelect, false);
   }
 
   function handleWorkspacePostFileSelect(e) {
-
-    console.log('handleWorkspacePostFileSelect');
     if(!e.target.files) return;
 
     var idString = e.target.id.split("_");

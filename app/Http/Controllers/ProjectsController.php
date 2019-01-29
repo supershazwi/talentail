@@ -104,6 +104,43 @@ class ProjectsController extends Controller
         ]);
     }
 
+    public function showWorkspacePost() {
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $attemptedProject = AttemptedProject::where('user_id', Auth::id())->where('project_id', $project->id)->first();
+
+        $workspacePost = WorkspacePost::find($routeParameters['workspacePostId']);
+
+        return view('projects.workspacePost', [
+            'project' => $project,
+            'workspacePost' => $workspacePost,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]);
+    }
+
+    public function showIndividualWorkspacePost() {
+        $routeParameters = Route::getCurrentRoute()->parameters();
+        $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
+        $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
+
+        $attemptedProject = AttemptedProject::where('user_id', $routeParameters['userId'])->where('project_id', $project->id)->first();
+
+        $workspacePost = WorkspacePost::find($routeParameters['workspacePostId']);
+
+        return view('projects.individualWorkspacePost', [
+            'project' => $project,
+            'attemptedProject' => $attemptedProject,
+            'workspacePost' => $workspacePost,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]);
+    }
+
     public function showIndividualWorkspace() {
         $routeParameters = Route::getCurrentRoute()->parameters();
         $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
@@ -138,7 +175,7 @@ class ProjectsController extends Controller
         $role = Role::select('id', 'title', 'slug')->where('slug', $routeParameters['roleSlug'])->get()[0];
         $project = Project::where([['slug', '=', $routeParameters['projectSlug']], ['role_id', '=', $role->id]])->get()[0];
 
-        if($routeParameters['userId']) {
+        if(!empty($routeParameters['userId'])) {
             $attemptedProject = AttemptedProject::where('user_id', $routeParameters['userId'])->where('project_id', $project->id)->first();
         } else {
             $attemptedProject = AttemptedProject::where('user_id', Auth::id())->where('project_id', $project->id)->first();
@@ -176,6 +213,19 @@ class ProjectsController extends Controller
                     }
                 }
             }
+
+            // if i own the post
+            $notification = new Notification;
+            $notification->message = "commented on the post: " . $comment->workspace_post->content;
+            if(!empty($routeParameters['userId'])) {
+                $notification->recipient_id = $comment->workspace_post->user_id;
+                $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug ."/workspace/" . $request->input('workspacePostId');
+            } else {
+                $notification->recipient_id = 1;
+                $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . $attemptedProject->user_id . "/workspace/" . $request->input('workspacePostId');
+            }
+            $notification->user_id = Auth::id();
+            $notification->save();
         } else {
             $workspacePostLatestId = WorkspacePost::where('attempted_project_id', $attemptedProject->id)->orderBy('id', 'desc')->first();
 
@@ -209,12 +259,32 @@ class ProjectsController extends Controller
                     $workspacePostFile->save();
                 }
             }
+
+            $notification = new Notification;
+            $notification->message = "submitted a post: " . $workspacePost->content;
+            if(!empty($routeParameters['userId'])) {
+                $notification->recipient_id = $comment->workspace_post->user_id;
+                $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug ."/workspace/" . $workspacePost->id;
+            } else {
+                $notification->recipient_id = 1;
+                $notification->url = "/roles/" . $attemptedProject->project->role->slug . "/projects/" . $attemptedProject->project->slug . "/" . $attemptedProject->user_id . "/workspace/" . $workspacePost->id;
+            }
+            $notification->user_id = Auth::id();
+            $notification->save();
         }
 
-        if($routeParameters['userId']) {
-            return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$attemptedProject->user_id.'/workspace');
+        if(!empty($routeParameters['userId'])) {
+            if(!empty($routeParameters['workspacePostId'])) {
+                return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$attemptedProject->user_id.'/workspace/'.$routeParameters['workspacePostId']);
+            } else {
+                return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/'.$attemptedProject->user_id.'/workspace');
+            }
         } else {
-            return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/workspace');
+            if(!empty($routeParameters['workspacePostId'])) {
+                return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/workspace/'.$routeParameters['workspacePostId']);
+            } else {
+                return redirect('/roles/'.$project->role->slug.'/projects/'.$project->slug.'/workspace');
+            }
         }
     }
 
