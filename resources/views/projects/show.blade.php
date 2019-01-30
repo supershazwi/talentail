@@ -284,7 +284,7 @@
                 <p>What you'll be getting from this project:</p>
                 <ul style="margin-left: -1.4rem;">
                   <li>Practical work experience</li>
-                  <li>A well constructed business case</li>
+                  <li>A well constructed business case to add to your <a href="/profile">portfolio</a></li>
                   <li>A workspace to post any enquiry related to the project</li>
                   <li>A better shot at landing that interview and job offer</li>
                 </ul>
