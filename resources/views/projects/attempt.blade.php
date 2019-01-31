@@ -221,7 +221,8 @@
         <input type="hidden" name="files-deleted_{{$answeredTask->id}}" id="files-deleted_{{$answeredTask->id}}" />
       @endforeach
         <input type="hidden" name="submissionType" id="submissionType" />
-        <button type="submit" style="display: none;" id="submitProjectAttempt">Submit</button>
+        <button type="submit" class="btn btn-primary btn-block" id="saveProjectAttempt">Save Project</button>
+        <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}" class="btn btn-default btn-block">Cancel</a>
       </form>
           @elseif($parameter == 'file')
             <div class="row">
