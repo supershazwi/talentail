@@ -31,7 +31,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
 	<script src="https://js.braintreegateway.com/web/dropin/1.8.1/js/dropin.min.js"></script>
 
-
+  <meta name="google-site-verification" content="OJantCXfGuTlfFzI5XMc9vihxeFMsqGDhFqiON_qcws" />
+  
 	<script>var colorScheme = 'light';</script>
 	<title>Talentail</title>
 
