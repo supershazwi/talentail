@@ -325,6 +325,10 @@
       document.getElementById("toggleVisibilityProjectButton").click();
     }
   </script>
+
+  <!-- Start of HubSpot Embed Code -->
+    <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/4936096.js"></script>
+  <!-- End of HubSpot Embed Code --> 
 @endsection
 
 @section ('footer')
