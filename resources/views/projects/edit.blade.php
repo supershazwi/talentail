@@ -335,7 +335,7 @@
 
         </form>
         <button onclick="saveProject()" class="btn btn-block btn-primary">
-          Save project
+          Save Project
         </button>
         <a href="#" class="btn btn-block btn-link text-muted">
           Cancel
