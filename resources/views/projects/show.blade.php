@@ -296,6 +296,7 @@
                 <button class="btn btn-block btn-primary" onclick="addProjectToInventory()">
                   Attempt Project
                 </button>
+                <p style="text-align: center; margin-bottom: 0; margin-top: 0.5rem;"><small>Don't worry, there is no deadline.</small></p>
                 @endif
               @else
                 <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}/edit" class="btn btn-block btn-primary">Edit Project</a>
