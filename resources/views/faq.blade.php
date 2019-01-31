@@ -36,7 +36,7 @@
             <div class="row justify-content-center">
               <div class="col">
                 <h3>3. Why come up with this idea?</h3>
-                <p style="margin-bottom: 0rem;">There are a lot of people getting into a new career or wanting to switch careers. One similar problem they face is the lack of experience. Other professions such as creative designers can create beautiful art pieces and use that as a portfolio to show their capabilities. Why not other not so direct roles such as business analysts? They simply need a project/use case to apply their knowledge on and those projects/use cases are what Talentail is consolidating.</p>
+                <p style="margin-bottom: 0rem;">There are a lot of people getting into a new career or wanting to switch careers. One similar problem they face is the lack of experience. Other professions such as creative designers can create beautiful art pieces and use that as a portfolio to show their capabilities. Why not other "indirect" roles such as business analysts? They simply need a project/use case to apply their knowledge on and those projects/use cases are what Talentail is consolidating.</p>
               </div>
             </div> <!-- / .row -->
           </div>
