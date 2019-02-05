@@ -90,7 +90,7 @@
 
                 </div>
                 <div class="col-auto mr--3">
-                  <button class="btn btn-primary" style="margin-bottom: 0.1875rem !important;" onclick="addTask()">Add Task</button>
+                  <button class="btn btn-primary" style="margin-bottom: 0.1875rem !important;" onclick="addTask()" id="addTask">Add Task</button>
                 </div>
               </div>
             </div>
@@ -256,7 +256,7 @@
           <button class="btn btn-default" onclick="cancel()" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
 
         </form>
-        <button onclick="saveProject()" class="btn btn-block btn-primary">
+        <button onclick="saveProject()" id="saveProjectButton" class="btn btn-block btn-primary">
           Save Project
         </button>
         <a href="#" class="btn btn-block btn-link text-muted">
@@ -694,6 +694,33 @@
         document.getElementById("charactersLeft").innerHTML = (280 - descriptionLength) + " characters left";
       }
     }
+  </script>
+  <script type="text/javascript">
+    $('#addTask').click(function( event ){
+        event.preventDefault();
+
+        let cardCounter = document.querySelectorAll('.task-card').length + 1;
+
+        document.getElementById("tasksList_" + cardCounter).innerHTML += "<div class='card' id='tasksList_" + cardCounter + "'><div class='card-body task-card' id='card_" + cardCounter + "'><div class='row'><div class='col-12 col-md-12'><div class='form-group'><label class='todo-title'>To-do #" + cardCounter + " Title</label><input type='text' name='todo-title_" + cardCounter + "' class='form-control todo-title-input' id='todo-title-input_" + cardCounter + "' placeholder='Enter title'></div></div></div><div class='row'><div class='col-12 col-md-12'><div class='form-group'><label class='todo-description'>To-do #" + cardCounter + " Description</label><input type='text' name='todo-description_" + cardCounter + "' class='form-control todo-description-input' id='todo-description-input_" + cardCounter + "' placeholder='Enter description'></div></div></div><div class='row'><div class='col-12 col-md-12'><div class='form-group'><div class='btn-group-toggle' data-toggle='buttons'><label class='btn btn-white radio-mcq-label' onclick='launchMcq()' id='radio-mcq_" + cardCounter + "'><input type='radio' name='todo_" + cardCounter + "' value='mcq' class='radio-mcq' id='radio-mcq_" + cardCounter + "'> <i class='fe fe-check-circle check-mcq' id='radio-mcq-check_" + cardCounter + "'></i> Multiple Choice Question</label><label class='btn btn-white radio-open-ended-label' onclick='removeMcq()' id='radio-open-ended_" + cardCounter + "'><input type='radio' name='todo_" + cardCounter + "' value='open-ended' class='radio-open-ended' id='radio-open-ended_" + cardCounter + "'> <i class='fe fe-check-circle check-open-ended' id='radio-open-ended-check_" + cardCounter + "'></i> Open-ended</label><label class='btn btn-white radio-na-label' onclick='removeMcq()' id='radio-na_" + cardCounter + "'><input type='radio' name='todo_" + cardCounter + "' value='na' class='radio-na' id='radio-na_" + cardCounter + "'> <i class='fe fe-check-circle check-na' id='radio-na-check_" + cardCounter + "'></i> Not Applicable</label></div></div></div></div><div class='accordion answer-accordion answer-accordion_" + cardCounter + "' id='answersList_" + cardCounter + "_1' ></div><div id='mcq-buttons_" + cardCounter + "' style='display: none;'><div class='row align-items-center'><div class='col-auto'><div class='custom-control custom-checkbox-toggle'><input type='checkbox' class='custom-control-input' id='checkbox-multiple-select_" + cardCounter + "' name='checkbox-multiple-select_" + cardCounter + "'><label class='custom-control-label' id='checkbox-multiple-select-label_" + cardCounter + "' for='checkbox-multiple-select_" + cardCounter + "'></label></div></div><div class='col'><span>Enable Multiple Select</span></div><div class='col-auto'><button class='btn btn-primary add-task' style='float: right;' id='add-task_" + cardCounter + "' onclick='addAnswer()'>Add Answer</button></div></div><hr/></div><div class='row align-items-center'><div class='col-auto'><div class='custom-control custom-checkbox-toggle'><input type='checkbox' class='custom-control-input' id='checkbox-file-upload_" + cardCounter + "' name='checkbox-file-upload_" + cardCounter + "'><label class='custom-control-label' id='checkbox-file-upload-label_" + cardCounter + "' for='checkbox-file-upload_" + cardCounter + "'></label></div></div><div class='col'><span>Allow user to upload file</span></div><div class='col-auto'><button class='btn btn-danger delete-task' id='delete-task_" + cardCounter + "' onclick='deleteTask()'>Delete Task</button></div></div></div></div>";
+
+        document.getElementById("tasksList_" + cardCounter).insertAdjacentHTML('afterend', "<div class='task-accordion' id='tasksList_" + (cardCounter+1) + "'></div>");
+    });
+
+    $("#saveProjectButton").click(function( event ) {
+      event.preventDefault();
+
+      let competencyCount = document.getElementsByClassName("custom-competency").length;
+
+      for (i = 1; i <= competencyCount; i++) {  
+          i = parseInt(i);
+
+          let x = document.getElementById("custom-competency-checkbox_" + i);
+          x.value = document.getElementById("custom-competency-input_" + i).value;
+      }
+
+      document.getElementById("projectForm").action = "/projects/save-project";
+      document.getElementById("saveProject").click();
+    });
   </script>
 @endsection
 
