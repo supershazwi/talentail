@@ -179,16 +179,6 @@
 		                <td><a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}">{{$attemptedProject->project->title}}</a></td>
 		                <td><span class="badge badge-primary">{{$attemptedProject->project->role->title}}</span></td>
 		                <td><span class="badge badge-warning">{{$attemptedProject->project->industry->title}}</span></td>
-	                  	<!-- <td>
-	                      <div class="custom-control custom-checkbox-toggle">
-	                        @if($attemptedProject->added)
-	                        <input type="checkbox" class="custom-control-input" name="visibility" id="attemptedProject_{{$attemptedProject->id}}" value="{{$attemptedProject->id}}" checked onchange="toggleVisibility(this.id)">
-	                        @else
-	                        <input type="checkbox" class="custom-control-input" name="visibility" id="attemptedProject_{{$attemptedProject->id}}" value="{{$attemptedProject->id}}" onchange="toggleVisibility(this.id)">
-	                        @endif
-	                        <label class="custom-control-label" for="attemptedProject_{{$attemptedProject->id}}" id="attemptedProject_{{$attemptedProject->id}}"></label>
-	                      </div>
-	                    </td> -->
 	                    <td>
 	                    	@if($attemptedProject->project->internal)
 	                    	<span class="badge badge-dark">Internal</span>
@@ -247,16 +237,6 @@
 			                <td><a href="/portfolios/{{$portfolio->id}}">{{$portfolio->role->title}}</a></td>
 			                <td><span class="badge badge-primary">{{$portfolio->noOfInternalProjects}}</span></td>
 			                <td><span class="badge badge-primary">{{$portfolio->noOfExternalProjects}}</span></td>
-		                  	<!-- <td>
-		                      <div class="custom-control custom-checkbox-toggle">
-		                        @if($attemptedProject->added)
-		                        <input type="checkbox" class="custom-control-input" name="visibility" id="attemptedProject_{{$attemptedProject->id}}" value="{{$attemptedProject->id}}" checked onchange="toggleVisibility(this.id)">
-		                        @else
-		                        <input type="checkbox" class="custom-control-input" name="visibility" id="attemptedProject_{{$attemptedProject->id}}" value="{{$attemptedProject->id}}" onchange="toggleVisibility(this.id)">
-		                        @endif
-		                        <label class="custom-control-label" for="attemptedProject_{{$attemptedProject->id}}" id="attemptedProject_{{$attemptedProject->id}}"></label>
-		                      </div>
-		                    </td> -->
 			              </tr>
 			              @endforeach
 			          </tbody>
