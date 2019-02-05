@@ -334,10 +334,10 @@
           <button class="btn btn-default" onclick="cancel()" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
 
         </form>
-        <button onclick="saveProject()" class="btn btn-block btn-primary">
+        <button onclick="saveProject()" class="btn btn-block btn-primary" id="saveProjectButton">
           Save Project
         </button>
-        <a href="#" class="btn btn-block btn-link text-muted">
+        <a href="/roles/{{$role->slug}}/projects/{{$project->slug}}" class="btn btn-block btn-link text-muted">
           Cancel
         </a>
 
@@ -748,6 +748,12 @@
 
       document.getElementById("saveProject").click();
     }
+
+    $("#saveProjectButton").click(function( event ) {
+      event.preventDefault();
+
+      document.getElementById("saveProject").click();
+    });
   </script>
 @endsection
 
