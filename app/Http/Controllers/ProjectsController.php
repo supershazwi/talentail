@@ -63,7 +63,7 @@ class ProjectsController extends Controller
 
     public function index() {
         $role = Role::where('slug', 'business-analyst')->first();
-        $projects = Project::orderBy('updated_at', 'desc')->get();
+        $projects = Project::orderBy('updated_at', 'desc')->paginate(10);
 
         return view('attempt.index', [
             

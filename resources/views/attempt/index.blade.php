@@ -95,6 +95,11 @@
 		@endif
 		@endforeach
 	</div>
+	<div class="row">
+		<div class="col-lg-12" style="justify-content: center;">
+			{{ $projects->links() }}
+		</div>
+	</div>
 </div>
 <!-- Start of HubSpot Embed Code -->
   <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/4936096.js"></script>
