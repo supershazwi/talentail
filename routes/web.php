@@ -51,7 +51,8 @@ use App\AttemptedProject;
 use App\Mail\SendResetPasswordLink;
 
 use Pusher\Laravel\Facades\Pusher;
-use Illuminate\Support\Facades\Password;
+// use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Passwords\PasswordBroker;
 
 use App\Mail\SendEndorsersMail;
 use App\Mail\UserRegistered;
