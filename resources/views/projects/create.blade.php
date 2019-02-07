@@ -203,53 +203,6 @@
 
           <hr class="mt-5 mb-5">
 
-          <div class="form-group">
-            <div class="container">
-              <div class="row align-items-center">
-                <div class="col-auto" style="padding-left: 0px;">
-                  <label class="mb-1">
-                    Miscellaneous
-                  </label>
-                </div>
-                <div class="col">
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="form-group">
-                <label>
-                  Price
-                </label>
-
-                <div class="input-group mb-3">
-                  <input type="number" class="form-control" placeholder="Enter project price in dollars" aria-label="Project price" aria-describedby="basic-addon1" name="price" value="{{ old('price') }}">
-                  <div class="input-group-append">
-                    <span class="input-group-text" id="basic-addon1">credits</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="form-group">
-                <label>
-                  Duration given to complete project
-                </label>
-                <div class="input-group mb-3">
-                  <input type="number" class="form-control" placeholder="Enter project duration in hours" aria-label="Recipient's username" aria-describedby="basic-addon2" name="hours" value="{{ old('hours') }}">
-                  <div class="input-group-append">
-                    <span class="input-group-text" id="basic-addon2">hours</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <hr class="mt-5 mb-5" style="margin-top: 0.875rem !important;">
-
           <!-- Buttons -->
           <button class="btn btn-primary" id="createProject" type="submit" style="float: right; display: none;">Create Project</button>
           <button class="btn btn-default" id="saveProject" type="submit" style="float: right; margin-right: 0.5rem; display: none;">Save</button>
