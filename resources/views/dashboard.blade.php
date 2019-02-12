@@ -126,8 +126,8 @@
 					            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
 					            @elseif($creatorProject->status == "Reviewed")
 					            <td><span class="badge badge-success">{{$creatorProject->status}}</span></td>
-					            <td>{{$creatorProject->created_at->diffForHumans()}}</td>
 					            @endif
+					            <td>{{$creatorProject->created_at->diffForHumans()}}</td>
 					          </tr>
 					          @endforeach
 					      </tbody>
