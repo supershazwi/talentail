@@ -109,6 +109,7 @@
 					          <th scope="col">Project</th>
 					          <th scope="col">User</th>
 					          <th scope="col">Status</th>
+					          <th scope="col">Age</th>
 					        </tr>
 					      </thead>
 					      <tbody>
@@ -125,6 +126,7 @@
 					            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
 					            @elseif($creatorProject->status == "Reviewed")
 					            <td><span class="badge badge-success">{{$creatorProject->status}}</span></td>
+					            <td>{{$creatorProject->created_at->diffForHumans()}}</td>
 					            @endif
 					          </tr>
 					          @endforeach
