@@ -25,15 +25,27 @@ use Illuminate\Validation\Rule;
 use App\Experience;
 use App\User;
 use App\Credit;
+use App\Exercise;
+use App\Community;
+use App\ResponseFile;
+use App\Opportunity;
+use App\Vote;
+use App\CommunityPost;
+use App\CommunityPostFile;
+use App\CommunityPostComment;
+use App\CommunityPostCommentFile;
+use App\Category;
 use App\Company;
 use App\Notification;
+use App\AnsweredExercise;
 use App\PendingNotification;
 use App\Role;
+use App\Task;
 use App\Project;
 use App\Endorser;
 use App\Industry;
-use App\AnsweredTaskFile;
-use App\ProjectFile;
+use App\AnsweredExerciseFile;
+use App\ExerciseFile;
 use App\Invoice;
 use App\Review;
 use App\RoleGained;
@@ -82,6 +94,560 @@ Route::post('/password/send-email', function(Request $request) {
     //https://talentail.com/password/reset/a464542384b9c1d164f2dc60471851abd01e1eb3776a6e0a0061b58ca5d524f0
 });
 
+Route::get('/check-upvote', function() {
+   
+});
+
+Route::post('/community-post-comment/{communityPostCommentId}/downvote', function(Request $request) {
+    $returnArray = array();
+
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $communityPostComment = CommunityPostComment::find($request->input('communityPostCommentId'));
+
+    // i need to attach the upvote or neutral here
+    // check whether exists first
+    // if exist, change to neutral and delete row
+    $vote = Vote::where('user_id', $request->input('userId'))->where('community_post_comment_id', $request->input('communityPostCommentId'))->first();
+
+    if($vote) {
+        // that means it exists
+        // check whether its neutral, upvoted or downvoted
+
+        if($vote->upvote || $vote->neutral) {
+            if($vote->neutral) {
+                $communityPostComment->score = $communityPostComment->score - 1;
+                array_push($returnArray, "downvote");
+            }
+
+            if($vote->upvote) {
+                $communityPostComment->score = $communityPostComment->score - 2;
+                array_push($returnArray, "downvote");
+            }
+
+            $communityPostComment->save();
+
+            $vote->downvote = 1;
+            $vote->upvote = 0;
+            $vote->neutral = 0;
+
+            $vote->save();
+        } else {
+            $communityPostComment->score = $communityPostComment->score + 1;
+
+            $communityPostComment->save();
+
+            $vote->neutral = 1;
+            $vote->downvote = 0;
+            $vote->upvote = 0;
+
+            $vote->save();
+
+            array_push($returnArray, "neutral");
+        }
+    } else {
+        $vote = new Vote;
+
+        $vote->community_post_comment_id = $request->input('communityPostCommentId');
+        $vote->user_id = $request->input('userId');
+        $vote->downvote = 1;
+
+        $vote->save();
+
+        $communityPostComment->score = $communityPostComment->score - 1;
+
+        $communityPostComment->save();
+
+        array_push($returnArray, "downvote");
+    }
+
+    array_push($returnArray, $communityPostComment->score);
+
+    return $returnArray;
+
+})->middleware('auth');
+
+Route::post('/community-post-comment/{communityPostCommentId}/upvote', function(Request $request) {
+    $returnArray = array();
+
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    // i need to attach the upvote or neutral here
+    // check whether exists first
+    // if exist, change to neutral and delete row
+    $vote = Vote::where('user_id', $request->input('userId'))->where('community_post_comment_id', $request->input('communityPostCommentId'))->first();
+
+    if($vote) {
+        // that means it exists
+        // check whether its neutral, upvoted or downvoted
+
+        if($vote->downvote || $vote->neutral) {
+            $communityPostComment = CommunityPostComment::find($request->input('communityPostCommentId'));
+
+            if($vote->neutral) {
+                $communityPostComment->score = $communityPostComment->score + 1;
+                array_push($returnArray, "upvote");
+            }
+
+            if($vote->downvote) {
+                $communityPostComment->score = $communityPostComment->score + 2;
+                array_push($returnArray, "upvote");
+            }
+
+            $communityPostComment->save();
+
+            $vote->upvote = 1;
+            $vote->downvote = 0;
+            $vote->neutral = 0;
+
+            $vote->save();
+        } else {
+            $communityPostComment = CommunityPostComment::find($request->input('communityPostCommentId'));
+
+            $communityPostComment->score = $communityPostComment->score - 1;
+
+            $communityPostComment->save();
+
+            $vote->neutral = 1;
+            $vote->downvote = 0;
+            $vote->upvote = 0;
+
+            $vote->save();
+
+            array_push($returnArray, "neutral");
+        }
+    } else {
+        $vote = new Vote;
+
+        $vote->community_post_comment_id = $request->input('communityPostCommentId');
+        $vote->user_id = $request->input('userId');
+        $vote->upvote = 1;
+
+        $vote->save();
+
+        $communityPostComment = CommunityPostComment::find($request->input('communityPostCommentId'));
+
+        $communityPostComment->score = $communityPostComment->score + 1;
+
+        $communityPostComment->save();
+
+        array_push($returnArray, "upvote");
+    }
+
+    array_push($returnArray, $communityPostComment->score);
+
+    return $returnArray;
+
+})->middleware('auth');
+
+Route::post('/community-post/{communityPostId}/upvote', function(Request $request) {
+    $returnArray = array();
+
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    // i need to attach the upvote or neutral here
+    // check whether exists first
+    // if exist, change to neutral and delete row
+    $vote = Vote::where('user_id', $request->input('userId'))->where('community_post_id', $request->input('communityPostId'))->first();
+
+    if($vote) {
+        // that means it exists
+        // check whether its neutral, upvoted or downvoted
+
+        if($vote->downvote || $vote->neutral) {
+            $communityPost = CommunityPost::find($request->input('communityPostId'));
+
+            if($vote->neutral) {
+                $communityPost->score = $communityPost->score + 1;
+                array_push($returnArray, "upvote");
+            }
+
+            if($vote->downvote) {
+                $communityPost->score = $communityPost->score + 2;
+                array_push($returnArray, "upvote");
+            }
+
+            $communityPost->save();
+
+            $vote->upvote = 1;
+            $vote->downvote = 0;
+            $vote->neutral = 0;
+
+            $vote->save();
+        } else {
+            $communityPost = CommunityPost::find($request->input('communityPostId'));
+
+            $communityPost->score = $communityPost->score - 1;
+
+            $communityPost->save();
+
+            $vote->neutral = 1;
+            $vote->downvote = 0;
+            $vote->upvote = 0;
+
+            $vote->save();
+
+            array_push($returnArray, "neutral");
+        }
+    } else {
+        $vote = new Vote;
+
+        $vote->community_post_id = $request->input('communityPostId');
+        $vote->user_id = $request->input('userId');
+        $vote->upvote = 1;
+
+        $vote->save();
+
+        $communityPost = CommunityPost::find($request->input('communityPostId'));
+
+        $communityPost->score = $communityPost->score + 1;
+
+        $communityPost->save();
+
+        array_push($returnArray, "upvote");
+    }
+
+    array_push($returnArray, $communityPost->score);
+
+    return $returnArray;
+
+})->middleware('auth');
+
+Route::post('/community-post/{communityPostId}/downvote', function(Request $request) {
+    $returnArray = array();
+
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+        // i need to attach the upvote or neutral here
+        // check whether exists first
+        // if exist, change to neutral and delete row
+        $vote = Vote::where('user_id', $request->input('userId'))->where('community_post_id', $request->input('communityPostId'))->first();
+
+        if($vote) {
+            // that means it exists
+            // check whether its neutral, upvoted or downvoted
+
+            if($vote->upvote || $vote->neutral) {
+                $communityPost = CommunityPost::find($request->input('communityPostId'));
+
+                if($vote->neutral) {
+                    $communityPost->score = $communityPost->score - 1;
+
+                    array_push($returnArray, "downvote");
+                }
+
+                if($vote->upvote) {
+                    $communityPost->score = $communityPost->score - 2;
+
+                    array_push($returnArray, "downvote");
+                }
+
+                $communityPost->save();
+
+                $vote->upvote = 0;
+                $vote->downvote = 1;
+                $vote->neutral = 0;
+
+                $vote->save();
+            } else {
+                $communityPost = CommunityPost::find($request->input('communityPostId'));
+
+                $communityPost->score = $communityPost->score + 1;
+
+                $communityPost->save();
+
+                $vote->neutral = 1;
+                $vote->downvote = 0;
+                $vote->upvote = 0;
+
+                $vote->save();
+
+                array_push($returnArray, "neutral");
+            }
+        } else {
+            $vote = new Vote;
+
+            $vote->community_post_id = $request->input('communityPostId');
+            $vote->user_id = $request->input('userId');
+            $vote->downvote = 1;
+
+            $vote->save();
+
+            $communityPost = CommunityPost::find($request->input('communityPostId'));
+
+            $communityPost->score = $communityPost->score - 1;
+
+            $communityPost->save();
+
+            array_push($returnArray, "downvote");
+        }
+
+        array_push($returnArray, $communityPost->score);
+
+        return $returnArray;
+
+})->middleware('auth');
+
+Route::post('/communities/{communitySlug}/subscribe', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $community = Community::where('slug', $routeParameters['communitySlug'])->first();
+
+    $community->users()->attach(Auth::id());
+
+    return redirect('/communities/' . $routeParameters['communitySlug']);
+
+})->middleware('auth');
+
+Route::get('/communities/{communitySlug}/posts/{communityPostId}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $communityPost = CommunityPost::find($routeParameters['communityPostId']);
+
+    if(Auth::user()) 
+        $subscribed = Auth::user()->communities()->where('user_id', Auth::id())->exists();
+    else
+        $subscribed = false;
+
+    $community = Community::where('slug', $routeParameters['communitySlug'])->first();
+
+    $communityTopPostVote = null;
+
+    $voteArray = array();
+
+    if(Auth::id()) {
+        $vote = Vote::where('user_id', Auth::id())->where('community_post_id', $routeParameters['communityPostId'])->first();
+        if($vote != null) {
+            if($vote->upvote) {
+                $communityTopPostVote = "u";
+            } else if($vote->downvote) {
+                $communityTopPostVote = "d";
+            } else {
+                $communityTopPostVote = "n";
+            }
+        }
+
+        $votes = Vote::where('user_id', Auth::id())->where('community_post_id', 0)->get();
+        foreach($votes as $vote) {
+            if($vote->upvote) {
+                $voteArray[$vote->community_post_comment_id] = "u";
+            } else if($vote->downvote) {
+                $voteArray[$vote->community_post_comment_id] = "d";
+            } else {
+                $voteArray[$vote->community_post_comment_id] = "n";
+            }
+        }
+    } 
+
+    $communityPostCommentsArray = array();
+
+    foreach($communityPost->community_post_comments as $communityPostComment) {
+        array_push($communityPostCommentsArray, $communityPostComment->id);
+        foreach($communityPostComment->nested_comments as $nestedComment) {
+            array_push($communityPostCommentsArray, $nestedComment->id);
+        }
+    }
+
+    return view('communities.showPost', [
+        'communityPostCommentsArray' => implode(",", $communityPostCommentsArray),
+        'communityPost' => $communityPost,
+        'communityTopPostVote' => $communityTopPostVote,
+        'community' => $community,
+        'voteArray' => $voteArray,
+        'subscribed' => $subscribed,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
+Route::post('/community-post/{communityPostId}/create-comment', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $communityPost = CommunityPost::find($routeParameters['communityPostId']);
+
+    $communityPostComment = new CommunityPostComment;
+
+    $communityPostComment->content = $request->input('content');
+    $communityPostComment->score = 1;
+    $communityPostComment->user_id = Auth::id();
+    $communityPostComment->community_post_id = $routeParameters['communityPostId'];
+
+    $communityPostComment->save();    
+
+    if($request->file('topFile')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('topFile')); $fileCounter++) {
+
+            $communityPostCommentFile = new CommunityPostCommentFile;
+
+            $communityPostCommentFile->title = $request->file('topFile')[$fileCounter]->getClientOriginalName();
+            $communityPostCommentFile->size = $request->file('topFile')[$fileCounter]->getSize();
+            $communityPostCommentFile->url = Storage::disk('gcs')->put('/assets', $request->file('topFile')[$fileCounter], 'public');
+            $communityPostCommentFile->mime_type = $request->file('topFile')[$fileCounter]->getMimeType();
+            $communityPostCommentFile->community_post_comment_id = $communityPostComment->id;
+            $communityPostCommentFile->user_id = Auth::id();
+
+            $communityPostCommentFile->save();
+        }
+    }
+
+    return redirect('/communities/'.$request->input('communitySlug').'/posts/'.$request->input('communityPostId'));
+});
+
+Route::post('/community-post-comment/{communityPostCommentId}/create-comment', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $communityPostComment = CommunityPostComment::find($routeParameters['communityPostCommentId']);
+
+    $communityPostComment = new CommunityPostComment;
+
+    $communityPostComment->content = $request->input('content');
+    $communityPostComment->score = 1;
+    $communityPostComment->user_id = Auth::id();
+    $communityPostComment->community_post_comment_id = $routeParameters['communityPostCommentId'];
+
+    $communityPostComment->save();    
+
+    if($request->file('file_'.$request->input('nestedCommentId'))) {
+        for($fileCounter = 0; $fileCounter < count($request->file('file_'.$request->input('nestedCommentId'))); $fileCounter++) {
+
+            $communityPostCommentFile = new CommunityPostCommentFile;
+
+            $communityPostCommentFile->title = $request->file('file_'.$request->input('nestedCommentId'))[$fileCounter]->getClientOriginalName();
+            $communityPostCommentFile->size = $request->file('file_'.$request->input('nestedCommentId'))[$fileCounter]->getSize();
+            $communityPostCommentFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_'.$request->input('nestedCommentId'))[$fileCounter], 'public');
+            $communityPostCommentFile->mime_type = $request->file('file_'.$request->input('nestedCommentId'))[$fileCounter]->getMimeType();
+            $communityPostCommentFile->community_post_comment_id = $communityPostComment->id;
+            $communityPostCommentFile->user_id = Auth::id();
+
+            $communityPostCommentFile->save();
+        }
+    }
+
+    if($request->file('file_'.$routeParameters['communityPostCommentId'])) {
+        for($fileCounter = 0; $fileCounter < count($request->file('file_'.$routeParameters['communityPostCommentId'])); $fileCounter++) {
+
+            $communityPostCommentFile = new CommunityPostCommentFile;
+
+            $communityPostCommentFile->title = $request->file('file_'.$routeParameters['communityPostCommentId'])[$fileCounter]->getClientOriginalName();
+            $communityPostCommentFile->size = $request->file('file_'.$routeParameters['communityPostCommentId'])[$fileCounter]->getSize();
+            $communityPostCommentFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_'.$routeParameters['communityPostCommentId'])[$fileCounter], 'public');
+            $communityPostCommentFile->mime_type = $request->file('file_'.$routeParameters['communityPostCommentId'])[$fileCounter]->getMimeType();
+            $communityPostCommentFile->community_post_comment_id = $communityPostComment->id;
+            $communityPostCommentFile->user_id = Auth::id();
+
+            $communityPostCommentFile->save();
+        }
+    }
+
+    return redirect('/communities/'.$request->input('communitySlug').'/posts/'.$request->input('communityPostId'));
+});
+
+Route::post('/communities/{communitySlug}/create-post', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $community = Community::where('slug', $routeParameters['communitySlug'])->first();
+
+    $communityPost = new CommunityPost;
+
+    $communityPost->title = $request->input('title');
+    $communityPost->description = $request->input('description');
+    $communityPost->score = 1;
+    $communityPost->user_id = Auth::id();
+    $communityPost->community_id = $community->id;
+
+    $communityPost->save();
+
+    if($request->file('file')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('file')); $fileCounter++) {
+
+            $communityPostFile = new CommunityPostFile;
+
+            $communityPostFile->title = $request->file('file')[$fileCounter]->getClientOriginalName();
+            $communityPostFile->size = $request->file('file')[$fileCounter]->getSize();
+            $communityPostFile->url = Storage::disk('gcs')->put('/assets', $request->file('file')[$fileCounter], 'public');
+            $communityPostFile->mime_type = $request->file('file')[$fileCounter]->getMimeType();
+            $communityPostFile->community_post_id = $communityPost->id;
+            $communityPostFile->user_id = Auth::id();
+
+            $communityPostFile->save();
+        }
+    }
+
+    return redirect('/communities/'.$routeParameters['communitySlug'].'/posts/'.$communityPost->id);
+});
+
+
+Route::get('/communities/{communitySlug}/create-post', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $community = Community::where('slug', $routeParameters['communitySlug'])->first();
+
+    if(Auth::user()) 
+        $subscribed = Auth::user()->communities()->where('user_id', Auth::id())->exists();
+    else
+        $subscribed = false;
+
+    return view('communities.createPost', [
+        'community' => $community,
+        'subscribed' => $subscribed,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+})->middleware('auth');
+
+Route::post('/delete-community-post-comment/{communityPostCommentId}', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    // check for files
+
+    CommunityPostCommentFile::where('community_post_comment_id', $request->input('community-post-comment-id'))->delete();
+
+    CommunityPostComment::destroy($request->input('community-post-comment-id'));
+
+    return redirect('/communities/'.$request->input('community-slug').'/posts/'.$request->input('community-post-id'));
+
+})->middleware('auth');
+
+Route::get('/communities/{communitySlug}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $community = Community::where('slug', $routeParameters['communitySlug'])->first();
+
+    $communityPosts = CommunityPost::where('community_id', $community->id)->orderBy('created_at', 'desc')->paginate(10);
+
+    if(Auth::user()) 
+        $subscribed = Auth::user()->communities()->where('user_id', Auth::id())->exists();
+    else
+        $subscribed = false;
+
+    $voteArray = array();
+
+    if(Auth::id()) {
+        $votes = Vote::where('user_id', Auth::id())->where('community_post_comment_id', 0)->get();
+        foreach($votes as $vote) {
+            if($vote->upvote) {
+                $voteArray[$vote->community_post_id] = "u";
+            } else if($vote->downvote) {
+                $voteArray[$vote->community_post_id] = "d";
+            } else {
+                $voteArray[$vote->community_post_id] = "n";
+            }
+        }
+    } 
+
+    return view('communities.show', [
+        'community' => $community,
+        'voteArray' => $voteArray,
+        'communityPosts' => $communityPosts,
+        'subscribed' => $subscribed,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+});
+
 Route::get('/checkout/{shoppingCartId}', 'PayPalController@getExpressCheckout');
 Route::get('/checkout/{shoppingCartId}/success', 'PayPalController@getExpressCheckoutSuccess');
 
@@ -103,12 +669,223 @@ Route::post('/connect-paypal', function(Request $request) {
     return redirect('/creator-stripe-account')->with('paypal-success', "You have successfully connected " . $request->input('paypal_email') . " with PayPal.");
 });
 
+Route::get('/roles/business-analyst', function() {
+    $role = Role::find(1);
+    $tasks = Task::orderBy('order', 'desc')->get();
+
+    return view('roles.show', [
+        'role' => $role,
+        'tasks' => $tasks,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
 Route::get('/payment-information', function() {
     return view('payment-information', [
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]); 
+});
+
+Route::get('/exercises/{exerciseSlug}/edit', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $exercise = Exercise::where('slug', $routeParameters['exerciseSlug'])->first();
+    $tasks = Task::all();
+
+    return view('exercises.edit', [
+        'exercise' => $exercise,
+        'tasks' => $tasks,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::post('/exercises/{exerciseSlug}/recall-attempt', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $answeredExercise = AnsweredExercise::find($request->input('answeredExerciseId'));
+
+    $answeredExercise->status = "Attempted";
+
+    $answeredExercise->save();
+
+    return redirect('/exercises/' . $routeParameters['exerciseSlug']);
+});
+
+Route::post('/exercises/{exerciseSlug}/{userId}/submit-review', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $answeredExercise = AnsweredExercise::find($request->input('answeredExerciseId'));
+
+    $answeredExercise->response = $request->input('response');
+    $answeredExercise->status = $request->input('status');
+
+    $answeredExercise->save();
+
+    if($request->file('file')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('file')); $fileCounter++) {
+
+            $responseFile = new ResponseFile;
+
+            $responseFile->title = $request->file('file')[$fileCounter]->getClientOriginalName();
+            $responseFile->size = $request->file('file')[$fileCounter]->getSize();
+            $responseFile->url = Storage::disk('gcs')->put('/assets', $request->file('file')[$fileCounter], 'public');
+            $responseFile->mime_type = $request->file('file')[$fileCounter]->getMimeType();
+            $responseFile->answered_exercise_id = $request->input('answeredExerciseId');
+            $responseFile->user_id = Auth::id();
+
+            $responseFile->save();
+        }
+    }
+
+    return redirect('/exercises/'.$routeParameters['exerciseSlug'].'/'.$answeredExercise->user_id);
+});
+
+Route::post('/exercises/{exerciseSlug}/save-attempt', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $answeredExercise = AnsweredExercise::find($request->input('answeredExerciseId'));
+
+    $answeredExercise->answer = $request->input('answer');
+
+    if($request->input('status') != null && $request->input('status') == "submitForReview") {
+        $answeredExercise->status = "Submitted For Review";
+    } else {
+        $answeredExercise->status = "Attempted";
+    }
+
+    $answeredExercise->save();
+
+    if($request->file('file')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('file')); $fileCounter++) {
+
+            $answeredExerciseFile = new AnsweredExerciseFile;
+
+            $answeredExerciseFile->title = $request->file('file')[$fileCounter]->getClientOriginalName();
+            $answeredExerciseFile->size = $request->file('file')[$fileCounter]->getSize();
+            $answeredExerciseFile->url = Storage::disk('gcs')->put('/assets', $request->file('file')[$fileCounter], 'public');
+            $answeredExerciseFile->mime_type = $request->file('file')[$fileCounter]->getMimeType();
+            $answeredExerciseFile->answered_exercise_id = $request->input('answeredExerciseId');
+            $answeredExerciseFile->user_id = Auth::id();
+
+            $answeredExerciseFile->save();
+        }
+    }
+
+    $removedFilesIdArray = $request->input('files-deleted_'.$request->input('answeredExerciseId'));
+
+    if($removedFilesIdArray != null) {
+        $removedFilesIdArray = explode(",",$removedFilesIdArray);
+        foreach($removedFilesIdArray as $removedFileId) {
+            AnsweredExerciseFile::destroy($removedFileId);
+        }
+    }
+
+    return redirect('/exercises/' . $routeParameters['exerciseSlug']);
+});
+
+Route::post('/exercises/{exerciseSlug}/attempt-exercise', function(Request $request) {
+
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $exercise = Exercise::find($request->input('exerciseId'));
+
+    $answeredExercise = new AnsweredExercise;
+    $answeredExercise->answer = "";
+    $answeredExercise->response = "";
+    $answeredExercise->user_id = Auth::id();
+    $answeredExercise->exercise_id = $exercise->id;
+    $answeredExercise->task_id = $exercise->task->id;
+    $answeredExercise->status = "Attempted";
+
+    $answeredExercise->save();
+
+    return redirect('/exercises/' . $routeParameters['exerciseSlug']);
+});
+
+Route::post('/categories/{categorySlug}/tasks/{taskSlug}/save-task', function(Request $request) {
+
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    if($request->file('file')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('file')); $fileCounter++) {
+
+            $answeredTaskFile = new AnsweredTaskFile;
+
+            $answeredTaskFile->title = $request->file('file')[$fileCounter]->getClientOriginalName();
+            $answeredTaskFile->size = $request->file('file')[$fileCounter]->getSize();
+            $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file')[$fileCounter], 'public');
+            $answeredTaskFile->mime_type = $request->file('file')[$fileCounter]->getMimeType();
+            $answeredTaskFile->answered_task_id = $request->input('answeredTaskId');
+            $answeredTaskFile->user_id = Auth::id();
+
+            $answeredTaskFile->save();
+        }
+    }
+
+    $removedFilesIdArray = $request->input('files-deleted_'.$request->input('answeredTaskId'));
+
+    if($removedFilesIdArray != null) {
+        $removedFilesIdArray = explode(",",$removedFilesIdArray);
+        foreach($removedFilesIdArray as $removedFileId) {
+            AnsweredTaskFile::destroy($removedFileId);
+        }
+    }
+
+    return redirect('/categories/' . $routeParameters['categorySlug'] . '/tasks/' . $routeParameters['taskSlug']);
+});
+
+Route::get('/tasks/create', function() {
+    $roles = Role::all();
+
+    return view('tasks.create', [
+        'roles' => $roles,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::get('/tasks/{taskSlug}', function() {
+
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $task = Task::where('slug', $routeParameters['taskSlug'])->first();
+
+    return view('tasks.show', [
+        'task' => $task,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::get('/categories/create', function() {
+    return view('categories.create', [
+        'roles' => Role::all(),
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::get('/categories/{categorySlug}', function() {
+
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $category = Category::where('slug', $routeParameters['categorySlug'])->first();
+
+    return view('categories.show', [
+        'category' => $category,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
 });
 
 // Route::get('/portfolios/{portfolioId}/projects/{attemptedProjectId}/leave-review', function() {
@@ -1159,13 +1936,155 @@ Route::get('/created-projects', function() {
     ]);
 });
 
-Route::get('dashboard', function() {
-    return view('dashboard', [
-        
+Route::get('/opportunities', function() {
+    $opportunities = Opportunity::all();
+
+    return view('opportunities.index', [
+        'parameter' => 'opportunity',
+        'opportunities' => $opportunities,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
+});
+
+Route::get('/opportunities/create', function() {
+    $roles = Role::all();
+    $tasks = Task::all();
+    $companies = Company::all();
+
+    return view('opportunities.create', [
+        'roles' => $roles,
+        'companies' => $companies,
+        'tasks' => $tasks,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+})->middleware('auth');
+
+Route::get('/opportunities/{opportunitySlug}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $opportunity = Opportunity::where('slug', $routeParameters['opportunitySlug'])->first();
+
+    $statusArray = array();
+
+    $applyArray = array();
+    
+    $status2Array = array();
+
+    foreach($opportunity->tasks as $key=>$task) {
+
+        foreach($task->exercises as $exercise) {
+            $answeredExercise = AnsweredExercise::select('status')->where('exercise_id', $exercise->id)->where('user_id', Auth::id())->first();
+            if($answeredExercise) {
+                $statusArray[$exercise->id] = $answeredExercise->status;
+                array_push($status2Array, $answeredExercise->status);
+            } else {
+                $statusArray[$exercise->id] = "Not Attempted";
+                array_push($status2Array, "Not Attempted");
+            }
+        }
+
+        if(in_array("Competent", $status2Array)) {
+            array_push($applyArray, "Competent");
+        } else {
+            array_push($applyArray, "Incompetent");
+        }
+    }
+
+    $applicable;
+
+    if(in_array("Incompetent", $applyArray)) {
+        $applicable = false;
+    } else {
+        $applicable = true;
+    }
+
+    return view('opportunities.show', [
+        'statusArray' => $statusArray,
+        'opportunity' => $opportunity,
+        'applicable' => $applicable,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::post('/opportunities/save-opportunity', function(Request $request) {
+    $opportunity = new Opportunity;
+
+    $company = Company::find($request->input('company'));
+
+    $opportunity->title = $request->input('title');
+    $opportunity->role_id = $request->input('role');
+    $opportunity->link = $request->input('link');
+    $opportunity->posted_at = $request->input('posted_at');
+    $opportunity->company_id = $request->input('company');
+    $opportunity->slug = strtolower($company->title) . "-" . str_slug($opportunity->title, '-') . "-" . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
+    $opportunity->description = $request->input('description');
+    $opportunity->location = $request->input('location');
+    $opportunity->level = $request->input('level');
+    $opportunity->type = $request->input('type');
+
+    $opportunity->save();
+
+    $opportunity->exercises()->attach($request->input('exercises'));
+
+    $exercises = DB::table('exercises')
+                        ->whereIn('id', $request->input('exercises'))
+                        ->get();
+
+    $tasksIdArray = array();
+
+    foreach($exercises as $exercise) {
+        if(!in_array($exercise->task_id, $tasksIdArray)) {
+            array_push($tasksIdArray, $exercise->task_id);
+        }
+    }
+
+    $opportunity->tasks()->attach($tasksIdArray);
+
+    return redirect('/opportunities/' . $opportunity->slug);
+
+})->middleware('auth');
+
+Route::get('dashboard', function() {
+
+    if(Auth::user()->admin) {
+        $roles = Role::all();
+        $tasks = Task::all();
+        $exercises = Exercise::all();
+        $opportunities = Opportunity::all();
+        $answeredExercises = AnsweredExercise::all();  
+
+        return view('dashboard', [
+            'opportunities' => $opportunities,
+            'answeredExercises' => $answeredExercises,
+            'roles' => $roles,
+            'tasks' => $tasks,
+            'exercises' => $exercises,
+            'parameter' => 'index',
+            'parameter' => 'none',
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        ]);
+    } else {
+        $answeredExercises = AnsweredExercise::where("user_id", Auth::id())->get();
+
+        return view('dashboard', [
+            'answeredExercises' => $answeredExercises,
+            'parameter' => 'index',
+            'parameter' => 'none',
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        ]);
+    }
+
+    
 })->middleware('auth');
 
 Route::post('/shopping-cart/empty-cart', function(Request $request) {
@@ -2035,6 +2954,270 @@ Route::get('/file-upload', function() {
     return view('file-upload');
 });
 
+// Route::get('/exercises/{exerciseSlug}/attempt', function(Request $request) {
+//     $tasks = Task::all();
+
+//     return view('exercises.create', [
+//         'tasks' => $tasks,
+//         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+//         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+//         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+//     ]);
+// });
+
+Route::get('/exercises/create', function() {
+    $tasks = Task::all();
+
+    return view('exercises.create', [
+        'tasks' => $tasks,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::get('/exercises/{exerciseSlug}/{userId}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    if(Auth::user()->admin) {
+        $exercise = Exercise::where('slug', $routeParameters['exerciseSlug'])->first();
+
+        // check whether attempted or not
+
+        $answeredExercise = AnsweredExercise::where('user_id', $routeParameters['userId'])->where('exercise_id', $exercise->id)->first();
+
+        return view('exercises.review', [
+            'exercise' => $exercise,
+            'answeredExercise' => $answeredExercise,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]);
+    } else {
+        return redirect('/exercises/'.$routeParameters['exerciseSlug']);
+    }
+
+    
+})->middleware('auth');
+
+Route::get('/exercises/{exerciseSlug}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $exercise = Exercise::where('slug', $routeParameters['exerciseSlug'])->first();
+
+    // check whether attempted or not
+
+    $answeredExercise = AnsweredExercise::where('user_id', Auth::id())->where('exercise_id', $exercise->id)->first();
+
+    if($answeredExercise) {
+        return view('exercises.attempt', [
+            'exercise' => $exercise,
+            'answeredExercise' => $answeredExercise,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]);
+    }
+
+    return view('exercises.show', [
+        'exercise' => $exercise,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::post('/categories/save-category', function(Request $request) {
+
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|unique:categories'
+    ]);
+
+    if($validator->fails()) {
+        return redirect('tasks/create')
+                    ->withErrors($validator)
+                    ->withInput();
+    }
+
+    $category = new Category;
+
+    $category->title = $request->input('title');
+    $category->description = $request->input('description');
+    $category->slug = str_slug($request->input('title'), '-');
+
+    $category->save();
+
+    $category->roles()->attach($request->input('role'));
+
+    return redirect('/categories/'.$category->slug);
+});
+
+Route::post('/tasks/save-task', function(Request $request) {
+
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|unique:tasks'
+    ]);
+
+    if($validator->fails()) {
+        return redirect('tasks/create')
+                    ->withErrors($validator)
+                    ->withInput();
+    }
+
+    $task = new Task;
+
+    $task->title = $request->input('title');
+    $task->description = $request->input('description');
+    $task->slug = str_slug($request->input('title'), '-');
+
+    $task->save();
+
+    $task->categories()->attach($request->input('category'));
+
+    return redirect('/tasks/'.$task->slug);
+});
+
+Route::post('/exercises/{exerciseSlug}/save-exercise', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|unique:tasks'
+    ]);
+
+    if($validator->fails()) {
+        return redirect('exercises/create')
+                    ->withErrors($validator)
+                    ->withInput();
+    }
+
+    $exercise = Exercise::where('slug', $routeParameters['exerciseSlug'])->first();
+
+    $exercise->description = $request->input('description');
+
+    if($exercise->solution_title != $request->input('solution-title')) {
+        $exercise->slug = str_slug($request->input('solution-title'), '-') . '-' . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
+    }
+    $exercise->title = $request->input('title');
+    $exercise->brief = $request->input('brief');
+    $exercise->task_id = $request->input('task');
+    $exercise->solution_title = $request->input('solution-title');
+    $exercise->solution_description = $request->input('solution-description');
+    $exercise->duration = $request->input('duration');
+
+    $exercise->save();
+
+    if($request->file('file')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('file')); $fileCounter++) {
+
+            $exerciseFile = new ExerciseFile;
+
+            $exerciseFile->title = $request->file('file')[$fileCounter]->getClientOriginalName();
+            $exerciseFile->size = $request->file('file')[$fileCounter]->getSize();
+            $exerciseFile->url = Storage::disk('gcs')->put('/assets', $request->file('file')[$fileCounter], 'public');
+            $exerciseFile->mime_type = $request->file('file')[$fileCounter]->getMimeType();
+            $exerciseFile->exercise_id = $exercise->id;
+
+            $exerciseFile->save();
+        }
+    }
+
+    $removedExerciseFilesIdArray = $request->input('files-deleted');
+
+    if($removedExerciseFilesIdArray != null) {
+        $removedExerciseFilesIdArray = explode(",",$removedExerciseFilesIdArray);
+
+        foreach($exercise->exercise_files as $exerciseFile) {
+            if(in_array($exerciseFile->id, $removedExerciseFilesIdArray)) {
+                ExerciseFile::destroy($exerciseFile->id);
+            }
+        }
+    }
+
+    return redirect('/exercises/'.$exercise->slug);
+});
+
+Route::post('/exercises/save-exercise', function(Request $request) {
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|unique:tasks'
+    ]);
+
+    if($validator->fails()) {
+        return redirect('exercises/create')
+                    ->withErrors($validator)
+                    ->withInput();
+    }
+
+    $exercise = new Exercise;
+
+    $exercise->title = $request->input('title');
+    $exercise->description = $request->input('description');
+    $exercise->slug = str_slug($request->input('solution-title'), '-') . '-' . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
+    $exercise->brief = $request->input('brief');
+    $exercise->task_id = $request->input('task');
+    $exercise->solution_title = $request->input('solution-title');
+    $exercise->solution_description = $request->input('solution-description');
+    $exercise->duration = $request->input('duration');
+
+    $exercise->save();
+
+    if($request->file('file')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('file')); $fileCounter++) {
+
+            $exerciseFile = new ExerciseFile;
+
+            $exerciseFile->title = $request->file('file')[$fileCounter]->getClientOriginalName();
+            $exerciseFile->size = $request->file('file')[$fileCounter]->getSize();
+            $exerciseFile->url = Storage::disk('gcs')->put('/assets', $request->file('file')[$fileCounter], 'public');
+            $exerciseFile->mime_type = $request->file('file')[$fileCounter]->getMimeType();
+            $exerciseFile->exercise_id = $exercise->id;
+
+            $exerciseFile->save();
+        }
+    }
+
+    return redirect('/exercises/'.$exercise->slug);
+});
+
+Route::get('/tasks/select-category', function() {
+    if(request('category') != null) {
+        $categoryId = request('category');
+        if($categoryId == "Nil") {
+            return redirect('/tasks/select-category')->with('selectCategorySelected', 'Please select a category.');
+        }
+        session(['selectedCategory' => $categoryId]);
+
+        return redirect('/tasks/create')->with('selectedCategory', session('selectedCategory'));
+    }
+    $categories = Category::orderBy('title', 'asc')->get();
+
+    return view('tasks.selectCategory', [
+        'categories' => $categories,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::post('/tasks/select-category', function() {
+    if(request('category') != null) {
+        $categoryId = request('category');
+        if($categoryId == "Nil") {
+            return redirect('/tasks/select-category')->with('selectCategorySelected', 'Please select a category.');
+        }
+        session(['selectedCategory' => $categoryId]);
+
+        return redirect('/tasks/create')->with('selectedCategory', session('selectedCategory'));
+    }
+    $categories = Category::orderBy('title', 'asc')->get();
+
+    return view('tasks.selectCategory', [
+        'categories' => $categories,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
 Route::get('/projects/select-role', 'ProjectsController@selectRole');
 Route::post('/projects/select-role', 'ProjectsController@selectRole');
 
@@ -2163,7 +3346,6 @@ Route::get('/companies/{companySlug}/add-opportunity', 'OpportunitiesController@
 
 Route::resources([
     'companies' => 'CompaniesController',
-    'opportunities' => 'OpportunitiesController',
     'roles' => 'RolesController',
     'messages' => 'MessagesController',
     'projects' => 'ProjectsController',
@@ -2187,58 +3369,14 @@ Route::post('/', function(Request $request) {
     }
 });
 
-Route::get('/', function(Request $request) {
-        if($request->input('r')) {
-            //referred
-            $request->session()->put('referral-link', $request->input('r'));
-        }
-        if(Auth::id()) {
-            $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
-
-            $creatorProjects = AttemptedProject::where('creator_id', Auth::id())->get();
-
-            $createdProjects = Project::where('user_id', Auth::id())->get();
-
-            $portfolios = Portfolio::where('user_id', Auth::id())->get();
-
-            foreach($portfolios as $portfolio) {
-
-                $noOfInternalProjects = 0;
-                $noOfExternalProjects = 0;
-
-                foreach($portfolio->attempted_projects as $attemptedProject) {
-                    if($attemptedProject->project->internal) {
-                        $noOfInternalProjects++;
-                    } else {
-                        $noOfExternalProjects++;
-                    }
-
-                    $portfolio->noOfInternalProjects = $noOfInternalProjects;
-                    $portfolio->noOfExternalProjects = $noOfExternalProjects;
-                }
-            }
-
-            return view('dashboard', [
-                'createdProjects' => $createdProjects,
-                'creatorProjects' => $creatorProjects,
-                'attemptedProjects' => $attemptedProjects,
-                'portfolios' => $portfolios,
-                'parameter' => 'index',
-                'parameter' => 'none',
-                'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-                'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-                'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-            ]);
-        }
-        return view('index', [
-            
-            'parameter' => 'index',
-            'parameter' => 'none',
-            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        ]);
-
+Route::get('/', function() {
+    return view('index', [
+        'parameter' => 'index',
+        'parameter' => 'none',
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    ]);
 });
 
 Auth::routes();

@@ -29,8 +29,16 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function communities() {
+        return $this->belongsToMany(Community::class);
+    }
+
     public function experiences() {
         return $this->hasMany(Experience::class);
+    }
+
+    public function response_files() {
+        return $this->hasMany(ResponseFile::class);
     }
 
     public function comment_files() {
@@ -55,6 +63,18 @@ class User extends Authenticatable
 
     public function projects() {
         return $this->hasMany(Project::class);
+    }
+
+    public function votes() {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function community_posts() {
+        return $this->hasMany(CommunityPost::class);
+    }
+
+    public function community_post_comments() {
+        return $this->hasMany(CommunityPostComment::class);
     }
 
     public function workspace_posts() {

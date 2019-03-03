@@ -31,14 +31,14 @@
 			<div class="row align-items-center">
 			  <div class="col-auto">
 			    <h2>
-			      Created Projects
+			      Roles
 			    </h2>
 			  </div>
 			  <div class="col">
-			  	<a href="/projects/select-role" class="btn btn-primary" style=" margin-top: -1.25rem; float: right;">Add Project</a>
+			  	<a href="/roles/create" class="btn btn-primary" style=" margin-top: -1.25rem; float: right;">Add Role</a>
 			  </div>
 			</div>
-			@if(count($createdProjects) > 0)
+			@if(count($roles) > 0)
 			<div class="row">
 				<div class="col-12 col-xl-12">
 					<div class="card">	
@@ -46,22 +46,14 @@
 					      <thead>
 					        <tr>
 					          <th scope="col">#</th>
-					          <th scope="col">Project</th>
-					          <th scope="col">Industry</th>
-					          <th scope="col">Status</th>
+					          <th scope="col">Role</th>
 					        </tr>
 					      </thead>
 					      <tbody>
-					      		@foreach($createdProjects as $key=>$createdProject)
+					      		@foreach($roles as $key=>$role)
 					          <tr>
 					            <th scope="row">{{$key+1}}</th>
-					            <td><a href="/roles/{{$createdProject->role->slug}}/projects/{{$createdProject->slug}}">{{$createdProject->title}}</a></td>
-					            <td>{{$createdProject->industry->title}}</td>
-					            @if($createdProject->published)
-					            	<td><span class="badge badge-primary">Public</span></td>
-					            @else
-					            	<td><span class="badge badge-warning">Private</span></td>
-					            @endif
+					            <td>{{$role->title}}</td>
 					          </tr>
 					          @endforeach
 					      </tbody>
@@ -77,7 +69,7 @@
 			        <div class="row justify-content-center" style="margin-top:1rem;">
 			          <div class="col-12 col-md-5 col-xl-4 my-5">
 			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
-			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Projects help users gain the hands-on experience they need to get a step up in their careers. Boost the community by creating a project based on your own experiences. <a href="/projects/select-role">Create a project</a>.
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">No roles added yet.
 			            </p>
 			          </div>
 			        </div>
@@ -87,18 +79,19 @@
 			</div>
 			@endif
 		@endif
+
 		@if(Auth::user()->admin)
 			<div class="row align-items-center">
 			  <div class="col-auto">
 			    <h2>
-			      Your Projects Attempted By Users
+			      Tasks
 			    </h2>
 			  </div>
 			  <div class="col">
-
+			  	<a href="/tasks/create" class="btn btn-primary" style=" margin-top: -1.25rem; float: right;">Add Task</a>
 			  </div>
 			</div>
-			@if(sizeof($creatorProjects) > 0)
+			@if(count($tasks) > 0)
 			<div class="row">
 				<div class="col-12 col-xl-12">
 					<div class="card">	
@@ -106,28 +99,14 @@
 					      <thead>
 					        <tr>
 					          <th scope="col">#</th>
-					          <th scope="col">Project</th>
-					          <th scope="col">User</th>
-					          <th scope="col">Status</th>
-					          <th scope="col">Age</th>
+					          <th scope="col">Task</th>
 					        </tr>
 					      </thead>
 					      <tbody>
-					      		@foreach($creatorProjects as $key=>$creatorProject)
+					      		@foreach($tasks as $key=>$task)
 					          <tr>
 					            <th scope="row">{{$key+1}}</th>
-					            <td><a href="/roles/{{$creatorProject->project->role->slug}}/projects/{{$creatorProject->project->slug}}/{{$creatorProject->user_id}}">{{$creatorProject->project->title}}</a></td>
-					            <td>{{$creatorProject->user->name}}</td>
-					            @if($creatorProject->status == "Attempting")
-					            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
-					            @elseif($creatorProject->status == "Completed")
-					            <td><span class="badge badge-info">{{$creatorProject->status}}</span></td>
-					            @elseif($creatorProject->status == "Assessed")
-					            <td><span class="badge badge-primary">{{$creatorProject->status}}</span></td>
-					            @elseif($creatorProject->status == "Reviewed")
-					            <td><span class="badge badge-success">{{$creatorProject->status}}</span></td>
-					            @endif
-					            <td>{{$creatorProject->created_at->diffForHumans()}}</td>
+					            <td><a href="/tasks/{{$task->slug}}">{{$task->title}}</td>
 					          </tr>
 					          @endforeach
 					      </tbody>
@@ -143,7 +122,7 @@
 			        <div class="row justify-content-center" style="margin-top:1rem;">
 			          <div class="col-12 col-md-5 col-xl-4 my-5">
 			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
-			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Users who have purchased your project will appear here.
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">No tasks added yet.
 			            </p>
 			          </div>
 			        </div>
@@ -153,98 +132,44 @@
 			</div>
 			@endif
 		@endif
-		<div class="row align-items-center">
-		  <div class="col-auto">
-		    <h2>
-		      Projects
-		    </h2>
-		  </div>
-		</div>
-		@if(count($attemptedProjects) > 0)
-		<div class="row">
-		  <div class="col-12 col-xl-12">
-		    <div class="card">  
-		        <table class="table table-nowrap" style="margin-bottom: 0;">
-		          <thead>
-		            <tr>
-		              <th scope="col">#</th>
-		              <th scope="col">Project</th>
-		              <th scope="col">Role</th>
-		              <th scope="col">Industry</th>
-		              <th scope="col">Type</th>
-		            </tr>
-		          </thead>
-		          <tbody>
-		              @foreach($attemptedProjects as $key=>$attemptedProject)
-		              <tr>
-		                <th scope="row">{{$key+1}}</th>
-		                <td><a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}">{{$attemptedProject->project->title}}</a></td>
-		                <td><span class="badge badge-primary">{{$attemptedProject->project->role->title}}</span></td>
-		                <td><span class="badge badge-warning">{{$attemptedProject->project->industry->title}}</span></td>
-	                    <td>
-	                    	@if($attemptedProject->project->internal)
-	                    	<span class="badge badge-dark">Internal</span>
-	                    	@else
-	                    	<span class="badge badge-dark">External</span>
-	                    	@endif
-	                    </td>
-		              </tr>
-		              @endforeach
-		          </tbody>
-		        </table>
-		    </div>
-		  </div>
-		</div>
-		@else
-		<div class="row align-items-center" id="talentailBox">
-		  <div class="col-lg-12">
-		    <div class="card">
-		      <div class="card-body">
-		        <div class="row justify-content-center" style="margin-top:1rem;">
-		          <div class="col-12 col-md-5 col-xl-4 my-5">
-		            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
-		            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Talentail projects are created by experienced professionals and have been designed according to their own work experiences. Reviewed projects will appear here. <a href="/projects">Discover projects</a>.
-		            </p>
-		          </div>
-		        </div>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-		@endif
-		<div class="row align-items-center" style="margin-top: 0.5rem;">
-		  <div class="col-auto">
-		    <h2>
-		      Portfolios
-		    </h2>
-		  </div>
-		</div>
-			@if(count($portfolios) > 0)
-			<div class="row">
-			  <div class="col-12 col-xl-12">
-			    <div class="card">  
-			        <table class="table table-nowrap" style="margin-bottom: 0;">
-			          <thead>
-			            <tr>
-			              <th scope="col">#</th>
-			              <th scope="col">Portfolio</th>
-			              <th scope="col">No. of Internal Projects</th>
-			              <th scope="col">No. of External Projects</th>
-			            </tr>
-			          </thead>
-			          <tbody>
-			              @foreach($portfolios as $key=>$portfolio)
-			              <tr>
-			                <th scope="row">{{$key+1}}</th>
-			                <td><a href="/portfolios/{{$portfolio->id}}">{{$portfolio->role->title}}</a></td>
-			                <td><span class="badge badge-primary">{{$portfolio->noOfInternalProjects}}</span></td>
-			                <td><span class="badge badge-primary">{{$portfolio->noOfExternalProjects}}</span></td>
-			              </tr>
-			              @endforeach
-			          </tbody>
-			        </table>
-			    </div>
+
+		@if(Auth::user()->admin)
+			<div class="row align-items-center">
+			  <div class="col-auto">
+			    <h2>
+			      Exercises
+			    </h2>
 			  </div>
+			  <div class="col">
+			  	<a href="/exercises/create" class="btn btn-primary" style=" margin-top: -1.25rem; float: right;">Add Exercise</a>
+			  </div>
+			</div>
+			@if(count($exercises) > 0)
+			<div class="row">
+				<div class="col-12 col-xl-12">
+					<div class="card">	
+					    <table class="table table-nowrap" style="margin-bottom: 0;">
+					      <thead>
+					        <tr>
+					          <th scope="col">#</th>
+					          <th scope="col">Question</th>
+					          <th scope="col">Exercise</th>
+					          <th scope="col">Task</th>
+					        </tr>
+					      </thead>
+					      <tbody>
+					      		@foreach($exercises as $key=>$exercise)
+					          <tr>
+					            <th scope="row">{{$key+1}}</th>
+					            <td><a href="/exercises/{{$exercise->slug}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exercise->solution_title}}</a></td>
+					            <td><a href="/tasks/{{$exercise->task->slug}}" style="display: block; width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exercise->title}}</a></td>
+					            <td><a href="/tasks/{{$exercise->task->slug}}" stye="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exercise->task->title}}</a></td>
+					          </tr>
+					          @endforeach
+					      </tbody>
+					    </table>
+					</div>
+				</div>
 			</div>
 			@else
 			<div class="row align-items-center" id="talentailBox">
@@ -254,7 +179,7 @@
 			        <div class="row justify-content-center" style="margin-top:1rem;">
 			          <div class="col-12 col-md-5 col-xl-4 my-5">
 			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
-			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Portfolios are built with both projects on Talentail and also your own work experiences. <a href="/portfolios/select-role">Build your portfolio</a>.
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">No exercises added yet.
 			            </p>
 			          </div>
 			        </div>
@@ -263,11 +188,172 @@
 			  </div>
 			</div>
 			@endif
-		<form action="/" method="POST" class="mb-4" enctype="multipart/form-data">
-		@csrf
-			<input type="hidden" name="attemptedProjectId" id="attemptedProjectId" value="" />
-			<button type="submit" id="toggleVisibilityButton" style="display: none;" />
-		</form>
+		@endif
+
+		@if(Auth::user()->admin)
+			<div class="row align-items-center">
+			  <div class="col-auto">
+			    <h2>
+			      Opportunities
+			    </h2>
+			  </div>
+			  <div class="col">
+			  	<a href="/opportunities/create" class="btn btn-primary" style=" margin-top: -1.25rem; float: right;">Add Opportunity</a>
+			  </div>
+			</div>
+			@if(count($opportunities) > 0)
+			<div class="row">
+				<div class="col-12 col-xl-12">
+					<div class="card">	
+					    <table class="table table-nowrap" style="margin-bottom: 0;">
+					      <thead>
+					        <tr>
+					          <th scope="col">#</th>
+					          <th scope="col">Opportunity</th>
+					          <th scope="col">Company</th>
+					          <th scope="col">Location</th>
+					        </tr>
+					      </thead>
+					      <tbody>
+					      		@foreach($opportunities as $key=>$opportunity)
+					          <tr>
+					            <th scope="row">{{$key+1}}</th>
+					            <td><a href="/opportunities/{{$opportunity->slug}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$opportunity->title}}</a></td>
+					            <td><span style="display: block; width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$opportunity->company->title}}</span></td>
+					            <td><span stye="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$opportunity->location}}</span></td>
+					          </tr>
+					          @endforeach
+					      </tbody>
+					    </table>
+					</div>
+				</div>
+			</div>
+			@else
+			<div class="row align-items-center" id="talentailBox">
+			  <div class="col-lg-12">
+			    <div class="card">
+			      <div class="card-body">
+			        <div class="row justify-content-center" style="margin-top:1rem;">
+			          <div class="col-12 col-md-5 col-xl-4 my-5">
+			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">No exercises added yet.
+			            </p>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			@endif
+		@endif
+
+		@if(Auth::user()->admin)
+			<div class="row align-items-center">
+			  <div class="col-auto">
+			    <h2>
+			      Answered Exercises
+			    </h2>
+			  </div>
+			</div>
+			@if(count($answeredExercises) > 0)
+			<div class="row">
+				<div class="col-12 col-xl-12">
+					<div class="card">	
+					    <table class="table table-nowrap" style="margin-bottom: 0;">
+					      <thead>
+					        <tr>
+					          <th scope="col">#</th>
+					          <th scope="col">Exercise</th>
+					          <th scope="col">User</th>
+					          <th scope="col">Status</th>
+					        </tr>
+					      </thead>
+					      <tbody>
+					      		@foreach($answeredExercises as $key=>$answeredExercise)
+					          <tr>
+					            <th scope="row">{{$key+1}}</th>
+					            <td><a href="/exercises/{{$answeredExercise->exercise->slug}}/{{$answeredExercise->user_id}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->exercise->solution_title}}</a></td>
+					            <td><span style="display: block; width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->user->name}}</span></td>
+					            <td><span stye="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->status}}</span></td>
+					          </tr>
+					          @endforeach
+					      </tbody>
+					    </table>
+					</div>
+				</div>
+			</div>
+			@else
+			<div class="row align-items-center" id="talentailBox">
+			  <div class="col-lg-12">
+			    <div class="card">
+			      <div class="card-body">
+			        <div class="row justify-content-center" style="margin-top:1rem;">
+			          <div class="col-12 col-md-5 col-xl-4 my-5">
+			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">No exercises added yet.
+			            </p>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			@endif
+		@endif
+
+		@if(!Auth::user()->admin)
+			<div class="row align-items-center">
+			  <div class="col-auto">
+			    <h2>
+			      Attempted Exercises
+			    </h2>
+			  </div>
+			</div>
+			@if(count($answeredExercises) > 0)
+			<div class="row">
+				<div class="col-12 col-xl-12">
+					<div class="card">	
+					    <table class="table table-nowrap" style="margin-bottom: 0;">
+					      <thead>
+					        <tr>
+					          <th scope="col">#</th>
+					          <th scope="col">Exercise</th>
+					          <th scope="col">User</th>
+					          <th scope="col">Status</th>
+					        </tr>
+					      </thead>
+					      <tbody>
+					      		@foreach($answeredExercises as $key=>$answeredExercise)
+					          <tr>
+					            <th scope="row">{{$key+1}}</th>
+					            <td><a href="/exercises/{{$answeredExercise->exercise->slug}}/{{$answeredExercise->user_id}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->exercise->solution_title}}</a></td>
+					            <td><span style="display: block; width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->user->name}}</span></td>
+					            <td><span stye="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->status}}</span></td>
+					          </tr>
+					          @endforeach
+					      </tbody>
+					    </table>
+					</div>
+				</div>
+			</div>
+			@else
+			<div class="row align-items-center" id="talentailBox">
+			  <div class="col-lg-12">
+			    <div class="card">
+			      <div class="card-body">
+			        <div class="row justify-content-center" style="margin-top:1rem;">
+			          <div class="col-12 col-md-5 col-xl-4 my-5">
+			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">No exercises attempted yet. <a href="/roles/business-analyst">View exercises</a>.
+			            </p>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			@endif
+		@endif
 	</div>
 
 	<script type="text/javascript">

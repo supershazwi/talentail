@@ -22,4 +22,25 @@ class Task extends Model
     public function answered_tasks() {
         return $this->hasMany(AnsweredTask::class);
     }
+
+    public function exercises() {
+        return $this->hasMany(Exercise::class);
+    }
+
+    public function answered_exercises() {
+        return $this->hasMany(AnsweredExercise::class);
+    }
+
+    public function opportunities()
+    {
+        return $this->belongsToMany(Opportunity::class);
+    }
+
+    public function categories() {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function role() {
+        return $this->belongsTo(Role::class);
+    }
 }

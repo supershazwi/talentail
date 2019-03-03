@@ -35,10 +35,6 @@ class Project extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function project_files() {
-        return $this->hasMany(ProjectFile::class);
-    }
-
     public function industry() {
         return $this->belongsTo(Industry::class);
     }

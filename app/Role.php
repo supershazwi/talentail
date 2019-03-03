@@ -31,4 +31,8 @@ class Role extends Model
     {
         return $this->belongsToMany(Industry::class);
     }
+
+    public function tasks() {
+        return $this->hasMany(Task::class);
+    }
 }

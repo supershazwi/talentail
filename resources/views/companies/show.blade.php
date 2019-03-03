@@ -4,7 +4,7 @@
 
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-xl-10 col-lg-11">
+    <div class="col-lg-8">
       <section class="py-4 py-lg-5" style="text-align: center; padding-bottom: 0rem !important;">
          <img src="https://storage.googleapis.com/talentail-123456789/{{$company->url}}" alt="" class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
         <h1 style="margin-top: 1.5rem;">{{$company->title}}</h1>
@@ -24,6 +24,10 @@
         @endif
 
       </section>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
 
       <div class="header mt-md-5" style="margin-top: 0rem !important;">
         <div class="header-body" style="padding-top: 0;">
@@ -46,7 +50,7 @@
 
             </div>
             <div class="col-auto mr">
-              <a href="/companies/{{$company->slug}}/add-job" class="btn btn-primary" style="margin-bottom: -1.25rem;" onclick="addTask()">Add Job</a>
+              <a href="/companies/{{$company->slug}}/add-opportunity" class="btn btn-primary" style="margin-bottom: -1.25rem;" onclick="addTask()">Add Job</a>
             </div>
           </div>
         </div>
@@ -54,6 +58,22 @@
 
       <div class="row">
         
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4">
+      <div class="card">
+        <div class="card-body">
+          <!-- Title -->
+          <a href="#"><h2 class="card-title text-center mb-3">
+            Business Analyst
+          </h2></a>
+
+          <!-- Text -->
+
+          
+          </div> 
+        </div>
       </div>
     </div>
   </div>

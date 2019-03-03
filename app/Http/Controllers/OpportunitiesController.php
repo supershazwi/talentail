@@ -33,9 +33,7 @@ class OpportunitiesController extends Controller
         ]);
     }
 
-    public function create($companySlug) {
-        $company = Company::where('slug', $companySlug)->first();
-
+    public function create() {
         return view('opportunities.create', [
             'company' => $company,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),

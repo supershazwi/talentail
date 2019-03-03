@@ -325,7 +325,7 @@
         <div class="col-lg-3">
           <div class="card">
             <div class="card-body">
-                <p>You can use the project workspace to:</p>
+                <p style="font-weight: bold;">Project Workspace</p>
                 <ul style="margin-left: -1.4rem;">
                   <li>Clarify your doubts with respect to the project</li>
                   <li>Request more files where applicable</li>
@@ -333,6 +333,14 @@
                 <a href="/roles/{{$project->role->slug}}/projects/{{$project->slug}}/workspace" class="btn btn-block btn-primary">
                   Project Workspace
                 </a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+                <p style="font-weight: bold;">Useful Links</p>
+                <ul style="margin-left: -1.4rem;">
+                  <li><a href="#">xxx</a></li>
+                </ul>
             </div>
           </div>
         </div>
