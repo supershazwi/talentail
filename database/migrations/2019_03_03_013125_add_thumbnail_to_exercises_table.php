@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeAnsweredTaskIdToAnsweredExerciseIdInAnsweredExerciseFilesTable extends Migration
+class AddThumbnailToExercisesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class ChangeAnsweredTaskIdToAnsweredExerciseIdInAnsweredExerciseFilesTable exten
      */
     public function up()
     {
-        Schema::table('answered_exercise_files', function (Blueprint $table) {
+        Schema::table('exercises', function (Blueprint $table) {
             //
-            $table->renameColumn('answered_task_id', 'answered_exercise_id');
+            $table->string('thumbnail');
+            $table->string('url');
         });
     }
 
@@ -26,9 +27,10 @@ class ChangeAnsweredTaskIdToAnsweredExerciseIdInAnsweredExerciseFilesTable exten
      */
     public function down()
     {
-        Schema::table('answered_exercise_files', function (Blueprint $table) {
+        Schema::table('exercises', function (Blueprint $table) {
             //
-            $table->renameColumn('answered_task_id', 'answered_exercise_id');
+            $table->dropColumn('thumbnail');
+            $table->dropColumn('url');
         });
     }
 }

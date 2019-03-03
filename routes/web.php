@@ -3104,6 +3104,11 @@ Route::post('/exercises/{exerciseSlug}/save-exercise', function(Request $request
     $exercise->solution_description = $request->input('solution-description');
     $exercise->duration = $request->input('duration');
 
+    if($request->file('thumbnail')) {
+        $exercise->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+        $exercise->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
+    }
+
     $exercise->save();
 
     if($request->file('file')) {
@@ -3158,8 +3163,6 @@ Route::post('/exercises/save-exercise', function(Request $request) {
     $exercise->solution_description = $request->input('solution-description');
     $exercise->duration = $request->input('duration');
 
-    $exercise->save();
-
     if($request->file('file')) {
         for($fileCounter = 0; $fileCounter < count($request->file('file')); $fileCounter++) {
 
@@ -3174,6 +3177,13 @@ Route::post('/exercises/save-exercise', function(Request $request) {
             $exerciseFile->save();
         }
     }
+
+    if($request->file('thumbnail')) {
+        $exercise->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+        $exercise->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
+    }
+
+    $exercise->save();
 
     return redirect('/exercises/'.$exercise->slug);
 });
