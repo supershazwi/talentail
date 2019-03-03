@@ -117,7 +117,7 @@
             </div>
             <input type="hidden" name="files-deleted" value="" id="files-deleted" />
           </div>
-
+<!-- 
           <div class="form-group">
             <label class="mb-1">
               Thumbnail file
@@ -129,7 +129,7 @@
             </div>
             <div id="selectedThumbnailFile" style="margin-top: 1.5rem;"></div>
           </div>
-
+ -->
           <button class="btn btn-primary" id="createTask" type="submit" style="float: right; display: none;">Create Task</button>
           <button class="btn btn-default" id="saveTask" type="submit" style="float: right; margin-right: 0.5rem; display: none;">Save</button>
           <button class="btn btn-default" onclick="cancel()" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
