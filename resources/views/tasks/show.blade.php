@@ -20,7 +20,7 @@
     @foreach($task->exercises as $exercise)
       <div class="col-12 col-md-6 col-xl-4">
         <div class="card">
-          <a href="/exercises/{{$exercise->slug}}">
+          <!-- <a href="/exercises/{{$exercise->slug}}">
 
             @if($exercise->url)
             <img src="https://storage.googleapis.com/talentail-123456789/{{$exercise->url}}" alt="..." class="card-img-top">
@@ -28,7 +28,7 @@
             <img src="https://images.unsplash.com/photo-1482440308425-276ad0f28b19?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=95f938199a2d20d027c2e16195089412&auto=format&fit=crop&w=1050&q=80" alt="..." class="card-img-top">
             @endif
 
-          </a>
+          </a> -->
           <div class="card-body">
             <!-- Title -->
             <a href="/exercises/{{$exercise->slug}}"><h2 class="card-title text-center mb-3">

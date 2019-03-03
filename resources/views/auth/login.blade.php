@@ -50,7 +50,7 @@
           @endif
           <!-- Subheading -->
           <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important;">
-            😬
+            😄
           </p>
 
           <!-- Heading -->
