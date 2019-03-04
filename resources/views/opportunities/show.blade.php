@@ -59,7 +59,7 @@
           <div class="card-body">
           	<img src="https://storage.googleapis.com/talentail-123456789/{{$opportunity->company->url}}" alt="" class="avatar-img rounded" style="width: 3rem; margin-bottom: 1.5rem;">
             <h3>{{$opportunity->title}}</h3>
-            <p>{{$opportunity->company->title}}, {{$opportunity->location}}</p>
+            <p><a href="/companies/{{$opportunity->company->slug}}">{{$opportunity->company->title}}</a>, {{$opportunity->location}}</p>
             <p>{{$opportunity->company->description}}</p>
             <p class="card-text small text-muted" style="margin-bottom: 0;">Applications</p>
             <p>10</p>

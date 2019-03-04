@@ -57,23 +57,22 @@
               {{$company->title}}
             </h2></a>
 
-            <p class="text-center" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">{{$company->description}}</p>
+            <p class="text-center" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">{{$company->description}}</p>
 
             <!-- Divider -->
             <hr>
 
             <div class="row">
-              <div class="col" style="text-align: center;">
+              <div class="col" style="text-align: left;">
                   <p class="card-text small text-muted" style="margin-bottom: 0;">Available Jobs</p>
-                  <p style="margin-bottom: 0;">2</p>
+                  <p style="margin-bottom: 0;">{{count($company->opportunities)}}</p>
               </div>
-              <div class="col" style="text-align: center;">
+              <!-- <div class="col" style="text-align: center;">
                 
-                <!-- Avatar group -->
-                <p class="card-text small text-muted" style="margin-bottom: 0;">Pre-Interview Projects</p>
-                <p style="margin-bottom: 0;">2</p>
+                <p class="card-text small text-muted" style="margin-bottom: 0;">Mapped Exercises</p>
+                <p style="margin-bottom: 0;">{{count($company->opportunities)}}</p>
 
-              </div>
+              </div>  -->
             </div> <!-- / .row -->
           </div> <!-- / .card-body -->
         </div>

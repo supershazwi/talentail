@@ -26,56 +26,45 @@
       </section>
     </div>
   </div>
+  <hr style="margin-top: 2.5rem; margin-bottom: 2.5rem;" />
   <div class="row">
-    <div class="col-lg-12">
-
-      <div class="header mt-md-5" style="margin-top: 0rem !important;">
-        <div class="header-body" style="padding-top: 0;">
-          <div class="row align-items-center">
-            <div class="col">
-              
-              <!-- Nav -->
-              <ul class="nav nav-tabs nav-overflow header-tabs">
-                <li class="nav-item">
-                  <a href="#" class="nav-link active">
-                    Available Jobs
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    Pre-Interview Projects
-                  </a>
-                </li>
-              </ul>
-
-            </div>
-            <div class="col-auto mr">
-              <a href="/companies/{{$company->slug}}/add-opportunity" class="btn btn-primary" style="margin-bottom: -1.25rem;" onclick="addTask()">Add Job</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        
-      </div>
-    </div>
-
+    @foreach($company->opportunities as $opportunity)
     <div class="col-12 col-md-6 col-xl-4">
       <div class="card">
         <div class="card-body">
+          <div class="text-center">
+            <a href="/opportunities/{{$opportunity->slug}}" class="card-avatar avatar avatar-lg mx-auto">
+                <img src="https://storage.googleapis.com/talentail-123456789/{{$opportunity->company->url}}" alt="..." class="avatar-img rounded">
+            </a>
+          </div>
+
           <!-- Title -->
-          <a href="#"><h2 class="card-title text-center mb-3">
-            Business Analyst
+          <a href="/opportunities/{{$opportunity->slug}}"><h2 class="card-title text-center mb-3">
+            {{$opportunity->title}} 
           </h2></a>
 
-          <!-- Text -->
+          <p class="text-center" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">{{$opportunity->company->title}}, {{$opportunity->location}}</p>
 
-          
-          </div> 
-        </div>
+          <!-- Divider -->
+          <hr>
+
+          <div class="row">
+            <div class="col" style="text-align: center;">
+                <p class="card-text small text-muted" style="margin-bottom: 0;">Exercises</p>
+                <p style="margin-bottom: 0;">{{count($opportunity->exercises)}}</p>
+              </div>
+              <div class="col" style="text-align: center;">
+                
+                <!-- Avatar group -->
+                <p class="card-text small text-muted" style="margin-bottom: 0;">Applications</p>
+                <p style="margin-bottom: 0;">2</p>
+
+              </div>
+          </div> <!-- / .row -->
+        </div> <!-- / .card-body -->
       </div>
     </div>
+    @endforeach
   </div>
 </div>
 @endsection
