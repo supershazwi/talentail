@@ -41,7 +41,6 @@ class CompaniesController extends Controller
     }
 
     public function store() {
-        dd("here");
     	$company = new Company;
 
     	$company->title = request('title');
