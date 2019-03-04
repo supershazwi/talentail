@@ -18,6 +18,7 @@
       <!-- <p style="color: #3e3e3c; margin-bottom: 0rem;">Complete tasks and unlock job opportunities (<a href="#">Not sure how to go about this?</a>)</p> -->
     </div>
     @foreach($task->exercises as $exercise)
+      @if($exercise->visible)
       <div class="col-12 col-md-6 col-xl-4">
         <div class="card">
           <!-- <a href="/exercises/{{$exercise->slug}}">
@@ -67,6 +68,7 @@
           </div>
         </div>
       </div>
+      @endif
     @endforeach
   </div>
 </div>

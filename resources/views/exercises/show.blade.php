@@ -58,8 +58,18 @@
             </form>
 
             @if(Auth::id() && Auth::user()->admin)
-              <a href="/exercises/{{$exercise->slug}}/edit" class="btn btn-block btn-link text-muted" style="padding-bottom: 0rem;">Edit</a>
+              <a href="/exercises/{{$exercise->slug}}/edit" class="btn btn-block btn-light" style="margin-top:0.5rem;">Edit</a>
+              @if($exercise->visible)
+              <a href="#" class="btn btn-block btn-light" style="margin-top: 0.5rem;" onclick="toggleVisibility()">Make Private</a>
+              @else
+              <a href="#" class="btn btn-block btn-light" style="margin-top: 0.5rem;" onclick="toggleVisibility()">Make Public</a>
+              @endif
             @endif
+
+            <form method="POST" action="/exercises/{{$exercise->slug}}/toggle-visibility">
+              @csrf
+              <button type="submit" style="display: none;" id="toggleExerciseButton" />
+            </form>
 
           </div>
         </div>
@@ -105,6 +115,13 @@
   }();
   drift.SNIPPET_VERSION = '0.3.1';
   drift.load('2fvbbrttnhyb');
+</script>
+
+<script type="text/javascript">
+  function toggleVisibility() {
+    event.preventDefault();
+    document.getElementById("toggleExerciseButton").click();
+  }
 </script>
 @endsection
 

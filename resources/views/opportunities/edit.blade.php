@@ -18,7 +18,7 @@
 
                 <!-- Title -->
                 <h1 class="header-title">
-                  Create a New Opportunity
+                  Edit Opportunity
                 </h1>
 
               </div>
@@ -27,7 +27,7 @@
         </div>
 
         <!-- Form -->
-          <form method="POST" action="/opportunities/save-opportunity" enctype="multipart/form-data">
+          <form method="POST" action="/opportunities/{{$opportunity->slug}}/save-opportunity" enctype="multipart/form-data">
           {{ csrf_field() }}
 
           <!-- Project name -->
@@ -35,7 +35,7 @@
             <label>
               Title
             </label>
-            <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" value="{{ old('title') }}" autofocus>
+            <input type="text" name="title" class="form-control" id="title" placeholder="Enter title" value="{{ $opportunity->title }}" autofocus>
           </div>
 
           <div class="row">
@@ -47,7 +47,11 @@
                 <select class="form-control" data-toggle="select" name="company">
                   <option value="Nil">Select company</option>
                   @foreach($companies as $company)
+                  @if($company->id == $opportunity->company_id)
+                  <option value="{{$company->id}}" selected>{{$company->title}}</option>
+                  @else
                   <option value="{{$company->id}}">{{$company->title}}</option>
+                  @endif
                   @endforeach
                 </select>
               </div>
@@ -60,7 +64,11 @@
                 <select class="form-control" data-toggle="select" name="role">
                   <option value="Nil">Select role</option>
                   @foreach($roles as $role)
+                  @if($role->id == $opportunity->role_id)
+                  <option value="{{$role->id}}" selected>{{$role->title}}</option>
+                  @else
                   <option value="{{$role->id}}">{{$role->title}}</option>
+                  @endif
                   @endforeach
                 </select>
               </div>
@@ -73,7 +81,7 @@
                 <label class="mb-1">
                   Posted at
                 </label>
-                <input type="text" name="posted_at" class="form-control" id="posted_at" placeholder="Enter posted location" value="{{ old('posted_at') }}">
+                <input type="text" name="posted_at" class="form-control" id="posted_at" placeholder="Enter posted location" value="{{ $opportunity->posted_at }}">
               </div>
             </div>
             <div class="col-lg-6">
@@ -81,7 +89,7 @@
                 <label class="mb-1">
                   Link
                 </label>
-                <input type="text" name="link" class="form-control" id="link" placeholder="Enter link" value="{{ old('link') }}">
+                <input type="text" name="link" class="form-control" id="link" placeholder="Enter link" value="{{ $opportunity->link }}">
               </div>
             </div>
           </div>
@@ -92,6 +100,7 @@
             </label>
             <div id="test-editormd3" style="border-radius: 0.5rem;">
                 <textarea style="display:none;" name="description"></textarea>
+                <input type="hidden" id="storedDescription" value="{{$opportunity->description}}" />
             </div>
           </div>
 
@@ -103,9 +112,21 @@
                 </label>
                 <select class="form-control" data-toggle="select" name="type">
                   <option value="Nil">Select type</option>
+                  @if($opportunity->type == "Permanent")
+                  <option value="Permanent" selected>Permanent</option>
+                  @else
                   <option value="Permanent">Permanent</option>
+                  @endif
+                  @if($opportunity->type == "Contract")
+                  <option value="Contract" selected>Contract</option>
+                  @else
                   <option value="Contract">Contract</option>
-                  <option value="Part-time">Part-time</option>
+                  @endif
+                  @if($opportunity->type == "Part-Time")
+                  <option value="Part-Time" selected>Part-Time</option>
+                  @else
+                  <option value="Part-Time">Part-Time</option>
+                  @endif
                 </select>
               </div>
             </div>
@@ -116,9 +137,21 @@
                 </label>
                 <select class="form-control" data-toggle="select" name="level">
                   <option value="Nil">Select level</option>
+                  @if($opportunity->level == "Associate")
+                  <option value="Associate" selected>Associate</option>
+                  @else
                   <option value="Associate">Associate</option>
+                  @endif
+                  @if($opportunity->level == "Junior")
+                  <option value="Junior" selected>Junior</option>
+                  @else
                   <option value="Junior">Junior</option>
+                  @endif
+                  @if($opportunity->level == "Senior")
+                  <option value="Senior" selected>Senior</option>
+                  @else
                   <option value="Senior">Senior</option>
+                  @endif
                 </select>
               </div>
             </div>
@@ -127,7 +160,7 @@
                 <label class="mb-1">
                   Location
                 </label>
-                <input type="text" name="location" class="form-control" id="location" placeholder="Enter location" value="{{ old('location') }}">
+                <input type="text" name="location" class="form-control" id="location" placeholder="Enter location" value="{{ $opportunity->location }}">
               </div>
             </div>
           </div>
@@ -163,7 +196,11 @@
                     <tr>
                       <td>
                         <div class="custom-control custom-checkbox table-checkbox">
+                          @if(in_array($exercise->id, $exerciseIdArray))
+                          <input type="checkbox" class="custom-control-input task_{{$task->id}}" name="exercises[]" id="exercise_{{$exercise->task->id}}_{{$exercise->id}}" value="{{$exercise->id}}" onclick="toggleIndividualCheckboxes()" checked>
+                          @else
                           <input type="checkbox" class="custom-control-input task_{{$task->id}}" name="exercises[]" id="exercise_{{$exercise->task->id}}_{{$exercise->id}}" value="{{$exercise->id}}" onclick="toggleIndividualCheckboxes()">
+                          @endif
                           <label class="custom-control-label" for="exercise_{{$exercise->task->id}}_{{$exercise->id}}" id="exercise_{{$exercise->id}}">
                             
                           </label>
@@ -186,12 +223,18 @@
           <button type="submit" class="btn btn-block btn-primary">
             Save Opportunity
           </button>
+          <a href="#" onclick="deleteOpportunity()" class="btn btn-block btn-danger">
+            Delete Opportunity
+          </a>
           <a href="/opportunities" class="btn btn-block btn-link text-muted">
             Cancel
           </a>
 
         </form>
-        
+        <form method="POST" action="/opportunities/{{$opportunity->slug}}/delete-opportunity">
+          @csrf
+          <button type="submit" style="display: none;" id="deleteOpportunityButton" />
+        </form>
 
       </div>
     </div> <!-- / .row -->
@@ -216,9 +259,14 @@
             //this.setMarkdown("###test onloaded");
             //testEditor.setMarkdown("###Test onloaded");
             // editor2.insertValue(document.getElementById("brief-info").innerHTML);
-            // editor2.insertValue(document.getElementById("old-brief").innerHTML);
+            editor2.insertValue(document.getElementById("storedDescription").value);
         }
     });
+
+    function deleteOpportunity() {
+      event.preventDefault();
+      document.getElementById("deleteOpportunityButton").click();
+    }
 
     function toggleCheckboxes() {
       let checkboxIdString = event.target.id.split("_");

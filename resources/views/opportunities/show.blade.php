@@ -3,10 +3,9 @@
 @section ('content')
 <div class="header">
   <div class="container">
-
     <div class="alert alert-warning alert-dismissible fade show" role="alert" id="applyAlert" style="margin-top: 1.5rem; text-align: center; display: none;" >
       Please complete at least one exercise per task provided. This drastically improves your chances of securing an interview. 
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="closeButton" onclick="closeAlert()">
+      <button type="button" class="close" onclick="closeAlert()">
         <span aria-hidden="true">×</span>
       </button>
     </div>
@@ -70,7 +69,17 @@
               @csrf
               <input type="hidden" id="applicable" name="applicable" value="{{$applicable}}" />
               <a href="#" onclick="applyForOpportunity()" class="btn btn-primary btn-block">Apply for Opportunity</a>
-              <button type="submit" style="display: none;" class="btn btn-primary btn-block" id="applyForOpportunityButton">Apply for Opportunity</button>
+              <a href="/opportunities/{{$opportunity->slug}}/edit" class="btn btn-block btn-light" style="margin-top: 0.5rem;">Edit</a>
+              @if($opportunity->visible)
+              <a href="#" class="btn btn-block btn-light" style="margin-top: 0.5rem;" onclick="toggleVisibility()">Make Private</a>
+              @else
+              <a href="#" class="btn btn-block btn-light" style="margin-top: 0.5rem;" onclick="toggleVisibility()">Make Public</a>
+              @endif
+            </form>
+
+            <form method="POST" action="/opportunities/{{$opportunity->slug}}/toggle-visibility">
+              @csrf
+              <button type="submit" style="display: none;" id="toggleOpportunityButton" />
             </form>
           </div>
         </div>
@@ -107,6 +116,11 @@
 </script>
 
 <script type="text/javascript">
+  function toggleVisibility() {
+    event.preventDefault();
+    document.getElementById("toggleOpportunityButton").click();
+  }
+
   function applyForOpportunity() {
     event.preventDefault();
 
@@ -120,7 +134,6 @@
 
   function closeAlert() {
     event.preventDefault();
-    
     document.getElementById("applyAlert").style.display = "none";
   }
 </script>
