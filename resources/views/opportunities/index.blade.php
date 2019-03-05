@@ -53,7 +53,7 @@
                   
                   <!-- Avatar group -->
                   <p class="card-text small text-muted" style="margin-bottom: 0;">Applications</p>
-                  <p style="margin-bottom: 0;">2</p>
+                  <p style="margin-bottom: 0;">0</p>
 
                 </div>
             </div> <!-- / .row -->
