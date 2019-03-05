@@ -14,10 +14,6 @@ use App\Notification;
 
 class CompaniesController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     public function index() {
         $companies = Company::all();
@@ -50,7 +46,6 @@ class CompaniesController extends Controller
         $company->twitter = request('twitter');
         $company->linkedin = request('linkedin');
         $company->email = request('email');
-        $company->avatar = request('avatar');
         $company->slug = str_slug(request('title'), '-');
 
         if(request('avatar')) {

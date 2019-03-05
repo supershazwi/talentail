@@ -98,6 +98,32 @@ Route::get('/check-upvote', function() {
    
 });
 
+Route::post('/companies/{companySlug}/save-company', function() {
+    if(Auth::user() && Auth::user()->admin) {
+        $routeParameters = Route::getCurrentRoute()->parameters();
+
+        $company = Company::where('slug', $routeParameters['companySlug'])->first();
+
+        $company->title = request('title');
+        $company->description = request('description');
+        $company->website = request('website');
+        $company->facebook = request('facebook');
+        $company->twitter = request('twitter');
+        $company->linkedin = request('linkedin');
+        $company->email = request('email');
+        $company->slug = str_slug(request('title'), '-');
+
+        if(request('avatar')) {
+            $company->avatar = request('avatar')->getClientOriginalName();
+            $company->url = Storage::disk('gcs')->put('/avatars', request('avatar'), 'public');
+        }
+
+        $company->save();
+
+        return redirect('/companies/'.$company->slug);
+    }
+})->middleware('auth');
+
 Route::post('/community-post-comment/{communityPostCommentId}/downvote', function(Request $request) {
     $returnArray = array();
 
@@ -3497,6 +3523,23 @@ Route::get('/roles/{roleSlug}/projects/{projectSlug}', 'ProjectsController@show'
 Route::post('/notifications/notify', 'NotificationController@postNotify');
 
 Route::get('/companies/{companySlug}/add-opportunity', 'OpportunitiesController@create');
+
+Route::get('/companies/{companySlug}/edit', function() {
+    if(Auth::user() && Auth::user()->admin) {
+        $routeParameters = Route::getCurrentRoute()->parameters();
+
+        $company = Company::where('slug', $routeParameters['companySlug'])->first();
+
+        return view('companies.edit', [
+            'company' => $company,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]);
+    } else {
+        return redirect('/companies/'.$routeParameters['companySlug']);
+    }
+})->middleware('auth');
 
 Route::resources([
     'companies' => 'CompaniesController',

@@ -32,11 +32,6 @@
     <div class="col-12 col-md-6 col-xl-4">
       <div class="card">
         <div class="card-body">
-          <div class="text-center">
-            <a href="/opportunities/{{$opportunity->slug}}" class="card-avatar avatar avatar-lg mx-auto">
-                <img src="https://storage.googleapis.com/talentail-123456789/{{$opportunity->company->url}}" alt="..." class="avatar-img rounded">
-            </a>
-          </div>
 
           <!-- Title -->
           <a href="/opportunities/{{$opportunity->slug}}"><h2 class="card-title text-center mb-3">
