@@ -3203,17 +3203,19 @@ Route::post('/categories/save-category', function(Request $request) {
 Route::post('/tasks/{taskSlug}/save-task', function(Request $request) {
     $routeParameters = Route::getCurrentRoute()->parameters();
 
-    $validator = Validator::make($request->all(), [
-        'title' => 'required|unique:tasks'
-    ]);
-
-    if($validator->fails()) {
-        return redirect('tasks/create')
-                    ->withErrors($validator)
-                    ->withInput();
-    }
-
     $task = Task::where('slug', $routeParameters['taskSlug'])->first();
+
+    if(!$task->title == $request->title) {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:tasks'
+        ]);
+
+        if($validator->fails()) {
+            return redirect('tasks/create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+    }
 
     $task->title = $request->input('title');
     $task->description = $request->input('description');
