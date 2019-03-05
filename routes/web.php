@@ -2081,9 +2081,12 @@ Route::get('/opportunities/{opportunitySlug}', function() {
     
     $status2Array = array();
 
-    foreach($opportunity->tasks as $key=>$task) {
+    $mappedExercises = $opportunity->exercises()->get();
 
-        foreach($task->exercises as $exercise) {
+    $mappedExercisesToShow = array();
+
+    foreach($opportunity->tasks as $key=>$task) {
+        foreach($mappedExercises as $exercise) {
             $answeredExercise = AnsweredExercise::select('status')->where('exercise_id', $exercise->id)->where('user_id', Auth::id())->first();
             if($answeredExercise) {
                 $statusArray[$exercise->id] = $answeredExercise->status;
@@ -2091,6 +2094,15 @@ Route::get('/opportunities/{opportunitySlug}', function() {
             } else {
                 $statusArray[$exercise->id] = "Not Attempted";
                 array_push($status2Array, "Not Attempted");
+            }
+
+            if($exercise->task_id == $task->id) {
+                if(empty($mappedExercisesToShow[$task->id])) {
+                    $mappedExercisesToShow[$task->id] = array();
+                    array_push($mappedExercisesToShow[$task->id], $exercise);
+                } else {
+                    array_push($mappedExercisesToShow[$task->id], $exercise);
+                }
             }
         }
 
@@ -2115,6 +2127,7 @@ Route::get('/opportunities/{opportunitySlug}', function() {
 
     return view('opportunities.show', [
         'statusArray' => $statusArray,
+        'mappedExercisesToShow' => $mappedExercisesToShow,
         'opportunity' => $opportunity,
         'applicable' => $applicable,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),

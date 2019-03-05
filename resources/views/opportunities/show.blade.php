@@ -27,24 +27,28 @@
           	<hr style="margin-top: 1.5rem; margin-bottom: 1.5rem;" />
           	<table class="table table-borderless" style="margin-bottom: 0rem !important;">
           	  <tbody>
-          	  	@foreach($task->exercises as $key2=>$exercise)
-          	    <tr>
-          	      <th scope="row" style="padding-top: 0rem; padding-left: 0rem;">Exercise {{$key+1}}.{{$key2+1}}.</th>
-          	      <td style="padding-top: 0rem; padding-left: 0rem;"><a href="/exercises/{{$exercise->slug}}">{{$exercise->solution_title}}</a></td>
-          	      <td style="padding-top: 0rem; padding-left: 0rem;">
-                    @if($statusArray[$exercise->id] == "Submitted For Review")
-                    <span class="badge badge-warning">{{$statusArray[$exercise->id]}}</span>
-                    @elseif($statusArray[$exercise->id] == "Competent")
-                    <span class="badge badge-success">{{$statusArray[$exercise->id]}}</span>
-                    @elseif($statusArray[$exercise->id] == "Needs Improvement")
-                    <span class="badge badge-danger">{{$statusArray[$exercise->id]}}</span>
-                    @elseif($statusArray[$exercise->id] == "Attempted")
-                    <span class="badge badge-dark">{{$statusArray[$exercise->id]}}</span>
-                    @else
-          	      	<span class="badge badge-light">{{$statusArray[$exercise->id]}}</span>
+          	  	@foreach($mappedExercisesToShow as $mappedExercises)
+                  @foreach($mappedExercises as $key2=>$exercise)
+                    @if($exercise->task_id == $task->id)
+              	    <tr>
+              	      <th scope="row" style="padding-top: 0rem; padding-left: 0rem;">Exercise {{$key+1}}.{{$key2+1}}.</th>
+              	      <td style="padding-top: 0rem; padding-left: 0rem;"><a href="/exercises/{{$exercise->slug}}">{{$exercise->solution_title}}</a></td>
+              	      <td style="padding-top: 0rem; padding-left: 0rem;">
+                        @if($statusArray[$exercise->id] == "Submitted For Review")
+                        <span class="badge badge-warning">{{$statusArray[$exercise->id]}}</span>
+                        @elseif($statusArray[$exercise->id] == "Competent")
+                        <span class="badge badge-success">{{$statusArray[$exercise->id]}}</span>
+                        @elseif($statusArray[$exercise->id] == "Needs Improvement")
+                        <span class="badge badge-danger">{{$statusArray[$exercise->id]}}</span>
+                        @elseif($statusArray[$exercise->id] == "Attempted")
+                        <span class="badge badge-dark">{{$statusArray[$exercise->id]}}</span>
+                        @else
+              	      	<span class="badge badge-light">{{$statusArray[$exercise->id]}}</span>
+                        @endif
+              	      </td>
+              	    </tr>
                     @endif
-          	      </td>
-          	    </tr>
+                  @endforeach
           	    @endforeach
           	  </tbody>
           	</table>	
