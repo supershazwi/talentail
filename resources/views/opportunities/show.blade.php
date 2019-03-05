@@ -62,7 +62,7 @@
             <p><a href="/companies/{{$opportunity->company->slug}}">{{$opportunity->company->title}}</a>, {{$opportunity->location}}</p>
             <p>{{$opportunity->company->description}}</p>
             <p class="card-text small text-muted" style="margin-bottom: 0;">Applications</p>
-            <p>10</p>
+            <p>0</p>
             <p class="card-text small text-muted" style="margin-bottom: 0;">Job Posted In</p>
             <p><a href="{{$opportunity->link}}">LinkedIn</a></p>
             <form id="applyForm" method="POST" action="/opportunities/{{$opportunity->slug}}/apply">
@@ -75,6 +75,7 @@
               @else
               <a href="#" class="btn btn-block btn-light" style="margin-top: 0.5rem;" onclick="toggleVisibility()">Make Public</a>
               @endif
+              <button type="submit" id="applyFormButton" style="display: none;" />
             </form>
 
             <form method="POST" action="/opportunities/{{$opportunity->slug}}/toggle-visibility">
@@ -125,10 +126,9 @@
     event.preventDefault();
 
     if(document.getElementById("applicable").value == true) {
-      document.getElementById("applyForOpportunityButton").click();
+      document.getElementById("applyFormButton").click();
     } else {
       document.getElementById("applyAlert").style.display = "block";
-      // setTimeout(function(){ document.getElementById("applyAlert").style.display = "none" }, 5000);
     }
   }
 
