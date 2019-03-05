@@ -39,7 +39,10 @@
               {{$opportunity->title}} 
             </h2></a>
 
-            <p class="text-center" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">{{$opportunity->company->title}}, {{$opportunity->location}}</p>
+            <p class="text-center" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; margin-bottom: 0.5rem;">{{$opportunity->company->title}}</p>
+
+            <p class="text-center" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
+            {{$opportunity->location}}</p>
 
             <!-- Divider -->
             <hr>
