@@ -69,13 +69,11 @@
               @csrf
               <input type="hidden" id="applicable" name="applicable" value="{{$applicable}}" />
               <a href="#" onclick="applyForOpportunity()" class="btn btn-primary btn-block">Apply for Opportunity</a>
-              @if(Auth::user() && Auth::user()->admin)
               <a href="/opportunities/{{$opportunity->slug}}/edit" class="btn btn-block btn-light" style="margin-top: 0.5rem;">Edit</a>
               @if($opportunity->visible)
               <a href="#" class="btn btn-block btn-light" style="margin-top: 0.5rem;" onclick="toggleVisibility()">Make Private</a>
               @else
               <a href="#" class="btn btn-block btn-light" style="margin-top: 0.5rem;" onclick="toggleVisibility()">Make Public</a>
-              @endif
               @endif
               <button type="submit" id="applyFormButton" style="display: none;" />
             </form>

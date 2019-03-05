@@ -2103,10 +2103,14 @@ Route::get('/opportunities/{opportunitySlug}', function() {
 
     $applicable;
 
-    if(in_array("Incompetent", $applyArray)) {
+    if(empty($applyArray)) {
         $applicable = false;
     } else {
-        $applicable = true;
+        if(in_array("Incompetent", $applyArray)) {
+            $applicable = false;
+        } else {
+            $applicable = true;
+        }
     }
 
     return view('opportunities.show', [
