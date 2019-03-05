@@ -73,12 +73,12 @@
 
           </div>
         </div>
-        @if(!empty($answeredExercise) && count($answeredExercise->exercise->opportunities) > 0)
+        @if(!empty($exercise) && count($exercise->opportunities) > 0)
         <div class="card">
           <div class="card-body">
             <h3>Job Opportunities Requiring This Competency</h3>
             <ul style="margin-left: -1.4rem; margin-bottom: 0rem;">
-              @foreach($answeredExercise->exercise->opportunities as $opportunity)
+              @foreach($exercise->opportunities as $opportunity)
               <li><a href="/opportunities/{{$opportunity->slug}}">{{$opportunity->title}} - {{$opportunity->company->title}}, {{$opportunity->location}}</a></li>
               @endforeach
             </ul>
