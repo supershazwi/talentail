@@ -2146,7 +2146,7 @@ Route::post('/opportunities/save-opportunity', function(Request $request) {
     $opportunity->link = $request->input('link');
     $opportunity->posted_at = $request->input('posted_at');
     $opportunity->company_id = $request->input('company');
-    $opportunity->slug = strtolower($company->title) . "-" . str_slug($opportunity->title, '-') . "-" . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
+    $opportunity->slug = strtolower($company->slug) . "-" . str_slug($opportunity->title, '-') . "-" . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
     $opportunity->description = $request->input('description');
     $opportunity->location = $request->input('location');
     $opportunity->level = $request->input('level');
