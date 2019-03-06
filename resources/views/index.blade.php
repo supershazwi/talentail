@@ -10,9 +10,9 @@
     </div>
     <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
       <h1 class="display-4 mb-3">
-      <span style="color: #0984e3;">Break into</span> a new career with a portfolio of pre-interview projects.
+      <span style="color: #0984e3;">Break into</span> a new career with a work portfolio.
       </h1>
-      <h1 style="color: #777d7f;">In today's day and age, learning is never enough. Attempt projects to apply your knowledge and show the world what you're made of.</h1>
+      <h1 style="color: #777d7f;">In today's day and age, learning is never enough. Attempt exercises to apply your knowledge and show companies what you're made of.</h1>
     </div>
   </div>
   <hr style="margin-top: 5rem;"/>
@@ -42,7 +42,7 @@
     </div>
     <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
       <h1 class="display-4 mb-3">
-        <span style="color: #0984e3;">Execute projects</span> and be given a platform to:
+        <span style="color: #0984e3;">Complete exercises</span> and be given a platform to:
       </h1>
       <ul style="list-style: none;margin-left: 0;padding-left: 2.2em;text-indent: -2.2em;">
         <li><h1 style="color: #777d7f;">😁 Showcase your competencies through tangible work</h1></li>

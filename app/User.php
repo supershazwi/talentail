@@ -33,6 +33,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Community::class);
     }
 
+    public function feedbacks() {
+        return $this->hasMany(Feedback::class);
+    }
+
+    public function feedback_files() {
+        return $this->hasMany(FeedbackFile::class);
+    }
+
     public function experiences() {
         return $this->hasMany(Experience::class);
     }

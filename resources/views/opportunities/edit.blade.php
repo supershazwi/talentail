@@ -137,6 +137,11 @@
                 </label>
                 <select class="form-control" data-toggle="select" name="level">
                   <option value="Nil">Select level</option>
+                  @if($opportunity->level == "Entry Level")
+                  <option value="Entry Level" selected>Entry Level</option>
+                  @else
+                  <option value="Entry Level">Entry Level</option>
+                  @endif
                   @if($opportunity->level == "Associate")
                   <option value="Associate" selected>Associate</option>
                   @else

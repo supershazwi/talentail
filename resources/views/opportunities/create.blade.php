@@ -116,6 +116,7 @@
                 </label>
                 <select class="form-control" data-toggle="select" name="level">
                   <option value="Nil">Select level</option>
+                  <option value="Entry Level">Entry Level</option>
                   <option value="Associate">Associate</option>
                   <option value="Junior">Junior</option>
                   <option value="Senior">Senior</option>

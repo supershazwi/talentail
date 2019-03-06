@@ -3,6 +3,11 @@
 @section ('content')
 <div class="header">
   <div class="container">
+    @if (session('feedbackSent'))
+    <div class="alert alert-primary" role="alert" id="successAlert" style="text-align: center; margin-top: 1.5rem;">
+      <h4 class="alert-heading" style="margin-bottom: 0;">{{session('feedbackSent')}}</h4>
+    </div>
+    @endif
     <div class="row" style="margin-top: 3rem;">
       <div class="col-lg-9">
         <div class="row">
@@ -66,6 +71,8 @@
               @endif
             @endif
 
+            <a href="/exercises/{{$exercise->slug}}/feedback" class="btn btn-block btn-link">Feedback</a>
+
             <form method="POST" action="/exercises/{{$exercise->slug}}/toggle-visibility">
               @csrf
               <button type="submit" style="display: none;" id="toggleExerciseButton" />
@@ -122,6 +129,10 @@
     event.preventDefault();
     document.getElementById("toggleExerciseButton").click();
   }
+</script>
+
+<script type="text/javascript">
+  setTimeout(function(){ document.getElementById("successAlert").style.display = "none" }, 3000);
 </script>
 @endsection
 

@@ -27,6 +27,8 @@ use App\User;
 use App\Credit;
 use App\Exercise;
 use App\Community;
+use App\Feedback;
+use App\FeedbackFile;
 use App\ResponseFile;
 use App\Opportunity;
 use App\Vote;
@@ -715,6 +717,50 @@ Route::get('/payment-information', function() {
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]); 
 });
+
+Route::post('/exercises/{exerciseSlug}/submit-feedback', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $exercise = Exercise::where('slug', $routeParameters['exerciseSlug'])->first();
+
+    $feedback = new Feedback;
+
+    $feedback->content = $request->input('content');
+    $feedback->user_id = Auth::id();
+
+    $feedback->save();
+
+    if($request->file('file')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('file')); $fileCounter++) {
+
+            $feedbackFile = new FeedbackFile;
+
+            $feedbackFile->title = $request->file('file')[$fileCounter]->getClientOriginalName();
+            $feedbackFile->size = $request->file('file')[$fileCounter]->getSize();
+            $feedbackFile->url = Storage::disk('gcs')->put('/assets', $request->file('file')[$fileCounter], 'public');
+            $feedbackFile->mime_type = $request->file('file')[$fileCounter]->getMimeType();
+            $feedbackFile->feedback_id = $feedback->id;
+            $feedbackFile->user_id = Auth::id();
+
+            $feedbackFile->save();
+        }
+    }
+
+    return redirect('/exercises/'.$routeParameters['exerciseSlug'])->with('feedbackSent', 'Your feedback has been submitted.');
+});
+
+Route::get('/exercises/{exerciseSlug}/feedback', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $exercise = Exercise::where('slug', $routeParameters['exerciseSlug'])->first();
+
+    return view('feedbacks.create', [
+        'exercise' => $exercise,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+})->middleware('auth');
 
 Route::get('/exercises/{exerciseSlug}/edit', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();
