@@ -2,44 +2,14 @@
 
 @section ('content')
 <div class="container">
-    <div class="row" style="margin-top: 5rem;">
-      <div class="col-12 col-md-6 offset-xl-2 offset-md-1 order-md-2 mb-5 mb-md-0">
-        <div class="text-center">
-          <img src="/img/illustrations/coworking.svg" alt="..." class="img-fluid">
-        </div>
-      </div>
-      <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
+    <div class="row align-items-center" style="margin-top: 7.5rem;">
+      <div class="col-lg-8 offset-lg-2" style="text-align: center;">
         <h1 class="display-4 mb-3">
-          <span style="border-bottom: 5px solid #0984e3;">Showcase</span> & <span style="border-bottom: 5px solid #0984e3;">explore</span> work portfolios endorsed by our experts
+          DISCOVER <span style="border-bottom: 5px solid #0984e3; text-transform: uppercase;">COMPANIES</span>
         </h1>
       </div>
     </div>
-    <!-- <hr style="margin-top: 5rem;"/> -->
-    <div class="row justify-content-center">
-      <div class="col-12 col-lg-12">
-        
-        <!-- Header -->
-        <div class="header mt-md-5">
-          <div class="header-body">
-            <div class="row align-items-center">
-              <div class="col">
-                
-                <!-- Pretitle -->
-                <h6 class="header-pretitle">
-                  Overview
-                </h6>
-
-                <!-- Title -->
-                <h1 class="header-title">
-                  Companies
-                </h1>
-
-              </div>
-            </div> <!-- / .row -->
-          </div>
-        </div>
-      </div>
-    </div> <!-- / .row -->
+    <hr style="margin-top: 7.5rem; margin-bottom: 2.5rem;"/>
 
     <div class="row">
       @foreach($companies as $company)
