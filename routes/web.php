@@ -796,6 +796,7 @@ Route::post('/exercises/{exerciseSlug}/{userId}/submit-review', function(Request
 
     $answeredExercise->response = $request->input('response');
     $answeredExercise->status = $request->input('status');
+    $answeredExercise->visible = 1;
 
     $answeredExercise->save();
 
@@ -865,6 +866,8 @@ Route::post('/exercises/{exerciseSlug}/attempt-exercise', function(Request $requ
 
     $routeParameters = Route::getCurrentRoute()->parameters();
 
+    // check whether got portfolio
+
     $exercise = Exercise::find($request->input('exerciseId'));
 
     $answeredExercise = new AnsweredExercise;
@@ -877,8 +880,19 @@ Route::post('/exercises/{exerciseSlug}/attempt-exercise', function(Request $requ
 
     $answeredExercise->save();
 
+    $portfolio = Portfolio::where('user_id', Auth::id())->where('role_id', $exercise->role_id)->first();
+
+    if(!$portfolio) {
+        $portfolio = new Portfolio;
+
+        $portfolio->user_id = Auth::id();
+        $portfolio->role_id = $exercise->task->role_id;
+
+        $portfolio->save();
+    }
+
     return redirect('/exercises/' . $routeParameters['exerciseSlug']);
-});
+})->middleware('auth');
 
 Route::post('/categories/{categorySlug}/tasks/{taskSlug}/save-task', function(Request $request) {
 
@@ -1465,10 +1479,10 @@ Route::get('/portfolios/add', function() {
         return redirect('/portfolios/'.$portfolio->id);
     }
 
-    $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
+    $reviewedExercises = AnsweredExercise::where('user_id', Auth::id())->where('status', 'Reviewed')->get();
 
     return view('portfolios.add', [
-        'attemptedProjects' => $attemptedProjects,
+        'reviewedExercises' => $reviewedExercises,
         'industries' => Industry::all(),
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -1488,442 +1502,464 @@ Route::get('/portfolios/select-role', function() {
     ]);
 })->middleware('auth');
 
-Route::post('/portfolios/save', function(Request $request) {
-    $roleId = $request->input('roleId');
+Route::post('/portfolios/{portfolioId}/save', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
 
-    // check if there is a current portfolio
-    $portfolio = Portfolio::where('role_id', $roleId)->first();
+    $answeredExercises = AnsweredExercise::where('user_id', Auth::id())->get();
 
-    $addedProjects = $request->input('attemptedProject');
+    $answeredExerciseInput = $request->input('answeredExercise');
 
-    if(!$portfolio) {
-        $portfolio = new Portfolio;
-
-        $portfolio->user_id = Auth::id();
-        $portfolio->role_id = $roleId;
-
-        $portfolio->save();
-    } else {
-        // detach all attempted projects from portfolio first
-        // before reattaching them back later
-
-        // $portfolio->attempted_projects()->detach();
-
-        // $addedProjects = $request->input('attemptedProject');
-
-        // dd($addedProjects);
-
-        $newlyAddedProjects = array();
-        $newlyRemovedProjects = array();
-
-        // if addedProjects is null, all internal projects have been removed
-        if($addedProjects == null) {
-            if($portfolio->attempted_projects) {
-                foreach($portfolio->attempted_projects as $attemptedProject) {
-                    if($attemptedProject->project->internal) {
-                        $attemptedProject->added = 0;
-                        $attemptedProject->save();
-
-                        $portfolio->industries()->detach($attemptedProject->project->industry_id);
-                        $portfolio->attempted_projects()->detach($attemptedProject->id);
-                    }
-                }
-            }
-        } else {
-            // there are still existing projects in the addedProjects array
-            // some may be removed
-            // some may be newly added
-
-            foreach($portfolio->attempted_projects as $attemptedProject) {
-                if($attemptedProject->project->internal) {
-                    // check whether the current list of attempted projects still exist in the new set of added projects
-                    if(!in_array($attemptedProject->id, $addedProjects)) {
-                        $attemptedProject->added = 0;
-                        $attemptedProject->save();
-
-                        $portfolio->industries()->detach($attemptedProject->project->industry_id);
-                        $portfolio->attempted_projects()->detach($attemptedProject->id);
-                    } else {
-                        array_splice($addedProjects, array_search($attemptedProject->id, $addedProjects));
-                    }
-                }
-            }
-
-            // remaining added projects are new ones
-            foreach($addedProjects as $addedProject) {
-                $attemptedProject = AttemptedProject::find($addedProject);
-                $attemptedProject->added = 1;
-                $attemptedProject->save();
-
-                $projectAdded = Project::find($attemptedProject->project_id);
-
-                $industry = Industry::find($attemptedProject->project->industry_id);
-                $portfolio->industries()->attach($industry);
-
-                $portfolio->attempted_projects()->attach($attemptedProject);
-            }
-        }
-
-        // look at external projects now
-
-        $removedAttemptedProjectsIdArray = $request->input('projects-deleted');
-
-        if($removedAttemptedProjectsIdArray != null) {
-            $removedAttemptedProjectsIdArray = explode(",",$removedAttemptedProjectsIdArray);
-
-            foreach($portfolio->attempted_projects as $attemptedProject) {
-                if(!$attemptedProject->project->internal) {
-                    // check whether the current list of attempted project exists in the removedAttemptedProjectsIdArray
-                    if(in_array($attemptedProject->id, $removedAttemptedProjectsIdArray)) {
-                        // remove project
-                        Project::destroy($attemptedProject->project->id);
-
-                        // remove answeredtaskfiles
-                        AnsweredTaskFile::where('attempted_project_id', $attemptedProject->project->id)->delete();
-
-                        // remove endorsers
-                        Endorsers::where('attempted_project_id', $attemptedProject->project->id)->delete();
-
-                        // detach portfolio industries
-                        $portfolio->industries()->detach($attemptedProject->project->industry_id);
-
-                        // detach portfolio attempted projects
-                        $portfolio->attempted_projects()->detach($attemptedProject->id);
-
-                        // remove attempted project
-                        AttemptedProject::destroy($attemptedProject->id);
-                    } else {
-                        // even if project isnt removed, we need to check whether each value has changed
-                    }
-                }
-            }
-        }
-
-        $projectCounter = 1;
-
-        while($request->input('project-title_'.$projectCounter) != null) {
-            // check whether it's existing or brand new
-
-            // existing
-            if($request->input('project-id_'.$projectCounter) != null) {
-                // need to check existing attempted projects whether changes have been made
-
-                $attemptedProject = AttemptedProject::find($request->input('project-id_'.$projectCounter));
-
-                if($attemptedProject->project->title != $request->input('project-title_'.$projectCounter)) {
-                    $attemptedProject->project->title = $request->input('project-title_'.$projectCounter);
-                }
-
-                if($attemptedProject->project->description != $request->input('project-description_'.$projectCounter)) {
-                    $attemptedProject->project->description = $request->input('project-description_'.$projectCounter);
-                }
-
-                if($attemptedProject->project->industry_id != $request->input('industry_'.$projectCounter)) {
-                    
-                    // need to detach and attach
-                    $portfolio->industries()->detach($attemptedProject->project->industry_id);
-                    $portfolio->industries()->attach($request->input('industry_'.$projectCounter));
-
-                    $attemptedProject->project->industry_id = $request->input('industry_'.$projectCounter);
-                }
-
-                // files
-                $removedAnsweredTaskFilesIdArray = $request->input('files-deleted');
-
-                if($removedAnsweredTaskFilesIdArray != null) {
-                    $removedAnsweredTaskFilesIdArray = explode(",",$removedAnsweredTaskFilesIdArray);
-
-                    foreach($attemptedProject->answered_task_files as $answeredTaskFile) {
-                        if(in_array($answeredTaskFile->id, $removedAnsweredTaskFilesIdArray)) {
-                            AnsweredTaskFile::destroy($answeredTaskFile->id);
-                        }
-                    }
-                }
-
-                if($request->file('file_'.$projectCounter)) {
-                    for($fileCounter = 0; $fileCounter < count($request->file('file_'.$projectCounter)); $fileCounter++) {
-
-                        $answeredTaskFile = new AnsweredTaskFile;
-
-                        $answeredTaskFile->title = $request->file('file_'.$projectCounter)[$fileCounter]->getClientOriginalName();
-                        $answeredTaskFile->size = $request->file('file_'.$projectCounter)[$fileCounter]->getSize();
-                        $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_'.$projectCounter)[$fileCounter], 'public');
-                        $answeredTaskFile->mime_type = $request->file('file_'.$projectCounter)[$fileCounter]->getMimeType();
-                        $answeredTaskFile->project_id = $attemptedProject->project->id;
-                        $answeredTaskFile->answered_task_id = 0;
-                        $answeredTaskFile->attempted_project_id = $attemptedProject->id;
-                        $answeredTaskFile->user_id = Auth::id();
-
-                        $answeredTaskFile->save();
-                    }
-                }
-
-                // endorsers
-                $removedEndorsersIdArray = $request->input('endorsers-deleted');
-
-                if($removedEndorsersIdArray != null) {
-                    $removedEndorsersIdArray = explode(",",$removedEndorsersIdArray);
-
-                    foreach($attemptedProject->endorsers as $endorser) {
-                        if(in_array($endorser->id, $removedEndorsersIdArray)) {
-                            Endorser::destroy($endorser->id);
-                        }
-                    }
-                }
-
-                if($request->input('project-endorsers_'.$projectCounter) != null) {
-                    $endorserArray = explode(",", $request->input('project-endorsers_'.$projectCounter));
-
-                    foreach ($endorserArray as $key => $endorserInput) {
-                        $endorser = new Endorser;
-
-                        $endorser->email = trim($endorserInput);
-                        $endorser->attempted_project_id = $attemptedProject->id;
-                        $endorser->mail_sent = 1;
-                        $endorser->portfolio_id = $portfolio->id;
-
-                        $endorser->save();
-
-                        // need to check whether or not user is already a member
-                        // if not, store notification in pending notification
-                        $userExists = User::where('email', $endorser->email)->first();
-
-                        if($userExists) {
-                            // create notification for user
-                            $notification = new Notification;
-
-                            $notification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
-                            $notification->recipient_id = $userExists->id;
-                            $notification->user_id = Auth::id();
-                            $notification->url = "/xxx";
-
-                            $notification->save();
-                        } else {
-                            // create pending notification for user
-                            $pendingNotification = new PendingNotification;
-
-                            $pendingNotification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
-                            $pendingNotification->recipient_email = $endorser->email;
-                            $pendingNotification->user_id = Auth::id();
-                            $pendingNotification->url = "/xxx";
-
-                            $pendingNotification->save();
-                        }
-
-                        Mail::to($endorser->email)->send(new SendEndorsersMail(Auth::user()->name, $attemptedProject->project->role->title, "https://talentail.com"));
-                    }
-                }
-
-                $attemptedProject->project->save();
-
-                $attemptedProject->save();
-
+    if($answeredExercises) {
+        foreach($answeredExercises as $answeredExercise) {
+            if(!empty($answeredExerciseInput) && in_array($answeredExercise->id, $answeredExerciseInput)) {
+                $answeredExercise->visible = 1;
             } else {
-                // new
-                $project = new Project;
-
-                $project->title = $request->input('project-title_'.$projectCounter);
-                $project->description = $request->input('project-description_'.$projectCounter);
-                $project->role_id = $roleId;
-                $project->user_id = Auth::id();
-                $project->internal = 0;
-                $project->industry_id = $request->input('industry_'.$projectCounter);
-
-                $project->save();
-
-                $industry = Industry::find($request->input('industry_'.$projectCounter));
-                $portfolio->industries()->attach($industry);
-
-                $attemptedProject = new AttemptedProject;
-
-                $attemptedProject->project_id = $project->id;
-                $attemptedProject->user_id = Auth::id();
-                $attemptedProject->status = "NA";
-                $attemptedProject->creator_id = 0;
-                $attemptedProject->added = 0;
-
-                $attemptedProject->save();
-
-                $portfolio->attempted_projects()->attach($attemptedProject);
-
-                if($request->file('file_'.$projectCounter)) {
-                    for($fileCounter = 0; $fileCounter < count($request->file('file_'.$projectCounter)); $fileCounter++) {
-
-                        $answeredTaskFile = new AnsweredTaskFile;
-
-                        $answeredTaskFile->title = $request->file('file_'.$projectCounter)[$fileCounter]->getClientOriginalName();
-                        $answeredTaskFile->size = $request->file('file_'.$projectCounter)[$fileCounter]->getSize();
-                        $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_'.$projectCounter)[$fileCounter], 'public');
-                        $answeredTaskFile->mime_type = $request->file('file_'.$projectCounter)[$fileCounter]->getMimeType();
-                        $answeredTaskFile->project_id = $project->id;
-                        $answeredTaskFile->answered_task_id = 0;
-                        $answeredTaskFile->attempted_project_id = $attemptedProject->id;
-                        $answeredTaskFile->user_id = Auth::id();
-
-                        $answeredTaskFile->save();
-                    }
-                }
-
-                if($request->input('project-endorsers_'.$projectCounter) != null) {
-                    $endorserArray = explode(",", $request->input('project-endorsers_'.$projectCounter));
-
-                    foreach ($endorserArray as $key => $endorserInput) {
-                        $endorser = new Endorser;
-
-                        $endorser->email = trim($endorserInput);
-                        $endorser->attempted_project_id = $attemptedProject->id;
-                        $endorser->mail_sent = 1;
-                        $endorser->portfolio_id = $portfolio->id;
-
-                        $endorser->save();
-
-                        // need to check whether or not user is already a member
-                        // if not, store notification in pending notification
-                        $userExists = User::where('email', $endorser->email)->first();
-
-                        if($userExists) {
-                            // create notification for user
-                            $notification = new Notification;
-
-                            $notification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
-                            $notification->recipient_id = $userExists->id;
-                            $notification->user_id = Auth::id();
-                            $notification->url = "/xxx";
-
-                            $notification->save();
-                        } else {
-                            // create pending notification for user
-                            $pendingNotification = new PendingNotification;
-
-                            $pendingNotification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
-                            $pendingNotification->recipient_email = $endorser->email;
-                            $pendingNotification->user_id = Auth::id();
-                            $pendingNotification->url = "/xxx";
-
-                            $pendingNotification->save();
-                        }
-
-                        Mail::to($endorser->email)->send(new SendEndorsersMail(Auth::user()->name, $attemptedProject->project->role->title, "https://talentail.com"));
-                    }
-                }
+                $answeredExercise->visible = 0;
             }
 
-            $projectCounter++;
+            $answeredExercise->save();
         }
-
-
-        return redirect('/portfolios/'.$portfolio->id);
     }
 
-    // add projects if exists
-    $projectCounter = 1;
-
-    while($request->input('project-title_'.$projectCounter) != null) {
-        $project = new Project;
-
-        $project->title = $request->input('project-title_'.$projectCounter);
-        $project->description = $request->input('project-description_'.$projectCounter);
-        $project->role_id = $roleId;
-        $project->user_id = Auth::id();
-        $project->internal = 0;
-        $project->industry_id = $request->input('industry_'.$projectCounter);
-
-        $project->save();
-
-        $industry = Industry::find($request->input('industry_'.$projectCounter));
-        $portfolio->industries()->attach($industry);
-
-        $attemptedProject = new AttemptedProject;
-
-        $attemptedProject->project_id = $project->id;
-        $attemptedProject->user_id = Auth::id();
-        $attemptedProject->status = "NA";
-        $attemptedProject->creator_id = 0;
-        $attemptedProject->added = 0;
-
-        $attemptedProject->save();
-
-        $portfolio->attempted_projects()->attach($attemptedProject);
-
-        if($request->file('file_'.$projectCounter)) {
-            for($fileCounter = 0; $fileCounter < count($request->file('file_'.$projectCounter)); $fileCounter++) {
-
-                $answeredTaskFile = new AnsweredTaskFile;
-
-                $answeredTaskFile->title = $request->file('file_'.$projectCounter)[$fileCounter]->getClientOriginalName();
-                $answeredTaskFile->size = $request->file('file_'.$projectCounter)[$fileCounter]->getSize();
-                $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_'.$projectCounter)[$fileCounter], 'public');
-                $answeredTaskFile->mime_type = $request->file('file_'.$projectCounter)[$fileCounter]->getMimeType();
-                $answeredTaskFile->project_id = $project->id;
-                $answeredTaskFile->answered_task_id = 0;
-                $answeredTaskFile->attempted_project_id = $attemptedProject->id;
-                $answeredTaskFile->user_id = Auth::id();
-
-                $answeredTaskFile->save();
-            }
-        }
-
-        if($request->input('project-endorsers_'.$projectCounter) != null) {
-            $endorserArray = explode(",", $request->input('project-endorsers_'.$projectCounter));
-
-            foreach ($endorserArray as $key => $endorserInput) {
-                $endorser = new Endorser;
-
-                $endorser->email = trim($endorserInput);
-                $endorser->attempted_project_id = $attemptedProject->id;
-                $endorser->mail_sent = 1;
-                $endorser->portfolio_id = $portfolio->id;
-
-                $endorser->save();
-
-                // need to check whether or not user is already a member
-                // if not, store notification in pending notification
-                $userExists = User::where('email', $endorser->email)->first();
-
-                if($userExists) {
-                    // create notification for user
-                    $notification = new Notification;
-
-                    $notification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
-                    $notification->recipient_id = $userExists->id;
-                    $notification->user_id = Auth::id();
-                    $notification->url = "/xxx";
-
-                    $notification->save();
-                } else {
-                    // create pending notification for user
-                    $pendingNotification = new PendingNotification;
-
-                    $pendingNotification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
-                    $pendingNotification->recipient_email = $endorser->email;
-                    $pendingNotification->user_id = Auth::id();
-                    $pendingNotification->url = "/xxx";
-
-                    $pendingNotification->save();
-                }
-
-                Mail::to($endorser->email)->send(new SendEndorsersMail(Auth::user()->name, $attemptedProject->project->role->title, "https://talentail.com"));
-            }
-        }
-
-        $projectCounter++;
-    }
-
-    foreach($addedProjects as $addedProject) {
-        $attemptedProject = AttemptedProject::find($addedProject);
-        $attemptedProject->added = 1;
-        $attemptedProject->save();
-
-        $projectAdded = Project::find($attemptedProject->project_id);
-
-        $industry = Industry::find($attemptedProject->project->industry_id);
-        $portfolio->industries()->attach($industry);
-
-        $portfolio->attempted_projects()->attach($attemptedProject);
-    }
-
-    return redirect('/portfolios/'.$portfolio->id);
+    return redirect('/portfolios/'.$routeParameters['portfolioId']); 
 })->middleware('auth');
+
+// Route::post('/portfolios/save', function(Request $request) {
+//     $roleId = $request->input('roleId');
+
+//     // check if there is a current portfolio
+//     $portfolio = Portfolio::where('role_id', $roleId)->first();
+
+//     $addedProjects = $request->input('attemptedProject');
+
+//     if(!$portfolio) {
+//         $portfolio = new Portfolio;
+
+//         $portfolio->user_id = Auth::id();
+//         $portfolio->role_id = $roleId;
+
+//         $portfolio->save();
+//     } else {
+//         // detach all attempted projects from portfolio first
+//         // before reattaching them back later
+
+//         // $portfolio->attempted_projects()->detach();
+
+//         // $addedProjects = $request->input('attemptedProject');
+
+//         // dd($addedProjects);
+
+//         $newlyAddedProjects = array();
+//         $newlyRemovedProjects = array();
+
+//         // if addedProjects is null, all internal projects have been removed
+//         if($addedProjects == null) {
+//             if($portfolio->attempted_projects) {
+//                 foreach($portfolio->attempted_projects as $attemptedProject) {
+//                     if($attemptedProject->project->internal) {
+//                         $attemptedProject->added = 0;
+//                         $attemptedProject->save();
+
+//                         $portfolio->industries()->detach($attemptedProject->project->industry_id);
+//                         $portfolio->attempted_projects()->detach($attemptedProject->id);
+//                     }
+//                 }
+//             }
+//         } else {
+//             // there are still existing projects in the addedProjects array
+//             // some may be removed
+//             // some may be newly added
+
+//             foreach($portfolio->attempted_projects as $attemptedProject) {
+//                 if($attemptedProject->project->internal) {
+//                     // check whether the current list of attempted projects still exist in the new set of added projects
+//                     if(!in_array($attemptedProject->id, $addedProjects)) {
+//                         $attemptedProject->added = 0;
+//                         $attemptedProject->save();
+
+//                         $portfolio->industries()->detach($attemptedProject->project->industry_id);
+//                         $portfolio->attempted_projects()->detach($attemptedProject->id);
+//                     } else {
+//                         array_splice($addedProjects, array_search($attemptedProject->id, $addedProjects));
+//                     }
+//                 }
+//             }
+
+//             // remaining added projects are new ones
+//             foreach($addedProjects as $addedProject) {
+//                 $attemptedProject = AttemptedProject::find($addedProject);
+//                 $attemptedProject->added = 1;
+//                 $attemptedProject->save();
+
+//                 $projectAdded = Project::find($attemptedProject->project_id);
+
+//                 $industry = Industry::find($attemptedProject->project->industry_id);
+//                 $portfolio->industries()->attach($industry);
+
+//                 $portfolio->attempted_projects()->attach($attemptedProject);
+//             }
+//         }
+
+//         // look at external projects now
+
+//         $removedAttemptedProjectsIdArray = $request->input('projects-deleted');
+
+//         if($removedAttemptedProjectsIdArray != null) {
+//             $removedAttemptedProjectsIdArray = explode(",",$removedAttemptedProjectsIdArray);
+
+//             foreach($portfolio->attempted_projects as $attemptedProject) {
+//                 if(!$attemptedProject->project->internal) {
+//                     // check whether the current list of attempted project exists in the removedAttemptedProjectsIdArray
+//                     if(in_array($attemptedProject->id, $removedAttemptedProjectsIdArray)) {
+//                         // remove project
+//                         Project::destroy($attemptedProject->project->id);
+
+//                         // remove answeredtaskfiles
+//                         AnsweredTaskFile::where('attempted_project_id', $attemptedProject->project->id)->delete();
+
+//                         // remove endorsers
+//                         Endorsers::where('attempted_project_id', $attemptedProject->project->id)->delete();
+
+//                         // detach portfolio industries
+//                         $portfolio->industries()->detach($attemptedProject->project->industry_id);
+
+//                         // detach portfolio attempted projects
+//                         $portfolio->attempted_projects()->detach($attemptedProject->id);
+
+//                         // remove attempted project
+//                         AttemptedProject::destroy($attemptedProject->id);
+//                     } else {
+//                         // even if project isnt removed, we need to check whether each value has changed
+//                     }
+//                 }
+//             }
+//         }
+
+//         $projectCounter = 1;
+
+//         while($request->input('project-title_'.$projectCounter) != null) {
+//             // check whether it's existing or brand new
+
+//             // existing
+//             if($request->input('project-id_'.$projectCounter) != null) {
+//                 // need to check existing attempted projects whether changes have been made
+
+//                 $attemptedProject = AttemptedProject::find($request->input('project-id_'.$projectCounter));
+
+//                 if($attemptedProject->project->title != $request->input('project-title_'.$projectCounter)) {
+//                     $attemptedProject->project->title = $request->input('project-title_'.$projectCounter);
+//                 }
+
+//                 if($attemptedProject->project->description != $request->input('project-description_'.$projectCounter)) {
+//                     $attemptedProject->project->description = $request->input('project-description_'.$projectCounter);
+//                 }
+
+//                 if($attemptedProject->project->industry_id != $request->input('industry_'.$projectCounter)) {
+                    
+//                     // need to detach and attach
+//                     $portfolio->industries()->detach($attemptedProject->project->industry_id);
+//                     $portfolio->industries()->attach($request->input('industry_'.$projectCounter));
+
+//                     $attemptedProject->project->industry_id = $request->input('industry_'.$projectCounter);
+//                 }
+
+//                 // files
+//                 $removedAnsweredTaskFilesIdArray = $request->input('files-deleted');
+
+//                 if($removedAnsweredTaskFilesIdArray != null) {
+//                     $removedAnsweredTaskFilesIdArray = explode(",",$removedAnsweredTaskFilesIdArray);
+
+//                     foreach($attemptedProject->answered_task_files as $answeredTaskFile) {
+//                         if(in_array($answeredTaskFile->id, $removedAnsweredTaskFilesIdArray)) {
+//                             AnsweredTaskFile::destroy($answeredTaskFile->id);
+//                         }
+//                     }
+//                 }
+
+//                 if($request->file('file_'.$projectCounter)) {
+//                     for($fileCounter = 0; $fileCounter < count($request->file('file_'.$projectCounter)); $fileCounter++) {
+
+//                         $answeredTaskFile = new AnsweredTaskFile;
+
+//                         $answeredTaskFile->title = $request->file('file_'.$projectCounter)[$fileCounter]->getClientOriginalName();
+//                         $answeredTaskFile->size = $request->file('file_'.$projectCounter)[$fileCounter]->getSize();
+//                         $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_'.$projectCounter)[$fileCounter], 'public');
+//                         $answeredTaskFile->mime_type = $request->file('file_'.$projectCounter)[$fileCounter]->getMimeType();
+//                         $answeredTaskFile->project_id = $attemptedProject->project->id;
+//                         $answeredTaskFile->answered_task_id = 0;
+//                         $answeredTaskFile->attempted_project_id = $attemptedProject->id;
+//                         $answeredTaskFile->user_id = Auth::id();
+
+//                         $answeredTaskFile->save();
+//                     }
+//                 }
+
+//                 // endorsers
+//                 $removedEndorsersIdArray = $request->input('endorsers-deleted');
+
+//                 if($removedEndorsersIdArray != null) {
+//                     $removedEndorsersIdArray = explode(",",$removedEndorsersIdArray);
+
+//                     foreach($attemptedProject->endorsers as $endorser) {
+//                         if(in_array($endorser->id, $removedEndorsersIdArray)) {
+//                             Endorser::destroy($endorser->id);
+//                         }
+//                     }
+//                 }
+
+//                 if($request->input('project-endorsers_'.$projectCounter) != null) {
+//                     $endorserArray = explode(",", $request->input('project-endorsers_'.$projectCounter));
+
+//                     foreach ($endorserArray as $key => $endorserInput) {
+//                         $endorser = new Endorser;
+
+//                         $endorser->email = trim($endorserInput);
+//                         $endorser->attempted_project_id = $attemptedProject->id;
+//                         $endorser->mail_sent = 1;
+//                         $endorser->portfolio_id = $portfolio->id;
+
+//                         $endorser->save();
+
+//                         // need to check whether or not user is already a member
+//                         // if not, store notification in pending notification
+//                         $userExists = User::where('email', $endorser->email)->first();
+
+//                         if($userExists) {
+//                             // create notification for user
+//                             $notification = new Notification;
+
+//                             $notification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
+//                             $notification->recipient_id = $userExists->id;
+//                             $notification->user_id = Auth::id();
+//                             $notification->url = "/xxx";
+
+//                             $notification->save();
+//                         } else {
+//                             // create pending notification for user
+//                             $pendingNotification = new PendingNotification;
+
+//                             $pendingNotification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
+//                             $pendingNotification->recipient_email = $endorser->email;
+//                             $pendingNotification->user_id = Auth::id();
+//                             $pendingNotification->url = "/xxx";
+
+//                             $pendingNotification->save();
+//                         }
+
+//                         Mail::to($endorser->email)->send(new SendEndorsersMail(Auth::user()->name, $attemptedProject->project->role->title, "https://talentail.com"));
+//                     }
+//                 }
+
+//                 $attemptedProject->project->save();
+
+//                 $attemptedProject->save();
+
+//             } else {
+//                 // new
+//                 $project = new Project;
+
+//                 $project->title = $request->input('project-title_'.$projectCounter);
+//                 $project->description = $request->input('project-description_'.$projectCounter);
+//                 $project->role_id = $roleId;
+//                 $project->user_id = Auth::id();
+//                 $project->internal = 0;
+//                 $project->industry_id = $request->input('industry_'.$projectCounter);
+
+//                 $project->save();
+
+//                 $industry = Industry::find($request->input('industry_'.$projectCounter));
+//                 $portfolio->industries()->attach($industry);
+
+//                 $attemptedProject = new AttemptedProject;
+
+//                 $attemptedProject->project_id = $project->id;
+//                 $attemptedProject->user_id = Auth::id();
+//                 $attemptedProject->status = "NA";
+//                 $attemptedProject->creator_id = 0;
+//                 $attemptedProject->added = 0;
+
+//                 $attemptedProject->save();
+
+//                 $portfolio->attempted_projects()->attach($attemptedProject);
+
+//                 if($request->file('file_'.$projectCounter)) {
+//                     for($fileCounter = 0; $fileCounter < count($request->file('file_'.$projectCounter)); $fileCounter++) {
+
+//                         $answeredTaskFile = new AnsweredTaskFile;
+
+//                         $answeredTaskFile->title = $request->file('file_'.$projectCounter)[$fileCounter]->getClientOriginalName();
+//                         $answeredTaskFile->size = $request->file('file_'.$projectCounter)[$fileCounter]->getSize();
+//                         $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_'.$projectCounter)[$fileCounter], 'public');
+//                         $answeredTaskFile->mime_type = $request->file('file_'.$projectCounter)[$fileCounter]->getMimeType();
+//                         $answeredTaskFile->project_id = $project->id;
+//                         $answeredTaskFile->answered_task_id = 0;
+//                         $answeredTaskFile->attempted_project_id = $attemptedProject->id;
+//                         $answeredTaskFile->user_id = Auth::id();
+
+//                         $answeredTaskFile->save();
+//                     }
+//                 }
+
+//                 if($request->input('project-endorsers_'.$projectCounter) != null) {
+//                     $endorserArray = explode(",", $request->input('project-endorsers_'.$projectCounter));
+
+//                     foreach ($endorserArray as $key => $endorserInput) {
+//                         $endorser = new Endorser;
+
+//                         $endorser->email = trim($endorserInput);
+//                         $endorser->attempted_project_id = $attemptedProject->id;
+//                         $endorser->mail_sent = 1;
+//                         $endorser->portfolio_id = $portfolio->id;
+
+//                         $endorser->save();
+
+//                         // need to check whether or not user is already a member
+//                         // if not, store notification in pending notification
+//                         $userExists = User::where('email', $endorser->email)->first();
+
+//                         if($userExists) {
+//                             // create notification for user
+//                             $notification = new Notification;
+
+//                             $notification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
+//                             $notification->recipient_id = $userExists->id;
+//                             $notification->user_id = Auth::id();
+//                             $notification->url = "/xxx";
+
+//                             $notification->save();
+//                         } else {
+//                             // create pending notification for user
+//                             $pendingNotification = new PendingNotification;
+
+//                             $pendingNotification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
+//                             $pendingNotification->recipient_email = $endorser->email;
+//                             $pendingNotification->user_id = Auth::id();
+//                             $pendingNotification->url = "/xxx";
+
+//                             $pendingNotification->save();
+//                         }
+
+//                         Mail::to($endorser->email)->send(new SendEndorsersMail(Auth::user()->name, $attemptedProject->project->role->title, "https://talentail.com"));
+//                     }
+//                 }
+//             }
+
+//             $projectCounter++;
+//         }
+
+
+//         return redirect('/portfolios/'.$portfolio->id);
+//     }
+
+//     // add projects if exists
+//     $projectCounter = 1;
+
+//     while($request->input('project-title_'.$projectCounter) != null) {
+//         $project = new Project;
+
+//         $project->title = $request->input('project-title_'.$projectCounter);
+//         $project->description = $request->input('project-description_'.$projectCounter);
+//         $project->role_id = $roleId;
+//         $project->user_id = Auth::id();
+//         $project->internal = 0;
+//         $project->industry_id = $request->input('industry_'.$projectCounter);
+
+//         $project->save();
+
+//         $industry = Industry::find($request->input('industry_'.$projectCounter));
+//         $portfolio->industries()->attach($industry);
+
+//         $attemptedProject = new AttemptedProject;
+
+//         $attemptedProject->project_id = $project->id;
+//         $attemptedProject->user_id = Auth::id();
+//         $attemptedProject->status = "NA";
+//         $attemptedProject->creator_id = 0;
+//         $attemptedProject->added = 0;
+
+//         $attemptedProject->save();
+
+//         $portfolio->attempted_projects()->attach($attemptedProject);
+
+//         if($request->file('file_'.$projectCounter)) {
+//             for($fileCounter = 0; $fileCounter < count($request->file('file_'.$projectCounter)); $fileCounter++) {
+
+//                 $answeredTaskFile = new AnsweredTaskFile;
+
+//                 $answeredTaskFile->title = $request->file('file_'.$projectCounter)[$fileCounter]->getClientOriginalName();
+//                 $answeredTaskFile->size = $request->file('file_'.$projectCounter)[$fileCounter]->getSize();
+//                 $answeredTaskFile->url = Storage::disk('gcs')->put('/assets', $request->file('file_'.$projectCounter)[$fileCounter], 'public');
+//                 $answeredTaskFile->mime_type = $request->file('file_'.$projectCounter)[$fileCounter]->getMimeType();
+//                 $answeredTaskFile->project_id = $project->id;
+//                 $answeredTaskFile->answered_task_id = 0;
+//                 $answeredTaskFile->attempted_project_id = $attemptedProject->id;
+//                 $answeredTaskFile->user_id = Auth::id();
+
+//                 $answeredTaskFile->save();
+//             }
+//         }
+
+//         if($request->input('project-endorsers_'.$projectCounter) != null) {
+//             $endorserArray = explode(",", $request->input('project-endorsers_'.$projectCounter));
+
+//             foreach ($endorserArray as $key => $endorserInput) {
+//                 $endorser = new Endorser;
+
+//                 $endorser->email = trim($endorserInput);
+//                 $endorser->attempted_project_id = $attemptedProject->id;
+//                 $endorser->mail_sent = 1;
+//                 $endorser->portfolio_id = $portfolio->id;
+
+//                 $endorser->save();
+
+//                 // need to check whether or not user is already a member
+//                 // if not, store notification in pending notification
+//                 $userExists = User::where('email', $endorser->email)->first();
+
+//                 if($userExists) {
+//                     // create notification for user
+//                     $notification = new Notification;
+
+//                     $notification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
+//                     $notification->recipient_id = $userExists->id;
+//                     $notification->user_id = Auth::id();
+//                     $notification->url = "/xxx";
+
+//                     $notification->save();
+//                 } else {
+//                     // create pending notification for user
+//                     $pendingNotification = new PendingNotification;
+
+//                     $pendingNotification->message = "has requested your endorsement on portfolio: " . $attemptedProject->project->role->title;
+//                     $pendingNotification->recipient_email = $endorser->email;
+//                     $pendingNotification->user_id = Auth::id();
+//                     $pendingNotification->url = "/xxx";
+
+//                     $pendingNotification->save();
+//                 }
+
+//                 Mail::to($endorser->email)->send(new SendEndorsersMail(Auth::user()->name, $attemptedProject->project->role->title, "https://talentail.com"));
+//             }
+//         }
+
+//         $projectCounter++;
+//     }
+
+//     foreach($addedProjects as $addedProject) {
+//         $attemptedProject = AttemptedProject::find($addedProject);
+//         $attemptedProject->added = 1;
+//         $attemptedProject->save();
+
+//         $projectAdded = Project::find($attemptedProject->project_id);
+
+//         $industry = Industry::find($attemptedProject->project->industry_id);
+//         $portfolio->industries()->attach($industry);
+
+//         $portfolio->attempted_projects()->attach($attemptedProject);
+//     }
+
+//     return redirect('/portfolios/'.$portfolio->id);
+// })->middleware('auth');
 
 Route::post('/portfolios/select-role', function() {
     if(request('role') != null) {
@@ -1952,27 +1988,11 @@ Route::post('/portfolios/select-role', function() {
 Route::get('/portfolios/{id}/manage-portfolio', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();
     $portfolio = Portfolio::find($routeParameters['id']);
-
-    $internalAttemptedProjects = array();
-    $externalAttemptedProjects = array();
-
-    $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
-
-    $internalAttemptedProjects = array();
-
-    foreach($attemptedProjects as $attemptedProject) {
-        if($attemptedProject->project->internal == 1 && $attemptedProject->project->role_id == $portfolio->role_id) {
-            array_push($internalAttemptedProjects, $attemptedProject);
-        } else {
-            array_push($externalAttemptedProjects, $attemptedProject);
-        }
-    }
-
+    
     return view('portfolios.manage', [ 
         'industries' => Industry::all(), 
         'portfolio' => $portfolio,
-        'internalAttemptedProjects' => $internalAttemptedProjects,
-        'externalAttemptedProjects' => $externalAttemptedProjects,
+        'answeredExercises' => AnsweredExercise::where('user_id', $portfolio->user_id)->get(),
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -1992,9 +2012,12 @@ Route::get('/portfolios/{id}', function() {
         $addedToCart = null;
     }
 
+    $reviewedExercises = AnsweredExercise::where('user_id', $portfolio->user_id)->where('status', 'Reviewed')->where('visible', 1)->get();
+
     return view('portfolios.show', [
         'addedToCart' => $addedToCart,
         'portfolio' => $portfolio,
+        'reviewedExercises' => $reviewedExercises,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -3087,15 +3110,12 @@ Route::post('/profile/save', function(Request $request) {
 Route::get('/profile', function() {
     $user = Auth::user();
 
-    // find out skills gained
-    $rolesGained = RoleGained::where('user_id', Auth::id())->get();
-    $attemptedProjects = AttemptedProject::where('user_id', Auth::id())->get();
+    $reviewedExercisesCount = AnsweredExercise::where('user_id', $user->id)->where('status', 'Reviewed')->where('visible', 1)->count();
 
 	return view('profile', [
         'user' => $user,
         'showMessage' => false,
-        'rolesGained' => $rolesGained,
-        'attemptedProjects' => $attemptedProjects,
+        'reviewedExercisesCount' => $reviewedExercisesCount,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',

@@ -122,6 +122,7 @@
 </div>
 <div class="container">
   <div class="row">
+    @if(count($user->portfolios) > 0)
     @foreach($user->portfolios as $portfolio)
     <div class="col-12 col-md-6 col-xl-4">
       <div class="card">
@@ -132,24 +133,15 @@
             {{$portfolio->role->title}}
           </h2></a>
 
-          <!-- Text -->
-          <div class="text-center" style="margin-bottom: 1.2rem;">
-            @foreach($portfolio->industries as $industry)
-              <span class="badge badge-warning">{{$industry->title}}</span>
-            @endforeach
-          </div>
-
-          <p class="card-text text-center text-muted mb-4">
-
-          </p>
+          <p style="margin-bottom: 0rem !important;">{{$portfolio->role->description}}</p>
 
           <!-- Divider -->
           <hr>
 
           <div class="row align-items-right">
             <div class="col">
-              <p class="card-text small text-muted" style="margin-bottom: 0;">Completed projects</p>
-              <p style="margin-bottom: 0;">{{count($portfolio->attempted_projects)}}</p>
+              <p class="card-text small text-muted" style="margin-bottom: 0;">Reviewed Exercises</p>
+              <p style="margin-bottom: 0;">{{$reviewedExercisesCount}}</p>
             </div>
             <!-- <div class="col-auto">
               <p class="card-text small text-muted" style="margin-bottom: 0;">Endorsed by</p>
@@ -172,7 +164,18 @@
       </div>
     </div>
     @endforeach
-    @if($user->id == Auth::id())
+    @else
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body" style="text-align: center;">
+          <h1>😃</h1>
+          <p style="margin-bottom: 0;">Your portfolio will be built once you start attempting exercises.</p>
+          <a href="/roles/business-analyst">Discover tasks</a>
+        </div>
+      </div>
+    </div>
+    @endif
+    <!-- @if($user->id == Auth::id())
     <div class="col-12 col-md-6 col-xl-4">
       <div class="card">
         <div class="card-body text-center">
@@ -183,42 +186,16 @@
               </h2>
             </a>
             <p style="margin-top: 1.5rem !important; margin-bottom: 0;">No material to build a portfolio?</p>
-            <a href="/projects">Discover projects</a>
+            <a href="/roles/business-analyst">Discover tasks</a>
         </div> 
       </div>
     </div>
-    @endif
+    @endif -->
   </div> <!-- / .row -->
 </div>
 
 <!-- Start of HubSpot Embed Code -->
   <!-- Start of Async Drift Code -->
-<script>
-"use strict";
-
-!function() {
-  var t = window.driftt = window.drift = window.driftt || [];
-  if (!t.init) {
-    if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
-    t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
-    t.factory = function(e) {
-      return function() {
-        var n = Array.prototype.slice.call(arguments);
-        return n.unshift(e), t.push(n), t;
-      };
-    }, t.methods.forEach(function(e) {
-      t[e] = t.factory(e);
-    }), t.load = function(t) {
-      var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
-      o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
-      var i = document.getElementsByTagName("script")[0];
-      i.parentNode.insertBefore(o, i);
-    };
-  }
-}();
-drift.SNIPPET_VERSION = '0.3.1';
-drift.load('2fvbbrttnhyb');
-</script>
 <!-- End of Async Drift Code -->
 <!-- End of HubSpot Embed Code --> 
 @endsection

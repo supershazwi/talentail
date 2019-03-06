@@ -29,7 +29,7 @@
         <form action="/portfolios/save" method="POST" class="mb-4" enctype="multipart/form-data">
         @csrf
 
-        @if(count($attemptedProjects) > 0)
+        @if(count($reviewedExercises) > 0)
     
           <div class="container">
             <div class="row align-items-center" style="margin-bottom: 0.5rem;">
@@ -49,23 +49,37 @@
                       <thead>
                         <tr>
                           <th scope="col">#</th>
-                          <th scope="col">Project</th>
-                          <th scope="col">Add to Portfolio</th>
+                          <th scope="col">Exercise</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Visible to Companies</th>
                         </tr>
                       </thead>
                       <tbody>
-                          @foreach($attemptedProjects as $key=>$attemptedProject)
+                          @foreach($reviewedExercises as $key=>$reviewedExercise)
                           <tr>
                             <th scope="row">{{$key+1}}</th>
-                            <td><a href="/roles/{{$attemptedProject->project->role->slug}}/projects/{{$attemptedProject->project->slug}}">{{$attemptedProject->project->title}}</a></td>
+                            <td><a href="/exercises/{{$reviewedExercise->exercise->slug}}">{{$reviewedExercise->exercise->solution_title}}</a></td>
+                            <td>
+                              @if($reviewedExercise->status == "Submitted For Review")
+                              <span class="badge badge-warning">{{$reviewedExercise->status}}</span>
+                              @elseif($reviewedExercise->status == "Competent")
+                              <span class="badge badge-success">{{$reviewedExercise->status}}</span>
+                              @elseif($reviewedExercise->status == "Needs Improvement")
+                              <span class="badge badge-danger">{{$reviewedExercise->status}}</span>
+                              @elseif($reviewedExercise->status == "Attempted")
+                              <span class="badge badge-dark">{{$reviewedExercise->status}}</span>
+                              @else
+                              <span class="badge badge-light">{{$reviewedExercise->status}}</span>
+                              @endif
+                            </td>
                             <td>
                               <div class="custom-control custom-checkbox-toggle">
-                                @if($attemptedProject->added)
-                                <input type="checkbox" class="custom-control-input" name="attemptedProject[]" id="attemptedProject_{{$attemptedProject->id}}" value="{{$attemptedProject->id}}" checked>
+                                @if($reviewedExercise->visible)
+                                <input type="checkbox" class="custom-control-input" name="reviewedExercise[]" id="reviewedExercise_{{$reviewedExercise->id}}" value="{{$reviewedExercise->id}}" checked>
                                 @else
-                                <input type="checkbox" class="custom-control-input" name="attemptedProject[]" id="attemptedProject_{{$attemptedProject->id}}" value="{{$attemptedProject->id}}">
+                                <input type="checkbox" class="custom-control-input" name="reviewedExercise[]" id="reviewedExercise_{{$reviewedExercise->id}}" value="{{$reviewedExercise->id}}">
                                 @endif
-                                <label class="custom-control-label" for="attemptedProject_{{$attemptedProject->id}}" id="attemptedProject_{{$attemptedProject->id}}"></label>
+                                <label class="custom-control-label" for="reviewedExercise_{{$reviewedExercise->id}}" id="reviewedExercise_{{$reviewedExercise->id}}"></label>
                               </div>
                             </td>
                           </tr>
@@ -85,7 +99,7 @@
               <div class="row align-items-center">
                 <div class="col-auto" style="padding-left: 0px;">
                   <h2>
-                    Internal Projects
+                    Reviewed Exercises
                   </h2>
                 </div>
                 <div class="col">
@@ -99,7 +113,7 @@
                       <div class="row justify-content-center" style="margin-top:1rem;">
                         <div class="col-12 col-md-5 col-xl-4 my-5">
                           <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
-                          <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Internal projects are created by experienced professionals on Talentail and have been designed according to their own work experiences. Attempted projects will appear here. <a href="/discover">Discover projects</a>.
+                          <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">Exercises have been created and adapted from actual work engagements. Exercises that have been attempted and reviewed will appear here. <a href="/roles/business-analyst">Discover tasks</a>.
                           </p>
                         </div>
                       </div>
@@ -112,7 +126,7 @@
           <hr style="margin-bottom: 2.5rem;">
         @endif
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           
           <div class="container">
             <div class="row align-items-center">
@@ -151,7 +165,7 @@
           <input type="hidden" name="roleId" value="{{session('selectedRole')->id}}" />
         </div>
 
-        <hr class="mt-4 mb-5">
+        <hr class="mt-4 mb-5"> -->
 
           <button type="submit" class="btn btn-block btn-primary">
             Save portfolio

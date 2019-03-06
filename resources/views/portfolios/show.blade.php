@@ -59,70 +59,25 @@
 
       <div class="content-list-body row">
           <div class="col-lg-12">
-            @foreach($portfolio->attempted_projects as $attemptedProject)
+            @foreach($reviewedExercises as $answeredExercise)
               <div class="card mb-3" style="margin-bottom: 0rem !important;">
                   <div class="card-body">
-                      <!-- @if(!$attemptedProject->project->internal && count($attemptedProject->reviews) == 0)
-                      <div class="alert alert-warning alert-dismissible fade show" role="alert" style="text-align: center;">
-                        This project can only be published once it has been reviewed by at least 1 reviewer.
-                      </div>
-                      @endif -->
-                      <a href="#"><span style="letter-spacing: -.02em; font-weight: 500; font-size: 1.0625rem; line-height: 1.1;">{{$attemptedProject->project->title}}</span> 
-                        @if(!$attemptedProject->project->internal)
-                        <span class="badge badge-soft-secondary" style="margin-left: 0.5rem; margin-top: -0.5rem;">External Project</span>
-                        @endif
+                      <a href="/exercises/{{$answeredExercise->exercise->slug}}"><span style="letter-spacing: -.02em; font-weight: 500; font-size: 1.0625rem; line-height: 1.1;">{{$answeredExercise->exercise->title}}</span> 
                       </a>
-                      <p style="margin-top: 0.5rem;">{{$attemptedProject->project->description}}</p>
+                      <p style="margin-top: 0.5rem;">{{$answeredExercise->exercise->description}}</p>
+                      <h3>Exercise</h3>
+                      <p>{{$answeredExercise->exercise->solution_title}}</p>
+                      <h3>Submission</h3>
+                      @if(count($answeredExercise->answered_exercise_files) > 0)
                       <div class='row'>
                         <div class='col-12 col-md-12'>
                           <div class='form-group' style="margin-bottom: 0rem;">
-                            <h4><label class='mb-1'>Competencies fulfilled</label></h4>
-                            @foreach($attemptedProject->project->competencies as $competency)
-                              @if($loop->last) 
-                                <span style="float: left;">🌟</span>
-                                <p style="margin-left: 2rem;">
-                                  {{$competency->title}}
-                                </p>
-                              @else
-                                <span style="float: left;">🌟</span>
-                                <p style="margin-left: 2rem; margin-bottom: 0.5rem;">
-                                  {{$competency->title}}
-                                </p>
-                              @endif
+                            @foreach($answeredExercise->answered_exercise_files as $answeredExerciseFile)
+                              <a href="https://storage.googleapis.com/talentail-123456789/{{$answeredExerciseFile->url}}">{{$answeredExerciseFile->title}}</a><br/>
                             @endforeach
                           </div>
                         </div>
                       </div>
-                      @if(count($attemptedProject->answered_task_files) > 0)
-                      <div class='row'>
-                        <div class='col-12 col-md-12'>
-                          <div class='form-group' style="margin-bottom: 0rem;">
-                            <h4><label class='mb-1'>Supporting files</label></h4>
-                            @foreach($attemptedProject->answered_task_files as $answeredTaskFile)
-                              <a href="https://storage.googleapis.com/talentail-123456789/{{$answeredTaskFile->url}}">{{$answeredTaskFile->title}}</a><br/>
-                            @endforeach
-                          </div>
-                        </div>
-                      </div>
-                      @endif
-                      @if(count($attemptedProject->reviews) > 0)
-                        <hr style="margin-top: 1.375rem;"/>
-                        @foreach($attemptedProject->reviews as $review)
-                          @if($attemptedProject->project->user->avatar)
-                           <img src="https://storage.googleapis.com/talentail-123456789/{{$attemptedProject->project->user->avatar}}" alt="..." class="avatar-img rounded" style="height: 3rem; width: 3rem; float: left;">
-                          @else
-                          <img src="/img/avatar.png" alt="..." class="avatar-img rounded" style="height: 3rem; width: 3rem; float: left;">
-                          @endif
-                          <div style="margin-left: 4rem !important;">
-                            <p style="margin-bottom: 0.25rem;"><a href="/profile/{{$attemptedProject->project->user->id}}">{{$attemptedProject->project->user->name}}</a> 
-                              @if($attemptedProject->project->internal)
-                              <span class="badge badge-soft-secondary" style="font-size: 0.8rem; margin-top: -0.5rem;">Creator</span></p>
-                              @else
-                              <span class="badge badge-soft-secondary" style="font-size: 0.8rem; margin-top: -0.5rem;">Endorser</span></p>
-                              @endif
-                            <p style="margin-bottom: 0rem;">{{$review->description}}</p>
-                          @endforeach
-                        </div>
                       @endif
                   </div>
               </div>

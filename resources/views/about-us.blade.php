@@ -16,7 +16,7 @@
                             <div class="card-body">
                                 <div class="row">
                                   <div class="col-lg-2">
-                                    <img src="/img/gray-avatar.png" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
+                                    <img src="/img/lol.jpeg" style="width: 100%; height: auto; border-radius: 0.5rem;"/>
                                   </div>
                                   <div class="col-lg-10">
                                     <h3 data-filter-by="text">Shazwi Suwandi</h3>
