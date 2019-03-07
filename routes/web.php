@@ -2051,7 +2051,7 @@ Route::get('/created-projects', function() {
 });
 
 Route::get('/opportunities', function() {
-    $opportunities = Opportunity::where('visible', true)->get();
+    $opportunities = Opportunity::where('visible', true)->orderBy('created_at', 'desc')->get();
 
     return view('opportunities.index', [
         'parameter' => 'opportunity',
