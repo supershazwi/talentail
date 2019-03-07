@@ -183,52 +183,16 @@
 
         <!-- Navigation -->
         <ul class="navbar-nav mr-auto">
-           <!-- <li class="nav-item">
-            @if(!empty($parameter) && $parameter == "opportunity")
-              <a class="nav-link active" href="/opportunities">
-                Opportunities
-              </a>
-            @else
-              <a class="nav-link" href="/opportunities">
-                Opportunities
-              </a>
-            @endif
-          </li> -->
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle " href="#" id="topnavRoles" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Roles
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="topnavRoles">
-              <li>
-                <a class="dropdown-item " href="/roles/business-analyst">
-                  Business Analyst
+           <li class="nav-item">
+              @if(!empty($parameter) && $parameter == "task")
+                <a class="nav-link active" href="/roles/business-analyst">
+                  Tasks
                 </a>
-              </li>
-              <!-- <li>
-                <a class="dropdown-item " href="/roles/solution-architect">
-                  Solution Architect
+              @else
+                <a class="nav-link" href="/roles/business-analyst">
+                  Tasks
                 </a>
-              </li> -->
-            </ul>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle " href="#" id="topnavCommunities" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Communities
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="topnavCommunities">
-              <li>
-                <a class="dropdown-item " href="/communities/business-analyst">
-                  Business Analyst
-                </a>
-              </li>
-              <!-- <li>
-                <a class="dropdown-item " href="/communities/solution-architect">
-                  Solution Architect
-                </a>
-              </li> -->
-            </ul>
+              @endif
           </li>
 
           <li class="nav-item">
@@ -242,6 +206,44 @@
                 </a>
               @endif
             </li>
+
+          <li class="nav-item">
+              @if(!empty($parameter) && $parameter == "community")
+                <a class="nav-link active" href="/communities/business-analyst">
+                  Community
+                </a>
+              @else
+                <a class="nav-link" href="/communities/business-analyst">
+                  Community
+                </a>
+              @endif
+          </li>
+
+          <!-- <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle " href="#" id="topnavRoles" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Roles
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="topnavRoles">
+              <li>
+                <a class="dropdown-item " href="/roles/business-analyst">
+                  Business Analyst
+                </a>
+              </li>
+            </ul>
+          </li> -->
+<!-- 
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle " href="#" id="topnavCommunities" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Communities
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="topnavCommunities">
+              <li>
+                <a class="dropdown-item " href="/communities/business-analyst">
+                  Business Analyst
+                </a>
+              </li>
+            </ul>
+          </li> -->
 
           <!-- <li class="nav-item">
               @if(!empty($parameter) && $parameter == "company")

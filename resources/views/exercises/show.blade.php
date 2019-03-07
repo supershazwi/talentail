@@ -10,37 +10,33 @@
     @endif
     <div class="row" style="margin-top: 3rem;">
       <div class="col-lg-9">
-        <div class="row">
-          <div class="col-lg-12">
-            <h1>Exercise Brief</h1>
-            <div class="card">
-              <div class="card-body exercise-brief" style="margin-bottom: -1rem;">
-                @parsedown($exercise->brief)
-                @if(count($exercise->exercise_files) > 0)
-                <hr style="margin-top: 1.5rem; margin-bottom: 1.5rem;"/>
-                <h3>Exercise Files</h3>
-                <ul style="margin-left: -1.4rem;">
-                  @foreach($exercise->exercise_files->sortBy('title') as $exerciseFile) 
-                    <li><a href="https://storage.googleapis.com/talentail-123456789/{{$exerciseFile->url}}">{{$exerciseFile->title}}</a></li>
-                  @endforeach
-                </ul>
-                @endif
+        <h1>Exercise Instructions</h1>
+          <div class="card">
+            <div class="card-body" style="padding-bottom: 0.5rem;">
+              <h3>{{$exercise->solution_title}}</h3>
+              <input type="hidden" name="task_1" value="107">
+              <p>{{$exercise->solution_description}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <h1>Exercise Brief</h1>
+              <div class="card">
+                <div class="card-body exercise-brief" style="margin-bottom: -1rem;">
+                  @parsedown($exercise->brief)
+                  @if(count($exercise->exercise_files) > 0)
+                  <hr style="margin-top: 1.5rem; margin-bottom: 1.5rem;"/>
+                  <h3>Exercise Files</h3>
+                  <ul style="margin-left: -1.4rem;">
+                    @foreach($exercise->exercise_files->sortBy('title') as $exerciseFile) 
+                      <li><a href="https://storage.googleapis.com/talentail-123456789/{{$exerciseFile->url}}">{{$exerciseFile->title}}</a></li>
+                    @endforeach
+                  </ul>
+                  @endif
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-12">
-            <h1>Your Solution</h1>
-              <div class="card">
-                <div class="card-body" style="padding-bottom: 0.5rem;">
-                  <h3>{{$exercise->solution_title}}</h3>
-                  <input type="hidden" name="task_1" value="107">
-                  <p>{{$exercise->solution_description}}</p>
-                </div>
-              </div>
-          </div>
-        </div>
       </div>
       <div class="col-lg-3">
         <div class="card">
@@ -92,6 +88,11 @@
           </div>
         </div>
         @endif
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-9">
+        
       </div>
     </div>
   </div>

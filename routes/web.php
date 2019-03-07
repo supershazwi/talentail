@@ -481,6 +481,7 @@ Route::get('/communities/{communitySlug}/posts/{communityPostId}', function() {
         'communityPost' => $communityPost,
         'communityTopPostVote' => $communityTopPostVote,
         'community' => $community,
+        'parameter' => 'community',
         'voteArray' => $voteArray,
         'subscribed' => $subscribed,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -619,6 +620,7 @@ Route::get('/communities/{communitySlug}/create-post', function() {
     return view('communities.createPost', [
         'community' => $community,
         'subscribed' => $subscribed,
+        'parameter' => 'community',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -668,6 +670,7 @@ Route::get('/communities/{communitySlug}', function() {
     return view('communities.show', [
         'community' => $community,
         'voteArray' => $voteArray,
+        'parameter' => 'community',
         'communityPosts' => $communityPosts,
         'subscribed' => $subscribed,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -704,6 +707,7 @@ Route::get('/roles/business-analyst', function() {
     return view('roles.show', [
         'role' => $role,
         'tasks' => $tasks,
+        'parameter' => 'task',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -771,6 +775,7 @@ Route::get('/exercises/{exerciseSlug}/edit', function() {
     return view('exercises.edit', [
         'exercise' => $exercise,
         'tasks' => $tasks,
+        'parameter' => 'task',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -931,6 +936,7 @@ Route::get('/tasks/create', function() {
 
     return view('tasks.create', [
         'roles' => $roles,
+        'parameter' => 'task',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -949,6 +955,7 @@ Route::get('/tasks/{taskSlug}/edit', function() {
 
     return view('tasks.edit', [
         'task' => $task,
+        'parameter' => 'task',
         'roles' => Role::all(),
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -964,6 +971,7 @@ Route::get('/tasks/{taskSlug}', function() {
 
     return view('tasks.show', [
         'task' => $task,
+        'parameter' => 'task',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -2069,6 +2077,7 @@ Route::get('/opportunities/create', function() {
 
     return view('opportunities.create', [
         'roles' => $roles,
+        'parameter' => 'opportunity',
         'companies' => $companies,
         'tasks' => $tasks,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -2157,6 +2166,7 @@ Route::get('/opportunities/{opportunitySlug}/edit', function() {
         'roles' => $roles,
         'companies' => $companies,
         'tasks' => $tasks,
+        'parameter' => 'opportunity',
         'opportunity' => $opportunity,
         'exerciseIdArray' => $exerciseIdArray, 
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -2222,6 +2232,7 @@ Route::get('/opportunities/{opportunitySlug}', function() {
 
     return view('opportunities.show', [
         'statusArray' => $statusArray,
+        'parameter' => 'opportunity',
         'mappedExercisesToShow' => $mappedExercisesToShow,
         'opportunity' => $opportunity,
         'applicable' => $applicable,
@@ -3184,6 +3195,7 @@ Route::get('/exercises/create', function() {
 
     return view('exercises.create', [
         'tasks' => $tasks,
+        'parameter' => 'task',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -3202,6 +3214,7 @@ Route::get('/exercises/{exerciseSlug}/{userId}', function() {
 
         return view('exercises.review', [
             'exercise' => $exercise,
+            'parameter' => 'task',
             'answeredExercise' => $answeredExercise,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -3226,6 +3239,7 @@ Route::get('/exercises/{exerciseSlug}', function() {
     if($answeredExercise) {
         return view('exercises.attempt', [
             'exercise' => $exercise,
+            'parameter' => 'task',
             'answeredExercise' => $answeredExercise,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -3235,6 +3249,7 @@ Route::get('/exercises/{exerciseSlug}', function() {
 
     return view('exercises.show', [
         'exercise' => $exercise,
+        'parameter' => 'task',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -3440,6 +3455,7 @@ Route::get('/tasks/select-category', function() {
 
     return view('tasks.selectCategory', [
         'categories' => $categories,
+        'parameter' => 'task',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -3460,6 +3476,7 @@ Route::post('/tasks/select-category', function() {
 
     return view('tasks.selectCategory', [
         'categories' => $categories,
+        'parameter' => 'task',
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
