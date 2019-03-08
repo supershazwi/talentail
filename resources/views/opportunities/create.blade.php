@@ -133,56 +133,6 @@
             </div>
           </div>
 
-          <hr class="mt-4 mb-5">
-
-          <h1 class="header-title">
-            Task/Exercise Mapping
-          </h1>
-
-          @foreach($tasks as $task)
-            @if(count($task->exercises) > 0)
-            <div class="card" data-toggle="lists" style="margin-top: 1.5rem;">
-              <div class="table-responsive">
-                <table class="table table-sm table-nowrap card-table">
-                  <thead>
-                    <tr>
-                      <th>
-                        <div class="custom-control custom-checkbox table-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="task_{{$task->id}}" onclick="toggleCheckboxes()">
-                          <label class="custom-control-label" for="task_{{$task->id}}">
-                            &nbsp;
-                          </label>
-                        </div>
-                      </th>
-                      <th colspan="7" style="color: #12263f;">
-                        {{$task->title}}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="list">
-                    @foreach($task->exercises as $exercise)
-                    <tr>
-                      <td>
-                        <div class="custom-control custom-checkbox table-checkbox">
-                          <input type="checkbox" class="custom-control-input task_{{$task->id}}" name="exercises[]" id="exercise_{{$exercise->task->id}}_{{$exercise->id}}" value="{{$exercise->id}}" onclick="toggleIndividualCheckboxes()">
-                          <label class="custom-control-label" for="exercise_{{$exercise->task->id}}_{{$exercise->id}}" id="exercise_{{$exercise->id}}">
-                            
-                          </label>
-                        </div>
-                      </td>
-                      <td colspan="7" style="width: 100%;">
-                        <a target="_blank" href="/exercises/{{$exercise->slug}}">{{$exercise->solution_title}}</a>
-                      </td>
-                    </tr>
-                    @endforeach
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            @endif
-          @endforeach
-
-
           <!-- Buttons -->
           <button type="submit" class="btn btn-block btn-primary">
             Save Opportunity

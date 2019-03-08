@@ -50,7 +50,7 @@
             <div class="row">
               <div class="col" style="text-align: center;">
                   <p class="card-text small text-muted" style="margin-bottom: 0;">Exercises</p>
-                  <p style="margin-bottom: 0;">{{count($opportunity->exercises)}}</p>
+                  <p style="margin-bottom: 0;">{{count($opportunity->exercise_groupings)}}</p>
                 </div>
                 <div class="col" style="text-align: center;">
                   

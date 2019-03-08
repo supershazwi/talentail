@@ -21,4 +21,8 @@ class Exercise extends Model
     public function opportunities() {
         return $this->belongsToMany(Opportunity::class);
     }
+
+    public function exercise_groupings() {
+        return $this->belongsToMany(ExerciseGrouping::class);
+    }
 }

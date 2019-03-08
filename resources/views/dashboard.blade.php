@@ -165,7 +165,7 @@
 					            <th scope="row">{{$key+1}}</th>
 					            <td><a href="/exercises/{{$exercise->slug}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exercise->solution_title}}</a></td>
 					            <td><a href="/tasks/{{$exercise->task->slug}}" style="display: block; width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exercise->title}}</a></td>
-					            <td><a href="/tasks/{{$exercise->task->slug}}" stye="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exercise->task->title}}</a></td>
+					            <td><a href="/tasks/{{$exercise->task->slug}}" style="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exercise->task->title}}</a></td>
 					          </tr>
 					          @endforeach
 					      </tbody>
@@ -222,7 +222,7 @@
 					            <th scope="row">{{$key+1}}</th>
 					            <td><a href="/opportunities/{{$opportunity->slug}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$opportunity->title}}</a></td>
 					            <td><span style="display: block; width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$opportunity->company->title}}</span></td>
-					            <td><span stye="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$opportunity->location}}</span></td>
+					            <td><span style="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$opportunity->location}}</span></td>
 					          </tr>
 					          @endforeach
 					      </tbody>
@@ -239,6 +239,63 @@
 			          <div class="col-12 col-md-5 col-xl-4 my-5">
 			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
 			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">No opportunities added yet.
+			            </p>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			@endif
+		@endif
+
+		@if(Auth::user()->admin)
+			<div class="row align-items-center">
+			  <div class="col-auto">
+			    <h2>
+			      Exercise Groupings
+			    </h2>
+			  </div>
+			  <div class="col">
+			  	<a href="/exercise-groupings/create" class="btn btn-primary" style=" margin-top: -1.25rem; float: right;">Add Exercise Grouping</a>
+			  </div>
+			</div>
+			@if(count($exerciseGroupings) > 0)
+			<div class="row">
+				<div class="col-12 col-xl-12">
+					<div class="card">	
+					    <table class="table" style="margin-bottom: 0;">
+					      <thead>
+					        <tr>
+					          <th scope="col">#</th>
+					          <th scope="col">Exercise Grouping</th>
+					          <th scope="col">Opportunity</th>
+					          <th scope="col">Company</th>
+					        </tr>
+					      </thead>
+					      <tbody>
+					      		@foreach($exerciseGroupings as $key=>$exerciseGrouping)
+					          <tr>
+					            <th scope="row">{{$key+1}}</th>
+					            <td><a href="/exercise-groupings/{{$exerciseGrouping->id}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exerciseGrouping->title}}</a></td>
+					            <td><span style="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exerciseGrouping->opportunity->title}}</span></td>
+					            <td><span style="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$exerciseGrouping->opportunity->company->title}}</span></td>
+					          </tr>
+					          @endforeach
+					      </tbody>
+					    </table>
+					</div>
+				</div>
+			</div>
+			@else
+			<div class="row align-items-center" id="talentailBox">
+			  <div class="col-lg-12">
+			    <div class="card">
+			      <div class="card-body">
+			        <div class="row justify-content-center" style="margin-top:1rem;">
+			          <div class="col-12 col-md-5 col-xl-4 my-5">
+			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">No exercise groupings added yet.
 			            </p>
 			          </div>
 			        </div>
@@ -276,7 +333,7 @@
 					            <th scope="row">{{$key+1}}</th>
 					            <td><a href="/exercises/{{$answeredExercise->exercise->slug}}/{{$answeredExercise->user_id}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->exercise->solution_title}}</a></td>
 					            <td><span style="display: block; width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->user->name}}</span></td>
-					            <td><span stye="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->status}}</span></td>
+					            <td><span style="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->status}}</span></td>
 					          </tr>
 					          @endforeach
 					      </tbody>
@@ -330,7 +387,7 @@
 					            <th scope="row">{{$key+1}}</th>
 					            <td><a href="/exercises/{{$answeredExercise->exercise->slug}}/{{$answeredExercise->user_id}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->exercise->solution_title}}</a></td>
 					            <td><span style="display: block; width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->user->name}}</span></td>
-					            <td><span stye="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->status}}</span></td>
+					            <td><span style="display: block; width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$answeredExercise->status}}</span></td>
 					          </tr>
 					          @endforeach
 					      </tbody>

@@ -26,6 +26,7 @@ use App\Experience;
 use App\User;
 use App\Credit;
 use App\Exercise;
+use App\ExerciseGrouping;
 use App\Community;
 use App\Feedback;
 use App\FeedbackFile;
@@ -96,9 +97,41 @@ Route::post('/password/send-email', function(Request $request) {
     //https://talentail.com/password/reset/a464542384b9c1d164f2dc60471851abd01e1eb3776a6e0a0061b58ca5d524f0
 });
 
-Route::get('/check-upvote', function() {
-   
-});
+Route::post('/exercise-groupings/save-exercise-grouping', function(Request $request) {
+    $exerciseGrouping = new ExerciseGrouping;
+
+    $exerciseGrouping->task_id = $request->input('task');
+    $exerciseGrouping->opportunity_id = $request->input('opportunity');
+
+    $opportunity = Opportunity::find($request->input('opportunity'));
+
+    $exerciseGrouping->slug = str_slug($opportunity->company->slug, '-') . "-" . str_slug($opportunity->slug, '-') . "-" . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
+    $exerciseGrouping->title = $exerciseGrouping->slug;
+
+    $exerciseGrouping->save();
+
+    $exerciseGrouping->exercises()->attach($request->input('exercises'));
+
+    return redirect('/dashboard');
+
+})->middleware('auth');
+
+Route::get('/exercise-groupings/create', function() {
+    if(Auth::user()->admin) {
+        $opportunities = Opportunity::all();
+        $tasks = Task::all();
+
+        return view('exerciseGroupings.create', [
+            'opportunities' => $opportunities,
+            'tasks' => $tasks,
+            'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+            'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+        ]); 
+    } else {
+        return redirect('/dashboard');
+    }
+})->middleware('auth');
 
 Route::post('/companies/{companySlug}/save-company', function() {
     if(Auth::user() && Auth::user()->admin) {
@@ -750,7 +783,7 @@ Route::post('/exercises/{exerciseSlug}/submit-feedback', function(Request $reque
         }
     }
 
-    return redirect('/exercises/'.$routeParameters['exerciseSlug'])->with('feedbackSent', 'Your feedback has been submitted.');
+    return redirect('/exercises/'.$routeParameters['exerciseSlug'])->with('status', 'Your feedback has been submitted.');
 });
 
 Route::get('/exercises/{exerciseSlug}/feedback', function() {
@@ -791,7 +824,7 @@ Route::post('/exercises/{exerciseSlug}/recall-attempt', function(Request $reques
 
     $answeredExercise->save();
 
-    return redirect('/exercises/' . $routeParameters['exerciseSlug']);
+    return redirect('/exercises/' . $routeParameters['exerciseSlug'])->with('status', 'You have recalled your submission.');;
 });
 
 Route::post('/exercises/{exerciseSlug}/{userId}/submit-review', function(Request $request) {
@@ -831,10 +864,14 @@ Route::post('/exercises/{exerciseSlug}/save-attempt', function(Request $request)
 
     $answeredExercise->answer = $request->input('answer');
 
+    $status;
+
     if($request->input('status') != null && $request->input('status') == "submitForReview") {
         $answeredExercise->status = "Submitted For Review";
+        $status = "You have submitted your exercise for review.";
     } else {
         $answeredExercise->status = "Attempted";
+        $status = "You have saved your exercise.";
     }
 
     $answeredExercise->save();
@@ -864,7 +901,7 @@ Route::post('/exercises/{exerciseSlug}/save-attempt', function(Request $request)
         }
     }
 
-    return redirect('/exercises/' . $routeParameters['exerciseSlug']);
+    return redirect('/exercises/' . $routeParameters['exerciseSlug'])->with('status', $status);
 });
 
 Route::post('/exercises/{exerciseSlug}/attempt-exercise', function(Request $request) {
@@ -2182,58 +2219,30 @@ Route::get('/opportunities/{opportunitySlug}', function() {
 
     $statusArray = array();
 
-    $applyArray = array();
-    
-    $status2Array = array();
+    // this has to have all competent
+    $loopExerciseGroupingArray = array();
 
-    $mappedExercises = $opportunity->exercises()->get();
-
-    $mappedExercisesToShow = array();
-
-    foreach($opportunity->tasks as $key=>$task) {
-        foreach($mappedExercises as $exercise) {
+    foreach($opportunity->exercise_groupings as $exerciseGrouping) {
+        foreach($exerciseGrouping->exercises as $exercise) {
             $answeredExercise = AnsweredExercise::select('status')->where('exercise_id', $exercise->id)->where('user_id', Auth::id())->first();
+
             if($answeredExercise) {
                 $statusArray[$exercise->id] = $answeredExercise->status;
-                array_push($status2Array, $answeredExercise->status);
             } else {
                 $statusArray[$exercise->id] = "Not Attempted";
-                array_push($status2Array, "Not Attempted");
-            }
-
-            if($exercise->task_id == $task->id) {
-                if(empty($mappedExercisesToShow[$task->id])) {
-                    $mappedExercisesToShow[$task->id] = array();
-                    array_push($mappedExercisesToShow[$task->id], $exercise);
-                } else {
-                    array_push($mappedExercisesToShow[$task->id], $exercise);
-                }
             }
         }
 
-        if(in_array("Competent", $status2Array)) {
-            array_push($applyArray, "Competent");
-        } else {
-            array_push($applyArray, "Incompetent");
+        if(in_array("Competent", $statusArray)) {
+            array_push($loopExerciseGroupingArray, "Competent");
         }
     }
 
-    $applicable;
-
-    if(empty($applyArray)) {
-        $applicable = false;
-    } else {
-        if(in_array("Incompetent", $applyArray)) {
-            $applicable = false;
-        } else {
-            $applicable = true;
-        }
-    }
+    $applicable = in_array("Competent",$loopExerciseGroupingArray);
 
     return view('opportunities.show', [
         'statusArray' => $statusArray,
         'parameter' => 'opportunity',
-        'mappedExercisesToShow' => $mappedExercisesToShow,
         'opportunity' => $opportunity,
         'applicable' => $applicable,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -2288,10 +2297,12 @@ Route::get('dashboard', function() {
         $exercises = Exercise::all();
         $opportunities = Opportunity::all();
         $answeredExercises = AnsweredExercise::all();  
+        $exerciseGroupings = ExerciseGrouping::all();
 
         return view('dashboard', [
             'opportunities' => $opportunities,
             'answeredExercises' => $answeredExercises,
+            'exerciseGroupings' => $exerciseGroupings,
             'roles' => $roles,
             'tasks' => $tasks,
             'exercises' => $exercises,

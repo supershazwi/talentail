@@ -13,50 +13,46 @@
       <div class="col-lg-9">
         <div class="row">
           <div class="col-lg-12">
-            <h1 style="color: #3e3e3c; margin-bottom: 0rem; font-size: 1.5rem;">Complete <span style="border-bottom: 5px solid #0984e3;">One Exercise In Each Task</span></h1>
+            <h1 style="color: #3e3e3c; margin-bottom: 0rem; font-size: 1.5rem;">Complete <span style="border-bottom: 5px solid #0984e3;">One Exercise In Each Section</span></h1>
           </div>
         </div>
-        @foreach($opportunity->tasks as $key=>$task)
+        @foreach($opportunity->exercise_groupings as $key=>$exerciseGrouping)
         <div class="row" style="margin-top: 1.5rem;">
-			<div class="col-lg-12">
-			  <div class="card">
-          <div class="card-body">
-          	<h2 class="card-title mb-3" style="margin-bottom: 0rem !important;">
-          	  Task {{$key+1}}. {{$task->title}}
-          	</h2>
-          	<hr style="margin-top: 1.5rem; margin-bottom: 1.5rem;" />
-          	<table class="table table-borderless" style="margin-bottom: 0rem !important;">
-          	  <tbody>
-          	  	@foreach($mappedExercisesToShow as $mappedExercises)
-                  @foreach($mappedExercises as $key2=>$exercise)
-                    @if($exercise->task_id == $task->id)
-              	    <tr>
-              	      <th scope="row" style="padding-top: 0rem; padding-left: 0rem;">Exercise {{$key+1}}.{{$key2+1}}.</th>
-              	      <td style="padding-top: 0rem; padding-left: 0rem;"><a href="/exercises/{{$exercise->slug}}">{{$exercise->solution_title}}</a></td>
-              	      <td style="padding-top: 0rem; padding-left: 0rem;">
-                        @if($statusArray[$exercise->id] == "Submitted For Review")
-                        <span class="badge badge-warning">{{$statusArray[$exercise->id]}}</span>
-                        @elseif($statusArray[$exercise->id] == "Competent")
-                        <span class="badge badge-success">{{$statusArray[$exercise->id]}}</span>
-                        @elseif($statusArray[$exercise->id] == "Needs Improvement")
-                        <span class="badge badge-danger">{{$statusArray[$exercise->id]}}</span>
-                        @elseif($statusArray[$exercise->id] == "Attempted")
-                        <span class="badge badge-dark">{{$statusArray[$exercise->id]}}</span>
-                        @else
-              	      	<span class="badge badge-light">{{$statusArray[$exercise->id]}}</span>
-                        @endif
-              	      </td>
-              	    </tr>
-                    @endif
-                  @endforeach
-          	    @endforeach
-          	  </tbody>
-          	</table>	
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <h2 class="card-title mb-3" style="margin-bottom: 0rem !important;">
+                  Section {{$key+1}}. {{$exerciseGrouping->task->title}}
+                </h2>
+                <hr style="margin-top: 1.5rem; margin-bottom: 1.5rem;" />
+                  <table class="table table-borderless" style="margin-bottom: 0rem !important;">
+                    <tbody>
+                        @foreach($exerciseGrouping->exercises as $key2=>$exercise)
+                          <tr>
+                            <th scope="row" style="padding-top: 0rem; padding-left: 0rem;">Exercise {{$key+1}}.{{$key2+1}}.</th>
+                            <td style="padding-top: 0rem; padding-left: 0rem;"><a href="/exercises/{{$exercise->slug}}">{{$exercise->solution_title}}</a></td>
+                            <td style="padding-top: 0rem; padding-left: 0rem;">
+                              @if($statusArray[$exercise->id] == "Submitted For Review")
+                              <span class="badge badge-warning">{{$statusArray[$exercise->id]}}</span>
+                              @elseif($statusArray[$exercise->id] == "Competent")
+                              <span class="badge badge-success">{{$statusArray[$exercise->id]}}</span>
+                              @elseif($statusArray[$exercise->id] == "Needs Improvement")
+                              <span class="badge badge-danger">{{$statusArray[$exercise->id]}}</span>
+                              @elseif($statusArray[$exercise->id] == "Attempted")
+                              <span class="badge badge-dark">{{$statusArray[$exercise->id]}}</span>
+                              @else
+                              <span class="badge badge-light">{{$statusArray[$exercise->id]}}</span>
+                              @endif
+                            </td>
+                          </tr>
+                        @endforeach
+                    </tbody>
+                  </table>  
+              </div>
+            </div>
           </div>
-			  </div>
-			</div>
-		</div>
-		@endforeach
+        </div>
+        @endforeach
       </div>
       <div class="col-lg-3">
         <div class="card">

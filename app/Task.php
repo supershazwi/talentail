@@ -23,6 +23,10 @@ class Task extends Model
         return $this->hasMany(AnsweredTask::class);
     }
 
+    public function exercise_groupings() {
+        return $this->hasMany(ExerciseGrouping::class);
+    }
+
     public function exercises() {
         return $this->hasMany(Exercise::class);
     }
