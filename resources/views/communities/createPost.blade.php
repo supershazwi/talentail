@@ -132,7 +132,7 @@
         id   : "test-editormd3",
         path : "/lib/",
         height: 640,
-        placeholder: "Start creating your project full description & role brief...",
+        placeholder: "Start writing your post...",
         onload : function() {
             //this.watch();
             //this.setMarkdown("###test onloaded");
