@@ -2162,24 +2162,24 @@ Route::post('/opportunities/{opportunitySlug}/save-opportunity', function(Reques
 
     $opportunity->save();
 
-    $opportunity->tasks()->detach();
-    $opportunity->exercises()->detach();
+    // $opportunity->tasks()->detach();
+    // $opportunity->exercises()->detach();
 
-    $opportunity->exercises()->attach($request->input('exercises'));
+    // $opportunity->exercises()->attach($request->input('exercises'));
 
-    $exercises = DB::table('exercises')
-                        ->whereIn('id', $request->input('exercises'))
-                        ->get();
+    // $exercises = DB::table('exercises')
+    //                     ->whereIn('id', $request->input('exercises'))
+    //                     ->get();
 
-    $tasksIdArray = array();
+    // $tasksIdArray = array();
 
-    foreach($exercises as $exercise) {
-        if(!in_array($exercise->task_id, $tasksIdArray)) {
-            array_push($tasksIdArray, $exercise->task_id);
-        }
-    }
+    // foreach($exercises as $exercise) {
+    //     if(!in_array($exercise->task_id, $tasksIdArray)) {
+    //         array_push($tasksIdArray, $exercise->task_id);
+    //     }
+    // }
 
-    $opportunity->tasks()->attach($tasksIdArray);
+    // $opportunity->tasks()->attach($tasksIdArray);
 
     return redirect('/opportunities/' . $opportunity->slug);
 })->middleware('auth');
@@ -2269,21 +2269,21 @@ Route::post('/opportunities/save-opportunity', function(Request $request) {
 
     $opportunity->save();
 
-    $opportunity->exercises()->attach($request->input('exercises'));
+    // $opportunity->exercises()->attach($request->input('exercises'));
 
-    $exercises = DB::table('exercises')
-                        ->whereIn('id', $request->input('exercises'))
-                        ->get();
+    // $exercises = DB::table('exercises')
+    //                     ->whereIn('id', $request->input('exercises'))
+    //                     ->get();
 
-    $tasksIdArray = array();
+    // $tasksIdArray = array();
 
-    foreach($exercises as $exercise) {
-        if(!in_array($exercise->task_id, $tasksIdArray)) {
-            array_push($tasksIdArray, $exercise->task_id);
-        }
-    }
+    // foreach($exercises as $exercise) {
+    //     if(!in_array($exercise->task_id, $tasksIdArray)) {
+    //         array_push($tasksIdArray, $exercise->task_id);
+    //     }
+    // }
 
-    $opportunity->tasks()->attach($tasksIdArray);
+    // $opportunity->tasks()->attach($tasksIdArray);
 
     return redirect('/opportunities/' . $opportunity->slug);
 
