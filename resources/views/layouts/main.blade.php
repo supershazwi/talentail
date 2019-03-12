@@ -70,22 +70,14 @@
         @if(Auth::id())
           <div class="navbar-user">
             
-            <!-- <div class="dropdown mr-4 d-none d-lg-flex">
+            <div class="dropdown mr-4 d-none d-lg-flex">
           
 
-              <a href="/messages" class="text-muted" role="button">
-            @if($messageCount > 0)
-              <span class="icon active">
-                <i class="fe fe-message-square"></i>
-              </span>
-            @else
-              <span class="icon">
-                <i class="fe fe-message-square"></i>
-              </span>
-            @endif
+              <a href="/score" class="text-muted" role="button">
+                {{Auth::user()->score}} Points
               </a>
 
-            </div> -->
+            </div>
 
             <!-- Dropdown -->
             <div class="dropdown mr-4 d-none d-lg-flex">

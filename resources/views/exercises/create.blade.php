@@ -78,6 +78,13 @@
 
           <div class="form-group">
             <label>
+              Exercise score
+            </label>
+            <input type="text" name="score" class="form-control" id="score" placeholder="Enter score" value="{{ old('score') }}">
+          </div>
+
+          <div class="form-group">
+            <label>
               Solution title
             </label>
             <input type="text" name="solution-title" class="form-control" id="solutionTitle" placeholder="Enter solution title" value="{{ old('solution-title') }}">

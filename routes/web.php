@@ -179,11 +179,19 @@ Route::post('/community-post-comment/{communityPostCommentId}/downvote', functio
             if($vote->neutral) {
                 $communityPostComment->score = $communityPostComment->score - 1;
                 array_push($returnArray, "downvote");
+
+                $user = User::find($communityPostComment->user_id);
+                $user->score = $user->score - 1;
+                $user->save();
             }
 
             if($vote->upvote) {
                 $communityPostComment->score = $communityPostComment->score - 2;
                 array_push($returnArray, "downvote");
+
+                $user = User::find($communityPostComment->user_id);
+                $user->score = $user->score - 2;
+                $user->save();
             }
 
             $communityPostComment->save();
@@ -204,6 +212,10 @@ Route::post('/community-post-comment/{communityPostCommentId}/downvote', functio
 
             $vote->save();
 
+            $user = User::find($communityPostComment->user_id);
+            $user->score = $user->score + 1;
+            $user->save();
+
             array_push($returnArray, "neutral");
         }
     } else {
@@ -218,6 +230,10 @@ Route::post('/community-post-comment/{communityPostCommentId}/downvote', functio
         $communityPostComment->score = $communityPostComment->score - 1;
 
         $communityPostComment->save();
+
+        $user = User::find($communityPostComment->user_id);
+        $user->score = $user->score - 1;
+        $user->save();
 
         array_push($returnArray, "downvote");
     }
@@ -248,11 +264,19 @@ Route::post('/community-post-comment/{communityPostCommentId}/upvote', function(
             if($vote->neutral) {
                 $communityPostComment->score = $communityPostComment->score + 1;
                 array_push($returnArray, "upvote");
+
+                $user = User::find($communityPostComment->user_id);
+                $user->score = $user->score + 1;
+                $user->save();
             }
 
             if($vote->downvote) {
                 $communityPostComment->score = $communityPostComment->score + 2;
                 array_push($returnArray, "upvote");
+
+                $user = User::find($communityPostComment->user_id);
+                $user->score = $user->score + 2;
+                $user->save();
             }
 
             $communityPostComment->save();
@@ -275,6 +299,10 @@ Route::post('/community-post-comment/{communityPostCommentId}/upvote', function(
 
             $vote->save();
 
+            $user = User::find($communityPostComment->user_id);
+            $user->score = $user->score - 1;
+            $user->save();
+
             array_push($returnArray, "neutral");
         }
     } else {
@@ -291,6 +319,10 @@ Route::post('/community-post-comment/{communityPostCommentId}/upvote', function(
         $communityPostComment->score = $communityPostComment->score + 1;
 
         $communityPostComment->save();
+
+        $user = User::find($communityPostComment->user_id);
+        $user->score = $user->score - 1;
+        $user->save();
 
         array_push($returnArray, "upvote");
     }
@@ -321,11 +353,19 @@ Route::post('/community-post/{communityPostId}/upvote', function(Request $reques
             if($vote->neutral) {
                 $communityPost->score = $communityPost->score + 1;
                 array_push($returnArray, "upvote");
+
+                $user = User::find($communityPost->user_id);
+                $user->score = $user->score + 1;
+                $user->save();
             }
 
             if($vote->downvote) {
                 $communityPost->score = $communityPost->score + 2;
                 array_push($returnArray, "upvote");
+
+                $user = User::find($communityPost->user_id);
+                $user->score = $user->score + 2;
+                $user->save();
             }
 
             $communityPost->save();
@@ -348,6 +388,10 @@ Route::post('/community-post/{communityPostId}/upvote', function(Request $reques
 
             $vote->save();
 
+            $user = User::find($communityPost->user_id);
+            $user->score = $user->score - 1;
+            $user->save();
+
             array_push($returnArray, "neutral");
         }
     } else {
@@ -364,6 +408,10 @@ Route::post('/community-post/{communityPostId}/upvote', function(Request $reques
         $communityPost->score = $communityPost->score + 1;
 
         $communityPost->save();
+
+        $user = User::find($communityPost->user_id);
+        $user->score = $user->score + 1;
+        $user->save();
 
         array_push($returnArray, "upvote");
     }
@@ -395,12 +443,20 @@ Route::post('/community-post/{communityPostId}/downvote', function(Request $requ
                     $communityPost->score = $communityPost->score - 1;
 
                     array_push($returnArray, "downvote");
+
+                    $user = User::find($communityPost->user_id);
+                    $user->score = $user->score - 1;
+                    $user->save();
                 }
 
                 if($vote->upvote) {
                     $communityPost->score = $communityPost->score - 2;
 
                     array_push($returnArray, "downvote");
+
+                    $user = User::find($communityPost->user_id);
+                    $user->score = $user->score - 2;
+                    $user->save();
                 }
 
                 $communityPost->save();
@@ -423,6 +479,10 @@ Route::post('/community-post/{communityPostId}/downvote', function(Request $requ
 
                 $vote->save();
 
+                $user = User::find($communityPost->user_id);
+                $user->score = $user->score + 1;
+                $user->save();
+
                 array_push($returnArray, "neutral");
             }
         } else {
@@ -439,6 +499,10 @@ Route::post('/community-post/{communityPostId}/downvote', function(Request $requ
             $communityPost->score = $communityPost->score - 1;
 
             $communityPost->save();
+
+            $user = User::find($communityPost->user_id);
+            $user->score = $user->score - 1;
+            $user->save();
 
             array_push($returnArray, "downvote");
         }
@@ -553,13 +617,25 @@ Route::post('/community-post/{communityPostId}/create-comment', function(Request
         }
     }
 
+    if(Auth::id() != $communityPost->user_id) {
+
+        $notification = new Notification;
+
+        $notification->message = "has left a comment on your post: "  . $communityPost->title;
+        $notification->recipient_id = $communityPost->user_id;
+        $notification->user_id = Auth::id();
+        $notification->url = "/communities/".$communityPost->community->slug."/posts/".$routeParameters['communityPostId'];
+
+        $notification->save();
+    }
+
     return redirect('/communities/'.$request->input('communitySlug').'/posts/'.$request->input('communityPostId'));
 });
 
 Route::post('/community-post-comment/{communityPostCommentId}/create-comment', function(Request $request) {
     $routeParameters = Route::getCurrentRoute()->parameters();
 
-    $communityPostComment = CommunityPostComment::find($routeParameters['communityPostCommentId']);
+    $originalCommunityPostComment = CommunityPostComment::find($routeParameters['communityPostCommentId']);
 
     $communityPostComment = new CommunityPostComment;
 
@@ -600,6 +676,18 @@ Route::post('/community-post-comment/{communityPostCommentId}/create-comment', f
 
             $communityPostCommentFile->save();
         }
+    }
+
+    if(Auth::id() != $originalCommunityPostComment->user_id) {
+
+        $notification = new Notification;
+
+        $notification->message = "has left a comment on your post: " . $originalCommunityPostComment->content;
+        $notification->recipient_id = $originalCommunityPostComment->user_id;
+        $notification->user_id = Auth::id();
+        $notification->url = '/communities/'.$request->input('communitySlug').'/posts/'.$request->input('communityPostId');
+
+        $notification->save();
     }
 
     return redirect('/communities/'.$request->input('communitySlug').'/posts/'.$request->input('communityPostId'));
@@ -3134,7 +3222,7 @@ Route::get('/profile', function() {
 
     $reviewedExercisesCount = AnsweredExercise::where('user_id', $user->id)->where('status', 'Reviewed')->where('visible', 1)->count();
 
-	return view('profile', [
+    return view('profile', [
         'user' => $user,
         'showMessage' => false,
         'reviewedExercisesCount' => $reviewedExercisesCount,
@@ -3550,13 +3638,13 @@ Route::get('/settings/authentication', function() {
 Route::get('/settings', function() {
     $user = Auth::user();
 
-	return view('settings.profile', [
-		'user' => $user,
+    return view('settings.profile', [
+        'user' => $user,
         
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-	]);
+    ]);
 })->middleware('auth');
 
 Route::get('/home', 'HomeController@index')->name('home');
