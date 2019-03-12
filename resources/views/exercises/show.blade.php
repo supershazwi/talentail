@@ -72,7 +72,7 @@
               @endif
             </div>
             @else
-            <p class="card-text small text-muted" style="margin-bottom: 0;">{{count($exercise->answered_exercises)}}</p>
+            <p>{{count($exercise->answered_exercises)}}</p>
             @endif
 
             <form id="attemptForm" method="POST" action="/exercises/{{$exercise->slug}}/attempt-exercise" enctype="multipart/form-data">
