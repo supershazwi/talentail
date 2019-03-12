@@ -55,7 +55,7 @@
 
                 <div class="avatar-group d-none d-sm-flex">
                   @foreach($exercise->answered_exercises as $answeredExercise)
-                  <a href="/profile/1" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="{{$answeredExercise->user->name}}">
+                  <a href="/profile/{{$answeredExercise->user->id}}" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="{{$answeredExercise->user->name}}">
                     @if($answeredExercise->user->avatar)
                      <img src="https://storage.googleapis.com/talentail-123456789/{{$answeredExercise->user->avatar}}" alt="..." class="avatar-img rounded-circle">
                     @else
