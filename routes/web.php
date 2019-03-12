@@ -2439,8 +2439,6 @@ Route::get('dashboard', function() {
         $answeredExercises = AnsweredExercise::all();  
         $exerciseGroupings = ExerciseGrouping::all();
 
-        dd($appliedOpportunities);
-
         return view('dashboard', [
             'opportunities' => $opportunities,
             'answeredExercises' => $answeredExercises,
