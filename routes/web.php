@@ -2833,7 +2833,7 @@ Route::get('/profile/{userId}/resume', function() {
     return view('profile.resume', [
         'showMessage' => true,
         'user' => $user,
-        'reviewedExercisesCount' => $reviewedExercisesCount
+        'reviewedExercisesCount' => $reviewedExercisesCount,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
