@@ -188,6 +188,18 @@
           </li>
 
           <li class="nav-item">
+              @if(!empty($parameter) && $parameter == "community")
+                <a class="nav-link active" href="/communities/business-analyst">
+                  Community
+                </a>
+              @else
+                <a class="nav-link" href="/communities/business-analyst">
+                  Community
+                </a>
+              @endif
+          </li>
+
+          <li class="nav-item">
               @if(!empty($parameter) && $parameter == "opportunity")
                 <a class="nav-link active" href="/opportunities">
                   Opportunities
@@ -199,17 +211,7 @@
               @endif
             </li>
 
-          <li class="nav-item">
-              @if(!empty($parameter) && $parameter == "community")
-                <a class="nav-link active" href="/communities/business-analyst">
-                  Community
-                </a>
-              @else
-                <a class="nav-link" href="/communities/business-analyst">
-                  Community
-                </a>
-              @endif
-          </li>
+          
 
           <!-- <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle " href="#" id="topnavRoles" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
