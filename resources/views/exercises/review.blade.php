@@ -128,7 +128,6 @@
             <p>{{$exercise->duration}}</p>
             <p class="card-text small text-muted" style="margin-bottom: 0;">Opportunities</p>
             <p>{{count($exercise->opportunities)}}</p>
-            <p class="card-text small text-muted" style="margin-bottom: 0;">Attempts</p>
             <p class="card-text small text-muted" style="margin-bottom: 0.25rem;">Attempts</p>
             @if(count($exercise->answered_exercises) > 0)
             <div class="row">
