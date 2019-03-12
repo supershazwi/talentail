@@ -15,7 +15,7 @@
               @if($user->avatar)
                <img src="https://storage.googleapis.com/talentail-123456789/{{$user->avatar}}" alt="..." class="avatar-img rounded-circle border border-4 border-body">
               @else
-              <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle border border-4 border-body">
+              <img src="https://api.adorable.io/avatars/150/{{$user->email}}.png" alt="..." class="avatar-img rounded-circle border border-4 border-body">
               @endif
           </div>
         </div>

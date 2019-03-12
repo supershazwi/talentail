@@ -105,7 +105,7 @@
                 @if(Auth::user()->avatar)
                    <img src="https://storage.googleapis.com/talentail-123456789/{{Auth::user()->avatar}}" alt="..." class="avatar-img rounded-circle">
                   @else
-                  <img src="/img/avatar.png" alt="..." class="avatar-img rounded-circle">
+                  <img src="https://api.adorable.io/avatars/150/{{Auth::user()->email}}.png" alt="..." class="avatar-img rounded-circle border border-4 border-body">
                   @endif
               </a>
 
