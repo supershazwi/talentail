@@ -239,6 +239,8 @@
       var selectedFile = 'selectedFiles';
       document.querySelector('#file').addEventListener('change', handleFileSelect, false);
 
+      document.querySelector('#answerFile').addEventListener('change', handleAnswerFileSelect, false);
+
       document.querySelector('#thumbnail').addEventListener('change', handleThumbnailFileSelect, false);
     }
 
@@ -251,6 +253,18 @@
         var f = files[i];
         
         document.getElementById('selectedFiles').innerHTML += f.name + "<br/>";
+      }
+    }
+
+    function handleAnswerFileSelect(e) {
+      if(!e.target.files) return;
+      document.getElementById('answerFiles').innerHTML = "";
+      
+      var files = e.target.files;
+      for(var i=0; i<files.length; i++) {
+        var f = files[i];
+        
+        document.getElementById('answerFiles').innerHTML += f.name + "<br/>";
       }
     }
 
