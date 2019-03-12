@@ -14,7 +14,7 @@
         @if($portfolio->user->avatar)
          <img src="https://storage.googleapis.com/talentail-123456789/{{$portfolio->user->avatar}}" alt="" class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
         @else
-        <img src="https://api.adorable.io/avatars/150/{{$user->email}}.png" alt="..." class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
+        <img src="https://api.adorable.io/avatars/150/{{$portfolio->user->email}}.png" alt="..." class="avatar-img rounded" style="width: 7.5rem; height: 7.5rem;">
         @endif
         <a href="/profile/{{$portfolio->user_id}}"><h1 style="margin-top: 1.5rem; margin-bottom: 0rem;">{{$portfolio->user->name}}</h1></a>
         <p>{{$portfolio->user->email}}</p>
