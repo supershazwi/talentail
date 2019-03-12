@@ -2833,7 +2833,7 @@ Route::get('/profile/{userId}/resume', function() {
     return view('profile.resume', [
         'showMessage' => true,
         'user' => $user,
-        'reviewedExercisesCount' => $reviewedExercisesCount,
+        'reviewedExercisesCount' => $reviewedExercisesCount
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -2928,12 +2928,15 @@ Route::get('/profile/{userId}', function() {
 
     $user = User::find($routeParameters['userId']);
 
+    $reviewedExercisesCount = AnsweredExercise::where('user_id', $user->id)->where('status', 'Reviewed')->where('visible', 1)->count();
+
     if($user->id == Auth::id()) {
         return redirect('/profile');
     } else {
         return view('profile', [
             'showMessage' => true,
             'user' => $user,
+            'reviewedExercisesCount' => $reviewedExercisesCount,
             'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
             'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         ]);
