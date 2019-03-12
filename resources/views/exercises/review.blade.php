@@ -129,7 +129,32 @@
             <p class="card-text small text-muted" style="margin-bottom: 0;">Opportunities</p>
             <p>{{count($exercise->opportunities)}}</p>
             <p class="card-text small text-muted" style="margin-bottom: 0;">Attempts</p>
-            <p>{{count($exercise->answered_exercises)}}</p>
+            <p class="card-text small text-muted" style="margin-bottom: 0.25rem;">Attempts</p>
+            @if(count($exercise->answered_exercises) > 0)
+            <div class="row">
+              <div class="col-auto mr-n3" style="margin-bottom: 1.5rem;">
+
+                <div class="avatar-group d-none d-sm-flex">
+                  @foreach($exercise->answered_exercises as $answeredExercise)
+                  <a href="/profile/1" class="avatar avatar-xs" data-toggle="tooltip" title="" data-original-title="{{$answeredExercise->user->name}}">
+                    @if($answeredExercise->user->avatar)
+                     <img src="https://storage.googleapis.com/talentail-123456789/{{$answeredExercise->user->avatar}}" alt="..." class="avatar-img rounded-circle">
+                    @else
+                    <img src="https://api.adorable.io/avatars/150/{{$answeredExercise->user->email}}.png" alt="..." class="avatar-img rounded-circle">
+                    @endif
+                  </a>
+                  @endforeach
+                </div>
+              </div>
+              @if(count($exercise->answered_exercises) > 3)
+              <div class="col" style="padding-left: 0rem;">
+                <span class="small">+{{count($exercise->answered_exercises) - 3}} others</span>
+              </div>
+              @endif
+            </div>
+            @else
+            <p class="card-text small text-muted" style="margin-bottom: 0;">{{count($exercise->answered_exercises)}}</p>
+            @endif
 
             <form id="attemptForm" method="POST" action="/exercises/{{$exercise->slug}}/attempt-exercise" enctype="multipart/form-data">
               @csrf
