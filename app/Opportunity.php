@@ -19,6 +19,10 @@ class Opportunity extends Model
         return $this->hasMany(ExerciseGrouping::class);
     }
 
+    public function applied_opportunities() {
+        return $this->hasMany(AppliedOpportunity::class);
+    }
+
     public function tasks()
     {
         return $this->belongsToMany(Task::class);

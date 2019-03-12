@@ -24,6 +24,7 @@ use Illuminate\Validation\Rule;
 
 use App\Experience;
 use App\User;
+use App\AppliedOpportunity;
 use App\Credit;
 use App\Exercise;
 use App\ExerciseGrouping;
@@ -2387,6 +2388,8 @@ Route::get('dashboard', function() {
         $answeredExercises = AnsweredExercise::all();  
         $exerciseGroupings = ExerciseGrouping::all();
 
+        dd($appliedOpportunities);
+
         return view('dashboard', [
             'opportunities' => $opportunities,
             'answeredExercises' => $answeredExercises,
@@ -2405,6 +2408,7 @@ Route::get('dashboard', function() {
 
         return view('dashboard', [
             'answeredExercises' => $answeredExercises,
+            'appliedOpportunities' => AppliedOpportunity::where('user_id', Auth::id())->get(),
             'parameter' => 'index',
             'parameter' => 'none',
             'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',

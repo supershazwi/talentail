@@ -37,6 +37,10 @@ class User extends Authenticatable
         return $this->hasMany(Feedback::class);
     }
 
+    public function applied_opportunities() {
+        return $this->hasMany(AppliedOpportunity::class);
+    }
+
     public function feedback_files() {
         return $this->hasMany(FeedbackFile::class);
     }
