@@ -77,8 +77,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
 Route::get('/score', function(Request $request) {
-    
-    
+
+
     return view('score', [
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -734,6 +734,12 @@ Route::post('/communities/{communitySlug}/create-post', function(Request $reques
             $communityPostFile->save();
         }
     }
+
+    $user = User::find(Auth::id());
+
+    $user->score = $user->score + 1;
+
+    $user->save();
 
     return redirect('/communities/'.$routeParameters['communitySlug'].'/posts/'.$communityPost->id);
 });
