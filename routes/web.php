@@ -76,6 +76,16 @@ use App\Mail\SendAttemptedProjectReviewedMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailable;
 
+Route::get('/score', function(Request $request) {
+    
+    
+    return view('score', [
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]); 
+})->middleware('auth');
+
 Route::post('/password/send-email', function(Request $request) {
     // find email
 

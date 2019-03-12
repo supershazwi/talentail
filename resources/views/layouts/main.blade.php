@@ -73,9 +73,9 @@
             <div class="dropdown mr-4 d-none d-lg-flex">
           
 
-              <a href="/score" class="text-muted" role="button">
+              <span class="text-muted">
                 {{Auth::user()->score}} Points
-              </a>
+              </span>
 
             </div>
 
