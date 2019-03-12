@@ -51,7 +51,7 @@
           <a target="_blank" href="{{$user->twitter}}"><i class="fab fa-twitter-square"></i></a>
           @endif
         </div>
-        @if($showMessage)
+        <!-- @if($showMessage)
         <div class="col-12 col-md-auto mt-2 mt-md-0 mb-md-3" style="margin-bottom: 0rem !important;">
 
           <a href="/messages/{{$user->id}}" class="btn btn-primary d-block d-md-inline-block">
@@ -59,7 +59,7 @@
           </a>
 
         </div>
-        @endif
+        @endif -->
       </div> <!-- / .row -->
       <div class="row align-items-center">
         <div class="col">
