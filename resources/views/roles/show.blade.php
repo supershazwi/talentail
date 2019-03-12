@@ -2,32 +2,11 @@
 
 @section ('content')
 <div class="container">
-  <div class="row align-items-center" style="margin-top: 7.5rem;">
-    <!-- <div class="col-12 col-md-6 offset-xl-2 offset-md-1 order-md-2 mb-5 mb-md-0">
-      <div class="text-center">
-        <img src="/img/companies.png" alt="..." class="img-fluid">
+  <div class="row" style="margin-top: 3rem;">
+      <div class="col-lg-12" style="text-align: center; margin-bottom: 2.5rem;">
+        <h1 style="font-size: 1.5rem;">{{$role->title}} Tasks</h1>
+        <p>Complete exercises under each listed tasks below</p>
       </div>
-    </div> -->
-    <!-- <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
-      <h1 class="display-4 mb-3">
-        Secure a <span style="color: #0984e3;">Business Analyst</span> career
-      </h1>
-      <h1 style="color: #777d7f;">Attempt tasks designed to show your competence to hiring companies</h1>
-    </div> -->
-    <div class="col-lg-8 offset-lg-2" style="text-align: center;">
-      <h1 class="display-4 mb-3">
-        SECURE A <span style="border-bottom: 5px solid #0984e3; text-transform: uppercase;">{{$role->title}}</span> CAREER
-      </h1>
-      <h1 style="color: #3e3e3c; margin-bottom: 0rem; font-size: 1.5rem;">Create positive change for an organisation by bridging the gap across departments and creating solutions</h1>
-    </div>
-  </div>
-  <hr style="margin-top: 7.5rem; margin-bottom: 2.5rem;"/>
-  <div class="row">
-    <div class="col-lg-12" style="text-align: center; margin-bottom: 2.5rem;">
-      <h1 style="font-size: 1.5rem;">TASKS</h1>
-      <p>Complete exercises under each listed tasks below <br/> and apply to job opportunities mapped to them</p>
-      <!-- <p style="color: #3e3e3c; margin-bottom: 0rem;">Browse these categories and complete the respective tasks (<a href="#">Not sure how to go about this?</a>)</p> -->
-    </div>
     @foreach($tasks as $task)
       @if(count($task->exercises) > 0)
       <div class="col-12 col-md-6 col-xl-4">

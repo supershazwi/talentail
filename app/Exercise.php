@@ -10,6 +10,10 @@ class Exercise extends Model
         return $this->belongsTo(Task::class);
     }
 
+    public function role() {
+        return $this->belongsTo(Role::class);
+    }
+
     public function exercise_files() {
         return $this->hasMany(ExerciseFile::class);
     }

@@ -177,23 +177,35 @@
         <ul class="navbar-nav mr-auto">
            <li class="nav-item">
               @if(!empty($parameter) && $parameter == "task")
-                <a class="nav-link active" href="/roles/business-analyst">
+                <a class="nav-link active" href="/tasks">
                   Tasks
                 </a>
               @else
-                <a class="nav-link" href="/roles/business-analyst">
+                <a class="nav-link" href="/tasks">
                   Tasks
                 </a>
               @endif
           </li>
 
+          <!-- <li class="nav-item">
+              @if(!empty($parameter) && $parameter == "role")
+                <a class="nav-link active" href="/roles">
+                  Roles
+                </a>
+              @else
+                <a class="nav-link" href="/roles">
+                  Roles
+                </a>
+              @endif
+          </li> -->
+
           <li class="nav-item">
               @if(!empty($parameter) && $parameter == "community")
-                <a class="nav-link active" href="/communities/business-analyst">
+                <a class="nav-link active" href="/communities">
                   Community
                 </a>
               @else
-                <a class="nav-link" href="/communities/business-analyst">
+                <a class="nav-link" href="/communities">
                   Community
                 </a>
               @endif

@@ -5,18 +5,65 @@
   <div class="row align-items-center" style="margin-top: 5rem;">
     <div class="col-12 col-md-6 offset-xl-2 offset-md-1 order-md-2 mb-5 mb-md-0">
       <div class="text-center">
-        <img src="/img/illustrations/happiness.svg" alt="..." class="img-fluid">
+        <img src="/img/exercises.svg" alt="..." class="img-fluid">
       </div>
     </div>
     <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
       <h1 class="display-4 mb-3">
-      <span style="color: #0984e3;">Break into</span> a new career with a work portfolio.
+      Practice <span style="color: #0984e3;">makes</span> perfect
       </h1>
-      <h1 style="color: #777d7f;">In today's day and age, learning is never enough. Attempt exercises to apply your knowledge and show companies what you're made of.</h1>
+      <h1 style="color: #777d7f;">Talentail is the only repository you need to attempt exercises adapted from real-world examples.</h1>
     </div>
   </div>
-  <hr style="margin-top: 5rem;"/>
-  <div class="row" style="margin-top: 5rem;">
+  <hr style="margin-top: 7.5rem; margin-bottom: 2.5rem;"/>
+  <div class="row">
+    <div class="col-lg-12" style="text-align: center; margin-bottom: 2.5rem;">
+      <h1 style="font-size: 1.5rem;">Browse Tasks By Role</h1>
+      <p>Tasks are grouped according to specific roles. There are several exercises grouped per task.</p>
+      <!-- <p style="color: #3e3e3c; margin-bottom: 0rem;">Browse these categories and complete the respective tasks (<a href="#">Not sure how to go about this?</a>)</p> -->
+    </div>
+    @foreach($roles as $role)
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="card">
+          <div class="card-body">
+            <!-- Title -->
+            <a href="/roles/{{$role->slug}}"><h2 class="card-title text-center mb-3">
+              {{$role->title}}
+            </h2></a>
+
+            <!-- Text -->
+
+            <p class="card-text text-center mb-4" style="margin-bottom: 0rem !important; overflow: hidden; text-overflow: ellipsis;display: -webkit-box; max-height: 72px; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+              {{$role->description}}
+            </p>  
+
+
+            <!-- Divider -->
+            <hr>
+
+            <div class="row align-items-center" style="text-align: center;">
+              <div class="col">
+                
+                <p class="card-text small text-muted" style="margin-bottom: 0;">Tasks</p>
+                <p style="margin-bottom: 0;">{{count($role->exercises->groupBy('task_id'))}}</p>
+
+              </div>
+
+              <div class="col">
+                
+                <p class="card-text small text-muted" style="margin-bottom: 0;">Exercises</p>
+                <p style="margin-bottom: 0;">{{count($role->exercises)}}</p>
+
+              </div>
+            </div> 
+
+          </div>
+        </div>
+      </div>
+    @endforeach
+  </div>
+  <!-- <hr style="margin-top: 5rem;"/> -->
+  <!-- <div class="row" style="margin-top: 5rem;">
     <div class="col-12 col-md-6 order-md-1 mb-5 mb-md-0">
       <div class="text-center">
         <img src="/img/illustrations/lost.svg" alt="..." class="img-fluid">
@@ -50,7 +97,7 @@
         <li><h1 style="color: #777d7f;">😁 Set yourself apart from other job seekers</h1></li>
       </ul>
     </div>
-  </div>
+  </div> -->
   <!-- <hr style="margin-top: 5rem;"/>
   <div class="row" style="margin-top: 5rem;">
     <div class="col-12 col-lg-4">
@@ -87,8 +134,8 @@
   @if(!Auth::id())
   <hr style="margin-top: 5rem;"/>
   <div class="row justify-content-center" style="margin-top: 5rem; display: block; text-align: center;">
-    <h1 class="display-4 mb-3">
-        Begin your journey today
+    <h1>
+        Start practising and become<br/> the best you today
       </h1>
     <a href="/register" class="btn btn-lg btn-primary mb-3">
         Register

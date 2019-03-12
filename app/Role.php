@@ -15,6 +15,10 @@ class Role extends Model
     	return $this->hasMany(Opportunity::class);
     }
 
+    public function exercises() {
+        return $this->hasMany(Exercise::class);
+    }
+
     public function competencies() {
     	return $this->hasMany(Competency::class);
     }

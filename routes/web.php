@@ -838,6 +838,26 @@ Route::post('/connect-paypal', function(Request $request) {
     return redirect('/creator-stripe-account')->with('paypal-success', "You have successfully connected " . $request->input('paypal_email') . " with PayPal.");
 });
 
+Route::get('/communities', function() {
+    return view('communities.index', [
+        'roles' => Role::all(),
+        'parameter' => 'community',
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::get('/tasks', function() {
+    return view('tasks.index', [
+        'roles' => Role::all(),
+        'parameter' => 'task',
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
 Route::get('/roles/business-analyst', function() {
     $role = Role::find(1);
     $tasks = Task::orderBy('order', 'desc')->where('role_id', 1)->get();
@@ -2201,10 +2221,25 @@ Route::get('/created-projects', function() {
 });
 
 Route::get('/opportunities', function() {
-    $opportunities = Opportunity::where('visible', true)->orderBy('created_at', 'desc')->get();
-
     return view('opportunities.index', [
         'parameter' => 'opportunity',
+        'roles' => Role::all(),
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::get('/opportunities/{roleSlug}', function() {
+    $opportunities = Opportunity::where('visible', true)->orderBy('created_at', 'desc')->get();
+
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $role = Role::where('slug', $routeParameters['roleSlug'])->first();
+
+    return view('opportunities.showRole', [
+        'parameter' => 'opportunity',
+        'role' => $role,
         'opportunities' => $opportunities,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
@@ -3771,7 +3806,9 @@ Route::post('/', function(Request $request) {
 });
 
 Route::get('/', function() {
+
     return view('index', [
+        'roles' => Role::all(),
         'parameter' => 'index',
         'parameter' => 'none',
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',

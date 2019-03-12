@@ -2,21 +2,11 @@
 
 @section ('content')
 <div class="container">
-  <div class="row align-items-center" style="margin-top: 7.5rem;">
-    <div class="col-lg-8 offset-lg-2" style="text-align: center;">
-      <h1 class="display-4 mb-3">
-        <span style="border-bottom: 5px solid #0984e3; text-transform: uppercase;">{{$task->title}}</span>
-      </h1>
-      <h1 style="color: #3e3e3c; margin-bottom: 0rem; font-size: 1.5rem;">{{$task->description}}</h1>
-    </div>
-  </div>
-  <hr style="margin-top: 7.5rem; margin-bottom: 2.5rem;"/>
-  <div class="row">
-    <div class="col-lg-12" style="text-align: center; margin-bottom: 2.5rem;">
-      <h1 style="font-size: 1.5rem;">EXERCISES</h1>
-      <p>Each exercise may be mapped to <br/> one or more job opportunities</p>
-      <!-- <p style="color: #3e3e3c; margin-bottom: 0rem;">Complete tasks and unlock job opportunities (<a href="#">Not sure how to go about this?</a>)</p> -->
-    </div>
+  <div class="row" style="margin-top: 3rem;">
+      <div class="col-lg-12" style="text-align: center; margin-bottom: 2.5rem;">
+        <h1 style="font-size: 1.5rem;">{{$task->title}}</h1>
+        <p>Each exercise may be mapped to one or more job opportunities</p>
+      </div>
     @foreach($task->exercises as $exercise)
       @if($exercise->visible)
       <div class="col-12 col-md-6 col-xl-4">
