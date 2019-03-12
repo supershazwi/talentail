@@ -18,6 +18,10 @@ class Exercise extends Model
         return $this->hasMany(ExerciseFile::class);
     }
 
+    public function answer_files() {
+        return $this->hasMany(AnswerFile::class);
+    }
+
     public function answered_exercises() {
         return $this->hasMany(AnsweredExercise::class);
     }

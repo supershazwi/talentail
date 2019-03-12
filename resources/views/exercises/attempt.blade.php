@@ -146,6 +146,8 @@
             @if(Auth::id() && Auth::user()->admin)
               <a href="/exercises/{{$exercise->slug}}/edit" class="btn btn-primary btn-block">Edit Exercise</a>
             @endif
+
+            <a href="/exercises/{{$exercise->slug}}/feedback" class="btn btn-block btn-link">Feedback</a>
           </div>
         </div>
         @if(count($answeredExercise->exercise->opportunities) > 0)

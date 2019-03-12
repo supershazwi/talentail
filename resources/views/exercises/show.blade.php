@@ -97,9 +97,20 @@
               @csrf
               <button type="submit" style="display: none;" id="toggleExerciseButton" />
             </form>
-
           </div>
         </div>
+        @if(Auth::user()->admin)
+        <div class="card">
+          <div class="card-body" style="padding-bottom: 0.5rem;">
+            <h3>Answers</h3>
+            <ul style="margin-left: -1.4rem;">
+              @foreach($exercise->answer_files->sortBy('title') as $answerFile) 
+                <li><a href="https://storage.googleapis.com/talentail-123456789/{{$answerFile->url}}">{{$answerFile->title}}</a></li>
+              @endforeach
+            </ul>
+          </div>
+        </div>
+        @endif
         @if(!empty($exercise) && count($exercise->opportunities) > 0)
         <div class="card">
           <div class="card-body">

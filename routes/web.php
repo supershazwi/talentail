@@ -24,6 +24,7 @@ use Illuminate\Validation\Rule;
 
 use App\Experience;
 use App\User;
+use App\AnswerFile;
 use App\AppliedOpportunity;
 use App\Credit;
 use App\Exercise;
@@ -3537,7 +3538,23 @@ Route::post('/exercises/{exerciseSlug}/save-exercise', function(Request $request
         }
     }
 
+    if($request->file('answerFile')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('answerFile')); $fileCounter++) {
+
+            $answerFile = new AnswerFile;
+
+            $answerFile->title = $request->file('answerFile')[$fileCounter]->getClientOriginalName();
+            $answerFile->size = $request->file('answerFile')[$fileCounter]->getSize();
+            $answerFile->url = Storage::disk('gcs')->put('/assets', $request->file('answerFile')[$fileCounter], 'public');
+            $answerFile->mime_type = $request->file('answerFile')[$fileCounter]->getMimeType();
+            $answerFile->exercise_id = $exercise->id;
+
+            $answerFile->save();
+        }
+    }
+
     $removedExerciseFilesIdArray = $request->input('files-deleted');
+    $removedAnswerFilesIdArray = $request->input('answer-files-deleted');
 
     if($removedExerciseFilesIdArray != null) {
         $removedExerciseFilesIdArray = explode(",",$removedExerciseFilesIdArray);
@@ -3545,6 +3562,16 @@ Route::post('/exercises/{exerciseSlug}/save-exercise', function(Request $request
         foreach($exercise->exercise_files as $exerciseFile) {
             if(in_array($exerciseFile->id, $removedExerciseFilesIdArray)) {
                 ExerciseFile::destroy($exerciseFile->id);
+            }
+        }
+    }
+
+    if($removedAnswerFilesIdArray != null) {
+        $removedAnswerFilesIdArray = explode(",",$removedAnswerFilesIdArray);
+
+        foreach($exercise->answer_files as $answerFile) {
+            if(in_array($answerFile->id, $removedAnswerFilesIdArray)) {
+                AnswerFile::destroy($answerFile->id);
             }
         }
     }
@@ -3574,6 +3601,13 @@ Route::post('/exercises/save-exercise', function(Request $request) {
     $exercise->solution_description = $request->input('solution-description');
     $exercise->duration = $request->input('duration');
 
+    if($request->file('thumbnail')) {
+        $exercise->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+        $exercise->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
+    }
+
+    $exercise->save();
+
     if($request->file('file')) {
         for($fileCounter = 0; $fileCounter < count($request->file('file')); $fileCounter++) {
 
@@ -3589,12 +3623,20 @@ Route::post('/exercises/save-exercise', function(Request $request) {
         }
     }
 
-    if($request->file('thumbnail')) {
-        $exercise->thumbnail = $request->file('thumbnail')->getClientOriginalName();
-        $exercise->url = Storage::disk('gcs')->put('/thumbnails', $request->file('thumbnail'), 'public');
-    }
+    if($request->file('answerFile')) {
+        for($fileCounter = 0; $fileCounter < count($request->file('answerFile')); $fileCounter++) {
 
-    $exercise->save();
+            $answerFile = new AnswerFile;
+
+            $answerFile->title = $request->file('answerFile')[$fileCounter]->getClientOriginalName();
+            $answerFile->size = $request->file('answerFile')[$fileCounter]->getSize();
+            $answerFile->url = Storage::disk('gcs')->put('/assets', $request->file('answerFile')[$fileCounter], 'public');
+            $answerFile->mime_type = $request->file('answerFile')[$fileCounter]->getMimeType();
+            $answerFile->exercise_id = $exercise->id;
+
+            $answerFile->save();
+        }
+    }
 
     return redirect('/exercises/'.$exercise->slug);
 });

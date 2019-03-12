@@ -108,20 +108,21 @@
               <label for="file" style="position: absolute; left: 0; margin-left: 0.75rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg> <span style="font-size: 1rem;">Choose Files</span></label>
             </div>
             <div id="selectedFiles" style="margin-top: 1.5rem;"></div>
-          </div><!-- 
+          </div>
 
           <div class="form-group">
             <label class="mb-1">
-              Thumbnail file
+              Answer files
             </label>
 
             <div class="box">
-              <input type="file" name="thumbnail" id="thumbnail" class="inputfile inputfile-1" style="visibility: hidden; background-color: #076BFF;">
-              <label for="thumbnail" style="position: absolute; left: 0; margin-left: 0.75rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg> <span style="font-size: 1rem;">Choose Files</span></label>
+              <input type="file" name="answerFile[]" id="answerFile" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple="" style="visibility: hidden; background-color: #076BFF;">
+              <label for="answerFile" style="position: absolute; left: 0; margin-left: 0.75rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg> <span style="font-size: 1rem;">Choose Files</span></label>
             </div>
-            <div id="selectedThumbnailFile" style="margin-top: 1.5rem;"></div>
+            <div id="answerFiles" style="margin-top: 1.5rem;"></div>
           </div>
- -->
+          
+
           <button class="btn btn-primary" id="createTask" type="submit" style="float: right; display: none;">Create Task</button>
           <button class="btn btn-default" id="saveTask" type="submit" style="float: right; margin-right: 0.5rem; display: none;">Save</button>
           <button class="btn btn-default" onclick="cancel()" style="float: right; margin-right: 0.5rem; display: none;">Cancel</button>
@@ -172,6 +173,7 @@
       var selectedFile = 'selectedFiles';
       document.querySelector('#file').addEventListener('change', handleFileSelect, false);
 
+      document.querySelector('#answerFile').addEventListener('change', handleAnswerFileSelect, false);
 
       document.querySelector('#thumbnail').addEventListener('change', handleThumbnailFileSelect, false);
     }
@@ -185,6 +187,18 @@
         var f = files[i];
         
         document.getElementById('selectedFiles').innerHTML += f.name + "<br/>";
+      }
+    }
+
+    function handleAnswerFileSelect(e) {
+      if(!e.target.files) return;
+      document.getElementById('answerFiles').innerHTML = "";
+      
+      var files = e.target.files;
+      for(var i=0; i<files.length; i++) {
+        var f = files[i];
+        
+        document.getElementById('answerFiles').innerHTML += f.name + "<br/>";
       }
     }
 

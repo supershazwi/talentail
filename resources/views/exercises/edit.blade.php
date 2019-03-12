@@ -125,6 +125,29 @@
             </div>
             <input type="hidden" name="files-deleted" value="" id="files-deleted" />
           </div>
+
+          <div class="form-group">
+            <label class="mb-1">
+              Answer files
+            </label>
+
+            <div class="box">
+              <input type="file" name="answerFile[]" id="answerFile" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple="" style="visibility: hidden; background-color: #076BFF;">
+              <label for="answerFile" style="position: absolute; left: 0; margin-left: 0.75rem; margin-bottom: 1.5rem;  border-radius: 0.25rem !important; padding: 0.5rem 1rem 0.5rem 1rem; background: #2c7be5; color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="white"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg> <span style="font-size: 1rem;">Choose Files</span></label>
+            </div>
+            @foreach($exercise->answer_files->sortBy('title') as $answerFile)
+            @if($loop->first)
+            <div id="answer-file-group_{{$answerFile->id}}" style="margin-top: 1.5rem;">
+            @else
+            <div id="answer-file-group_{{$answerFile->id}}">
+            @endif
+              <a href="https://storage.googleapis.com/talentail-123456789/{{$answerFile->url}}">{{$answerFile->title}}</a> <span id="delete-file_{{$answerFile->id}}" class="remove-file" onclick="deleteAnswerFile()" style="border-color: transparent; margin-right: 0px; padding: 0px;"><i class="fas fa-times-circle" id="span_{{$answerFile->id}}"></i></span><br/>
+            </div>
+            @endforeach
+            <div id="answerFiles">
+            </div>
+            <input type="hidden" name="answer-files-deleted" value="" id="answer-files-deleted" />
+          </div>
 <!-- 
           <div class="form-group">
             <label class="mb-1">
@@ -193,6 +216,20 @@
       }
 
       let elem = document.getElementById("file-group_"+fileId);
+      elem.parentNode.removeChild(elem);
+    }
+
+    function deleteAnswerFile() {
+      let fileIdString = event.target.id.split("_");
+      let fileId = fileIdString[1];
+
+      if(document.getElementById("answer-files-deleted").value == "") {
+        document.getElementById("answer-files-deleted").value += fileId;
+      } else {
+        document.getElementById("answer-files-deleted").value += ", " + fileId;
+      }
+
+      let elem = document.getElementById("answer-file-group_"+fileId);
       elem.parentNode.removeChild(elem);
     }
 
