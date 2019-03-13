@@ -54,6 +54,15 @@
                 <p style="margin-bottom: 0;">{{count($exercise->answered_exercises)}}</p>
 
               </div>
+
+              @if(Auth::id() && Auth::user()->admin)
+              	<div class="col">
+              	  
+              	  <p class="card-text small text-muted" style="margin-bottom: 0;">Answers</p>
+              	  <p style="margin-bottom: 0;">{{count($exercise->answer_files)}}</p>
+
+              	</div>
+              @endif
             </div> 
           </div>
         </div>
