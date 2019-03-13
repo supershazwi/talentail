@@ -99,7 +99,7 @@
             </form>
           </div>
         </div>
-        @if(Auth::user()->admin)
+        @if(Auth::id() && Auth::user()->admin)
         <div class="card">
           <div class="card-body" style="padding-bottom: 0.5rem;">
             <h3>Answers</h3>
