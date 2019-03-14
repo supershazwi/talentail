@@ -22,9 +22,6 @@
                 {{$role->description}}
               </p>  
 
-              <p class="card-text text-center">Estimated Salary: US${{number_format($role->salary)}}/year</p>
-
-
               <!-- Divider -->
               <hr>
 
