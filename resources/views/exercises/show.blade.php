@@ -99,15 +99,24 @@
             </form>
           </div>
         </div>
-        @if(Auth::id() && Auth::user()->admin)
+        @if(count($exercise->answer_files) > 0)
         <div class="card">
           <div class="card-body" style="padding-bottom: 0.5rem;">
+          	@if(Auth::id())
             <h3>Answers</h3>
             <ul style="margin-left: -1.4rem;">
               @foreach($exercise->answer_files->sortBy('title') as $answerFile) 
                 <li><a href="https://storage.googleapis.com/talentail-123456789/{{$answerFile->url}}">{{$answerFile->title}}</a></li>
               @endforeach
             </ul>
+            @else
+            <h3>Answers - Login to download</h3>
+            <ul style="margin-left: -1.4rem;">
+              @foreach($exercise->answer_files->sortBy('title') as $answerFile) 
+                <li>{{$answerFile->title}}</li>
+              @endforeach
+            </ul>
+            @endif
           </div>
         </div>
         @endif

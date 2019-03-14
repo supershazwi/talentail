@@ -52,7 +52,7 @@
 
             @if($answeredExercise->status == "Attempted")
             <button type="submit" class="btn btn-primary btn-block" id="saveExerciseAttempt">Save Exercise</button>
-            <a class="btn btn-warning btn-block" id="submitForReview" onclick="submitForReview()">Submit For Review</a>
+            <!-- <a class="btn btn-warning btn-block" id="submitForReview" onclick="submitForReview()">Submit For Review</a> -->
             <a href="/exercises/{{$exercise->slug}}" class="btn btn-block btn-link text-muted">
               Cancel
             </a>
@@ -150,6 +150,18 @@
             <a href="/exercises/{{$exercise->slug}}/feedback" class="btn btn-block btn-link">Feedback</a>
           </div>
         </div>
+        @if(count($exercise->answer_files) > 0)
+        <div class="card">
+          <div class="card-body" style="padding-bottom: 0.5rem;">
+            <h3>Answers</h3>
+            <ul style="margin-left: -1.4rem;">
+              @foreach($exercise->answer_files->sortBy('title') as $answerFile) 
+                <li><a href="https://storage.googleapis.com/talentail-123456789/{{$answerFile->url}}">{{$answerFile->title}}</a></li>
+              @endforeach
+            </ul>
+          </div>
+        </div>
+        @endif
         @if(count($answeredExercise->exercise->opportunities) > 0)
         <div class="card">
           <div class="card-body">
