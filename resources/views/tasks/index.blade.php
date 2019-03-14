@@ -18,9 +18,11 @@
 
               <!-- Text -->
 
-              <p class="card-text text-center mb-4" style="margin-bottom: 0rem !important; overflow: hidden; text-overflow: ellipsis;display: -webkit-box; max-height: 72px; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+              <p class="card-text text-center mb-4" style="overflow: hidden; text-overflow: ellipsis;display: -webkit-box; max-height: 72px; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
                 {{$role->description}}
               </p>  
+
+              <p class="card-text text-center">Estimated Salary: US${{number_format($role->salary)}}/year</p>
 
 
               <!-- Divider -->
