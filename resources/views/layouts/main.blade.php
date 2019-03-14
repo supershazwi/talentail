@@ -178,11 +178,11 @@
            <li class="nav-item">
               @if(!empty($parameter) && $parameter == "task")
                 <a class="nav-link active" href="/tasks">
-                  Tasks
+                  Practice
                 </a>
               @else
                 <a class="nav-link" href="/tasks">
-                  Tasks
+                  Practice
                 </a>
               @endif
           </li>
