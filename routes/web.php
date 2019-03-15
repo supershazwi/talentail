@@ -109,6 +109,45 @@ Route::post('/password/send-email', function(Request $request) {
     //https://talentail.com/password/reset/a464542384b9c1d164f2dc60471851abd01e1eb3776a6e0a0061b58ca5d524f0
 });
 
+Route::get('/opportunities/{roleSlug}/{opportunitySlug}', function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $opportunity = Opportunity::where('slug', $routeParameters['opportunitySlug'])->first();
+
+    $statusArray = array();
+
+    // this has to have all competent
+    $loopExerciseGroupingArray = array();
+
+    foreach($opportunity->exercise_groupings as $exerciseGrouping) {
+        foreach($exerciseGrouping->exercises as $exercise) {
+            $answeredExercise = AnsweredExercise::select('status')->where('exercise_id', $exercise->id)->where('user_id', Auth::id())->first();
+
+            if($answeredExercise) {
+                $statusArray[$exercise->id] = $answeredExercise->status;
+            } else {
+                $statusArray[$exercise->id] = "Not Attempted";
+            }
+        }
+
+        if(in_array("Competent", $statusArray)) {
+            array_push($loopExerciseGroupingArray, "Competent");
+        }
+    }
+
+    $applicable = in_array("Competent",$loopExerciseGroupingArray);
+
+    return view('opportunities.show', [
+        'statusArray' => $statusArray,
+        'parameter' => 'opportunity',
+        'opportunity' => $opportunity,
+        'applicable' => $applicable,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
 Route::post('/exercise-groupings/save-exercise-grouping', function(Request $request) {
     $exerciseGrouping = new ExerciseGrouping;
 
@@ -2347,45 +2386,6 @@ Route::get('/opportunities/{opportunitySlug}/edit', function() {
         'parameter' => 'opportunity',
         'opportunity' => $opportunity,
         'exerciseIdArray' => $exerciseIdArray, 
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-    ]);
-});
-
-Route::get('/opportunities/{opportunitySlug}', function() {
-    $routeParameters = Route::getCurrentRoute()->parameters();
-
-    $opportunity = Opportunity::where('slug', $routeParameters['opportunitySlug'])->first();
-
-    $statusArray = array();
-
-    // this has to have all competent
-    $loopExerciseGroupingArray = array();
-
-    foreach($opportunity->exercise_groupings as $exerciseGrouping) {
-        foreach($exerciseGrouping->exercises as $exercise) {
-            $answeredExercise = AnsweredExercise::select('status')->where('exercise_id', $exercise->id)->where('user_id', Auth::id())->first();
-
-            if($answeredExercise) {
-                $statusArray[$exercise->id] = $answeredExercise->status;
-            } else {
-                $statusArray[$exercise->id] = "Not Attempted";
-            }
-        }
-
-        if(in_array("Competent", $statusArray)) {
-            array_push($loopExerciseGroupingArray, "Competent");
-        }
-    }
-
-    $applicable = in_array("Competent",$loopExerciseGroupingArray);
-
-    return view('opportunities.show', [
-        'statusArray' => $statusArray,
-        'parameter' => 'opportunity',
-        'opportunity' => $opportunity,
-        'applicable' => $applicable,
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',

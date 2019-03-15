@@ -17,7 +17,7 @@
             </div>
 
             <!-- Title -->
-            <a href="/opportunities/{{$opportunity->slug}}"><h2 class="card-title text-center mb-3">
+            <a href="/opportunities/{{$opportunity->role->slug}}/{{$opportunity->slug}}"><h2 class="card-title text-center mb-3">
               {{$opportunity->title}} 
             </h2></a>
 
