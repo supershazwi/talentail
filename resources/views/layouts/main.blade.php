@@ -161,13 +161,12 @@
               </div>
 
             </div>
-
           </div>
-      @else
-        <a class="btn btn-primary mr-auto" href="/login">
-            Login
-        </a>
-      @endif
+        @else
+          <a class="btn btn-primary mr-auto" href="/login">
+              Login
+          </a>
+        @endif
     </div>
 
       <!-- Collapse -->
@@ -221,47 +220,19 @@
                   Opportunities
                 </a>
               @endif
-            </li>
-
-          
-
-          <!-- <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle " href="#" id="topnavRoles" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Roles
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="topnavRoles">
-              <li>
-                <a class="dropdown-item " href="/roles/business-analyst">
-                  Business Analyst
-                </a>
-              </li>
-            </ul>
-          </li> -->
-<!-- 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle " href="#" id="topnavCommunities" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Communities
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="topnavCommunities">
-              <li>
-                <a class="dropdown-item " href="/communities/business-analyst">
-                  Business Analyst
-                </a>
-              </li>
-            </ul>
-          </li> -->
+          </li>
 
           <!-- <li class="nav-item">
-              @if(!empty($parameter) && $parameter == "company")
-                <a class="nav-link active" href="/companies">
-                  Companies
+              @if(!empty($parameter) && $parameter == "enterprise")
+                <a class="nav-link active" href="/enterprise">
+                  Enterprise
                 </a>
               @else
-                <a class="nav-link" href="/companies">
-                  Companies
+                <a class="nav-link" href="/enterprise">
+                  Enterprise
                 </a>
               @endif
-            </li> -->
+          </li> -->
         </ul>
       </div>
 

@@ -109,6 +109,16 @@ Route::post('/password/send-email', function(Request $request) {
     //https://talentail.com/password/reset/a464542384b9c1d164f2dc60471851abd01e1eb3776a6e0a0061b58ca5d524f0
 });
 
+Route::get('/opportunities/post-an-opportunity', function() {
+
+    return view('postOpportunity', [
+        'parameter' => 'opportunity',   
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
 Route::get('/opportunities/{roleSlug}/{opportunitySlug}', function() {
     $routeParameters = Route::getCurrentRoute()->parameters();
 
@@ -142,6 +152,14 @@ Route::get('/opportunities/{roleSlug}/{opportunitySlug}', function() {
         'parameter' => 'opportunity',
         'opportunity' => $opportunity,
         'applicable' => $applicable,
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
+Route::get('enterprise', function() {
+    return view('enterprise.index', [
         'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
@@ -803,6 +821,25 @@ Route::get('/communities/{communitySlug}/create-post', function() {
         'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]); 
+})->middleware('auth');
+
+Route::post('/delete-community-post/{communityPostId}', function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $communityPostComments = CommunityPostComment::where('community_post_id', $request->input('community-post-id'))->get();
+
+    foreach($communityPostComments as $communityPostComment) {
+        CommunityPostCommentFile::where('community_post_comment_id', $communityPostComment->id)->delete();
+
+        CommunityPostComment::destroy($communityPostComment->id);
+    }
+
+    CommunityPostFile::where('community_post_id', $request->input('community-post-id'))->delete();
+
+    CommunityPost::destroy($request->input('community-post-id'));
+
+    return redirect('/communities/'.$request->input('community-slug'));
+
 })->middleware('auth');
 
 Route::post('/delete-community-post-comment/{communityPostCommentId}', function(Request $request) {

@@ -50,7 +50,7 @@
                 <div class="col">
                   <span onclick="showTopCommentBox()" class="pointer text-muted">Reply</span>
                   @if(Auth::id() && $communityPost->user_id == Auth::id())
-                    | <span onclick="deleteCommunityPost()" class="pointer text-muted">Delete</span> 
+                    | <span onclick="deleteCommunityPost()" class="pointer text-muted" id="delete-community-post_{{$communityPost->id}}">Delete</span> 
                   @endif
                 </div>
                 <div class="col" style="text-align: right;">
@@ -350,6 +350,14 @@
                crossorigin="anonymous">
 </script>
 <script>
+      function deleteCommunityPost() {
+        event.preventDefault();
+        let communityPostIdString = event.target.id.split("_");
+
+        document.getElementById("deleteCommunityPostCommentForm").action = "/delete-community-post/"+communityPostIdString[1];
+
+        document.getElementById("deleteCommunityPostCommentButton").click();
+      }
 
       function deleteCommunityPostComment() {
         event.preventDefault();
