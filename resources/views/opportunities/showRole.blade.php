@@ -5,9 +5,9 @@
   <div class="row" style="margin-top: 3rem;">
       <div class="col-lg-12" style="text-align: center; margin-bottom: 2.5rem;">
         <h1 style="font-size: 1.5rem; margin-bottom: 1.5rem;">{{$role->title}} Opportunities</h1>
-        <a href="/opportunities/post-an-opportunity" class="btn btn-primary">
+        <!-- <a href="/opportunities/post-an-opportunity" class="btn btn-primary">
           Post an Opportunity
-        </a>
+        </a> -->
       </div>
       @foreach($opportunities as $opportunity)
       <div class="col-12 col-md-6 col-xl-4">
