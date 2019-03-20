@@ -222,6 +222,18 @@
               @endif
           </li>
 
+          <li class="nav-item">
+              @if(!empty($parameter) && $parameter == "forCompanies")
+                <a class="nav-link active" href="/for-companies">
+                  For Companies
+                </a>
+              @else
+                <a class="nav-link" href="/for-companies">
+                  For Companies
+                </a>
+              @endif
+          </li>
+
           <!-- <li class="nav-item">
               @if(!empty($parameter) && $parameter == "enterprise")
                 <a class="nav-link active" href="/enterprise">

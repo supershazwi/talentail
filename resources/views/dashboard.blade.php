@@ -463,6 +463,56 @@
 			</div>
 			@endif
 		@endif
+
+		@if(!Auth::user()->admin)
+			<div class="row align-items-center">
+			  <div class="col-auto">
+			    <h2>
+			      Opportunity Submissions
+			    </h2>
+			  </div>
+			</div>
+			@if(count($opportunitySubmissions) > 0)
+			<div class="row">
+				<div class="col-12 col-xl-12">
+					<div class="card">	
+					    <table class="table" style="margin-bottom: 0;">
+					      <thead>
+					        <tr>
+					          <th scope="col">#</th>
+					          <th scope="col">Opportunity</th>
+					        </tr>
+					      </thead>
+					      <tbody>
+					      		@foreach($opportunitySubmissions as $key=>$opportunitySubmission)
+					          <tr>
+					            <th scope="row">{{$key+1}}</th>
+					            <td><a href="/opportunity-submissions/{{$opportunitySubmission->slug}}" style="display: block; width: 500px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{$opportunitySubmission->title}}</a></td>
+					          </tr>
+					          @endforeach
+					      </tbody>
+					    </table>
+					</div>
+				</div>
+			</div>
+			@else
+			<div class="row align-items-center" id="talentailBox">
+			  <div class="col-lg-12">
+			    <div class="card">
+			      <div class="card-body">
+			        <div class="row justify-content-center" style="margin-top:1rem;">
+			          <div class="col-12 col-md-5 col-xl-4 my-5">
+			            <p class="text-center mb-5" style="font-size: 2rem; margin-bottom: 0.25rem !important; -webkit-transform: scaleX(-1); transform: scaleX(-1);">😀</p>
+			            <p class="text-center mb-3" style="margin-bottom: 2.25rem !important;">No opportunities submitted yet.
+			            </p>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			@endif
+		@endif
 	</div>
 
 	<script type="text/javascript">

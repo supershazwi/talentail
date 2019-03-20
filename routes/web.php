@@ -25,6 +25,7 @@ use Illuminate\Validation\Rule;
 use App\Experience;
 use App\User;
 use App\AnswerFile;
+use App\OpportunitySubmission;
 use App\AppliedOpportunity;
 use App\Credit;
 use App\Exercise;
@@ -108,6 +109,17 @@ Route::post('/password/send-email', function(Request $request) {
 
     //https://talentail.com/password/reset/a464542384b9c1d164f2dc60471851abd01e1eb3776a6e0a0061b58ca5d524f0
 });
+
+Route::get('/for-companies', function() {
+
+    return view('forCompanies', [
+        'parameter' => 'forCompanies',   
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+});
+
 
 Route::get('/opportunities/post-an-opportunity', function() {
 
@@ -2307,6 +2319,36 @@ Route::get('/opportunities', function() {
     ]);
 });
 
+Route::get('/opportunities/create', function() {
+    $roles = Role::all();
+    $tasks = Task::all();
+    $companies = Company::all();
+
+    if(Auth::user()->admin) {
+    	return view('opportunities.create', [
+    	    'roles' => $roles,
+    	    'parameter' => 'opportunity',
+    	    'companies' => $companies,
+    	    'tasks' => $tasks,
+    	    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    	    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    	    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    	]);
+    } else {
+    	return view('opportunities.create2', [
+    	    'roles' => $roles,
+    	    'parameter' => 'opportunity',
+    	    'companies' => $companies,
+    	    'tasks' => $tasks,
+    	    'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    	    'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+    	    'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    	]);
+    }
+
+    
+})->middleware('auth');
+
 Route::get('/opportunities/{roleSlug}', function() {
     $opportunities = Opportunity::where('visible', true)->orderBy('created_at', 'desc')->get();
 
@@ -2323,22 +2365,6 @@ Route::get('/opportunities/{roleSlug}', function() {
         'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
     ]);
 });
-
-Route::get('/opportunities/create', function() {
-    $roles = Role::all();
-    $tasks = Task::all();
-    $companies = Company::all();
-
-    return view('opportunities.create', [
-        'roles' => $roles,
-        'parameter' => 'opportunity',
-        'companies' => $companies,
-        'tasks' => $tasks,
-        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
-        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
-    ]);
-})->middleware('auth');
 
 Route::post('/opportunities/{opportunitySlug}/toggle-visibility', function(Request $request) {
     $routeParameters = Route::getCurrentRoute()->parameters();
@@ -2429,41 +2455,92 @@ Route::get('/opportunities/{opportunitySlug}/edit', function() {
     ]);
 });
 
+Route::post('/opportunity-submissions/{opportunitySubmissionSlug}/save-opportunity' , function(Request $request) {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    $opportunitySubmission = OpportunitySubmission::where('slug', $routeParameters['opportunitySubmissionSlug'])->first();
+
+    if($opportunitySubmission->title != $request->input('title') || $opportunitySubmission->company != $request->input('company')) {
+        $opportunitySubmission->slug = str_slug($request->input('company'), '-') . "-" . str_slug($request->title, '-') . "-" . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
+    }
+
+    $opportunitySubmission->title = $request->input('title');
+    $opportunitySubmission->role_id = $request->input('role');
+    $opportunitySubmission->company = $request->input('company');
+    $opportunitySubmission->description = $request->input('description');
+    $opportunitySubmission->location = $request->input('location');
+    $opportunitySubmission->level = $request->input('level');
+    $opportunitySubmission->type = $request->input('type');
+
+    $opportunitySubmission->save();
+
+    return redirect('/opportunity-submissions/'.$opportunitySubmission->slug);
+})->middleware('auth');
+
+Route::get('/opportunity-submissions/{opportunitySubmissionSlug}/edit' , function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    return view('opportunitySubmissions.edit', [
+        'roles' => Role::all(),
+        'opportunitySubmission' => OpportunitySubmission::where('slug', $routeParameters['opportunitySubmissionSlug'])->first(),
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+
+})->middleware('auth');
+
+Route::get('/opportunity-submissions/{opportunitySubmissionSlug}' , function() {
+    $routeParameters = Route::getCurrentRoute()->parameters();
+
+    return view('opportunitySubmissions.show', [
+        'opportunitySubmission' => OpportunitySubmission::where('slug', $routeParameters['opportunitySubmissionSlug'])->first(),
+        'messageCount' => Message::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'notificationCount' => Notification::where('recipient_id', Auth::id())->where('read', 0)->count(),
+        'shoppingCartActive' => ShoppingCart::where('user_id', Auth::id())->where('status', 'pending')->first()['status']=='pending',
+    ]);
+
+})->middleware('auth');
+
 Route::post('/opportunities/save-opportunity', function(Request $request) {
-    $opportunity = new Opportunity;
 
-    $company = Company::find($request->input('company'));
+    if(Auth::user()->admin) {
 
-    $opportunity->title = $request->input('title');
-    $opportunity->role_id = $request->input('role');
-    $opportunity->link = $request->input('link');
-    $opportunity->posted_at = $request->input('posted_at');
-    $opportunity->company_id = $request->input('company');
-    $opportunity->slug = strtolower($company->slug) . "-" . str_slug($opportunity->title, '-') . "-" . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
-    $opportunity->description = $request->input('description');
-    $opportunity->location = $request->input('location');
-    $opportunity->level = $request->input('level');
-    $opportunity->type = $request->input('type');
+        $opportunity = new Opportunity;
 
-    $opportunity->save();
+        $company = Company::find($request->input('company'));
 
-    // $opportunity->exercises()->attach($request->input('exercises'));
+        $opportunity->title = $request->input('title');
+        $opportunity->role_id = $request->input('role');
+        $opportunity->link = $request->input('link');
+        $opportunity->posted_at = $request->input('posted_at');
+        $opportunity->company_id = $request->input('company');
+        $opportunity->slug = strtolower($company->slug) . "-" . str_slug($opportunity->title, '-') . "-" . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
+        $opportunity->description = $request->input('description');
+        $opportunity->location = $request->input('location');
+        $opportunity->level = $request->input('level');
+        $opportunity->type = $request->input('type');
 
-    // $exercises = DB::table('exercises')
-    //                     ->whereIn('id', $request->input('exercises'))
-    //                     ->get();
+        $opportunity->save();
 
-    // $tasksIdArray = array();
+        return redirect('/opportunities/' . $opportunity->slug);
+    } else {
+        $opportunitySubmission = new OpportunitySubmission;
 
-    // foreach($exercises as $exercise) {
-    //     if(!in_array($exercise->task_id, $tasksIdArray)) {
-    //         array_push($tasksIdArray, $exercise->task_id);
-    //     }
-    // }
+        $opportunitySubmission->title = $request->input('title');
+        $opportunitySubmission->role_id = $request->input('role');
+        $opportunitySubmission->company = $request->input('company');
+        $opportunitySubmission->slug = str_slug($request->input('company'), '-') . "-" . str_slug($opportunitySubmission->title, '-') . "-" . substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, 10);
+        $opportunitySubmission->description = $request->input('description');
+        $opportunitySubmission->location = $request->input('location');
+        $opportunitySubmission->level = $request->input('level');
+        $opportunitySubmission->type = $request->input('type');
+        $opportunitySubmission->user_id = Auth::id();
 
-    // $opportunity->tasks()->attach($tasksIdArray);
+        $opportunitySubmission->save();
 
-    return redirect('/opportunities/' . $opportunity->slug);
+        return redirect('/opportunity-submissions/' . $opportunitySubmission->slug);
+    }
 
 })->middleware('auth');
 
@@ -2476,11 +2553,13 @@ Route::get('dashboard', function() {
         $opportunities = Opportunity::all();
         $answeredExercises = AnsweredExercise::all();  
         $exerciseGroupings = ExerciseGrouping::all();
+        $opportunitySubmissions = OpportunitySubmission::all();
 
         return view('dashboard', [
             'opportunities' => $opportunities,
             'answeredExercises' => $answeredExercises,
             'exerciseGroupings' => $exerciseGroupings,
+            'opportunitySubmissions' => $opportunitySubmissions,
             'roles' => $roles,
             'tasks' => $tasks,
             'exercises' => $exercises,
@@ -2492,9 +2571,11 @@ Route::get('dashboard', function() {
         ]);
     } else {
         $answeredExercises = AnsweredExercise::where("user_id", Auth::id())->get();
+        $opportunitySubmissions = OpportunitySubmission::all();
 
         return view('dashboard', [
             'answeredExercises' => $answeredExercises,
+            'opportunitySubmissions' => $opportunitySubmissions,
             'appliedOpportunities' => AppliedOpportunity::where('user_id', Auth::id())->get(),
             'parameter' => 'index',
             'parameter' => 'none',
