@@ -12,7 +12,7 @@
         </div>
         @endif
         @if (session('error'))
-          <div class="alert alert-danger" style="text-align: center;">
+          <div class="alert alert-primary" style="text-align: center;">
             <h4 class="alert-heading" style="margin-bottom: 0;">{{session('error')}}</h4>
           </div>
         @endif

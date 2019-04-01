@@ -103,6 +103,8 @@ Route::post('/password/send-email', function(Request $request) {
 
     $url = url(config('app.url').route('password.reset', $token, false));
 
+    dd(config('app.url'));
+
     Mail::to($request->input('email'))->send(new SendResetPasswordLink($user, $url));
 
     return redirect('password/reset')->with('sent', 'We have e-mailed your password reset link!');
